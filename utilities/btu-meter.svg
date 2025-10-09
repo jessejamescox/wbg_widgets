@@ -84,10 +84,18 @@
     <text class="unit-text" x="280" y="490">MMBTU</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+//!export-start
+let _pn_currentSupplyTemp = 0;
+let _pn_currentReturnTemp = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       btuRate: 'btu_meter_rate',              // MBTU/Hr (thousand BTU per hour)
       supplyTemp: 'btu_meter_supply_temp',    // °F
       returnTemp: 'btu_meter_return_temp',    // °F
@@ -98,7 +106,7 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       maxBTURate: 10000,     // MBTU/Hr
       minDeltaT: 5,          // °F
       maxDeltaT: 50,         // °F
@@ -137,19 +145,18 @@
     }
 
     function updateBTURate(value) {
-      var rate = parseFloat(value) || 0;
+let rate = parseFloat(value) || 0;
 
       // Display in MBTU/Hr (thousands)
-      var displayValue = rate / 1000;
+let displayValue = rate / 1000;
       document.getElementById('btuRateValue').textContent = displayValue.toFixed(0);
 
       // Update gauge
-      var percent = Math.min((rate / config.maxBTURate) * 100, 100);
+let percent = Math.min((rate / config.maxBTURate) * 100, 100);
       document.getElementById('energyPercent').textContent = percent.toFixed(0) + '%';
-
-      var circumference = 2 * Math.PI * 50;
-      var offset = circumference - (percent / 100) * circumference;
-      var gaugeFill = document.getElementById('energyGaugeFill');
+let circumference = 2 * Math.PI * 50;
+let offset = circumference - (percent / 100) * circumference;
+const gaugeFill = document.getElementById('energyGaugeFill');
       gaugeFill.setAttribute('stroke-dashoffset', offset);
 
       // Change color based on load
@@ -163,20 +170,19 @@
     }
 
     function updateSupplyTemp(value) {
-      var temp = parseFloat(value) || 0;
+let temp = parseFloat(value) || 0;
       document.getElementById('supplyTempValue').textContent = temp.toFixed(1);
     }
 
     function updateReturnTemp(value) {
-      var temp = parseFloat(value) || 0;
+let temp = parseFloat(value) || 0;
       document.getElementById('returnTempValue').textContent = temp.toFixed(1);
     }
 
     function updateDeltaT(value) {
-      var deltaT = parseFloat(value) || 0;
+let deltaT = parseFloat(value) || 0;
       document.getElementById('deltaTValue').textContent = deltaT.toFixed(1);
-
-      var valueText = document.getElementById('deltaTValue');
+const valueText = document.getElementById('deltaTValue');
       if (deltaT < config.minDeltaT) {
         valueText.setAttribute('fill', '#ffaa00');
       } else if (deltaT > config.maxDeltaT) {
@@ -187,18 +193,18 @@
     }
 
     function updateFlowRate(value) {
-      var flow = parseFloat(value) || 0;
+let flow = parseFloat(value) || 0;
       document.getElementById('flowRateValue').textContent = flow.toFixed(1);
     }
 
     function updateTotalEnergy(value) {
-      var total = parseFloat(value) || 0;
+let total = parseFloat(value) || 0;
       document.getElementById('totalEnergyValue').textContent = total.toFixed(2);
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+const indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
@@ -208,29 +214,39 @@
     }
 
     // Initialize - calculate delta-T if both temps are available
-    var currentSupplyTemp = 0;
-    var currentReturnTemp = 0;
 
     // Override individual temp updates to auto-calculate delta-T
-    var originalUpdateSupplyTemp = updateSupplyTemp;
-    var originalUpdateReturnTemp = updateReturnTemp;
+let originalUpdateSupplyTemp = updateSupplyTemp;
+let originalUpdateReturnTemp = updateReturnTemp;
 
     updateSupplyTemp = function(value) {
-      currentSupplyTemp = parseFloat(value) || 0;
+      _pn_currentSupplyTemp = parseFloat(value) || 0;
       originalUpdateSupplyTemp(value);
-      updateDeltaT(Math.abs(currentSupplyTemp - currentReturnTemp));
+      updateDeltaT(Math.abs(_pn_currentSupplyTemp - _pn_currentReturnTemp));
     };
 
     updateReturnTemp = function(value) {
-      currentReturnTemp = parseFloat(value) || 0;
+      _pn_currentReturnTemp = parseFloat(value) || 0;
       originalUpdateReturnTemp(value);
-      updateDeltaT(Math.abs(currentSupplyTemp - currentReturnTemp));
+      updateDeltaT(Math.abs(_pn_currentSupplyTemp - _pn_currentReturnTemp));
     };
 
     // Initialize
     if (typeof window !== 'undefined') {
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_currentSupplyTemp') {
+    _pn_currentSupplyTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_currentReturnTemp') {
+    _pn_currentReturnTemp = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

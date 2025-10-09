@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="450" height="350">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="100%" height="100%">
   <defs>
     <style>
       .hx-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -131,75 +131,81 @@
   <text class="hx-label" x="240" y="310">Energy Saved:</text>
   <text id="energySaved" class="hx-value" x="240" y="325">0 kW</text>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var oaTemp = 35; // degrees F
-    var raTemp = 70; // degrees F
-    var saTemp = 62; // degrees F (calculated)
-    var eaTemp = 43; // degrees F (calculated)
-    var supplyAirflow = 0; // CFM
-    var exhaustAirflow = 0; // CFM
-    var wheelSpeed = 0; // RPM
-    var enabled = false;
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pn_oaTemp = 35;
+let _pn_raTemp = 70;
+let _pn_saTemp = 62;
+let _pn_eaTemp = 43;
+let _pn_supplyAirflow = 0;
+let _pn_exhaustAirflow = 0;
+let _pn_wheelSpeed = 0;
+let _pb_enabled = false;
+let _pb_alarmActive = false;
+let _pn_efficiency = 0.77;
+let _pn_energySaved = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Calculate heat exchanger performance
-      var tempDiff = raTemp - oaTemp;
-      var efficiency = 0.77; // 77% efficient
+let tempDiff = _pn_raTemp - _pn_oaTemp;
 
-      if (enabled && supplyAirflow > 0) {
-        // Calculate outlet temperatures based on efficiency
-        var tempTransfer = tempDiff * efficiency;
-        saTemp = oaTemp + tempTransfer;
-        eaTemp = raTemp - tempTransfer;
+      if (_pb_enabled && _pn_supplyAirflow > 0) {
+        // Calculate outlet temperatures based on _pn_efficiency
+let tempTransfer = tempDiff * _pn_efficiency;
+        _pn_saTemp = _pn_oaTemp + tempTransfer;
+        _pn_eaTemp = _pn_raTemp - tempTransfer;
       } else {
         // No heat transfer when off
-        saTemp = oaTemp;
-        eaTemp = raTemp;
+        _pn_saTemp = _pn_oaTemp;
+        _pn_eaTemp = _pn_raTemp;
       }
-
-      var tempRise = saTemp - oaTemp;
-      var tempDrop = raTemp - eaTemp;
+let tempRise = _pn_saTemp - _pn_oaTemp;
+let tempDrop = _pn_raTemp - _pn_eaTemp;
 
       // Update temperature displays
-      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
-      document.getElementById('eaTemp').textContent = eaTemp.toFixed(0) + '°F';
-      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('saTempData').textContent = saTemp.toFixed(0) + '°F';
-      document.getElementById('eaTempData').textContent = eaTemp.toFixed(0) + '°F';
+      document.getElementById('oaTemp').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = _pn_saTemp.toFixed(0) + '°F';
+      document.getElementById('eaTemp').textContent = _pn_eaTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('saTempData').textContent = _pn_saTemp.toFixed(0) + '°F';
+      document.getElementById('eaTempData').textContent = _pn_eaTemp.toFixed(0) + '°F';
 
       // Update calculated values
       document.getElementById('tempRise').textContent = tempRise.toFixed(0) + '°F';
       document.getElementById('tempDrop').textContent = tempDrop.toFixed(0) + '°F';
-      document.getElementById('efficiency').textContent = (efficiency * 100).toFixed(0) + '%';
+      document.getElementById('efficiency').textContent = (_pn_efficiency * 100).toFixed(0) + '%';
 
       // Update airflows
-      document.getElementById('supplyFlow').textContent = supplyAirflow.toFixed(0) + ' CFM';
-      document.getElementById('exhaustFlow').textContent = exhaustAirflow.toFixed(0) + ' CFM';
+      document.getElementById('supplyFlow').textContent = _pn_supplyAirflow.toFixed(0) + ' CFM';
+      document.getElementById('exhaustFlow').textContent = _pn_exhaustAirflow.toFixed(0) + ' CFM';
 
       // Calculate energy savings (rough estimate)
       // Energy (kW) = CFM × temp_rise × 1.08 / 3412 (BTU to kW conversion)
-      var energySaved = 0;
-      if (enabled && supplyAirflow > 0) {
-        var btuh = supplyAirflow * tempRise * 1.08;
-        energySaved = btuh / 3412; // Convert to kW
+
+      if (_pb_enabled && _pn_supplyAirflow > 0) {
+let btuh = _pn_supplyAirflow * tempRise * 1.08;
+        _pn_energySaved = btuh / 3412; // Convert to kW
       }
-      document.getElementById('energySaved').textContent = energySaved.toFixed(1) + ' kW';
+      document.getElementById('energySaved').textContent = _pn_energySaved.toFixed(1) + ' kW';
 
       // Update status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (alarmActive) {
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
-      } else if (enabled && supplyAirflow > 0) {
+      } else if (_pb_enabled && _pn_supplyAirflow > 0) {
         statusLight.setAttribute('class', 'status-running');
         statusText.textContent = 'Running';
         statusText.style.fill = '#27ae60';
@@ -210,17 +216,17 @@
       }
 
       // Wheel animation
-      var wheel = document.getElementById('wheel');
-      if (enabled && supplyAirflow > 0) {
+const wheel = document.getElementById('wheel');
+      if (_pb_enabled && _pn_supplyAirflow > 0) {
         wheel.classList.add('hx-wheel-active');
       } else {
         wheel.classList.remove('hx-wheel-active');
       }
 
       // Show/hide flow arrows
-      var supplyFlowGroup = document.getElementById('supplyFlow');
-      var exhaustFlowGroup = document.getElementById('exhaustFlow');
-      if (enabled && supplyAirflow > 0) {
+const supplyFlowGroup = document.getElementById('supplyFlow');
+const exhaustFlowGroup = document.getElementById('exhaustFlow');
+      if (_pb_enabled && _pn_supplyAirflow > 0) {
         supplyFlowGroup.style.display = 'block';
         exhaustFlowGroup.style.display = 'block';
       } else {
@@ -234,6 +240,45 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_oaTemp') {
+    _pn_oaTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raTemp') {
+    _pn_raTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_saTemp') {
+    _pn_saTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_eaTemp') {
+    _pn_eaTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_supplyAirflow') {
+    _pn_supplyAirflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_exhaustAirflow') {
+    _pn_exhaustAirflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_wheelSpeed') {
+    _pn_wheelSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pb_enabled') {
+    _pb_enabled = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  } else if (id === '_pn_efficiency') {
+    _pn_efficiency = Number(value) || 0;
+    update();
+  } else if (id === '_pn_energySaved') {
+    _pn_energySaved = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

@@ -121,11 +121,19 @@
     <circle cx="345" cy="15" r="8" fill="#ffffff" id="statusMarker"/>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_co2Score = 100;
+let _pn_circumference = 314;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var variables = {
+let variables = {
         roomName: 'room_comfort_name',
         temperature: 'room_temp',
         humidity: 'room_humidity',
@@ -134,7 +142,7 @@
       };
 
       // Comfort calculation parameters
-      var comfortParams = {
+let comfortParams = {
         temp: { ideal: 72, min: 68, max: 76 },
         humidity: { ideal: 45, min: 30, max: 60 },
         co2: { good: 600, fair: 800, max: 1000 },
@@ -142,28 +150,28 @@
       };
 
       function calculateComfortScore(temp, humidity, co2, occupancy) {
-        var scores = [];
+let scores = [];
 
         // Temperature score (0-100)
-        var tempDiff = Math.abs(temp - comfortParams.temp.ideal);
-        var tempRange = (comfortParams.temp.max - comfortParams.temp.min) / 2;
-        var tempScore = Math.max(0, 100 - (tempDiff / tempRange) * 100);
+let tempDiff = Math.abs(temp - comfortParams.temp.ideal);
+let tempRange = (comfortParams.temp.max - comfortParams.temp.min) / 2;
+let tempScore = Math.max(0, 100 - (tempDiff / tempRange) * 100);
         scores.push(tempScore);
 
         // Humidity score (0-100)
-        var humidityDiff = Math.abs(humidity - comfortParams.humidity.ideal);
-        var humidityRange = (comfortParams.humidity.max - comfortParams.humidity.min) / 2;
-        var humidityScore = Math.max(0, 100 - (humidityDiff / humidityRange) * 100);
+let humidityDiff = Math.abs(humidity - comfortParams.humidity.ideal);
+let humidityRange = (comfortParams.humidity.max - comfortParams.humidity.min) / 2;
+let humidityScore = Math.max(0, 100 - (humidityDiff / humidityRange) * 100);
         scores.push(humidityScore);
 
         // CO2 score (0-100)
-        var co2Score = 100;
+
         if (co2 > comfortParams.co2.good) {
-          co2Score = 100 - ((co2 - comfortParams.co2.good) /
+          _pn_co2Score = 100 - ((co2 - comfortParams.co2.good) /
                       (comfortParams.co2.max - comfortParams.co2.good)) * 100;
         }
-        co2Score = Math.max(0, Math.min(100, co2Score));
-        scores.push(co2Score);
+        _pn_co2Score = Math.max(0, Math.min(100, _pn_co2Score));
+        scores.push(_pn_co2Score);
 
         // Average score
         return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
@@ -191,13 +199,13 @@
           }
 
           // Get current values
-          var temp = data[variables.temperature] !== undefined ?
+let temp = data[variables.temperature] !== undefined ?
                     parseFloat(data[variables.temperature]) : 72;
-          var humidity = data[variables.humidity] !== undefined ?
+let humidity = data[variables.humidity] !== undefined ?
                         parseFloat(data[variables.humidity]) : 45;
-          var co2 = data[variables.co2] !== undefined ?
+let co2 = data[variables.co2] !== undefined ?
                    parseFloat(data[variables.co2]) : 650;
-          var occupancy = data[variables.occupancy] !== undefined ?
+let occupancy = data[variables.occupancy] !== undefined ?
                          parseInt(data[variables.occupancy]) : 0;
 
           // Update temperature
@@ -213,22 +221,22 @@
           document.getElementById('occupancyValue').textContent = occupancy;
 
           // Calculate and update comfort score
-          var comfortScore = calculateComfortScore(temp, humidity, co2, occupancy);
+let comfortScore = calculateComfortScore(temp, humidity, co2, occupancy);
           document.getElementById('comfortScore').textContent = comfortScore;
 
           // Update score ring
-          var circumference = 314;
-          var offset = circumference - (comfortScore / 100) * circumference;
-          var scoreRing = document.getElementById('scoreRing');
+
+let offset = _pn_circumference - (comfortScore / 100) * _pn_circumference;
+const scoreRing = document.getElementById('scoreRing');
           scoreRing.setAttribute('stroke-dashoffset', offset);
           scoreRing.setAttribute('stroke', getComfortColor(comfortScore));
 
           // Update comfort status
-          var status = getComfortStatus(comfortScore);
+let status = getComfortStatus(comfortScore);
           document.getElementById('comfortStatus').textContent = status;
 
           // Update status bar
-          var statusBarWidth = (comfortScore / 100) * 460;
+let statusBarWidth = (comfortScore / 100) * 460;
           document.getElementById('statusBar').setAttribute('width', statusBarWidth);
           document.getElementById('statusMarker').setAttribute('cx', statusBarWidth);
           document.getElementById('statusMarker').setAttribute('fill', getComfortColor(comfortScore));
@@ -250,6 +258,18 @@
       // Make update function globally accessible
       window.updateRoomComfort = updateWidget;
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_co2Score') {
+    _pn_co2Score = Number(value) || 0;
+    update();
+  } else if (id === '_pn_circumference') {
+    _pn_circumference = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

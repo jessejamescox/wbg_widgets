@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="80" height="40">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="100%" height="100%">
   <defs>
     <style>
       .chip-body { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1.5; }
@@ -27,25 +27,32 @@
   <!-- Status Indicator -->
   <circle id="statusDot" cx="73" cy="8" r="3" class="normal-state"/>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var co2 = 450;             // Current CO2 (ppm)
-    var highAlarm = 1000;      // High alarm setpoint
-    var warningLevel = 800;    // Warning level
-    var alarmState = 0;        // 0=normal, 1=alarm
+  <script><![CDATA[
+//!export-start
+let _pn_co2 = 450;
+let _pn_highAlarm = 1000;
+let _pn_warningLevel = 800;
+let _pn_alarmState = 0;
+//!export-end
 
-    function updateWidget() {
-      var valueText = document.getElementById('valueText');
-      var statusDot = document.getElementById('statusDot');
+function init() {
+  update();
+}
+
+    function update() {
+const valueText = document.getElementById('valueText');
+const statusDot = document.getElementById('statusDot');
+
+  if (!valueText || !statusDot) return;
 
       // Update value
-      valueText.textContent = Math.round(co2);
+      valueText.textContent = Math.round(_pn_co2);
 
       // Check alarm conditions
-      if (co2 > highAlarm || alarmState === 1) {
+      if (_pn_co2 > _pn_highAlarm || _pn_alarmState === 1) {
         statusDot.setAttribute('class', 'alarm-state');
         valueText.setAttribute('fill', '#e74c3c');
-      } else if (co2 > warningLevel) {
+      } else if (_pn_co2 > _pn_warningLevel) {
         statusDot.setAttribute('fill', '#f39c12');
         valueText.setAttribute('fill', '#f39c12');
       } else {
@@ -54,7 +61,23 @@
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_co2') {
+    _pn_co2 = Number(value) || 0;
+    update();
+  } else if (id === '_pn_highAlarm') {
+    _pn_highAlarm = Number(value) || 0;
+    update();
+  } else if (id === '_pn_warningLevel') {
+    _pn_warningLevel = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarmState') {
+    _pn_alarmState = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

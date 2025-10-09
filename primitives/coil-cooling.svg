@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 85" width="100" height="85">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 85" width="100%" height="100%">
   <defs>
     <style>
       .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
@@ -70,37 +70,44 @@
   <rect x="35" y="70" width="30" height="12" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
   <text id="tempText" x="50" y="78" class="value-text">---°F</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var valvePosition = 0;     // 0-100 (%)
-    var supplyTemp = 0;        // CHW supply temperature
-    var returnTemp = 0;        // CHW return temperature
-    var airTempOut = 0;        // Discharge air temp
-    var active = 0;            // 0=off, 1=active
+  <script><![CDATA[
+//!export-start
+let _pn_valvePosition = 0;
+let _pn_supplyTemp = 0;
+let _pn_returnTemp = 0;
+let _pn_airTempOut = 0;
+let _pn_active = 0;
+//!export-end
 
-    function updateWidget() {
-      var coilTubes = document.getElementById('coilTubes');
-      var tempText = document.getElementById('tempText');
-      var condensate = document.getElementById('condensate');
+function init() {
+  update();
+}
 
-      if (valvePosition > 10 && supplyTemp > 0) {
+    function update() {
+const coilTubes = document.getElementById('coilTubes');
+const tempText = document.getElementById('tempText');
+const condensate = document.getElementById('condensate');
+
+  if (!coilTubes || !tempText || !condensate) return;
+
+      if (_pn_valvePosition > 10 && _pn_supplyTemp > 0) {
         // Active cooling
-        var paths = coilTubes.querySelectorAll('path');
+let paths = coilTubes.querySelectorAll('path');
         paths.forEach(function(path) {
-          path.setAttribute('class', 'coil-tube coil-tube-active');
+          path.setAttribute('class', 'coil-tube coil-tube-_pn_active');
         });
 
         // Show condensate
-        condensate.setAttribute('opacity', valvePosition / 100);
+        condensate.setAttribute('opacity', _pn_valvePosition / 100);
 
-        if (airTempOut > 0) {
-          tempText.textContent = Math.round(airTempOut) + '°F';
+        if (_pn_airTempOut > 0) {
+          tempText.textContent = Math.round(_pn_airTempOut) + '°F';
         } else {
-          tempText.textContent = Math.round(supplyTemp) + '°F';
+          tempText.textContent = Math.round(_pn_supplyTemp) + '°F';
         }
       } else {
         // Inactive
-        var paths = coilTubes.querySelectorAll('path');
+let paths = coilTubes.querySelectorAll('path');
         paths.forEach(function(path) {
           path.setAttribute('class', 'coil-tube');
         });
@@ -109,7 +116,26 @@
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_valvePosition') {
+    _pn_valvePosition = Number(value) || 0;
+    update();
+  } else if (id === '_pn_supplyTemp') {
+    _pn_supplyTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_returnTemp') {
+    _pn_returnTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_airTempOut') {
+    _pn_airTempOut = Number(value) || 0;
+    update();
+  } else if (id === '_pn_active') {
+    _pn_active = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

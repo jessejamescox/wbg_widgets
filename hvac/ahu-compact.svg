@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="500" height="350">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
   <defs>
     <style>
       .ahu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -126,99 +126,171 @@
     <text id="statusText" class="ahu-value" x="405" y="315">Normal</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var supplyFanSpeed = 65; // 0-100%
-    var returnFanSpeed = 60; // 0-100%
-    var supplyFanStatus = true;
-    var returnFanStatus = true;
-    var coolingValve = 0; // 0-100%
-    var heatingValve = 25; // 0-100%
-    var returnTemp = 72; // degrees F
-    var supplyTemp = 58; // degrees F
-    var filterDirty = false;
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pn_supplyFanSpeed = 65;
+let _pn_returnFanSpeed = 60;
+let _pb_supplyFanStatus = true;
+let _pb_returnFanStatus = true;
+let _pn_coolingValve = 0;
+let _pn_heatingValve = 25;
+let _pn_returnTemp = 72;
+let _pn_supplyTemp = 58;
+let _pb_filterDirty = false;
+let _pb_alarmActive = false;
+//!export-end
 
-    function updateDisplay() {
-      // Update temperatures
-      document.getElementById('returnTemp').textContent = returnTemp.toFixed(0) + '°F';
-      document.getElementById('supplyTemp').textContent = supplyTemp.toFixed(0) + '°F';
+function init() {
+  update();
+}
 
-      // Update supply fan
-      var sfText = document.getElementById('supplyFanStatus');
-      if (supplyFanStatus) {
-        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
-        sfText.style.fill = '#27ae60';
-        document.getElementById('supplyFan').querySelector('.ahu-fan-blade').classList.add('ahu-fan-active');
-      } else {
-        sfText.textContent = 'OFF';
-        sfText.style.fill = '#7f8c8d';
-        document.getElementById('supplyFan').querySelector('.ahu-fan-blade').classList.remove('ahu-fan-active');
-      }
+function update() {
+  updateDisplay();
+}
 
-      // Update return fan
-      var rfText = document.getElementById('returnFanStatus');
-      if (returnFanStatus) {
-        rfText.textContent = 'ON - ' + returnFanSpeed.toFixed(0) + '%';
-        rfText.style.fill = '#27ae60';
-        document.getElementById('returnFan').querySelector('.ahu-fan-blade').classList.add('ahu-fan-active');
-      } else {
-        rfText.textContent = 'OFF';
-        rfText.style.fill = '#7f8c8d';
-        document.getElementById('returnFan').querySelector('.ahu-fan-blade').classList.remove('ahu-fan-active');
-      }
+function updateDisplay() {
+  const returnTempEl = document.getElementById('returnTemp');
+  const supplyTempEl = document.getElementById('supplyTemp');
+  const sfText = document.getElementById('supplyFanStatus');
+  const rfText = document.getElementById('returnFanStatus');
+  const coolingValveEl = document.getElementById('coolingValve');
+  const heatingValveEl = document.getElementById('heatingValve');
+  const ccCoil = document.getElementById('coolingCoil');
+  const hcCoil = document.getElementById('heatingCoil');
+  const filterLight = document.getElementById('filterLight');
+  const filterText = document.getElementById('filterText');
+  const statusLight = document.getElementById('statusLight');
+  const statusText = document.getElementById('statusText');
+  const supplyFan = document.getElementById('supplyFan');
+  const returnFan = document.getElementById('returnFan');
 
-      // Update cooling coil
-      document.getElementById('coolingValve').textContent = coolingValve.toFixed(0) + '%';
-      var ccCoil = document.getElementById('coolingCoil');
-      if (coolingValve > 5) {
-        ccCoil.classList.add('ahu-coil-active');
-      } else {
-        ccCoil.classList.remove('ahu-coil-active');
-      }
+  if (!returnTempEl || !supplyTempEl) return;
 
-      // Update heating coil
-      document.getElementById('heatingValve').textContent = heatingValve.toFixed(0) + '%';
-      var hcCoil = document.getElementById('heatingCoil');
-      if (heatingValve > 5) {
-        hcCoil.classList.add('ahu-coil-active');
-      } else {
-        hcCoil.classList.remove('ahu-coil-active');
-      }
+  // Update temperatures
+  returnTempEl.textContent = _pn_returnTemp.toFixed(0) + '°F';
+  supplyTempEl.textContent = _pn_supplyTemp.toFixed(0) + '°F';
 
-      // Update filter status
-      var filterLight = document.getElementById('filterLight');
-      var filterText = document.getElementById('filterText');
-      if (filterDirty) {
-        filterLight.setAttribute('class', 'status-alarm');
-        filterText.textContent = 'Dirty';
-        filterText.style.fill = '#e74c3c';
-      } else {
-        filterLight.setAttribute('class', 'status-ok');
-        filterText.textContent = 'Clean';
-        filterText.style.fill = '#27ae60';
-      }
-
-      // Update system status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
-      if (alarmActive) {
-        statusLight.setAttribute('class', 'status-alarm');
-        statusText.textContent = 'Alarm';
-        statusText.style.fill = '#e74c3c';
-      } else {
-        statusLight.setAttribute('class', 'status-ok');
-        statusText.textContent = 'Normal';
-        statusText.style.fill = '#27ae60';
-      }
+  // Update supply fan
+  if (sfText && supplyFan) {
+    if (_pb_supplyFanStatus) {
+      sfText.textContent = 'ON - ' + _pn_supplyFanSpeed.toFixed(0) + '%';
+      sfText.style.fill = '#27ae60';
+      const sfBlade = supplyFan.querySelector('.ahu-fan-blade');
+      if (sfBlade) sfBlade.classList.add('ahu-fan-active');
+    } else {
+      sfText.textContent = 'OFF';
+      sfText.style.fill = '#7f8c8d';
+      const sfBlade = supplyFan.querySelector('.ahu-fan-blade');
+      if (sfBlade) sfBlade.classList.remove('ahu-fan-active');
     }
+  }
 
-    // Initialize display
-    updateDisplay();
+  // Update return fan
+  if (rfText && returnFan) {
+    if (_pb_returnFanStatus) {
+      rfText.textContent = 'ON - ' + _pn_returnFanSpeed.toFixed(0) + '%';
+      rfText.style.fill = '#27ae60';
+      const rfBlade = returnFan.querySelector('.ahu-fan-blade');
+      if (rfBlade) rfBlade.classList.add('ahu-fan-active');
+    } else {
+      rfText.textContent = 'OFF';
+      rfText.style.fill = '#7f8c8d';
+      const rfBlade = returnFan.querySelector('.ahu-fan-blade');
+      if (rfBlade) rfBlade.classList.remove('ahu-fan-active');
+    }
+  }
 
-    // Update display every 100ms
-    setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+  // Update cooling coil
+  if (coolingValveEl) {
+    coolingValveEl.textContent = _pn_coolingValve.toFixed(0) + '%';
+  }
+  if (ccCoil) {
+    if (_pn_coolingValve > 5) {
+      ccCoil.classList.add('ahu-coil-active');
+    } else {
+      ccCoil.classList.remove('ahu-coil-active');
+    }
+  }
+
+  // Update heating coil
+  if (heatingValveEl) {
+    heatingValveEl.textContent = _pn_heatingValve.toFixed(0) + '%';
+  }
+  if (hcCoil) {
+    if (_pn_heatingValve > 5) {
+      hcCoil.classList.add('ahu-coil-active');
+    } else {
+      hcCoil.classList.remove('ahu-coil-active');
+    }
+  }
+
+  // Update filter status
+  if (filterLight && filterText) {
+    if (_pb_filterDirty) {
+      filterLight.setAttribute('class', 'status-alarm');
+      filterText.textContent = 'Dirty';
+      filterText.style.fill = '#e74c3c';
+    } else {
+      filterLight.setAttribute('class', 'status-ok');
+      filterText.textContent = 'Clean';
+      filterText.style.fill = '#27ae60';
+    }
+  }
+
+  // Update system status
+  if (statusLight && statusText) {
+    if (_pb_alarmActive) {
+      statusLight.setAttribute('class', 'status-alarm');
+      statusText.textContent = 'Alarm';
+      statusText.style.fill = '#e74c3c';
+    } else {
+      statusLight.setAttribute('class', 'status-ok');
+      statusText.textContent = 'Normal';
+      statusText.style.fill = '#27ae60';
+    }
+  }
+}
+
+// Initialize display
+updateDisplay();
+
+// Update display every 100ms
+setInterval(updateDisplay, 100);
+
+function putValue(id, value) {
+  if (id === '_pn_supplyFanSpeed') {
+    _pn_supplyFanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_returnFanSpeed') {
+    _pn_returnFanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pb_supplyFanStatus') {
+    _pb_supplyFanStatus = !!value;
+    update();
+  } else if (id === '_pb_returnFanStatus') {
+    _pb_returnFanStatus = !!value;
+    update();
+  } else if (id === '_pn_coolingValve') {
+    _pn_coolingValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_heatingValve') {
+    _pn_heatingValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_returnTemp') {
+    _pn_returnTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_supplyTemp') {
+    _pn_supplyTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pb_filterDirty') {
+    _pb_filterDirty = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  }
+}
+init();
+
+]]></script>
 </svg>

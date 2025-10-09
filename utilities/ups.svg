@@ -110,10 +110,18 @@
     <rect id="loadBar" class="battery-fill" x="30" y="510" width="0" height="5" rx="2"/>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+//!export-start
+let _ps_currentMode = 'online';
+let _ps_timeStr = '';
+//!export-end
+
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       batteryLevel: 'ups_battery_level',      // %
       runtimeRemaining: 'ups_runtime',        // minutes
       inputVoltage: 'ups_input_voltage',      // V
@@ -125,15 +133,13 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       nominalVoltage: 120,       // V
       criticalBattery: 20,       // %
       lowBattery: 40,            // %
       highLoad: 90,              // %
       warnLoad: 75               // %
     };
-
-    var currentMode = 'online';
 
     // Update function called by FUXA
     function updateValues(tag, value) {
@@ -170,17 +176,17 @@
     }
 
     function updateBatteryLevel(value) {
-      var battery = parseFloat(value) || 0;
+let battery = parseFloat(value) || 0;
       document.getElementById('batteryValue').textContent = battery.toFixed(0);
 
       // Update battery fill (inverted - fills from bottom)
-      var barHeight = (battery / 100) * 38;
-      var batteryFill = document.getElementById('batteryFill');
+let barHeight = (battery / 100) * 38;
+const batteryFill = document.getElementById('batteryFill');
       batteryFill.setAttribute('height', barHeight);
       batteryFill.setAttribute('y', 18 - barHeight);
 
       // Change color based on battery level
-      var valueText = document.getElementById('batteryValue');
+const valueText = document.getElementById('batteryValue');
       if (battery <= config.criticalBattery) {
         batteryFill.setAttribute('fill', '#ff0000');
         valueText.setAttribute('fill', '#ff0000');
@@ -194,22 +200,20 @@
     }
 
     function updateRuntime(value) {
-      var minutes = parseInt(value) || 0;
+let minutes = parseInt(value) || 0;
 
-      if (currentMode === 'battery' && minutes >= 0) {
-        var hours = Math.floor(minutes / 60);
-        var mins = minutes % 60;
+      if (_ps_currentMode === 'battery' && minutes >= 0) {
+let hours = Math.floor(minutes / 60);
+let mins = minutes % 60;
 
-        var timeStr = '';
         if (hours > 0) {
-          timeStr = hours + 'h ' + pad(mins) + 'm';
+          _ps_timeStr = hours + 'h ' + pad(mins) + 'm';
         } else {
-          timeStr = mins + ' min';
+          _ps_timeStr = mins + ' min';
         }
 
-        document.getElementById('runtimeValue').textContent = timeStr;
-
-        var valueText = document.getElementById('runtimeValue');
+        document.getElementById('runtimeValue').textContent = _ps_timeStr;
+const valueText = document.getElementById('runtimeValue');
         if (minutes < 5) {
           valueText.setAttribute('fill', '#ff0000');
         } else if (minutes < 15) {
@@ -224,11 +228,10 @@
     }
 
     function updateInputVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('inputVoltage').textContent = voltage.toFixed(0);
-
-      var valueText = document.getElementById('inputVoltage');
-      var deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+const valueText = document.getElementById('inputVoltage');
+let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
 
       if (voltage === 0 || deviation > 0.2) {
         valueText.setAttribute('fill', '#ff0000');
@@ -240,11 +243,10 @@
     }
 
     function updateOutputVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('outputVoltage').textContent = voltage.toFixed(0);
-
-      var valueText = document.getElementById('outputVoltage');
-      var deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+const valueText = document.getElementById('outputVoltage');
+let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
 
       if (deviation > 0.05) {
         valueText.setAttribute('fill', '#ffaa00');
@@ -254,16 +256,16 @@
     }
 
     function updateLoad(value) {
-      var load = parseFloat(value) || 0;
+let load = parseFloat(value) || 0;
       document.getElementById('loadValue').textContent = load.toFixed(0);
 
       // Update load bar
-      var barWidth = (load / 100) * 340;
-      var loadBar = document.getElementById('loadBar');
+let barWidth = (load / 100) * 340;
+const loadBar = document.getElementById('loadBar');
       loadBar.setAttribute('width', Math.min(barWidth, 340));
 
       // Change color based on load
-      var valueText = document.getElementById('loadValue');
+const valueText = document.getElementById('loadValue');
       if (load >= config.highLoad) {
         loadBar.setAttribute('fill', '#ff0000');
         valueText.setAttribute('fill', '#ff0000');
@@ -277,10 +279,10 @@
     }
 
     function updateMode(value) {
-      currentMode = String(value).toLowerCase() || 'online';
-      var modeText = document.getElementById('modeText');
+      _ps_currentMode = String(value).toLowerCase() || 'online';
+const modeText = document.getElementById('modeText');
 
-      switch(currentMode) {
+      switch(_ps_currentMode) {
         case 'online':
         case 'normal':
           modeText.textContent = 'ONLINE';
@@ -310,9 +312,9 @@
     }
 
     function updateBypass(value) {
-      var bypass = Boolean(value);
-      var bypassLine = document.getElementById('bypassLine');
-      var bypassText = document.getElementById('bypassText');
+let bypass = Boolean(value);
+const bypassLine = document.getElementById('bypassLine');
+const bypassText = document.getElementById('bypassText');
 
       if (bypass) {
         bypassLine.setAttribute('opacity', '1');
@@ -324,8 +326,8 @@
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+const indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
@@ -346,6 +348,18 @@
     if (typeof window !== 'undefined') {
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_ps_currentMode') {
+    _ps_currentMode = String(value) || "";
+    update();
+  } else if (id === '_ps_timeStr') {
+    _ps_timeStr = String(value) || "";
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

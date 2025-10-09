@@ -94,10 +94,13 @@
     <text id="leakText" class="unit-text" x="292.5" y="465" text-anchor="middle">NO LEAK</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       flowRate: 'water_meter_flow_rate',      // GPM
       pressure: 'water_meter_pressure',       // PSI
       temperature: 'water_meter_temp',        // °F
@@ -108,7 +111,7 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       maxFlowRate: 100,      // GPM
       minPressure: 30,       // PSI
       maxPressure: 80,       // PSI
@@ -147,20 +150,20 @@
     }
 
     function updateFlowRate(value) {
-      var flow = parseFloat(value) || 0;
+let flow = parseFloat(value) || 0;
       document.getElementById('flowValue').textContent = flow.toFixed(1);
 
       // Control animation speed based on flow rate
-      var particles = [
+let particles = [
         document.getElementById('particle1'),
         document.getElementById('particle2'),
         document.getElementById('particle3')
       ];
 
       if (flow > 0) {
-        var duration = Math.max(0.5, 3 - (flow / config.maxFlowRate * 2.5));
+let duration = Math.max(0.5, 3 - (flow / config.maxFlowRate * 2.5));
         particles.forEach(function(particle, index) {
-          var anims = particle.getElementsByTagName('animate');
+let anims = particle.getElementsByTagName('animate');
           for (var i = 0; i < anims.length; i++) {
             anims[i].setAttribute('dur', duration + 's');
           }
@@ -169,10 +172,9 @@
     }
 
     function updatePressure(value) {
-      var pressure = parseFloat(value) || 0;
+let pressure = parseFloat(value) || 0;
       document.getElementById('pressureValue').textContent = pressure.toFixed(1);
-
-      var valueText = document.getElementById('pressureValue');
+let valueText = document.getElementById('pressureValue');
       if (pressure < config.minPressure) {
         valueText.setAttribute('fill', '#ffaa00');
       } else if (pressure > config.maxPressure) {
@@ -183,12 +185,12 @@
     }
 
     function updateTemperature(value) {
-      var temp = parseFloat(value) || 0;
+let temp = parseFloat(value) || 0;
       document.getElementById('tempValue').textContent = temp.toFixed(1);
     }
 
     function updateTotalVolume(value) {
-      var total = parseFloat(value) || 0;
+let total = parseFloat(value) || 0;
 
       if (total >= 1000000) {
         document.getElementById('totalValue').textContent = (total / 1000000).toFixed(2);
@@ -203,7 +205,7 @@
     }
 
     function updateDailyUsage(value) {
-      var daily = parseFloat(value) || 0;
+let daily = parseFloat(value) || 0;
 
       if (daily >= 1000) {
         document.getElementById('dailyValue').textContent = (daily / 1000).toFixed(1) + 'K';
@@ -213,10 +215,10 @@
     }
 
     function updateLeakStatus(value) {
-      var leak = Boolean(value);
-      var indicator = document.getElementById('leakIndicator');
-      var text = document.getElementById('leakText');
-      var icon = document.querySelector('#leakIcon .leak-icon');
+let leak = Boolean(value);
+let indicator = document.getElementById('leakIndicator');
+let text = document.getElementById('leakText');
+let icon = document.querySelector('#leakIcon .leak-icon');
 
       if (leak) {
         indicator.setAttribute('class', 'status-alarm');
@@ -235,8 +237,8 @@
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+let indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
@@ -249,6 +251,7 @@
     if (typeof window !== 'undefined') {
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+init();
+]]></script>
 </svg>

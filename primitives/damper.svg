@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
       .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
@@ -36,41 +36,60 @@
   <text x="10" y="15" class="label-text">CLOSED</text>
   <text x="75" y="15" class="label-text">OPEN</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var position = 0;  // 0=closed, 100=open (%)
-    var command = 0;
-    var feedback = 0;
+  <script><![CDATA[
+//!export-start
+let _pn_position = 0;
+let _pn_command = 0;
+let _pn_feedback = 0;
+//!export-end
 
-    function updateWidget() {
-      var blade1 = document.getElementById('blade1');
-      var blade2 = document.getElementById('blade2');
-      var blade3 = document.getElementById('blade3');
-      var posText = document.getElementById('positionText');
+function init() {
+  update();
+}
 
-      var displayPos = feedback > 0 ? feedback : position;
-      displayPos = Math.max(0, Math.min(100, displayPos));
+function update() {
+  const blade1 = document.getElementById('blade1');
+  const blade2 = document.getElementById('blade2');
+  const blade3 = document.getElementById('blade3');
+  const posText = document.getElementById('positionText');
 
-      // Rotate blades (0° = closed/vertical, 90° = open/horizontal)
-      var angle = (displayPos / 100) * 90;
-      blade1.setAttribute('transform', 'rotate(' + angle + ' 25 40)');
-      blade2.setAttribute('transform', 'rotate(' + angle + ' 50 40)');
-      blade3.setAttribute('transform', 'rotate(' + angle + ' 75 40)');
+  if (!blade1 || !blade2 || !blade3 || !posText) return;
 
-      // Update position text
-      posText.textContent = Math.round(displayPos) + '%';
+  let displayPos = _pn_feedback > 0 ? _pn_feedback : _pn_position;
+  displayPos = Math.max(0, Math.min(100, displayPos));
 
-      // Color code position
-      if (displayPos < 5) {
-        posText.setAttribute('fill', '#e74c3c');
-      } else if (displayPos > 95) {
-        posText.setAttribute('fill', '#27ae60');
-      } else {
-        posText.setAttribute('fill', '#3498db');
-      }
-    }
+  // Rotate blades (0° = closed/vertical, 90° = open/horizontal)
+  const angle = (displayPos / 100) * 90;
+  blade1.setAttribute('transform', 'rotate(' + angle + ' 25 40)');
+  blade2.setAttribute('transform', 'rotate(' + angle + ' 50 40)');
+  blade3.setAttribute('transform', 'rotate(' + angle + ' 75 40)');
 
-    updateWidget();
-    ]]>
-  </script>
+  // Update position text
+  posText.textContent = Math.round(displayPos) + '%';
+
+  // Color code position
+  if (displayPos < 5) {
+    posText.setAttribute('fill', '#e74c3c');
+  } else if (displayPos > 95) {
+    posText.setAttribute('fill', '#27ae60');
+  } else {
+    posText.setAttribute('fill', '#3498db');
+  }
+}
+
+function putValue(id, value) {
+  if (id === '_pn_position') {
+    _pn_position = Number(value) || 0;
+    update();
+  } else if (id === '_pn_command') {
+    _pn_command = Number(value) || 0;
+    update();
+  } else if (id === '_pn_feedback') {
+    _pn_feedback = Number(value) || 0;
+    update();
+  }
+}
+init();
+
+]]></script>
 </svg>

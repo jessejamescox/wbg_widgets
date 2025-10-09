@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="100%" height="100%">
   <defs>
     <style>
       .thermo-card-bg { fill: #2c3e50; stroke: #34495e; stroke-width: 2; }
@@ -99,20 +99,26 @@
     <path class="fan-icon" d="M 9 10 Q 5 10 5 14 Q 8 14 12 10 Z"/>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var currentTemp = 72;
-    var setpoint = 70;
-    var mode = 0; // 0=Off, 1=Heat, 2=Cool, 3=Auto
-    var fanMode = 0; // 0=Auto, 1=On
-    var heating = false;
-    var cooling = false;
-    var fanRunning = false;
+  <script><![CDATA[
+//!export-start
+let _pn_currentTemp = 72;
+let _pn_setpoint = 70;
+let _pn_mode = 0;
+let _pn_fanMode = 0;
+let _pb_heating = false;
+let _pb_cooling = false;
+let _pb_fanRunning = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
-      document.getElementById('currentTemp').textContent = currentTemp.toFixed(1);
-      document.getElementById('setpoint').textContent = setpoint.toFixed(1);
+      document.getElementById('currentTemp').textContent = _pn_currentTemp.toFixed(1);
+      document.getElementById('setpoint').textContent = _pn_setpoint.toFixed(1);
 
       // Update mode buttons
       document.getElementById('modeOff').classList.remove('mode-active');
@@ -120,56 +126,56 @@
       document.getElementById('modeCool').classList.remove('mode-active');
       document.getElementById('modeAuto').classList.remove('mode-active');
 
-      if (mode === 0) document.getElementById('modeOff').classList.add('mode-active');
-      else if (mode === 1) document.getElementById('modeHeat').classList.add('mode-active');
-      else if (mode === 2) document.getElementById('modeCool').classList.add('mode-active');
-      else if (mode === 3) document.getElementById('modeAuto').classList.add('mode-active');
+      if (_pn_mode === 0) document.getElementById('modeOff').classList.add('mode-active');
+      else if (_pn_mode === 1) document.getElementById('modeHeat').classList.add('mode-active');
+      else if (_pn_mode === 2) document.getElementById('modeCool').classList.add('mode-active');
+      else if (_pn_mode === 3) document.getElementById('modeAuto').classList.add('mode-active');
 
       // Update fan buttons
-      document.getElementById('fanAuto').querySelector('rect').style.stroke = fanMode === 0 ? '#3498db' : '#7f8c8d';
-      document.getElementById('fanAuto').querySelector('rect').style.strokeWidth = fanMode === 0 ? '3' : '2';
-      document.getElementById('fanOn').querySelector('rect').style.stroke = fanMode === 1 ? '#3498db' : '#7f8c8d';
-      document.getElementById('fanOn').querySelector('rect').style.strokeWidth = fanMode === 1 ? '3' : '2';
+      document.getElementById('fanAuto').querySelector('rect').style.stroke = _pn_fanMode === 0 ? '#3498db' : '#7f8c8d';
+      document.getElementById('fanAuto').querySelector('rect').style.strokeWidth = _pn_fanMode === 0 ? '3' : '2';
+      document.getElementById('fanOn').querySelector('rect').style.stroke = _pn_fanMode === 1 ? '#3498db' : '#7f8c8d';
+      document.getElementById('fanOn').querySelector('rect').style.strokeWidth = _pn_fanMode === 1 ? '3' : '2';
 
       // Fan animation
-      var fanIcon = document.getElementById('fanIcon');
-      if (fanRunning) {
+const fanIcon = document.getElementById('fanIcon');
+      if (_pb_fanRunning) {
         fanIcon.classList.add('fan-spinning');
       } else {
         fanIcon.classList.remove('fan-spinning');
       }
 
-      // Determine heating/cooling status
-      if (mode === 1) { // Heat mode
-        heating = currentTemp < setpoint - 0.5;
-        cooling = false;
-      } else if (mode === 2) { // Cool mode
-        heating = false;
-        cooling = currentTemp > setpoint + 0.5;
-      } else if (mode === 3) { // Auto mode
-        heating = currentTemp < setpoint - 0.5;
-        cooling = currentTemp > setpoint + 0.5;
+      // Determine _pb_heating/_pb_cooling status
+      if (_pn_mode === 1) { // Heat _pn_mode
+        _pb_heating = _pn_currentTemp < _pn_setpoint - 0.5;
+        _pb_cooling = false;
+      } else if (_pn_mode === 2) { // Cool _pn_mode
+        _pb_heating = false;
+        _pb_cooling = _pn_currentTemp > _pn_setpoint + 0.5;
+      } else if (_pn_mode === 3) { // Auto _pn_mode
+        _pb_heating = _pn_currentTemp < _pn_setpoint - 0.5;
+        _pb_cooling = _pn_currentTemp > _pn_setpoint + 0.5;
       } else {
-        heating = false;
-        cooling = false;
+        _pb_heating = false;
+        _pb_cooling = false;
       }
 
-      fanRunning = fanMode === 1 || heating || cooling;
+      _pb_fanRunning = _pn_fanMode === 1 || _pb_heating || _pb_cooling;
     }
 
     function adjustSetpoint(delta) {
-      setpoint += delta;
-      setpoint = Math.max(50, Math.min(90, setpoint));
+      _pn_setpoint += delta;
+      _pn_setpoint = Math.max(50, Math.min(90, _pn_setpoint));
       updateDisplay();
     }
 
     function setMode(newMode) {
-      mode = newMode;
+      _pn_mode = newMode;
       updateDisplay();
     }
 
     function setFan(newFanMode) {
-      fanMode = newFanMode;
+      _pn_fanMode = newFanMode;
       updateDisplay();
     }
 
@@ -178,6 +184,33 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_currentTemp') {
+    _pn_currentTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_setpoint') {
+    _pn_setpoint = Number(value) || 0;
+    update();
+  } else if (id === '_pn_mode') {
+    _pn_mode = Number(value) || 0;
+    update();
+  } else if (id === '_pn_fanMode') {
+    _pn_fanMode = Number(value) || 0;
+    update();
+  } else if (id === '_pb_heating') {
+    _pb_heating = !!value;
+    update();
+  } else if (id === '_pb_cooling') {
+    _pb_cooling = !!value;
+    update();
+  } else if (id === '_pb_fanRunning') {
+    _pb_fanRunning = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

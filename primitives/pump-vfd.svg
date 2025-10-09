@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="120" height="90">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="100%" height="100%">
   <defs>
     <style>
       .pump-body { fill: #3498db; stroke: #2c3e50; stroke-width: 2; }
@@ -54,41 +54,47 @@
   <!-- Labels -->
   <text x="102" y="85" class="label-text">SPEED</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var speed = 0;         // 0-100 (%)
-    var status = 0;        // 0=off, 1=on
-    var frequency = 0;     // Hz (0-60)
+  <script><![CDATA[
+//!export-start
+let _pn_speed = 0;
+let _pn_status = 0;
+let _pn_frequency = 0;
+//!export-end
 
-    var rotation = 0;
-    var animationId = null;
+function init() {
+  update();
+}
 
-    function updateWidget() {
-      var impeller = document.getElementById('impeller');
-      var speedBar = document.getElementById('speedBar');
-      var speedDisplay = document.getElementById('speedDisplay');
+let rotation = 0;
+let animationId = null;
 
-      var displaySpeed = Math.max(0, Math.min(100, speed));
+    function update() {
+const impeller = document.getElementById('impeller');
+const speedBar = document.getElementById('speedBar');
+const speedDisplay = document.getElementById('speedDisplay');
 
-      // Update speed display
+  if (!impeller || !speedBar || !speedDisplay) return;
+let displaySpeed = Math.max(0, Math.min(100, _pn_speed));
+
+      // Update _pn_speed display
       speedDisplay.textContent = Math.round(displaySpeed) + '%';
 
-      // Update speed bar (fills from bottom)
-      var barHeight = (displaySpeed / 100) * 40;
+      // Update _pn_speed bar (fills from bottom)
+let barHeight = (displaySpeed / 100) * 40;
       speedBar.setAttribute('y', 75 - barHeight);
       speedBar.setAttribute('height', barHeight);
 
       // Animation
       if (animationId) clearInterval(animationId);
 
-      if (status === 1 && displaySpeed > 0) {
-        var rotSpeed = displaySpeed / 5;
+      if (_pn_status === 1 && displaySpeed > 0) {
+let rotSpeed = displaySpeed / 5;
         animationId = setInterval(function() {
           rotation += rotSpeed;
           impeller.setAttribute('transform', 'rotate(' + rotation + ' 45 35)');
         }, 50);
 
-        // Color based on speed
+        // Color based on _pn_speed
         if (displaySpeed < 30) {
           speedBar.setAttribute('fill', '#e74c3c');
         } else if (displaySpeed < 70) {
@@ -99,7 +105,20 @@
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_speed') {
+    _pn_speed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+    update();
+  } else if (id === '_pn_frequency') {
+    _pn_frequency = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

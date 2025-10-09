@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="120" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <style>
       .btn-container { cursor: pointer; }
@@ -52,22 +52,29 @@
   <!-- Status LED -->
   <circle class="status-led" id="statusLED" cx="60" cy="92" r="6" fill="#999" stroke="#666" stroke-width="1"/>
 
-  <script type="text/javascript"><![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pb_isRunning = false;
+let _ps_tagId = '';
+let _ps_cmdTagId = '';
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Integration Variables
-      var isRunning = false;
-      var tagId = ''; // Set by FUXA: variable binding for run status
-      var cmdTagId = ''; // Set by FUXA: variable binding for start/stop command
 
       // DOM Elements
-      var btnRect = document.getElementById('btnRect');
-      var btnText = document.getElementById('btnText');
-      var statusLED = document.getElementById('statusLED');
-      var btnGroup = document.getElementById('btnGroup');
+const btnRect = document.getElementById('btnRect');
+const btnText = document.getElementById('btnText');
+const statusLED = document.getElementById('statusLED');
+const btnGroup = document.getElementById('btnGroup');
 
       // Update visual state
       function updateVisuals() {
-        if (isRunning) {
+        if (_pb_isRunning) {
           btnRect.classList.add('running');
           btnText.textContent = 'STOP';
           statusLED.setAttribute('fill', '#4CAF50');
@@ -85,14 +92,14 @@
         evt.preventDefault();
 
         // Send momentary pulse command
-        if (typeof GAuxy !== 'undefined' && cmdTagId) {
-          var command = isRunning ? 0 : 1; // 1 for START, 0 for STOP
-          GAuxy.setVariable(cmdTagId, command);
+        if (typeof GAuxy !== 'undefined' && _ps_cmdTagId) {
+let command = _pb_isRunning ? 0 : 1; // 1 for START, 0 for STOP
+          GAuxy.setVariable(_ps_cmdTagId, command);
 
           // Reset command after 200ms (momentary)
           setTimeout(function() {
-            if (typeof GAuxy !== 'undefined' && cmdTagId) {
-              GAuxy.setVariable(cmdTagId, -1); // Reset command
+            if (typeof GAuxy !== 'undefined' && _ps_cmdTagId) {
+              GAuxy.setVariable(_ps_cmdTagId, -1); // Reset command
             }
           }, 200);
         }
@@ -100,28 +107,44 @@
 
       // FUXA Integration Functions
       window.svgSetValue = function(sigid, value) {
-        if (sigid === tagId) {
-          isRunning = (value > 0);
+        if (sigid === _ps_tagId) {
+          _pb_isRunning = (value > 0);
           updateVisuals();
         }
       };
 
       window.svgGetProperty = function(name) {
-        if (name === 'variableId') return tagId;
-        if (name === 'cmdVariableId') return cmdTagId;
+        if (name === 'variableId') return _ps_tagId;
+        if (name === 'cmdVariableId') return _ps_cmdTagId;
         return null;
       };
 
       window.svgSetProperty = function(name, value) {
         if (name === 'variableId') {
-          tagId = value;
+          _ps_tagId = value;
         } else if (name === 'cmdVariableId') {
-          cmdTagId = value;
+          _ps_cmdTagId = value;
         }
       };
 
       // Initialize
       updateVisuals();
     })();
-  ]]></script>
+
+function putValue(id, value) {
+  if (id === '_pb_isRunning') {
+    _pb_isRunning = !!value;
+    update();
+  } else if (id === '_ps_tagId') {
+    _ps_tagId = String(value) || "";
+    update();
+  } else if (id === '_ps_cmdTagId') {
+    _ps_cmdTagId = String(value) || "";
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

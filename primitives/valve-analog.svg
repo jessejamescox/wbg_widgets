@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 110" width="80" height="110">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 110" width="100%" height="100%">
   <defs>
     <style>
       .valve-body { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
@@ -40,34 +40,41 @@
   <text id="valueText" x="40" y="95" class="value-text" fill="#ffffff">0%</text>
   <text x="40" y="105" class="label-text">POSITION</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var position = 0;     // 0-100 (%)
-    var command = 0;      // Commanded position
-    var feedback = 0;     // Actual position feedback
+  <script><![CDATA[
+//!export-start
+let _pn_position = 0;
+let _pn_command = 0;
+let _pn_feedback = 0;
+//!export-end
 
-    function updateWidget() {
-      var gaugeFill = document.getElementById('gaugeFill');
-      var valueText = document.getElementById('valueText');
-      var stemTop = document.getElementById('stemTop');
+function init() {
+  update();
+}
 
-      // Use feedback if available, otherwise use command
-      var displayPos = feedback > 0 ? feedback : position;
+    function update() {
+const gaugeFill = document.getElementById('gaugeFill');
+const valueText = document.getElementById('valueText');
+const stemTop = document.getElementById('stemTop');
+
+  if (!gaugeFill || !valueText || !stemTop) return;
+
+      // Use _pn_feedback if available, otherwise use _pn_command
+let displayPos = _pn_feedback > 0 ? _pn_feedback : _pn_position;
       displayPos = Math.max(0, Math.min(100, displayPos));
 
       // Update gauge fill (inverted - fills from bottom)
-      var fillHeight = (displayPos / 100) * 50;
+let fillHeight = (displayPos / 100) * 50;
       gaugeFill.setAttribute('y', 70 - fillHeight);
       gaugeFill.setAttribute('height', fillHeight);
 
-      // Update stem position
-      var stemY = 27 + (25 * (1 - displayPos / 100));
+      // Update stem _pn_position
+let stemY = 27 + (25 * (1 - displayPos / 100));
       stemTop.setAttribute('cy', stemY);
 
       // Update value display
       valueText.textContent = Math.round(displayPos) + '%';
 
-      // Color based on position
+      // Color based on _pn_position
       if (displayPos < 10) {
         gaugeFill.setAttribute('fill', '#e74c3c');
       } else if (displayPos > 90) {
@@ -77,7 +84,20 @@
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_position') {
+    _pn_position = Number(value) || 0;
+    update();
+  } else if (id === '_pn_command') {
+    _pn_command = Number(value) || 0;
+    update();
+  } else if (id === '_pn_feedback') {
+    _pn_feedback = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

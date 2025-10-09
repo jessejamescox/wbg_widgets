@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 450" width="380" height="450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 380 450" width="100%" height="100%">
   <defs>
     <linearGradient id="bgGradient" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#1a1a2e;stop-opacity:1" />
@@ -125,11 +125,20 @@
     </g>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_blinkCount = 0;
+let _pn_opacity = 0;
+let _pb_increasing = true;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var bindings = {
+let bindings = {
         soc: 'battery.soc',                       // State of Charge (0-100%)
         voltage: 'battery.voltage',               // Volts
         current: 'battery.current',               // Amperes (positive=charging, negative=discharging)
@@ -143,21 +152,19 @@
         timeToFull: 'battery.timeToFull',         // Minutes (when charging)
         timeToEmpty: 'battery.timeToEmpty'        // Minutes (when discharging)
       };
-
-      var arrowAnimationId = null;
+let arrowAnimationId = null;
 
       function updateSOC(soc) {
-        var socText = document.getElementById('socText');
-        var chargeLevel = document.getElementById('chargeLevel');
+const socText = document.getElementById('socText');
+const chargeLevel = document.getElementById('chargeLevel');
 
         if (!socText || !chargeLevel) return;
-
-        var value = Math.max(0, Math.min(100, soc));
+let value = Math.max(0, Math.min(100, soc));
         socText.textContent = value.toFixed(0) + '%';
 
         // Calculate charge level height (max 150px)
-        var height = (value / 100) * 150;
-        var yPos = 75 - height; // Start from bottom (75) and go up
+let height = (value / 100) * 150;
+let yPos = 75 - height; // Start from bottom (75) and go up
 
         chargeLevel.setAttribute('y', yPos);
         chargeLevel.setAttribute('height', height);
@@ -176,9 +183,9 @@
       }
 
       function updateStatus(status, power) {
-        var statusText = document.getElementById('batteryStatus');
-        var chargingArrows = document.getElementById('chargingArrows');
-        var dischargingArrows = document.getElementById('dischargingArrows');
+const statusText = document.getElementById('batteryStatus');
+const chargingArrows = document.getElementById('chargingArrows');
+const dischargingArrows = document.getElementById('dischargingArrows');
 
         if (!statusText) return;
 
@@ -192,39 +199,39 @@
           case 0: // Idle
             statusText.textContent = 'IDLE';
             statusText.setAttribute('fill', '#95a5a6');
-            if (chargingArrows) chargingArrows.setAttribute('opacity', '0');
-            if (dischargingArrows) dischargingArrows.setAttribute('opacity', '0');
+            if (chargingArrows) chargingArrows.setAttribute('_pn_opacity', '0');
+            if (dischargingArrows) dischargingArrows.setAttribute('_pn_opacity', '0');
             break;
 
           case 1: // Charging
             statusText.textContent = 'CHARGING';
             statusText.setAttribute('fill', '#27ae60');
-            if (dischargingArrows) dischargingArrows.setAttribute('opacity', '0');
+            if (dischargingArrows) dischargingArrows.setAttribute('_pn_opacity', '0');
             animateArrows(chargingArrows, true);
             break;
 
           case 2: // Discharging
             statusText.textContent = 'DISCHARGING';
             statusText.setAttribute('fill', '#e74c3c');
-            if (chargingArrows) chargingArrows.setAttribute('opacity', '0');
+            if (chargingArrows) chargingArrows.setAttribute('_pn_opacity', '0');
             animateArrows(dischargingArrows, false);
             break;
 
           case 3: // Fault
             statusText.textContent = 'FAULT';
             statusText.setAttribute('fill', '#e74c3c');
-            if (chargingArrows) chargingArrows.setAttribute('opacity', '0');
-            if (dischargingArrows) dischargingArrows.setAttribute('opacity', '0');
+            if (chargingArrows) chargingArrows.setAttribute('_pn_opacity', '0');
+            if (dischargingArrows) dischargingArrows.setAttribute('_pn_opacity', '0');
 
             // Blink effect
-            var blinkCount = 0;
-            var blinkInterval = setInterval(function() {
-              blinkCount++;
-              var opacity = (blinkCount % 2 === 0) ? '1' : '0.3';
-              statusText.setAttribute('opacity', opacity);
-              if (blinkCount > 8) {
+
+let blinkInterval = setInterval(function() {
+              _pn_blinkCount++;
+
+              statusText.setAttribute('_pn_opacity', _pn_opacity);
+              if (_pn_blinkCount > 8) {
                 clearInterval(blinkInterval);
-                statusText.setAttribute('opacity', '1');
+                statusText.setAttribute('_pn_opacity', '1');
               }
             }, 300);
             break;
@@ -234,25 +241,22 @@
       function animateArrows(arrowGroup, isCharging) {
         if (!arrowGroup) return;
 
-        var opacity = 0;
-        var increasing = true;
-
         function animate() {
-          if (increasing) {
-            opacity += 0.02;
-            if (opacity >= 1) {
-              opacity = 1;
-              increasing = false;
+          if (_pb_increasing) {
+            _pn_opacity += 0.02;
+            if (_pn_opacity >= 1) {
+              _pn_opacity = 1;
+              _pb_increasing = false;
             }
           } else {
-            opacity -= 0.02;
-            if (opacity <= 0.3) {
-              opacity = 0.3;
-              increasing = true;
+            _pn_opacity -= 0.02;
+            if (_pn_opacity <= 0.3) {
+              _pn_opacity = 0.3;
+              _pb_increasing = true;
             }
           }
 
-          arrowGroup.setAttribute('opacity', opacity);
+          arrowGroup.setAttribute('_pn_opacity', _pn_opacity);
           arrowAnimationId = requestAnimationFrame(animate);
         }
 
@@ -260,12 +264,11 @@
       }
 
       function updatePowerFlow(power) {
-        var powerText = document.getElementById('powerFlow');
+const powerText = document.getElementById('powerFlow');
         if (!powerText) return;
-
-        var absValue = Math.abs(power);
-        var sign = power >= 0 ? '+' : '-';
-        var displayValue = absValue >= 1 ? absValue.toFixed(2) + ' kW' : (absValue * 1000).toFixed(0) + ' W';
+let absValue = Math.abs(power);
+let sign = power >= 0 ? '+' : '-';
+let displayValue = absValue >= 1 ? absValue.toFixed(2) + ' kW' : (absValue * 1000).toFixed(0) + ' W';
 
         powerText.textContent = sign + displayValue;
 
@@ -279,7 +282,7 @@
       }
 
       function updateVoltage(voltage) {
-        var voltageText = document.getElementById('voltage');
+const voltageText = document.getElementById('voltage');
         if (voltageText) {
           voltageText.textContent = voltage.toFixed(1) + ' V';
 
@@ -295,11 +298,11 @@
       }
 
       function updateCurrent(current) {
-        var currentText = document.getElementById('current');
-        var currentDir = document.getElementById('currentDir');
+const currentText = document.getElementById('current');
+const currentDir = document.getElementById('currentDir');
 
         if (currentText) {
-          var absValue = Math.abs(current);
+let absValue = Math.abs(current);
           currentText.textContent = absValue.toFixed(1) + ' A';
         }
 
@@ -318,13 +321,12 @@
       }
 
       function updateTemperature(temp) {
-        var tempText = document.getElementById('temperature');
-        var tempStatus = document.getElementById('tempStatus');
+const tempText = document.getElementById('temperature');
+const tempStatus = document.getElementById('tempStatus');
 
         if (tempText) {
           tempText.textContent = temp.toFixed(1) + '°C';
-
-          var status, color;
+let status, color;
           if (temp < 0) {
             status = 'COLD';
             color = '#3498db';
@@ -354,7 +356,7 @@
       }
 
       function updateCapacity(capacity, maxCapacity) {
-        var capacityText = document.getElementById('capacity');
+const capacityText = document.getElementById('capacity');
         if (capacityText) {
           if (maxCapacity !== undefined && maxCapacity > 0) {
             capacityText.textContent = capacity.toFixed(1) + '/' + maxCapacity.toFixed(0) + ' kWh';
@@ -365,26 +367,26 @@
       }
 
       function updateCycles(cycles) {
-        var cyclesText = document.getElementById('cycles');
+const cyclesText = document.getElementById('cycles');
         if (cyclesText) {
           cyclesText.textContent = cycles.toLocaleString();
         }
       }
 
       function updateHealth(health) {
-        var healthBar = document.getElementById('healthBar');
-        var healthText = document.getElementById('healthText');
+const healthBar = document.getElementById('healthBar');
+const healthText = document.getElementById('healthText');
 
         if (healthBar && healthText) {
-          var value = Math.max(0, Math.min(100, health));
+let value = Math.max(0, Math.min(100, health));
           healthText.textContent = value.toFixed(0) + '%';
 
           // Calculate bar width (max 90px)
-          var width = (value / 100) * 90;
+let width = (value / 100) * 90;
           healthBar.setAttribute('width', width);
 
           // Color based on health
-          var color;
+let color;
           if (value < 50) {
             color = '#e74c3c';
           } else if (value < 70) {
@@ -452,6 +454,21 @@
       // Expose bindings for FUXA
       window.batteryStorageBindings = bindings;
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_blinkCount') {
+    _pn_blinkCount = Number(value) || 0;
+    update();
+  } else if (id === '_pn_opacity') {
+    _pn_opacity = Number(value) || 0;
+    update();
+  } else if (id === '_pb_increasing') {
+    _pb_increasing = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

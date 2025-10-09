@@ -86,10 +86,13 @@
     <text id="demandValue" class="unit-text" x="375" y="162" text-anchor="end">0 kW</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       power: 'electrical_meter_power',           // kW
       voltage: 'electrical_meter_voltage',       // V
       current: 'electrical_meter_current',       // A
@@ -102,7 +105,7 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       maxPower: 500,      // kW
       maxCurrent: 1000,   // A
       nominalVoltage: 480, // V
@@ -145,16 +148,15 @@
     }
 
     function updatePower(value) {
-      var power = parseFloat(value) || 0;
+let power = parseFloat(value) || 0;
       document.getElementById('powerValue').textContent = power.toFixed(2);
 
       // Update gauge
-      var percent = Math.min((power / config.maxPower) * 100, 100);
+let percent = Math.min((power / config.maxPower) * 100, 100);
       document.getElementById('powerPercent').textContent = percent.toFixed(0) + '%';
-
-      var circumference = 2 * Math.PI * 60;
-      var offset = circumference - (percent / 100) * circumference;
-      var gaugeFill = document.getElementById('powerGaugeFill');
+let circumference = 2 * Math.PI * 60;
+let offset = circumference - (percent / 100) * circumference;
+let gaugeFill = document.getElementById('powerGaugeFill');
       gaugeFill.setAttribute('stroke-dashoffset', offset);
 
       // Change color based on load
@@ -168,20 +170,19 @@
     }
 
     function updateVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('voltageValue').textContent = voltage.toFixed(0);
     }
 
     function updateCurrent(value) {
-      var current = parseFloat(value) || 0;
+let current = parseFloat(value) || 0;
       document.getElementById('currentValue').textContent = current.toFixed(1);
     }
 
     function updatePowerFactor(value) {
-      var pf = parseFloat(value) || 0;
+let pf = parseFloat(value) || 0;
       document.getElementById('pfValue').textContent = pf.toFixed(2);
-
-      var indicator = document.getElementById('pfIndicator');
+let indicator = document.getElementById('pfIndicator');
       if (pf < config.lowPF) {
         indicator.setAttribute('class', 'status-alarm');
       } else if (pf < 0.95) {
@@ -192,12 +193,12 @@
     }
 
     function updateFrequency(value) {
-      var freq = parseFloat(value) || 0;
+let freq = parseFloat(value) || 0;
       document.getElementById('freqValue').textContent = freq.toFixed(1);
     }
 
     function updateEnergy(value) {
-      var energy = parseFloat(value) || 0;
+let energy = parseFloat(value) || 0;
       if (energy >= 1000) {
         document.getElementById('energyValue').textContent = (energy / 1000).toFixed(2);
         document.querySelector('#energyDisplay .unit-text').textContent = 'MWh';
@@ -208,18 +209,17 @@
     }
 
     function updateDemand(value) {
-      var demand = parseFloat(value) || 0;
-      var maxDemand = config.maxPower;
+let demand = parseFloat(value) || 0;
+let maxDemand = config.maxPower;
 
       document.getElementById('demandValue').textContent = demand.toFixed(0) + ' kW';
-
-      var width = Math.min((demand / maxDemand) * 340, 340);
+let width = Math.min((demand / maxDemand) * 340, 340);
       document.getElementById('demandBar').setAttribute('width', width);
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+let indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
@@ -233,6 +233,7 @@
       // For FUXA integration
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+init();
+]]></script>
 </svg>

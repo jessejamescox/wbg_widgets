@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
       .motor-body { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -39,36 +39,43 @@
   <rect x="20" y="63" width="60" height="12" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
   <text id="infoText" x="50" y="72" class="value-text">0 RPM</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var status = 0;            // 0=off, 1=on
-    var speed = 0;             // RPM
-    var current = 0;           // Amps
-    var alarmState = 0;        // 0=normal, 1=alarm
+  <script><![CDATA[
+//!export-start
+let _pn_status = 0;
+let _pn_speed = 0;
+let _pn_current = 0;
+let _pn_alarmState = 0;
+//!export-end
 
-    var rotation = 0;
-    var animationId = null;
+function init() {
+  update();
+}
 
-    function updateWidget() {
-      var fan = document.getElementById('fan');
-      var indicator = document.getElementById('statusIndicator');
-      var statusText = document.getElementById('statusText');
-      var infoText = document.getElementById('infoText');
+let rotation = 0;
+let animationId = null;
 
-      if (status === 1) {
+    function update() {
+const fan = document.getElementById('fan');
+const indicator = document.getElementById('statusIndicator');
+const statusText = document.getElementById('statusText');
+const infoText = document.getElementById('infoText');
+
+  if (!fan || !indicator || !statusText || !infoText) return;
+
+      if (_pn_status === 1) {
         // Running
         indicator.setAttribute('class', 'status-on');
         statusText.textContent = 'RUN';
 
-        if (speed > 0) {
-          infoText.textContent = Math.round(speed) + ' RPM';
+        if (_pn_speed > 0) {
+          infoText.textContent = Math.round(_pn_speed) + ' RPM';
         } else {
           infoText.textContent = 'RUNNING';
         }
 
         // Animate fan
         if (!animationId) {
-          var rotSpeed = speed > 0 ? Math.max(5, speed / 200) : 10;
+let rotSpeed = _pn_speed > 0 ? Math.max(5, _pn_speed / 200) : 10;
           animationId = setInterval(function() {
             rotation += rotSpeed;
             fan.setAttribute('transform', 'rotate(' + rotation + ' 22 42.5)');
@@ -86,14 +93,30 @@
       }
 
       // Alarm state
-      if (alarmState === 1) {
+      if (_pn_alarmState === 1) {
         indicator.setAttribute('class', 'status-alarm');
         statusText.textContent = 'ALARM';
         infoText.textContent = 'FAULT';
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+    update();
+  } else if (id === '_pn_speed') {
+    _pn_speed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_current') {
+    _pn_current = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarmState') {
+    _pn_alarmState = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="700" height="450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="100%" height="100%">
   <defs>
     <style>
       .ahud-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -206,60 +206,66 @@
     <text id="statusText" class="ahud-value" x="580" y="415">Normal</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var oaDamperPos = 25; // 0-100%
-    var raDamperPos = 75; // 0-100%
-    var eaDamperPos = 20; // 0-100%
-    var supplyFanSpeed = 65; // 0-100%
-    var returnFanSpeed = 60; // 0-100%
-    var supplyFanStatus = true;
-    var returnFanStatus = true;
-    var preheatValve = 0; // 0-100%
-    var coolingValve = 0; // 0-100%
-    var reheatValve = 30; // 0-100%
-    var oaTemp = 45; // degrees F
-    var raTemp = 72; // degrees F
-    var maTemp = 62; // degrees F
-    var saTemp = 58; // degrees F
-    var staticPressure = 2.5; // inches wc
-    var filterDirty = false;
-    var alarmActive = false;
-    var mode = 'Heating'; // Heating, Cooling, Economizer, Off
+  <script><![CDATA[
+//!export-start
+let _pn_oaDamperPos = 25;
+let _pn_raDamperPos = 75;
+let _pn_eaDamperPos = 20;
+let _pn_supplyFanSpeed = 65;
+let _pn_returnFanSpeed = 60;
+let _pb_supplyFanStatus = true;
+let _pb_returnFanStatus = true;
+let _pn_preheatValve = 0;
+let _pn_coolingValve = 0;
+let _pn_reheatValve = 30;
+let _pn_oaTemp = 45;
+let _pn_raTemp = 72;
+let _pn_maTemp = 62;
+let _pn_saTemp = 58;
+let _pn_staticPressure = 2.5;
+let _pb_filterDirty = false;
+let _pb_alarmActive = false;
+let _ps_mode = 'Heating';
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Update temperatures
-      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
-      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
-      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
+      document.getElementById('oaTemp').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('maTemp').textContent = _pn_maTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = _pn_saTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = _pn_maTemp.toFixed(0) + '°F';
 
       // Calculate mixed air temp
-      maTemp = (oaTemp * oaDamperPos / 100) + (raTemp * raDamperPos / 100);
-      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
-      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
+      _pn_maTemp = (_pn_oaTemp * _pn_oaDamperPos / 100) + (_pn_raTemp * _pn_raDamperPos / 100);
+      document.getElementById('maTemp').textContent = _pn_maTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = _pn_maTemp.toFixed(0) + '°F';
 
       // Update damper positions
-      document.getElementById('oaDamperPos').textContent = oaDamperPos.toFixed(0) + '%';
-      document.getElementById('raDamperPos').textContent = raDamperPos.toFixed(0) + '%';
-      document.getElementById('eaDamperPos').textContent = eaDamperPos.toFixed(0) + '%';
+      document.getElementById('oaDamperPos').textContent = _pn_oaDamperPos.toFixed(0) + '%';
+      document.getElementById('raDamperPos').textContent = _pn_raDamperPos.toFixed(0) + '%';
+      document.getElementById('eaDamperPos').textContent = _pn_eaDamperPos.toFixed(0) + '%';
 
       // Rotate dampers
-      var oaAngle = (oaDamperPos / 100) * 90;
-      var raAngle = (raDamperPos / 100) * 90;
-      var eaAngle = (eaDamperPos / 100) * 90;
+let oaAngle = (_pn_oaDamperPos / 100) * 90;
+let raAngle = (_pn_raDamperPos / 100) * 90;
+let eaAngle = (_pn_eaDamperPos / 100) * 90;
       document.getElementById('oaDamper').setAttribute('transform', 'translate(120, 80) rotate(' + oaAngle + ')');
       document.getElementById('raDamper').setAttribute('transform', 'translate(120, 170) rotate(' + raAngle + ')');
       document.getElementById('eaDamper').setAttribute('transform', 'translate(87, 245) rotate(' + eaAngle + ')');
 
       // Update fans
-      var sfText = document.getElementById('sfStatus');
-      if (supplyFanStatus) {
-        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
+const sfText = document.getElementById('sfStatus');
+      if (_pb_supplyFanStatus) {
+        sfText.textContent = 'ON - ' + _pn_supplyFanSpeed.toFixed(0) + '%';
         sfText.style.fill = '#27ae60';
         document.getElementById('supplyFan').querySelector('.ahud-fan-blade').classList.add('ahud-fan-active');
       } else {
@@ -267,10 +273,9 @@
         sfText.style.fill = '#7f8c8d';
         document.getElementById('supplyFan').querySelector('.ahud-fan-blade').classList.remove('ahud-fan-active');
       }
-
-      var rfText = document.getElementById('rfStatus');
-      if (returnFanStatus) {
-        rfText.textContent = 'ON - ' + returnFanSpeed.toFixed(0) + '%';
+const rfText = document.getElementById('rfStatus');
+      if (_pb_returnFanStatus) {
+        rfText.textContent = 'ON - ' + _pn_returnFanSpeed.toFixed(0) + '%';
         rfText.style.fill = '#27ae60';
         document.getElementById('returnFan').querySelector('.ahud-fan-blade').classList.add('ahud-fan-active');
       } else {
@@ -279,36 +284,36 @@
         document.getElementById('returnFan').querySelector('.ahud-fan-blade').classList.remove('ahud-fan-active');
       }
 
-      document.getElementById('sfStatic').textContent = staticPressure.toFixed(1) + '"wc';
+      document.getElementById('sfStatic').textContent = _pn_staticPressure.toFixed(1) + '"wc';
 
       // Update coil valves
-      document.getElementById('phcValve').textContent = preheatValve.toFixed(0) + '%';
-      document.getElementById('ccValve').textContent = coolingValve.toFixed(0) + '%';
-      document.getElementById('rhcValve').textContent = reheatValve.toFixed(0) + '%';
+      document.getElementById('phcValve').textContent = _pn_preheatValve.toFixed(0) + '%';
+      document.getElementById('ccValve').textContent = _pn_coolingValve.toFixed(0) + '%';
+      document.getElementById('rhcValve').textContent = _pn_reheatValve.toFixed(0) + '%';
 
       // Update coil appearance
-      if (preheatValve > 5) {
+      if (_pn_preheatValve > 5) {
         document.getElementById('preheatCoil').classList.add('ahud-coil-active');
       } else {
         document.getElementById('preheatCoil').classList.remove('ahud-coil-active');
       }
 
-      if (coolingValve > 5) {
+      if (_pn_coolingValve > 5) {
         document.getElementById('coolingCoil').classList.add('ahud-coil-active');
       } else {
         document.getElementById('coolingCoil').classList.remove('ahud-coil-active');
       }
 
-      if (reheatValve > 5) {
+      if (_pn_reheatValve > 5) {
         document.getElementById('reheatCoil').classList.add('ahud-coil-active');
       } else {
         document.getElementById('reheatCoil').classList.remove('ahud-coil-active');
       }
 
       // Update filter status
-      var filterLight = document.getElementById('filterLight');
-      var filterText = document.getElementById('filterText');
-      if (filterDirty) {
+const filterLight = document.getElementById('filterLight');
+const filterText = document.getElementById('filterText');
+      if (_pb_filterDirty) {
         filterLight.setAttribute('class', 'status-alarm');
         filterText.textContent = 'Dirty';
         filterText.style.fill = '#e74c3c';
@@ -318,13 +323,13 @@
         filterText.style.fill = '#27ae60';
       }
 
-      // Update mode
-      document.getElementById('modeText').textContent = mode;
+      // Update _ps_mode
+      document.getElementById('modeText').textContent = _ps_mode;
 
       // Update system status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
-      if (alarmActive) {
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
@@ -340,6 +345,66 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_oaDamperPos') {
+    _pn_oaDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raDamperPos') {
+    _pn_raDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_eaDamperPos') {
+    _pn_eaDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_supplyFanSpeed') {
+    _pn_supplyFanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_returnFanSpeed') {
+    _pn_returnFanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pb_supplyFanStatus') {
+    _pb_supplyFanStatus = !!value;
+    update();
+  } else if (id === '_pb_returnFanStatus') {
+    _pb_returnFanStatus = !!value;
+    update();
+  } else if (id === '_pn_preheatValve') {
+    _pn_preheatValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_coolingValve') {
+    _pn_coolingValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_reheatValve') {
+    _pn_reheatValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_oaTemp') {
+    _pn_oaTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raTemp') {
+    _pn_raTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_maTemp') {
+    _pn_maTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_saTemp') {
+    _pn_saTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_staticPressure') {
+    _pn_staticPressure = Number(value) || 0;
+    update();
+  } else if (id === '_pb_filterDirty') {
+    _pb_filterDirty = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  } else if (id === '_ps_mode') {
+    _ps_mode = String(value) || "";
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

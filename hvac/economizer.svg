@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%">
   <defs>
     <style>
       .econ-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -162,112 +162,118 @@
     <text id="statusText" class="econ-value" x="88" y="375">Normal</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var oaDamperPos = 75; // 0-100%
-    var raDamperPos = 25; // 0-100%
-    var eaDamperPos = 70; // 0-100%
-    var oaTemp = 55; // degrees F
-    var raTemp = 72; // degrees F
-    var maTemp = 62; // degrees F (calculated)
-    var setpoint = 60; // degrees F
-    var totalAirflow = 4000; // CFM
-    var oaAirflow = 3000; // CFM (calculated)
-    var raAirflow = 1000; // CFM (calculated)
-    var mode = 'Economizer'; // 'Min OA', 'Economizer', 'Max Cool'
-    var enabled = true;
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pn_oaDamperPos = 75;
+let _pn_raDamperPos = 25;
+let _pn_eaDamperPos = 70;
+let _pn_oaTemp = 55;
+let _pn_raTemp = 72;
+let _pn_maTemp = 62;
+let _pn_setpoint = 60;
+let _pn_totalAirflow = 4000;
+let _pn_oaAirflow = 3000;
+let _pn_raAirflow = 1000;
+let _ps_mode = 'Economizer';
+let _pb_enabled = true;
+let _pb_alarmActive = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Calculate airflows based on damper positions
-      oaAirflow = (oaDamperPos / 100) * totalAirflow;
-      raAirflow = (raDamperPos / 100) * totalAirflow;
+      _pn_oaAirflow = (_pn_oaDamperPos / 100) * _pn_totalAirflow;
+      _pn_raAirflow = (_pn_raDamperPos / 100) * _pn_totalAirflow;
 
       // Calculate mixed air temperature
-      var oaFraction = oaAirflow / totalAirflow;
-      var raFraction = raAirflow / totalAirflow;
-      maTemp = (oaTemp * oaFraction) + (raTemp * raFraction);
+let oaFraction = _pn_oaAirflow / _pn_totalAirflow;
+let raFraction = _pn_raAirflow / _pn_totalAirflow;
+      _pn_maTemp = (_pn_oaTemp * oaFraction) + (_pn_raTemp * raFraction);
 
       // Update temperature displays
-      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
-      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
-      document.getElementById('setpoint').textContent = setpoint.toFixed(0) + '°F';
+      document.getElementById('oaTemp').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('maTemp').textContent = _pn_maTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = _pn_maTemp.toFixed(0) + '°F';
+      document.getElementById('setpoint').textContent = _pn_setpoint.toFixed(0) + '°F';
 
       // Update damper positions
-      document.getElementById('oaDamperPos').textContent = oaDamperPos.toFixed(0) + '%';
-      document.getElementById('raDamperPos').textContent = raDamperPos.toFixed(0) + '%';
-      document.getElementById('eaDamperPos').textContent = eaDamperPos.toFixed(0) + '%';
+      document.getElementById('oaDamperPos').textContent = _pn_oaDamperPos.toFixed(0) + '%';
+      document.getElementById('raDamperPos').textContent = _pn_raDamperPos.toFixed(0) + '%';
+      document.getElementById('eaDamperPos').textContent = _pn_eaDamperPos.toFixed(0) + '%';
 
       // Update airflows
-      document.getElementById('oaFlow').textContent = oaAirflow.toFixed(0) + ' CFM';
-      document.getElementById('raFlow').textContent = raAirflow.toFixed(0) + ' CFM';
+      document.getElementById('oaFlow').textContent = _pn_oaAirflow.toFixed(0) + ' CFM';
+      document.getElementById('raFlow').textContent = _pn_raAirflow.toFixed(0) + ' CFM';
 
       // Rotate dampers
-      var oaAngle = (oaDamperPos / 100) * 90;
-      var raAngle = (raDamperPos / 100) * 90;
-      var eaAngle = (eaDamperPos / 100) * 90;
+let oaAngle = (_pn_oaDamperPos / 100) * 90;
+let raAngle = (_pn_raDamperPos / 100) * 90;
+let eaAngle = (_pn_eaDamperPos / 100) * 90;
       document.getElementById('oaDamper').setAttribute('transform', 'translate(125, 105) rotate(' + oaAngle + ')');
       document.getElementById('raDamper').setAttribute('transform', 'translate(125, 225) rotate(' + raAngle + ')');
       document.getElementById('eaDamper').setAttribute('transform', 'translate(100, 310) rotate(' + eaAngle + ')');
 
-      // Determine mode based on OA damper position
-      if (oaDamperPos < 20) {
-        mode = 'Min OA';
-      } else if (oaDamperPos > 90) {
-        mode = 'Max Cool';
+      // Determine _ps_mode based on OA damper position
+      if (_pn_oaDamperPos < 20) {
+        _ps_mode = 'Min OA';
+      } else if (_pn_oaDamperPos > 90) {
+        _ps_mode = 'Max Cool';
       } else {
-        mode = 'Economizer';
+        _ps_mode = 'Economizer';
       }
-      document.getElementById('modeText').textContent = mode;
+      document.getElementById('modeText').textContent = _ps_mode;
 
       // Auto control logic for economizer
-      if (enabled) {
+      if (_pb_enabled) {
         // Check if economizer is beneficial
-        if (oaTemp < raTemp - 5 && oaTemp < setpoint + 5) {
+        if (_pn_oaTemp < _pn_raTemp - 5 && _pn_oaTemp < _pn_setpoint + 5) {
           // Economizer beneficial - increase OA damper
-          var error = setpoint - maTemp;
+let error = _pn_setpoint - _pn_maTemp;
           if (error > 0) {
             // Need more cooling - open OA damper more
-            oaDamperPos = Math.min(oaDamperPos + 1, 100);
-            raDamperPos = Math.max(raDamperPos - 1, 0);
+            _pn_oaDamperPos = Math.min(_pn_oaDamperPos + 1, 100);
+            _pn_raDamperPos = Math.max(_pn_raDamperPos - 1, 0);
           } else if (error < -2) {
             // Too much cooling - reduce OA damper
-            oaDamperPos = Math.max(oaDamperPos - 1, 15);
-            raDamperPos = Math.min(raDamperPos + 1, 85);
+            _pn_oaDamperPos = Math.max(_pn_oaDamperPos - 1, 15);
+            _pn_raDamperPos = Math.min(_pn_raDamperPos + 1, 85);
           }
         } else {
           // Economizer not beneficial - go to minimum OA
-          oaDamperPos = Math.max(oaDamperPos - 1, 15); // Min 15% OA
-          raDamperPos = Math.min(raDamperPos + 1, 85);
+          _pn_oaDamperPos = Math.max(_pn_oaDamperPos - 1, 15); // Min 15% OA
+          _pn_raDamperPos = Math.min(_pn_raDamperPos + 1, 85);
         }
 
         // EA damper tracks OA damper (relief)
-        eaDamperPos = oaDamperPos * 0.9; // Slightly less than OA
+        _pn_eaDamperPos = _pn_oaDamperPos * 0.9; // Slightly less than OA
       }
 
       // Show/hide flow arrows based on damper positions
-      document.getElementById('oaFlow').style.opacity = oaDamperPos > 5 ? 1 : 0;
-      document.getElementById('raFlow').style.opacity = raDamperPos > 5 ? 1 : 0;
-      document.getElementById('eaFlow').style.opacity = eaDamperPos > 5 ? 1 : 0;
+      document.getElementById('oaFlow').style.opacity = _pn_oaDamperPos > 5 ? 1 : 0;
+      document.getElementById('raFlow').style.opacity = _pn_raDamperPos > 5 ? 1 : 0;
+      document.getElementById('eaFlow').style.opacity = _pn_eaDamperPos > 5 ? 1 : 0;
 
       // Update status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (alarmActive) {
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
-      } else if (enabled && mode === 'Economizer') {
+      } else if (_pb_enabled && _ps_mode === 'Economizer') {
         statusLight.setAttribute('class', 'status-active');
         statusText.textContent = 'Economizing';
         statusText.style.fill = '#27ae60';
-      } else if (enabled) {
+      } else if (_pb_enabled) {
         statusLight.setAttribute('class', 'status-ok');
         statusText.textContent = 'Normal';
         statusText.style.fill = '#27ae60';
@@ -283,6 +289,51 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_oaDamperPos') {
+    _pn_oaDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raDamperPos') {
+    _pn_raDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_eaDamperPos') {
+    _pn_eaDamperPos = Number(value) || 0;
+    update();
+  } else if (id === '_pn_oaTemp') {
+    _pn_oaTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raTemp') {
+    _pn_raTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_maTemp') {
+    _pn_maTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_setpoint') {
+    _pn_setpoint = Number(value) || 0;
+    update();
+  } else if (id === '_pn_totalAirflow') {
+    _pn_totalAirflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_oaAirflow') {
+    _pn_oaAirflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raAirflow') {
+    _pn_raAirflow = Number(value) || 0;
+    update();
+  } else if (id === '_ps_mode') {
+    _ps_mode = String(value) || "";
+    update();
+  } else if (id === '_pb_enabled') {
+    _pb_enabled = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

@@ -183,11 +183,14 @@
     </g>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var variables = {
+let variables = {
         roomName: 'conf_room_name',
         status: 'conf_status',
         bookingTitle: 'conf_booking_title',
@@ -214,17 +217,15 @@
 
           // Update status
           if (data[variables.status] !== undefined) {
-            var status = data[variables.status];
-            var statusBadge = document.getElementById('statusBadge');
-            var statusText = document.getElementById('statusText');
-
-            var statusMap = {
+let status = data[variables.status];
+let statusBadge = document.getElementById('statusBadge');
+let statusText = document.getElementById('statusText');
+let statusMap = {
               0: { text: 'Available', class: 'conf-available' },
               1: { text: 'Booked', class: 'conf-booked' },
               2: { text: 'In Use', class: 'conf-in-use' }
             };
-
-            var statusInfo = statusMap[status] || statusMap[0];
+let statusInfo = statusMap[status] || statusMap[0];
             statusBadge.setAttribute('class', statusInfo.class);
             statusText.textContent = statusInfo.text;
           }
@@ -246,18 +247,18 @@
 
           // Update temperature
           if (data[variables.temperature] !== undefined) {
-            var temp = Math.round(parseFloat(data[variables.temperature]));
+let temp = Math.round(parseFloat(data[variables.temperature]));
             document.getElementById('confTemp').textContent = temp + '°F';
           }
 
           // Update light level
           if (data[variables.lightLevel] !== undefined) {
-            var light = Math.round(parseFloat(data[variables.lightLevel]));
+let light = Math.round(parseFloat(data[variables.lightLevel]));
             document.getElementById('lightLevel').textContent = light + '%';
           }
 
           // Update AV system status
-          var avStates = [
+let avStates = [
             { var: variables.displayOn, elem: 'displayStatus', onText: 'Display On', offText: 'Display Off' },
             { var: variables.projectorOn, elem: 'projectorStatus', onText: 'Projector On', offText: 'Projector Off' },
             { var: variables.audioOn, elem: 'audioStatus', onText: 'Audio On', offText: 'Audio Off' },
@@ -266,7 +267,7 @@
 
           avStates.forEach(function(item) {
             if (data[item.var] !== undefined) {
-              var elem = document.getElementById(item.elem);
+let elem = document.getElementById(item.elem);
               elem.textContent = data[item.var] ? item.onText : item.offText;
               elem.setAttribute('fill', data[item.var] ? '#48bb78' : '#ffffff');
             }
@@ -293,14 +294,14 @@
         // Temperature controls
         document.getElementById('tempDown').addEventListener('click', function() {
           if (window.fuxa && window.fuxa.setVariable) {
-            var currentTemp = parseFloat(document.getElementById('confTemp').textContent);
+let currentTemp = parseFloat(document.getElementById('confTemp').textContent);
             window.fuxa.setVariable(variables.temperature, currentTemp - 1);
           }
         });
 
         document.getElementById('tempUp').addEventListener('click', function() {
           if (window.fuxa && window.fuxa.setVariable) {
-            var currentTemp = parseFloat(document.getElementById('confTemp').textContent);
+let currentTemp = parseFloat(document.getElementById('confTemp').textContent);
             window.fuxa.setVariable(variables.temperature, currentTemp + 1);
           }
         });
@@ -308,14 +309,14 @@
         // Light controls
         document.getElementById('lightDown').addEventListener('click', function() {
           if (window.fuxa && window.fuxa.setVariable) {
-            var currentLight = parseFloat(document.getElementById('lightLevel').textContent);
+let currentLight = parseFloat(document.getElementById('lightLevel').textContent);
             window.fuxa.setVariable(variables.lightLevel, Math.max(0, currentLight - 10));
           }
         });
 
         document.getElementById('lightUp').addEventListener('click', function() {
           if (window.fuxa && window.fuxa.setVariable) {
-            var currentLight = parseFloat(document.getElementById('lightLevel').textContent);
+let currentLight = parseFloat(document.getElementById('lightLevel').textContent);
             window.fuxa.setVariable(variables.lightLevel, Math.min(100, currentLight + 10));
           }
         });
@@ -324,8 +325,8 @@
         ['display', 'projector', 'audio', 'video'].forEach(function(device) {
           document.getElementById(device + 'Btn').addEventListener('click', function() {
             if (window.fuxa && window.fuxa.setVariable && window.fuxa.getVariable) {
-              var varName = variables[device + 'On'];
-              var currentState = window.fuxa.getVariable(varName);
+let varName = variables[device + 'On'];
+let currentState = window.fuxa.getVariable(varName);
               window.fuxa.setVariable(varName, !currentState);
             }
           });
@@ -347,6 +348,7 @@
       // Make update function globally accessible
       window.updateConferenceRoom = updateWidget;
     })();
-    ]]>
-  </script>
+
+init();
+]]></script>
 </svg>

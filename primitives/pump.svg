@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
       .pump-body { fill: #3498db; stroke: #2c3e50; stroke-width: 2; }
@@ -40,49 +40,71 @@
   <!-- Status Text -->
   <text id="statusText" x="50" y="8" class="label-text">OFF</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var status = 0;        // 0=off, 1=on
-    var alarmState = 0;    // 0=normal, 1=alarm
-    var runCommand = 0;
-    var runFeedback = 0;
+  <script><![CDATA[
+//!export-start
+let _pn_status = 0;
+let _pn_alarmState = 0;
+let _pn_runCommand = 0;
+let _pn_runFeedback = 0;
+//!export-end
 
-    var rotation = 0;
-    var animationId = null;
+let rotation = 0;
+let animationId = null;
 
-    function updateWidget() {
-      var impeller = document.getElementById('impeller');
-      var indicator = document.getElementById('statusIndicator');
-      var statusText = document.getElementById('statusText');
+function init() {
+  update();
+}
 
-      if (status === 1) {
-        // Running
-        if (!animationId) {
-          animationId = setInterval(function() {
-            rotation += 15;
-            impeller.setAttribute('transform', 'rotate(' + rotation + ' 50 40)');
-          }, 50);
-        }
-        indicator.setAttribute('class', 'status-on');
-        statusText.textContent = 'RUN';
-      } else {
-        // Stopped
-        if (animationId) {
-          clearInterval(animationId);
-          animationId = null;
-        }
-        indicator.setAttribute('class', 'status-off');
-        statusText.textContent = 'OFF';
-      }
+function update() {
+  const impeller = document.getElementById('impeller');
+  const indicator = document.getElementById('statusIndicator');
+  const statusText = document.getElementById('statusText');
 
-      // Alarm state
-      if (alarmState === 1) {
-        indicator.setAttribute('class', 'status-alarm');
-        statusText.textContent = 'ALARM';
-      }
+  if (!impeller || !indicator || !statusText) return;
+
+  if (_pn_status === 1) {
+    // Running
+    if (!animationId) {
+      animationId = setInterval(function() {
+        rotation += 15;
+        impeller.setAttribute('transform', 'rotate(' + rotation + ' 50 40)');
+      }, 50);
     }
+    indicator.setAttribute('class', 'status-on');
+    statusText.textContent = 'RUN';
+  } else {
+    // Stopped
+    if (animationId) {
+      clearInterval(animationId);
+      animationId = null;
+    }
+    indicator.setAttribute('class', 'status-off');
+    statusText.textContent = 'OFF';
+  }
 
-    updateWidget();
-    ]]>
-  </script>
+  // Alarm state
+  if (_pn_alarmState === 1) {
+    indicator.setAttribute('class', 'status-alarm');
+    statusText.textContent = 'ALARM';
+  }
+}
+
+function putValue(id, value) {
+  if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarmState') {
+    _pn_alarmState = Number(value) || 0;
+    update();
+  } else if (id === '_pn_runCommand') {
+    _pn_runCommand = Number(value) || 0;
+    update();
+  } else if (id === '_pn_runFeedback') {
+    _pn_runFeedback = Number(value) || 0;
+    update();
+  }
+}
+init();
+
+]]></script>
 </svg>

@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="80" height="40">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="100%" height="100%">
   <defs>
     <style>
       .chip-body { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1.5; }
@@ -31,25 +31,32 @@
   <!-- Status Indicator -->
   <circle id="statusDot" cx="73" cy="8" r="3" class="normal-state"/>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var temperature = 72.5;    // Current temperature
-    var units = 'F';           // 'F' or 'C'
-    var highAlarm = 80;        // High alarm setpoint
-    var lowAlarm = 60;         // Low alarm setpoint
-    var alarmState = 0;        // 0=normal, 1=alarm
+  <script><![CDATA[
+//!export-start
+let _pn_temperature = 72.5;
+let _ps_units = 'F';
+let _pn_highAlarm = 80;
+let _pn_lowAlarm = 60;
+let _pn_alarmState = 0;
+//!export-end
 
-    function updateWidget() {
-      var valueText = document.getElementById('valueText');
-      var unitText = document.getElementById('unitText');
-      var statusDot = document.getElementById('statusDot');
+function init() {
+  update();
+}
+
+    function update() {
+const valueText = document.getElementById('valueText');
+const unitText = document.getElementById('unitText');
+const statusDot = document.getElementById('statusDot');
+
+  if (!valueText || !unitText || !statusDot) return;
 
       // Update value
-      valueText.textContent = temperature.toFixed(1);
-      unitText.textContent = '°' + units;
+      valueText.textContent = _pn_temperature.toFixed(1);
+      unitText.textContent = '°' + _ps_units;
 
       // Check alarm conditions
-      if (temperature > highAlarm || temperature < lowAlarm || alarmState === 1) {
+      if (_pn_temperature > _pn_highAlarm || _pn_temperature < _pn_lowAlarm || _pn_alarmState === 1) {
         statusDot.setAttribute('class', 'alarm-state');
         valueText.setAttribute('fill', '#e74c3c');
       } else {
@@ -58,7 +65,26 @@
       }
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_temperature') {
+    _pn_temperature = Number(value) || 0;
+    update();
+  } else if (id === '_ps_units') {
+    _ps_units = String(value) || "";
+    update();
+  } else if (id === '_pn_highAlarm') {
+    _pn_highAlarm = Number(value) || 0;
+    update();
+  } else if (id === '_pn_lowAlarm') {
+    _pn_lowAlarm = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarmState') {
+    _pn_alarmState = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

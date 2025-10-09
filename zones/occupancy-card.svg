@@ -109,14 +109,22 @@
     <text class="occ-text-small" x="90" y="0" id="lastActivity">2:45 PM</text>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_count = 0;
+let _pn_capacity = 10;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var variables = {
+let variables = {
         spaceName: 'occ_space_name',
         peopleCount: 'occ_people_count',
-        capacity: 'occ_capacity',
+        _pn_capacity: 'occ_capacity',
         motionDetected: 'occ_motion_detected',
         lightingOn: 'occ_lighting_on',
         lightLevel: 'occ_light_level',
@@ -125,10 +133,10 @@
 
       function formatTimestamp(timestamp) {
         if (!timestamp) return 'N/A';
-        var date = new Date(timestamp);
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
-        var ampm = hours >= 12 ? 'PM' : 'AM';
+let date = new Date(timestamp);
+let hours = date.getHours();
+let minutes = date.getMinutes();
+let ampm = hours >= 12 ? 'PM' : 'AM';
         hours = hours % 12;
         hours = hours ? hours : 12;
         minutes = minutes < 10 ? '0' + minutes : minutes;
@@ -137,16 +145,16 @@
 
       function getTimeSince(timestamp) {
         if (!timestamp) return 'N/A';
-        var now = new Date();
-        var past = new Date(timestamp);
-        var diffMs = now - past;
-        var diffMins = Math.floor(diffMs / 60000);
+let now = new Date();
+let past = new Date(timestamp);
+let diffMs = now - past;
+let diffMins = Math.floor(diffMs / 60000);
 
         if (diffMins < 1) return 'Just now';
         if (diffMins < 60) return diffMins + ' min ago';
-        var diffHours = Math.floor(diffMins / 60);
+let diffHours = Math.floor(diffMins / 60);
         if (diffHours < 24) return diffHours + ' hr ago';
-        var diffDays = Math.floor(diffHours / 24);
+let diffDays = Math.floor(diffHours / 24);
         return diffDays + ' day' + (diffDays > 1 ? 's' : '') + ' ago';
       }
 
@@ -157,28 +165,25 @@
             document.getElementById('spaceName').textContent = data[variables.spaceName];
           }
 
-          // Update people count
-          var count = 0;
-          var capacity = 10;
+          // Update people _pn_count
 
           if (data[variables.peopleCount] !== undefined) {
-            count = parseInt(data[variables.peopleCount]);
-            document.getElementById('peopleCount').textContent = count;
+            _pn_count = parseInt(data[variables.peopleCount]);
+            document.getElementById('peopleCount').textContent = _pn_count;
           }
 
-          if (data[variables.capacity] !== undefined) {
-            capacity = parseInt(data[variables.capacity]);
+          if (data[variables._pn_capacity] !== undefined) {
+            _pn_capacity = parseInt(data[variables._pn_capacity]);
           }
 
-          // Update capacity gauge
-          var percentage = capacity > 0 ? (count / capacity) * 100 : 0;
+          // Update _pn_capacity gauge
+let percentage = _pn_capacity > 0 ? (_pn_count / _pn_capacity) * 100 : 0;
           percentage = Math.min(100, percentage);
-
-          var barWidth = (percentage / 100) * 120;
-          var capacityBar = document.getElementById('capacityBar');
+let barWidth = (percentage / 100) * 120;
+const capacityBar = document.getElementById('capacityBar');
           capacityBar.setAttribute('width', barWidth);
 
-          // Color code based on capacity
+          // Color code based on _pn_capacity
           if (percentage >= 90) {
             capacityBar.setAttribute('fill', '#f56565');
           } else if (percentage >= 75) {
@@ -190,13 +195,13 @@
           }
 
           document.getElementById('capacityPercent').textContent = Math.round(percentage) + '%';
-          document.getElementById('capacityText').textContent = count + ' of ' + capacity;
+          document.getElementById('capacityText').textContent = _pn_count + ' of ' + _pn_capacity;
 
           // Update motion detection
           if (data[variables.motionDetected] !== undefined) {
-            var motionDetected = data[variables.motionDetected];
-            var motionIndicator = document.getElementById('motionIndicator');
-            var motionStatus = document.getElementById('motionStatus');
+let motionDetected = data[variables.motionDetected];
+const motionIndicator = document.getElementById('motionIndicator');
+const motionStatus = document.getElementById('motionStatus');
 
             if (motionDetected) {
               motionIndicator.setAttribute('class', 'occ-active');
@@ -209,7 +214,7 @@
 
           // Update motion time
           if (data[variables.lastMotionTime] !== undefined) {
-            var motionTime = getTimeSince(data[variables.lastMotionTime]);
+let motionTime = getTimeSince(data[variables.lastMotionTime]);
             document.getElementById('motionTime').textContent = motionTime;
             document.getElementById('lastActivity').textContent =
               formatTimestamp(data[variables.lastMotionTime]);
@@ -217,10 +222,10 @@
 
           // Update lighting status
           if (data[variables.lightingOn] !== undefined) {
-            var lightingOn = data[variables.lightingOn];
-            var lightIndicator = document.getElementById('lightIndicator');
-            var lightStatus = document.getElementById('lightStatus');
-            var lightRays = document.getElementById('lightRays');
+let lightingOn = data[variables.lightingOn];
+const lightIndicator = document.getElementById('lightIndicator');
+const lightStatus = document.getElementById('lightStatus');
+const lightRays = document.getElementById('lightRays');
 
             if (lightingOn) {
               lightIndicator.setAttribute('class', 'occ-active');
@@ -236,7 +241,7 @@
 
           // Update light level
           if (data[variables.lightLevel] !== undefined) {
-            var lightLevel = parseFloat(data[variables.lightLevel]);
+let lightLevel = parseFloat(data[variables.lightLevel]);
             document.getElementById('lightLevel').textContent = Math.round(lightLevel) + '%';
           }
 
@@ -260,7 +265,7 @@
       // Simulate periodic updates for demo purposes
       if (window.location.search.includes('demo=true')) {
         setInterval(function() {
-          var demoData = {};
+let demoData = {};
           demoData[variables.peopleCount] = Math.floor(Math.random() * 10);
           demoData[variables.motionDetected] = Math.random() > 0.5;
           demoData[variables.lightingOn] = Math.random() > 0.3;
@@ -269,6 +274,18 @@
         }, 5000);
       }
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_count') {
+    _pn_count = Number(value) || 0;
+    update();
+  } else if (id === '_pn_capacity') {
+    _pn_capacity = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

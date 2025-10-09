@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
     <style>
       .fan-blade { fill: #4a90e2; transition: fill 0.3s; }
@@ -29,50 +29,66 @@
   <!-- Speed Display -->
   <text id="speedText" x="50" y="97" class="fan-speed-text">OFF</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    // Exported variables for FUXA binding
-    var status = 0;        // 0=off, 1=on
-    var speed = 0;         // 0-100
-    var alarmState = 0;    // 0=normal, 1=alarm
+  <script><![CDATA[
+//!export-start
+let _pn_status = 0;      // 0=off, 1=on
+let _pn_speed = 0;       // 0-100
+let _pn_alarm = 0;       // 0=normal, 1=alarm
+//!export-end
 
-    // Animation
-    var rotation = 0;
-    var animationId = null;
+let rotation = 0;
+let animationId = null;
 
-    function updateWidget() {
-      var blades = document.getElementById('fanBlades');
-      var statusInd = document.getElementById('statusIndicator');
-      var speedText = document.getElementById('speedText');
+function init() {
+  update();
+}
 
-      if (status === 1 && speed > 0) {
-        // Running - animate blades
-        if (!animationId) {
-          animationId = setInterval(function() {
-            rotation += speed / 10;
-            blades.setAttribute('transform', 'rotate(' + rotation + ' 50 50)');
-          }, 50);
-        }
-        statusInd.setAttribute('class', 'fan-status-on');
-        speedText.textContent = speed + '%';
-      } else {
-        // Stopped
-        if (animationId) {
-          clearInterval(animationId);
-          animationId = null;
-        }
-        statusInd.setAttribute('class', 'fan-status-off');
-        speedText.textContent = 'OFF';
-      }
+function update() {
+  const blades = document.getElementById('fanBlades');
+  const statusInd = document.getElementById('statusIndicator');
+  const speedText = document.getElementById('speedText');
 
-      // Alarm state
-      if (alarmState === 1) {
-        statusInd.setAttribute('fill', '#e74c3c');
-      }
+  if (!blades || !statusInd || !speedText) return;
+
+  if (_pn_status === 1 && _pn_speed > 0) {
+    // Running - animate blades
+    if (!animationId) {
+      animationId = setInterval(function() {
+        rotation += _pn_speed / 10;
+        blades.setAttribute('transform', 'rotate(' + rotation + ' 50 50)');
+      }, 50);
     }
+    statusInd.setAttribute('class', 'fan-status-on');
+    speedText.textContent = Math.round(_pn_speed) + '%';
+  } else {
+    // Stopped
+    if (animationId) {
+      clearInterval(animationId);
+      animationId = null;
+    }
+    statusInd.setAttribute('class', 'fan-status-off');
+    speedText.textContent = 'OFF';
+  }
 
-    // Initialize
-    updateWidget();
-    ]]>
-  </script>
+  // Alarm state
+  if (_pn_alarm === 1) {
+    statusInd.setAttribute('fill', '#e74c3c');
+  }
+}
+
+function putValue(id, value) {
+  if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+    update();
+  } else if (id === '_pn_speed') {
+    _pn_speed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = Number(value) || 0;
+    update();
+  }
+}
+init();
+
+]]></script>
 </svg>

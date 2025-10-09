@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 300" width="350" height="300">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 300" width="100%" height="100%">
   <defs>
     <style>
       .exh-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -97,25 +97,31 @@
   <text class="exh-label" x="200" y="245">Damper:</text>
   <text id="damperPos" class="exh-value" x="200" y="265">0%</text>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var fanStatus = false; // On/Off
-    var fanSpeed = 0; // 0-100%
-    var airflow = 0; // CFM
-    var damperPosition = 0; // 0-100%
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pb_fanStatus = false;
+let _pn_fanSpeed = 0;
+let _pn_airflow = 0;
+let _pn_damperPosition = 0;
+let _pb_alarmActive = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Update status indicator
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (alarmActive) {
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
-      } else if (fanStatus) {
+      } else if (_pb_fanStatus) {
         statusLight.setAttribute('class', 'status-running');
         statusText.textContent = 'Running';
         statusText.style.fill = '#27ae60';
@@ -126,45 +132,45 @@
       }
 
       // Update speed
-      document.getElementById('speed').textContent = fanSpeed.toFixed(0) + '%';
+      document.getElementById('speed').textContent = _pn_fanSpeed.toFixed(0) + '%';
 
-      // Update airflow (proportional to speed)
-      if (fanStatus) {
-        airflow = (fanSpeed / 100) * 2000; // Max 2000 CFM
+      // Update _pn_airflow (proportional to speed)
+      if (_pb_fanStatus) {
+        _pn_airflow = (_pn_fanSpeed / 100) * 2000; // Max 2000 CFM
       } else {
-        airflow = 0;
+        _pn_airflow = 0;
       }
-      document.getElementById('airflow').textContent = airflow.toFixed(0) + ' CFM';
+      document.getElementById('airflow').textContent = _pn_airflow.toFixed(0) + ' CFM';
 
       // Update damper position
-      document.getElementById('damperPos').textContent = damperPosition.toFixed(0) + '%';
+      document.getElementById('damperPos').textContent = _pn_damperPosition.toFixed(0) + '%';
 
       // Rotate damper visual
-      var damperAngle = (damperPosition / 100) * 90;
+let damperAngle = (_pn_damperPosition / 100) * 90;
       document.getElementById('damper').setAttribute('transform',
         'translate(140, 110) rotate(' + damperAngle + ')');
 
       // Fan animation
-      var fanBlade = document.getElementById('fan').querySelector('.exh-fan-blade');
-      if (fanStatus && fanSpeed > 0) {
+const fanBlade = document.getElementById('fan').querySelector('.exh-fan-blade');
+      if (_pb_fanStatus && _pn_fanSpeed > 0) {
         fanBlade.classList.add('exh-fan-active');
-        var animSpeed = 2.0 / (fanSpeed / 100); // Faster for higher speeds
+let animSpeed = 2.0 / (_pn_fanSpeed / 100); // Faster for higher speeds
         fanBlade.style.animationDuration = Math.max(0.3, animSpeed) + 's';
       } else {
         fanBlade.classList.remove('exh-fan-active');
       }
 
       // Show/hide flow arrows
-      var flowArrows = document.getElementById('flowArrows');
-      if (fanStatus && airflow > 100) {
+const flowArrows = document.getElementById('flowArrows');
+      if (_pb_fanStatus && _pn_airflow > 100) {
         flowArrows.style.display = 'block';
       } else {
         flowArrows.style.display = 'none';
       }
 
       // Auto control damper with fan
-      if (fanStatus) {
-        damperPosition = Math.max(damperPosition, 50); // Open damper when fan is on
+      if (_pb_fanStatus) {
+        _pn_damperPosition = Math.max(_pn_damperPosition, 50); // Open damper when fan is on
       }
     }
 
@@ -173,6 +179,27 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pb_fanStatus') {
+    _pb_fanStatus = !!value;
+    update();
+  } else if (id === '_pn_fanSpeed') {
+    _pn_fanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_airflow') {
+    _pn_airflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_damperPosition') {
+    _pn_damperPosition = Number(value) || 0;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

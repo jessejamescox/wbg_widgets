@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450" width="400" height="450">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450" width="100%" height="100%">
   <defs>
     <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
@@ -149,11 +149,14 @@
     <text id="lastUpdate" x="200" y="428" font-family="Arial" font-size="9" fill="#7f8c8d" text-anchor="middle">Last updated: 2 min ago</text>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var bindings = {
+let bindings = {
         temperature: 'weather.temperature',         // Celsius
         feelsLike: 'weather.feelsLike',            // Celsius
         humidity: 'weather.humidity',              // Percentage 0-100
@@ -170,17 +173,16 @@
         cloudCover: 'weather.cloudCover',          // Percentage 0-100
         timestamp: 'weather.timestamp'             // Unix timestamp
       };
-
-      var rainAnimationId = null;
+let rainAnimationId = null;
 
       function getDirectionName(degrees) {
-        var directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
-        var index = Math.round(degrees / 22.5) % 16;
+let directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+let index = Math.round(degrees / 22.5) % 16;
         return directions[index];
       }
 
       function updateTemperature(temp, feelsLike) {
-        var tempText = document.getElementById('temperature');
+let tempText = document.getElementById('temperature');
         if (tempText) {
           tempText.textContent = temp.toFixed(1) + '°C';
 
@@ -199,7 +201,7 @@
         }
 
         if (feelsLike !== undefined) {
-          var feelsText = document.getElementById('feelsLike');
+let feelsText = document.getElementById('feelsLike');
           if (feelsText) {
             feelsText.textContent = 'Feels like: ' + feelsLike.toFixed(1) + '°C';
           }
@@ -207,31 +209,31 @@
       }
 
       function updateHumidity(humidity) {
-        var humidityText = document.getElementById('humidity');
+let humidityText = document.getElementById('humidity');
         if (humidityText) {
-          var value = Math.max(0, Math.min(100, humidity));
+let value = Math.max(0, Math.min(100, humidity));
           humidityText.textContent = value.toFixed(0) + '%';
         }
       }
 
       function updateWind(speed, direction) {
         if (speed !== undefined) {
-          var speedText = document.getElementById('windSpeed');
+let speedText = document.getElementById('windSpeed');
           if (speedText) {
             speedText.textContent = speed.toFixed(1) + ' km/h';
           }
         }
 
         if (direction !== undefined) {
-          var windArrow = document.getElementById('windArrow');
-          var dirText = document.getElementById('windDirection');
+let windArrow = document.getElementById('windArrow');
+let dirText = document.getElementById('windDirection');
 
           if (windArrow) {
             windArrow.setAttribute('transform', 'rotate(' + direction + ')');
           }
 
           if (dirText) {
-            var dirName = getDirectionName(direction);
+let dirName = getDirectionName(direction);
             dirText.textContent = dirName + ' (' + direction.toFixed(0) + '°)';
           }
         }
@@ -241,9 +243,8 @@
         if (rainAnimationId) {
           cancelAnimationFrame(rainAnimationId);
         }
-
-        var drops = document.querySelectorAll('#rainDrops line');
-        var rainGroup = document.getElementById('rainDrops');
+let drops = document.querySelectorAll('#rainDrops line');
+let rainGroup = document.getElementById('rainDrops');
 
         if (rate < 0.1) {
           rainGroup.setAttribute('opacity', '0');
@@ -251,16 +252,14 @@
         }
 
         rainGroup.setAttribute('opacity', Math.min(1, rate / 10));
-
-        var positions = [0, 0, 0, 0, 0, 0, 0];
+let positions = [0, 0, 0, 0, 0, 0, 0];
 
         function animate() {
           drops.forEach(function(drop, i) {
             positions[i] += (rate * 2 + 5);
             if (positions[i] > 80) positions[i] = 0;
-
-            var y1 = 180 + positions[i];
-            var y2 = y1 + 15;
+let y1 = 180 + positions[i];
+let y2 = y1 + 15;
 
             drop.setAttribute('y1', y1);
             drop.setAttribute('y2', y2);
@@ -274,7 +273,7 @@
 
       function updatePrecipitation(rate, total) {
         if (rate !== undefined) {
-          var rateText = document.getElementById('precipRate');
+let rateText = document.getElementById('precipRate');
           if (rateText) {
             rateText.textContent = rate.toFixed(1) + ' mm/h';
           }
@@ -282,7 +281,7 @@
         }
 
         if (total !== undefined) {
-          var totalText = document.getElementById('precipTotal');
+let totalText = document.getElementById('precipTotal');
           if (totalText) {
             totalText.textContent = total.toFixed(1) + ' mm';
           }
@@ -291,15 +290,15 @@
 
       function updatePressure(pressure, trend) {
         if (pressure !== undefined) {
-          var pressureText = document.getElementById('pressure');
+let pressureText = document.getElementById('pressure');
           if (pressureText) {
             pressureText.textContent = pressure.toFixed(1);
           }
         }
 
         if (trend !== undefined) {
-          var trendArrow = document.getElementById('trendArrow');
-          var trendText = document.getElementById('trendText');
+let trendArrow = document.getElementById('trendArrow');
+let trendText = document.getElementById('trendText');
 
           if (trendArrow && trendText) {
             if (trend > 0) {
@@ -323,13 +322,12 @@
       }
 
       function updateUVIndex(uvIndex) {
-        var uvText = document.getElementById('uvIndex');
-        var uvLevelText = document.getElementById('uvLevel');
+let uvText = document.getElementById('uvIndex');
+let uvLevelText = document.getElementById('uvLevel');
 
         if (uvText && uvLevelText) {
           uvText.textContent = Math.round(uvIndex);
-
-          var level, color;
+let level, color;
           if (uvIndex < 3) {
             level = 'LOW';
             color = '#27ae60';
@@ -355,46 +353,46 @@
 
       function updateAdditionalInfo(values) {
         if (values.dewPoint !== undefined) {
-          var dewText = document.getElementById('dewPoint');
+let dewText = document.getElementById('dewPoint');
           if (dewText) {
             dewText.textContent = values.dewPoint.toFixed(1) + '°C';
           }
         }
 
         if (values.visibility !== undefined) {
-          var visText = document.getElementById('visibility');
+let visText = document.getElementById('visibility');
           if (visText) {
             visText.textContent = values.visibility.toFixed(1) + ' km';
           }
         }
 
         if (values.cloudCover !== undefined) {
-          var cloudText = document.getElementById('cloudCover');
+let cloudText = document.getElementById('cloudCover');
           if (cloudText) {
             cloudText.textContent = values.cloudCover.toFixed(0) + '%';
           }
         }
 
         if (values.windGust !== undefined) {
-          var gustText = document.getElementById('windGust');
+let gustText = document.getElementById('windGust');
           if (gustText) {
             gustText.textContent = values.windGust.toFixed(1) + ' km/h';
           }
         }
 
         if (values.timestamp !== undefined) {
-          var updateText = document.getElementById('lastUpdate');
+let updateText = document.getElementById('lastUpdate');
           if (updateText) {
-            var now = Date.now() / 1000;
-            var diff = now - values.timestamp;
-            var minutes = Math.floor(diff / 60);
+let now = Date.now() / 1000;
+let diff = now - values.timestamp;
+let minutes = Math.floor(diff / 60);
 
             if (minutes < 1) {
               updateText.textContent = 'Last updated: Just now';
             } else if (minutes < 60) {
               updateText.textContent = 'Last updated: ' + minutes + ' min ago';
             } else {
-              var hours = Math.floor(minutes / 60);
+let hours = Math.floor(minutes / 60);
               updateText.textContent = 'Last updated: ' + hours + ' hr ago';
             }
           }
@@ -441,6 +439,7 @@
       // Expose bindings for FUXA
       window.weatherStationBindings = bindings;
     })();
-    ]]>
-  </script>
+
+init();
+]]></script>
 </svg>

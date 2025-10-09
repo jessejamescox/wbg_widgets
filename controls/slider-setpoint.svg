@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <style>
       .label-text {
@@ -73,55 +73,62 @@
   <text class="range-text" id="minText" x="20" y="90">0</text>
   <text class="range-text" id="maxText" x="280" y="90">100</text>
 
-  <script type="text/javascript"><![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_minValue = 0;
+let _pn_maxValue = 100;
+let _pn_currentValue = 50;
+let _ps_units = '%';
+let _pn_decimals = 1;
+let _ps_tagId = '';
+let _pb_isDragging = false;
+let _pn_sliderX = 20;
+let _pn_sliderWidth = 260;
+let _pn_sliderY = 69;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // Configuration
-      var minValue = 0;
-      var maxValue = 100;
-      var currentValue = 50;
-      var units = '%';
-      var decimals = 1;
 
       // FUXA Integration Variables
-      var tagId = ''; // Set by FUXA: variable binding for setpoint value
-      var isDragging = false;
 
       // Slider dimensions
-      var sliderX = 20;
-      var sliderWidth = 260;
-      var sliderY = 69;
 
       // DOM Elements
-      var sliderThumb = document.getElementById('sliderThumb');
-      var sliderFill = document.getElementById('sliderFill');
-      var valueText = document.getElementById('valueText');
-      var unitText = document.getElementById('unitText');
-      var minText = document.getElementById('minText');
-      var maxText = document.getElementById('maxText');
+const sliderThumb = document.getElementById('sliderThumb');
+const sliderFill = document.getElementById('sliderFill');
+const valueText = document.getElementById('valueText');
+const unitText = document.getElementById('unitText');
+const minText = document.getElementById('minText');
+const maxText = document.getElementById('maxText');
 
       // Update visuals based on current value
       function updateVisuals() {
-        var percentage = (currentValue - minValue) / (maxValue - minValue);
-        var thumbX = sliderX + (percentage * sliderWidth);
-        var fillWidth = percentage * sliderWidth;
+let percentage = (_pn_currentValue - _pn_minValue) / (_pn_maxValue - _pn_minValue);
+let thumbX = _pn_sliderX + (percentage * _pn_sliderWidth);
+let fillWidth = percentage * _pn_sliderWidth;
 
         sliderThumb.setAttribute('cx', thumbX);
         sliderFill.setAttribute('width', fillWidth);
-        valueText.textContent = currentValue.toFixed(decimals);
-        minText.textContent = minValue.toFixed(decimals);
-        maxText.textContent = maxValue.toFixed(decimals);
-        unitText.textContent = units;
+        valueText.textContent = _pn_currentValue.toFixed(_pn_decimals);
+        minText.textContent = _pn_minValue.toFixed(_pn_decimals);
+        maxText.textContent = _pn_maxValue.toFixed(_pn_decimals);
+        unitText.textContent = _ps_units;
       }
 
       // Convert mouse position to value
       function positionToValue(x) {
-        var percentage = Math.max(0, Math.min(1, (x - sliderX) / sliderWidth));
-        return minValue + (percentage * (maxValue - minValue));
+let percentage = Math.max(0, Math.min(1, (x - _pn_sliderX) / _pn_sliderWidth));
+        return _pn_minValue + (percentage * (_pn_maxValue - _pn_minValue));
       }
 
       // Get mouse position relative to SVG
       function getMousePosition(evt) {
-        var CTM = evt.target.ownerSVGElement.getScreenCTM();
+let CTM = evt.target.ownerSVGElement.getScreenCTM();
         return {
           x: (evt.clientX - CTM.e) / CTM.a,
           y: (evt.clientY - CTM.f) / CTM.d
@@ -131,32 +138,32 @@
       // Mouse/touch handlers
       function startDrag(evt) {
         evt.preventDefault();
-        isDragging = true;
+        _pb_isDragging = true;
         updateValue(evt);
       }
 
       function drag(evt) {
-        if (isDragging) {
+        if (_pb_isDragging) {
           evt.preventDefault();
           updateValue(evt);
         }
       }
 
       function endDrag(evt) {
-        if (isDragging) {
+        if (_pb_isDragging) {
           evt.preventDefault();
-          isDragging = false;
+          _pb_isDragging = false;
 
           // Write final value to FUXA
-          if (typeof GAuxy !== 'undefined' && tagId) {
-            GAuxy.setVariable(tagId, currentValue);
+          if (typeof GAuxy !== 'undefined' && _ps_tagId) {
+            GAuxy.setVariable(_ps_tagId, _pn_currentValue);
           }
         }
       }
 
       function updateValue(evt) {
-        var pos = getMousePosition(evt);
-        currentValue = positionToValue(pos.x);
+let pos = getMousePosition(evt);
+        _pn_currentValue = positionToValue(pos.x);
         updateVisuals();
       }
 
@@ -167,8 +174,8 @@
 
       // Touch support
       sliderThumb.addEventListener('touchstart', function(evt) {
-        var touch = evt.touches[0];
-        var mouseEvent = new MouseEvent('mousedown', {
+let touch = evt.touches[0];
+let mouseEvent = new MouseEvent('mousedown', {
           clientX: touch.clientX,
           clientY: touch.clientY
         });
@@ -176,9 +183,9 @@
       });
 
       document.addEventListener('touchmove', function(evt) {
-        if (isDragging) {
-          var touch = evt.touches[0];
-          var mouseEvent = new MouseEvent('mousemove', {
+        if (_pb_isDragging) {
+let touch = evt.touches[0];
+let mouseEvent = new MouseEvent('mousemove', {
             clientX: touch.clientX,
             clientY: touch.clientY
           });
@@ -189,48 +196,48 @@
       document.addEventListener('touchend', endDrag);
 
       // Click on track to jump
-      var sliderTrack = document.querySelector('.slider-track');
+let sliderTrack = document.querySelector('.slider-track');
       sliderTrack.addEventListener('click', function(evt) {
-        var pos = getMousePosition(evt);
-        currentValue = positionToValue(pos.x);
+let pos = getMousePosition(evt);
+        _pn_currentValue = positionToValue(pos.x);
         updateVisuals();
 
-        if (typeof GAuxy !== 'undefined' && tagId) {
-          GAuxy.setVariable(tagId, currentValue);
+        if (typeof GAuxy !== 'undefined' && _ps_tagId) {
+          GAuxy.setVariable(_ps_tagId, _pn_currentValue);
         }
       });
 
       // FUXA Integration Functions
       window.svgSetValue = function(sigid, value) {
-        if (sigid === tagId && !isDragging) {
-          currentValue = parseFloat(value);
+        if (sigid === _ps_tagId && !_pb_isDragging) {
+          _pn_currentValue = parseFloat(value);
           updateVisuals();
         }
       };
 
       window.svgGetProperty = function(name) {
-        if (name === 'variableId') return tagId;
-        if (name === 'min') return minValue;
-        if (name === 'max') return maxValue;
-        if (name === 'units') return units;
-        if (name === 'decimals') return decimals;
+        if (name === 'variableId') return _ps_tagId;
+        if (name === 'min') return _pn_minValue;
+        if (name === 'max') return _pn_maxValue;
+        if (name === '_ps_units') return _ps_units;
+        if (name === '_pn_decimals') return _pn_decimals;
         return null;
       };
 
       window.svgSetProperty = function(name, value) {
         if (name === 'variableId') {
-          tagId = value;
+          _ps_tagId = value;
         } else if (name === 'min') {
-          minValue = parseFloat(value);
+          _pn_minValue = parseFloat(value);
           updateVisuals();
         } else if (name === 'max') {
-          maxValue = parseFloat(value);
+          _pn_maxValue = parseFloat(value);
           updateVisuals();
-        } else if (name === 'units') {
-          units = value;
+        } else if (name === '_ps_units') {
+          _ps_units = value;
           updateVisuals();
-        } else if (name === 'decimals') {
-          decimals = parseInt(value);
+        } else if (name === '_pn_decimals') {
+          _pn_decimals = parseInt(value);
           updateVisuals();
         }
       };
@@ -238,5 +245,42 @@
       // Initialize
       updateVisuals();
     })();
-  ]]></script>
+
+function putValue(id, value) {
+  if (id === '_pn_minValue') {
+    _pn_minValue = Number(value) || 0;
+    update();
+  } else if (id === '_pn_maxValue') {
+    _pn_maxValue = Number(value) || 0;
+    update();
+  } else if (id === '_pn_currentValue') {
+    _pn_currentValue = Number(value) || 0;
+    update();
+  } else if (id === '_ps_units') {
+    _ps_units = String(value) || "";
+    update();
+  } else if (id === '_pn_decimals') {
+    _pn_decimals = Number(value) || 0;
+    update();
+  } else if (id === '_ps_tagId') {
+    _ps_tagId = String(value) || "";
+    update();
+  } else if (id === '_pb_isDragging') {
+    _pb_isDragging = !!value;
+    update();
+  } else if (id === '_pn_sliderX') {
+    _pn_sliderX = Number(value) || 0;
+    update();
+  } else if (id === '_pn_sliderWidth') {
+    _pn_sliderWidth = Number(value) || 0;
+    update();
+  } else if (id === '_pn_sliderY') {
+    _pn_sliderY = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

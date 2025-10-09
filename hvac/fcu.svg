@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="100%" height="100%">
   <defs>
     <style>
       .fcu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -130,23 +130,29 @@
   <text class="fcu-label" x="230" y="322">Fan Speed:</text>
   <text id="fanSpeedText" class="fcu-value" x="230" y="330">Off</text>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var fanSpeed = 0; // 0=Off, 1=Low, 2=Med, 3=High, 4=Auto
-    var roomTemp = 72.5; // degrees F
-    var setpoint = 72.0; // degrees F
-    var valvePosition = 45; // 0-100%
-    var enabled = true;
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pn_fanSpeed = 0;
+let _pn_roomTemp = 72.5;
+let _pn_setpoint = 72.0;
+let _pn_valvePosition = 45;
+let _pb_enabled = true;
+let _pb_alarmActive = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Update temperatures
-      document.getElementById('roomTemp').textContent = roomTemp.toFixed(1) + '°F';
-      document.getElementById('setpoint').textContent = setpoint.toFixed(1) + '°F';
+      document.getElementById('roomTemp').textContent = _pn_roomTemp.toFixed(1) + '°F';
+      document.getElementById('setpoint').textContent = _pn_setpoint.toFixed(1) + '°F';
 
       // Update valve position
-      document.getElementById('valvePos').textContent = valvePosition.toFixed(0) + '%';
+      document.getElementById('valvePos').textContent = _pn_valvePosition.toFixed(0) + '%';
 
       // Update fan speed buttons
       document.getElementById('speedOff').querySelector('rect').classList.remove('fcu-btn-active');
@@ -154,58 +160,57 @@
       document.getElementById('speedMed').querySelector('rect').classList.remove('fcu-btn-active');
       document.getElementById('speedHigh').querySelector('rect').classList.remove('fcu-btn-active');
       document.getElementById('speedAuto').querySelector('rect').classList.remove('fcu-btn-active');
+let fanSpeedNames = ['Off', 'Low', 'Med', 'High', 'Auto'];
+      document.getElementById('fanSpeedText').textContent = fanSpeedNames[_pn_fanSpeed];
 
-      var fanSpeedNames = ['Off', 'Low', 'Med', 'High', 'Auto'];
-      document.getElementById('fanSpeedText').textContent = fanSpeedNames[fanSpeed];
-
-      if (fanSpeed === 0) document.getElementById('speedOff').querySelector('rect').classList.add('fcu-btn-active');
-      else if (fanSpeed === 1) document.getElementById('speedLow').querySelector('rect').classList.add('fcu-btn-active');
-      else if (fanSpeed === 2) document.getElementById('speedMed').querySelector('rect').classList.add('fcu-btn-active');
-      else if (fanSpeed === 3) document.getElementById('speedHigh').querySelector('rect').classList.add('fcu-btn-active');
-      else if (fanSpeed === 4) document.getElementById('speedAuto').querySelector('rect').classList.add('fcu-btn-active');
+      if (_pn_fanSpeed === 0) document.getElementById('speedOff').querySelector('rect').classList.add('fcu-btn-active');
+      else if (_pn_fanSpeed === 1) document.getElementById('speedLow').querySelector('rect').classList.add('fcu-btn-active');
+      else if (_pn_fanSpeed === 2) document.getElementById('speedMed').querySelector('rect').classList.add('fcu-btn-active');
+      else if (_pn_fanSpeed === 3) document.getElementById('speedHigh').querySelector('rect').classList.add('fcu-btn-active');
+      else if (_pn_fanSpeed === 4) document.getElementById('speedAuto').querySelector('rect').classList.add('fcu-btn-active');
 
       // Fan animation
-      var fanBlade = document.getElementById('fan').querySelector('.fcu-fan-blade');
-      if (fanSpeed > 0) {
+const fanBlade = document.getElementById('fan').querySelector('.fcu-fan-blade');
+      if (_pn_fanSpeed > 0) {
         fanBlade.classList.add('fcu-fan-active');
-        var animSpeed = 2.0 / fanSpeed; // Faster for higher speeds
+let animSpeed = 2.0 / _pn_fanSpeed; // Faster for higher speeds
         fanBlade.style.animationDuration = animSpeed + 's';
       } else {
         fanBlade.classList.remove('fcu-fan-active');
       }
 
       // Coil animation
-      var coil = document.getElementById('coil');
-      if (valvePosition > 5) {
+const coil = document.getElementById('coil');
+      if (_pn_valvePosition > 5) {
         coil.classList.add('fcu-coil-active');
       } else {
         coil.classList.remove('fcu-coil-active');
       }
 
       // Auto mode logic
-      if (fanSpeed === 4) { // Auto mode
-        var tempError = Math.abs(roomTemp - setpoint);
+      if (_pn_fanSpeed === 4) { // Auto mode
+let tempError = Math.abs(_pn_roomTemp - _pn_setpoint);
         if (tempError < 0.5) {
-          // Close to setpoint, low speed
-          valvePosition = 25;
+          // Close to _pn_setpoint, low speed
+          _pn_valvePosition = 25;
         } else if (tempError < 2) {
           // Moderate error, medium speed
-          valvePosition = 50;
+          _pn_valvePosition = 50;
         } else {
           // Large error, high speed
-          valvePosition = 75;
+          _pn_valvePosition = 75;
         }
       }
 
       // Update status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (!enabled) {
+      if (!_pb_enabled) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Disabled';
         statusText.style.fill = '#e74c3c';
-      } else if (alarmActive) {
+      } else if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
@@ -217,7 +222,7 @@
     }
 
     function setFanSpeed(speed) {
-      fanSpeed = speed;
+      _pn_fanSpeed = speed;
       updateDisplay();
     }
 
@@ -226,6 +231,30 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_fanSpeed') {
+    _pn_fanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_roomTemp') {
+    _pn_roomTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_setpoint') {
+    _pn_setpoint = Number(value) || 0;
+    update();
+  } else if (id === '_pn_valvePosition') {
+    _pn_valvePosition = Number(value) || 0;
+    update();
+  } else if (id === '_pb_enabled') {
+    _pb_enabled = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

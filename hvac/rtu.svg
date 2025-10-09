@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 400" width="550" height="400">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 400" width="100%" height="100%">
   <defs>
     <style>
       .rtu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -182,37 +182,45 @@
   <text class="rtu-label" x="400" y="338">Capacity:</text>
   <text id="capacityText" class="rtu-value" x="400" y="356">50%</text>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var supplyFanSpeed = 75; // 0-100%
-    var supplyFanStatus = true;
-    var economizerPosition = 25; // 0-100%
-    var compressor1 = false;
-    var compressor2 = false;
-    var heatingActive = false;
-    var heatingOutput = 0; // 0-100%
-    var oaTemp = 45; // degrees F
-    var raTemp = 72; // degrees F
-    var saTemp = 58; // degrees F
-    var filterDirty = false;
-    var alarmActive = false;
-    var coolingStage = 0; // 0=Off, 1=Stage1, 2=Stage2
-    var heatingStage = 0; // 0=Off, 1=Stage1, 2=Stage2
+  <script><![CDATA[
+//!export-start
+let _pn_supplyFanSpeed = 75;
+let _pb_supplyFanStatus = true;
+let _pn_economizerPosition = 25;
+let _pb_compressor1 = false;
+let _pb_compressor2 = false;
+let _pb_heatingActive = false;
+let _pn_heatingOutput = 0;
+let _pn_oaTemp = 45;
+let _pn_raTemp = 72;
+let _pn_saTemp = 58;
+let _pb_filterDirty = false;
+let _pb_alarmActive = false;
+let _pn_coolingStage = 0;
+let _pn_heatingStage = 0;
+let _ps_stageText = '';
+let _pn_capacity = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Update temperatures
-      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
-      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
-      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
-      document.getElementById('saTempData').textContent = saTemp.toFixed(0) + '°F';
+      document.getElementById('oaTemp').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = _pn_saTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = _pn_oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = _pn_raTemp.toFixed(0) + '°F';
+      document.getElementById('saTempData').textContent = _pn_saTemp.toFixed(0) + '°F';
 
       // Update supply fan
-      var sfText = document.getElementById('sfStatus');
-      if (supplyFanStatus) {
-        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
+const sfText = document.getElementById('sfStatus');
+      if (_pb_supplyFanStatus) {
+        sfText.textContent = 'ON - ' + _pn_supplyFanSpeed.toFixed(0) + '%';
         sfText.style.fill = '#27ae60';
         document.getElementById('supplyFan').querySelector('.rtu-fan-blade').classList.add('rtu-fan-active');
       } else {
@@ -222,15 +230,15 @@
       }
 
       // Update economizer
-      document.getElementById('econStatus').textContent = economizerPosition.toFixed(0) + '%';
-      var econAngle = (economizerPosition / 100) * 90;
+      document.getElementById('econStatus').textContent = _pn_economizerPosition.toFixed(0) + '%';
+let econAngle = (_pn_economizerPosition / 100) * 90;
       document.getElementById('oaDamper').setAttribute('transform', 'translate(92, 120) rotate(' + econAngle + ')');
 
       // Update compressors
-      var comp1Circle = document.getElementById('compressor1').querySelector('circle');
-      var comp1Light = document.getElementById('comp1Light');
-      var comp1Text = document.getElementById('comp1Text');
-      if (compressor1) {
+const comp1Circle = document.getElementById('compressor1').querySelector('circle');
+const comp1Light = document.getElementById('comp1Light');
+const comp1Text = document.getElementById('comp1Text');
+      if (_pb_compressor1) {
         comp1Circle.classList.add('rtu-compressor-active');
         comp1Light.setAttribute('class', 'status-running');
         comp1Text.textContent = 'Running';
@@ -241,11 +249,10 @@
         comp1Text.textContent = 'Off';
         comp1Text.style.fill = '#7f8c8d';
       }
-
-      var comp2Circle = document.getElementById('compressor2').querySelector('circle');
-      var comp2Light = document.getElementById('comp2Light');
-      var comp2Text = document.getElementById('comp2Text');
-      if (compressor2) {
+const comp2Circle = document.getElementById('compressor2').querySelector('circle');
+const comp2Light = document.getElementById('comp2Light');
+const comp2Text = document.getElementById('comp2Text');
+      if (_pb_compressor2) {
         comp2Circle.classList.add('rtu-compressor-active');
         comp2Light.setAttribute('class', 'status-running');
         comp2Text.textContent = 'Running';
@@ -258,21 +265,21 @@
       }
 
       // Update DX coil appearance
-      var dxCoil = document.getElementById('dxCoil');
-      if (compressor1 || compressor2) {
+const dxCoil = document.getElementById('dxCoil');
+      if (_pb_compressor1 || _pb_compressor2) {
         dxCoil.style.filter = 'drop-shadow(0 0 3px #3498db)';
       } else {
         dxCoil.style.filter = 'none';
       }
 
       // Update heating
-      var heatCoil = document.getElementById('heatingCoil');
-      var heatLight = document.getElementById('heatLight');
-      var heatText = document.getElementById('heatText');
-      if (heatingActive && heatingOutput > 5) {
+const heatCoil = document.getElementById('heatingCoil');
+const heatLight = document.getElementById('heatLight');
+const heatText = document.getElementById('heatText');
+      if (_pb_heatingActive && _pn_heatingOutput > 5) {
         heatCoil.classList.add('rtu-coil-active');
         heatLight.setAttribute('class', 'status-running');
-        heatText.textContent = heatingOutput.toFixed(0) + '%';
+        heatText.textContent = _pn_heatingOutput.toFixed(0) + '%';
         heatText.style.fill = '#e74c3c';
       } else {
         heatCoil.classList.remove('rtu-coil-active');
@@ -282,27 +289,27 @@
       }
 
       // Update stage display
-      var stageText = '';
-      if (coolingStage > 0) {
-        stageText = 'Cool ' + coolingStage;
-      } else if (heatingStage > 0) {
-        stageText = 'Heat ' + heatingStage;
-      } else {
-        stageText = 'Off';
-      }
-      document.getElementById('stageStatus').textContent = stageText;
 
-      // Update capacity
-      var capacity = 0;
-      if (compressor1 && compressor2) capacity = 100;
-      else if (compressor1 || compressor2) capacity = 50;
-      else if (heatingActive) capacity = heatingOutput;
-      document.getElementById('capacityText').textContent = capacity.toFixed(0) + '%';
+      if (_pn_coolingStage > 0) {
+        _ps_stageText = 'Cool ' + _pn_coolingStage;
+      } else if (_pn_heatingStage > 0) {
+        _ps_stageText = 'Heat ' + _pn_heatingStage;
+      } else {
+        _ps_stageText = 'Off';
+      }
+      document.getElementById('stageStatus').textContent = _ps_stageText;
+
+      // Update _pn_capacity
+
+      if (_pb_compressor1 && _pb_compressor2) _pn_capacity = 100;
+      else if (_pb_compressor1 || _pb_compressor2) _pn_capacity = 50;
+      else if (_pb_heatingActive) _pn_capacity = _pn_heatingOutput;
+      document.getElementById('capacityText').textContent = _pn_capacity.toFixed(0) + '%';
 
       // Update filter status
-      var filterLight = document.getElementById('filterLight');
-      var filterText = document.getElementById('filterText');
-      if (filterDirty) {
+const filterLight = document.getElementById('filterLight');
+const filterText = document.getElementById('filterText');
+      if (_pb_filterDirty) {
         filterLight.setAttribute('class', 'status-alarm');
         filterText.textContent = 'Dirty';
         filterText.style.fill = '#e74c3c';
@@ -313,9 +320,9 @@
       }
 
       // Update system status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
-      if (alarmActive) {
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
@@ -326,12 +333,12 @@
       }
 
       // Auto control logic for cooling stages
-      compressor1 = coolingStage >= 1;
-      compressor2 = coolingStage >= 2;
-      heatingActive = heatingStage > 0;
-      if (heatingStage === 1) heatingOutput = 50;
-      else if (heatingStage === 2) heatingOutput = 100;
-      else heatingOutput = 0;
+      _pb_compressor1 = _pn_coolingStage >= 1;
+      _pb_compressor2 = _pn_coolingStage >= 2;
+      _pb_heatingActive = _pn_heatingStage > 0;
+      if (_pn_heatingStage === 1) _pn_heatingOutput = 50;
+      else if (_pn_heatingStage === 2) _pn_heatingOutput = 100;
+      else _pn_heatingOutput = 0;
     }
 
     // Initialize display
@@ -339,6 +346,60 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_supplyFanSpeed') {
+    _pn_supplyFanSpeed = Number(value) || 0;
+    update();
+  } else if (id === '_pb_supplyFanStatus') {
+    _pb_supplyFanStatus = !!value;
+    update();
+  } else if (id === '_pn_economizerPosition') {
+    _pn_economizerPosition = Number(value) || 0;
+    update();
+  } else if (id === '_pb_compressor1') {
+    _pb_compressor1 = !!value;
+    update();
+  } else if (id === '_pb_compressor2') {
+    _pb_compressor2 = !!value;
+    update();
+  } else if (id === '_pb_heatingActive') {
+    _pb_heatingActive = !!value;
+    update();
+  } else if (id === '_pn_heatingOutput') {
+    _pn_heatingOutput = Number(value) || 0;
+    update();
+  } else if (id === '_pn_oaTemp') {
+    _pn_oaTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_raTemp') {
+    _pn_raTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_saTemp') {
+    _pn_saTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pb_filterDirty') {
+    _pb_filterDirty = !!value;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  } else if (id === '_pn_coolingStage') {
+    _pn_coolingStage = Number(value) || 0;
+    update();
+  } else if (id === '_pn_heatingStage') {
+    _pn_heatingStage = Number(value) || 0;
+    update();
+  } else if (id === '_ps_stageText') {
+    _ps_stageText = String(value) || "";
+    update();
+  } else if (id === '_pn_capacity') {
+    _pn_capacity = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

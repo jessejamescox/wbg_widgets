@@ -92,14 +92,26 @@
     </text>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_tankHeight = 240;
+let _pn_tankTop = 60;
+let _pn_tankBottom = 300;
+let _ps_status = 'NORMAL';
+let _ps_statusColor = '#4caf50';
+let _pn_waveOffset = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Interface
-      var gaugeStatus = { id: 'water-tank', type: 'svg-ext' };
+let gaugeStatus = { id: 'water-tank', type: 'svg-ext' };
 
       // Default values
-      var settings = {
+let settings = {
         level: 50,           // Percentage (0-100)
         capacity: 10000,     // Total capacity in liters
         highAlarmSetpoint: 90,
@@ -144,18 +156,16 @@
 
       function updateTank() {
         // Constrain level between 0 and 100
-        var level = Math.max(0, Math.min(100, settings.level));
+let level = Math.max(0, Math.min(100, settings.level));
 
         // Calculate water height (tank body is 240px tall, from y=60 to y=300)
-        var tankHeight = 240;
-        var tankTop = 60;
-        var tankBottom = 300;
-        var waterHeight = (level / 100) * tankHeight;
-        var waterY = tankBottom - waterHeight;
+
+let waterHeight = (level / 100) * _pn_tankHeight;
+let waterY = _pn_tankBottom - waterHeight;
 
         // Update water level rectangle
-        var waterLevelRect = document.getElementById('water-level');
-        var waterSurface = document.getElementById('water-surface');
+const waterLevelRect = document.getElementById('water-level');
+const waterSurface = document.getElementById('water-surface');
 
         if (waterLevelRect) {
           waterLevelRect.setAttribute('y', waterY);
@@ -167,15 +177,15 @@
         }
 
         // Update level percentage display
-        var levelPercent = document.getElementById('level-percent');
+const levelPercent = document.getElementById('level-percent');
         if (levelPercent) {
           levelPercent.textContent = level.toFixed(1);
         }
 
         // Calculate current volume
-        var currentVolume = (level / 100) * settings.capacity;
-        var currentVolumeEl = document.getElementById('current-volume');
-        var maxCapacityEl = document.getElementById('max-capacity');
+let currentVolume = (level / 100) * settings.capacity;
+const currentVolumeEl = document.getElementById('current-volume');
+const maxCapacityEl = document.getElementById('max-capacity');
 
         if (currentVolumeEl) {
           currentVolumeEl.textContent = currentVolume.toFixed(0);
@@ -185,20 +195,17 @@
         }
 
         // Update alarm indicators
-        var highAlarmLight = document.getElementById('high-alarm-light');
-        var lowAlarmLight = document.getElementById('low-alarm-light');
-        var tankStatus = document.getElementById('tank-status');
-
-        var status = 'NORMAL';
-        var statusColor = '#4caf50';
+const highAlarmLight = document.getElementById('high-alarm-light');
+const lowAlarmLight = document.getElementById('low-alarm-light');
+const tankStatus = document.getElementById('tank-_ps_status');
 
         if (level >= settings.highAlarmSetpoint) {
           if (highAlarmLight) {
             highAlarmLight.setAttribute('opacity', '1');
             highAlarmLight.setAttribute('filter', 'url(#glow)');
           }
-          status = 'HIGH LEVEL';
-          statusColor = '#ff5252';
+          _ps_status = 'HIGH LEVEL';
+          _ps_statusColor = '#ff5252';
         } else {
           if (highAlarmLight) {
             highAlarmLight.setAttribute('opacity', '0.3');
@@ -211,8 +218,8 @@
             lowAlarmLight.setAttribute('opacity', '1');
             lowAlarmLight.setAttribute('filter', 'url(#glow)');
           }
-          status = 'LOW LEVEL';
-          statusColor = '#ffa726';
+          _ps_status = 'LOW LEVEL';
+          _ps_statusColor = '#ffa726';
         } else {
           if (lowAlarmLight) {
             lowAlarmLight.setAttribute('opacity', '0.3');
@@ -221,8 +228,8 @@
         }
 
         if (tankStatus) {
-          tankStatus.textContent = status;
-          tankStatus.setAttribute('fill', statusColor);
+          tankStatus.textContent = _ps_status;
+          tankStatus.setAttribute('fill', _ps_statusColor);
         }
 
         // Update water color based on level
@@ -237,16 +244,40 @@
       updateTank();
 
       // Animation loop for wave effect
-      var waveOffset = 0;
+
       setInterval(function() {
-        waveOffset += 0.5;
-        var waterSurface = document.getElementById('water-surface');
+        _pn_waveOffset += 0.5;
+const waterSurface = document.getElementById('water-surface');
         if (waterSurface) {
-          var rx = 73 + Math.sin(waveOffset * 0.1) * 2;
+let rx = 73 + Math.sin(_pn_waveOffset * 0.1) * 2;
           waterSurface.setAttribute('rx', rx);
         }
       }, 50);
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_tankHeight') {
+    _pn_tankHeight = Number(value) || 0;
+    update();
+  } else if (id === '_pn_tankTop') {
+    _pn_tankTop = Number(value) || 0;
+    update();
+  } else if (id === '_pn_tankBottom') {
+    _pn_tankBottom = Number(value) || 0;
+    update();
+  } else if (id === '_ps_status') {
+    _ps_status = String(value) || "";
+    update();
+  } else if (id === '_ps_statusColor') {
+    _ps_statusColor = String(value) || "";
+    update();
+  } else if (id === '_pn_waveOffset') {
+    _pn_waveOffset = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

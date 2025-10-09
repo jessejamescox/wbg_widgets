@@ -82,10 +82,19 @@
     <text class="unit-text" x="292.5" y="415" text-anchor="middle">A</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+//!export-start
+let _pn_currentRating = 100;
+let _pb_isOn = false;
+let _pb_isTripped = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       status: 'breaker_status',           // boolean (true=ON, false=OFF)
       current: 'breaker_current',         // Amps
       rating: 'breaker_rating',           // Amps (max rating)
@@ -95,14 +104,10 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       tripThreshold: 0.9,    // 90% of rating
       warnThreshold: 0.75    // 75% of rating
     };
-
-    var currentRating = 100;  // Default rating
-    var isOn = false;
-    var isTripped = false;
 
     // Update function called by FUXA
     function updateValues(tag, value) {
@@ -133,17 +138,17 @@
     }
 
     function updateStatus(value) {
-      isOn = Boolean(value);
+      _pb_isOn = Boolean(value);
       updateBreakerVisualization();
     }
 
     function updateCurrent(value) {
-      var current = parseFloat(value) || 0;
+let current = parseFloat(value) || 0;
       document.getElementById('currentValue').textContent = current.toFixed(1);
 
       // Check for overload
-      var loadPercent = current / currentRating;
-      var valueText = document.getElementById('currentValue');
+let loadPercent = current / _pn_currentRating;
+const valueText = document.getElementById('currentValue');
 
       if (loadPercent >= config.tripThreshold) {
         valueText.setAttribute('fill', '#ff0000');
@@ -154,23 +159,22 @@
       }
 
       // Auto-trip if overload and breaker is on
-      if (isOn && loadPercent >= 1.0 && !isTripped) {
+      if (_pb_isOn && loadPercent >= 1.0 && !_pb_isTripped) {
         updateTripped(true);
       }
     }
 
     function updateRating(value) {
-      currentRating = parseFloat(value) || 100;
-      document.getElementById('ratingValue').textContent = currentRating.toFixed(0);
+      _pn_currentRating = parseFloat(value) || 100;
+      document.getElementById('ratingValue').textContent = _pn_currentRating.toFixed(0);
     }
 
     function updateTripped(value) {
-      isTripped = Boolean(value);
+      _pb_isTripped = Boolean(value);
+const tripIndicator = document.getElementById('tripIndicator');
+const statusIndicator = document.getElementById('statusIndicator');
 
-      var tripIndicator = document.getElementById('tripIndicator');
-      var statusIndicator = document.getElementById('statusIndicator');
-
-      if (isTripped) {
+      if (_pb_isTripped) {
         tripIndicator.setAttribute('class', 'status-alarm');
         statusIndicator.setAttribute('class', 'status-alarm');
 
@@ -178,13 +182,13 @@
         tripIndicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
 
         // Force breaker off
-        isOn = false;
+        _pb_isOn = false;
         updateBreakerVisualization();
       } else {
         tripIndicator.setAttribute('class', 'status-off');
         tripIndicator.innerHTML = '';
 
-        if (isOn) {
+        if (_pb_isOn) {
           statusIndicator.setAttribute('class', 'status-ok');
         } else {
           statusIndicator.setAttribute('class', 'status-off');
@@ -197,10 +201,10 @@
     }
 
     function handleCommand(value) {
-      var command = Boolean(value);
+let command = Boolean(value);
 
       // Cannot close if tripped
-      if (command && isTripped) {
+      if (command && _pb_isTripped) {
         console.warn('Cannot close breaker - TRIPPED');
         return;
       }
@@ -209,12 +213,12 @@
     }
 
     function updateBreakerVisualization() {
-      var handle = document.getElementById('switchHandle');
-      var statusText = document.getElementById('statusText');
-      var contactLine = document.getElementById('contactLine');
-      var statusIndicator = document.getElementById('statusIndicator');
+const handle = document.getElementById('switchHandle');
+const statusText = document.getElementById('statusText');
+const contactLine = document.getElementById('contactLine');
+const statusIndicator = document.getElementById('statusIndicator');
 
-      if (isOn && !isTripped) {
+      if (_pb_isOn && !_pb_isTripped) {
         // ON position
         handle.setAttribute('transform', 'rotate(-30)');
         statusText.textContent = 'ON';
@@ -227,11 +231,11 @@
       } else {
         // OFF position
         handle.setAttribute('transform', 'rotate(30)');
-        statusText.textContent = isTripped ? 'TRIPPED' : 'OFF';
-        statusText.setAttribute('fill', isTripped ? '#ff0000' : '#666666');
+        statusText.textContent = _pb_isTripped ? 'TRIPPED' : 'OFF';
+        statusText.setAttribute('fill', _pb_isTripped ? '#ff0000' : '#666666');
         contactLine.setAttribute('class', 'contact-open');
 
-        if (!isTripped) {
+        if (!_pb_isTripped) {
           statusIndicator.setAttribute('class', 'status-off');
         }
 
@@ -242,7 +246,7 @@
 
     function animateSwitch(element, toAngle) {
       // Simple rotation animation
-      var animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+let animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
       animateTransform.setAttribute('attributeName', 'transform');
       animateTransform.setAttribute('type', 'rotate');
       animateTransform.setAttribute('from', '0 0 0');
@@ -251,7 +255,7 @@
       animateTransform.setAttribute('fill', 'freeze');
 
       // Remove old animations
-      var oldAnims = element.getElementsByTagName('animateTransform');
+let oldAnims = element.getElementsByTagName('animateTransform');
       while (oldAnims.length > 0) {
         element.removeChild(oldAnims[0]);
       }
@@ -267,6 +271,21 @@
 
     // Initialize display
     updateBreakerVisualization();
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_currentRating') {
+    _pn_currentRating = Number(value) || 0;
+    update();
+  } else if (id === '_pb_isOn') {
+    _pb_isOn = !!value;
+    update();
+  } else if (id === '_pb_isTripped') {
+    _pb_isTripped = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

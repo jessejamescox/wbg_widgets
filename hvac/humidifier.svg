@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="100%" height="100%">
   <defs>
     <style>
       .hum-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -142,65 +142,71 @@
     <text id="statusText" class="hum-value" x="293" y="320">Off</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var inletRH = 20; // percent
-    var outletRH = 45; // percent (calculated)
-    var setpointRH = 45; // percent
-    var inletTemp = 72; // degrees F
-    var outletTemp = 71; // degrees F (calculated)
-    var output = 65; // 0-100% valve/output
-    var waterFlow = 2.5; // GPM
-    var enabled = false;
-    var humidifierType = 'steam'; // 'steam' or 'spray'
-    var alarmActive = false;
+  <script><![CDATA[
+//!export-start
+let _pn_inletRH = 20;
+let _pn_outletRH = 45;
+let _pn_setpointRH = 45;
+let _pn_inletTemp = 72;
+let _pn_outletTemp = 71;
+let _pn_output = 65;
+let _pn_waterFlow = 2.5;
+let _pb_enabled = false;
+let _ps_humidifierType = 'steam';
+let _pb_alarmActive = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
-      // Calculate outlet RH based on output
-      if (enabled && output > 0) {
-        var rhIncrease = (output / 100) * 30; // Max 30% RH increase
-        outletRH = Math.min(inletRH + rhIncrease, 95);
+      // Calculate outlet RH based on _pn_output
+      if (_pb_enabled && _pn_output > 0) {
+let rhIncrease = (_pn_output / 100) * 30; // Max 30% RH increase
+        _pn_outletRH = Math.min(_pn_inletRH + rhIncrease, 95);
 
         // Calculate temp change (humidification can slightly cool air)
-        if (humidifierType === 'spray') {
-          outletTemp = inletTemp - (output / 100) * 2; // Evaporative cooling
+        if (_ps_humidifierType === 'spray') {
+          _pn_outletTemp = _pn_inletTemp - (_pn_output / 100) * 2; // Evaporative cooling
         } else {
-          outletTemp = inletTemp + (output / 100) * 1; // Steam slightly warms
+          _pn_outletTemp = _pn_inletTemp + (_pn_output / 100) * 1; // Steam slightly warms
         }
       } else {
-        outletRH = inletRH;
-        outletTemp = inletTemp;
+        _pn_outletRH = _pn_inletRH;
+        _pn_outletTemp = _pn_inletTemp;
       }
 
-      // Calculate water flow based on output
-      waterFlow = (output / 100) * 4.0; // Max 4 GPM
+      // Calculate water flow based on _pn_output
+      _pn_waterFlow = (_pn_output / 100) * 4.0; // Max 4 GPM
 
       // Update displays
-      document.getElementById('inletRH').textContent = inletRH.toFixed(0) + '% RH';
-      document.getElementById('outletRH').textContent = outletRH.toFixed(0) + '% RH';
-      document.getElementById('inletRHData').textContent = inletRH.toFixed(0) + '%';
-      document.getElementById('outletRHData').textContent = outletRH.toFixed(0) + '%';
-      document.getElementById('setpoint').textContent = setpointRH.toFixed(0) + '%';
-      document.getElementById('inletTemp').textContent = inletTemp.toFixed(0) + '°F';
-      document.getElementById('outletTemp').textContent = outletTemp.toFixed(0) + '°F';
-      document.getElementById('output').textContent = output.toFixed(0) + '%';
-      document.getElementById('waterFlow').textContent = waterFlow.toFixed(1) + ' GPM';
+      document.getElementById('inletRH').textContent = _pn_inletRH.toFixed(0) + '% RH';
+      document.getElementById('outletRH').textContent = _pn_outletRH.toFixed(0) + '% RH';
+      document.getElementById('inletRHData').textContent = _pn_inletRH.toFixed(0) + '%';
+      document.getElementById('outletRHData').textContent = _pn_outletRH.toFixed(0) + '%';
+      document.getElementById('setpoint').textContent = _pn_setpointRH.toFixed(0) + '%';
+      document.getElementById('inletTemp').textContent = _pn_inletTemp.toFixed(0) + '°F';
+      document.getElementById('outletTemp').textContent = _pn_outletTemp.toFixed(0) + '°F';
+      document.getElementById('output').textContent = _pn_output.toFixed(0) + '%';
+      document.getElementById('waterFlow').textContent = _pn_waterFlow.toFixed(1) + ' GPM';
 
       // Update type
-      var typeText = humidifierType === 'steam' ? 'Steam' : 'Spray';
+let typeText = _ps_humidifierType === 'steam' ? 'Steam' : 'Spray';
       document.getElementById('typeText').textContent = typeText;
 
       // Show/hide steam or spray based on type
-      var steam1 = document.getElementById('steam1');
-      var steam2 = document.getElementById('steam2');
-      var steam3 = document.getElementById('steam3');
-      var spray1 = document.getElementById('spray1');
-      var spray2 = document.getElementById('spray2');
-      var spray3 = document.getElementById('spray3');
+const steam1 = document.getElementById('steam1');
+const steam2 = document.getElementById('steam2');
+const steam3 = document.getElementById('steam3');
+const spray1 = document.getElementById('spray1');
+const spray2 = document.getElementById('spray2');
+const spray3 = document.getElementById('spray3');
 
-      if (enabled && output > 5) {
-        if (humidifierType === 'steam') {
+      if (_pb_enabled && _pn_output > 5) {
+        if (_ps_humidifierType === 'steam') {
           steam1.style.display = 'block';
           steam2.style.display = 'block';
           steam3.style.display = 'block';
@@ -225,14 +231,14 @@
       }
 
       // Update status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (alarmActive) {
+      if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
-      } else if (enabled && output > 5) {
+      } else if (_pb_enabled && _pn_output > 5) {
         statusLight.setAttribute('class', 'status-active');
         statusText.textContent = 'Active';
         statusText.style.fill = '#27ae60';
@@ -243,12 +249,12 @@
       }
 
       // Auto control based on setpoint
-      if (enabled) {
-        var error = setpointRH - inletRH;
+      if (_pb_enabled) {
+let error = _pn_setpointRH - _pn_inletRH;
         if (error > 0) {
-          output = Math.min((error / 25) * 100, 100); // Proportional control
+          _pn_output = Math.min((error / 25) * 100, 100); // Proportional control
         } else {
-          output = 0;
+          _pn_output = 0;
         }
       }
     }
@@ -258,6 +264,42 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_inletRH') {
+    _pn_inletRH = Number(value) || 0;
+    update();
+  } else if (id === '_pn_outletRH') {
+    _pn_outletRH = Number(value) || 0;
+    update();
+  } else if (id === '_pn_setpointRH') {
+    _pn_setpointRH = Number(value) || 0;
+    update();
+  } else if (id === '_pn_inletTemp') {
+    _pn_inletTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_outletTemp') {
+    _pn_outletTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_output') {
+    _pn_output = Number(value) || 0;
+    update();
+  } else if (id === '_pn_waterFlow') {
+    _pn_waterFlow = Number(value) || 0;
+    update();
+  } else if (id === '_pb_enabled') {
+    _pb_enabled = !!value;
+    update();
+  } else if (id === '_ps_humidifierType') {
+    _ps_humidifierType = String(value) || "";
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

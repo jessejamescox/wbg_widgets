@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="450" height="350">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="100%" height="100%">
   <defs>
     <style>
       .vavr-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
@@ -105,51 +105,57 @@
     <text id="statusText" class="vavr-value" x="340" y="325">Normal</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // Exported variables for FUXA
-    var damperPosition = 65; // 0-100%
-    var airflow = 450; // CFM
-    var zoneTemp = 72.5; // degrees F
-    var setpoint = 72.0; // degrees F
-    var supplyTemp = 55.0; // degrees F
-    var dischargeTemp = 68.0; // degrees F
-    var reheatValve = 35; // 0-100%
-    var minFlow = 150; // CFM
-    var maxFlow = 800; // CFM
-    var alarmActive = false;
-    var enabled = true;
+  <script><![CDATA[
+//!export-start
+let _pn_damperPosition = 65;
+let _pn_airflow = 450;
+let _pn_zoneTemp = 72.5;
+let _pn_setpoint = 72.0;
+let _pn_supplyTemp = 55.0;
+let _pn_dischargeTemp = 68.0;
+let _pn_reheatValve = 35;
+let _pn_minFlow = 150;
+let _pn_maxFlow = 800;
+let _pb_alarmActive = false;
+let _pb_enabled = true;
+//!export-end
+
+function init() {
+  update();
+}
+
+// Exported variables for FUXA
 
     function updateDisplay() {
       // Update damper position text
-      document.getElementById('damperPos').textContent = damperPosition.toFixed(0) + '%';
+      document.getElementById('damperPos').textContent = _pn_damperPosition.toFixed(0) + '%';
 
       // Rotate damper visual (0% = closed/horizontal, 100% = open/vertical)
-      var damperAngle = (damperPosition / 100) * 90;
+let damperAngle = (_pn_damperPosition / 100) * 90;
       document.getElementById('damper').setAttribute('transform',
         'translate(210, 130) rotate(' + damperAngle + ')');
 
-      // Update airflow
-      document.getElementById('airflow').textContent = airflow.toFixed(0) + ' CFM';
+      // Update _pn_airflow
+      document.getElementById('airflow').textContent = _pn_airflow.toFixed(0) + ' CFM';
 
       // Update temperatures
-      document.getElementById('zoneTemp').textContent = zoneTemp.toFixed(1) + '°F';
-      document.getElementById('setpoint').textContent = setpoint.toFixed(1) + '°F';
-      document.getElementById('supplyTemp').textContent = supplyTemp.toFixed(0) + '°F';
-      document.getElementById('dischargeTemp').textContent = dischargeTemp.toFixed(0) + '°F';
+      document.getElementById('zoneTemp').textContent = _pn_zoneTemp.toFixed(1) + '°F';
+      document.getElementById('setpoint').textContent = _pn_setpoint.toFixed(1) + '°F';
+      document.getElementById('supplyTemp').textContent = _pn_supplyTemp.toFixed(0) + '°F';
+      document.getElementById('dischargeTemp').textContent = _pn_dischargeTemp.toFixed(0) + '°F';
 
       // Update reheat valve
-      document.getElementById('reheatValve').textContent = reheatValve.toFixed(0) + '%';
+      document.getElementById('reheatValve').textContent = _pn_reheatValve.toFixed(0) + '%';
 
       // Update min/max
-      document.getElementById('minMaxFlow').textContent = minFlow + '/' + maxFlow + ' CFM';
+      document.getElementById('minMaxFlow').textContent = _pn_minFlow + '/' + _pn_maxFlow + ' CFM';
 
       // Update reheat coil appearance
-      var reheatCoil = document.getElementById('reheatCoil').querySelector('path');
-      var reheatLight = document.getElementById('reheatLight');
-      var reheatStatusText = document.getElementById('reheatStatusText');
+const reheatCoil = document.getElementById('reheatCoil').querySelector('path');
+const reheatLight = document.getElementById('reheatLight');
+const reheatStatusText = document.getElementById('reheatStatusText');
 
-      if (reheatValve > 5) {
+      if (_pn_reheatValve > 5) {
         reheatCoil.setAttribute('class', 'vavr-coil vavr-coil-active');
         reheatLight.setAttribute('class', 'status-heating');
         reheatStatusText.textContent = 'Active';
@@ -162,19 +168,19 @@
       }
 
       // Calculate discharge temp based on reheat
-      var tempRise = (reheatValve / 100) * 20; // Max 20°F rise
-      dischargeTemp = supplyTemp + tempRise;
-      document.getElementById('dischargeTemp').textContent = dischargeTemp.toFixed(0) + '°F';
+let tempRise = (_pn_reheatValve / 100) * 20; // Max 20°F rise
+      _pn_dischargeTemp = _pn_supplyTemp + tempRise;
+      document.getElementById('dischargeTemp').textContent = _pn_dischargeTemp.toFixed(0) + '°F';
 
       // Update status
-      var statusLight = document.getElementById('statusLight');
-      var statusText = document.getElementById('statusText');
+const statusLight = document.getElementById('statusLight');
+const statusText = document.getElementById('statusText');
 
-      if (!enabled) {
+      if (!_pb_enabled) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Disabled';
         statusText.style.fill = '#e74c3c';
-      } else if (alarmActive) {
+      } else if (_pb_alarmActive) {
         statusLight.setAttribute('class', 'status-alarm');
         statusText.textContent = 'Alarm';
         statusText.style.fill = '#e74c3c';
@@ -184,17 +190,17 @@
         statusText.style.fill = '#27ae60';
       }
 
-      // Show/hide flow arrows based on airflow
-      var flowArrows = document.getElementById('flowArrows');
-      if (airflow > 50) {
+      // Show/hide flow arrows based on _pn_airflow
+const flowArrows = document.getElementById('flowArrows');
+      if (_pn_airflow > 50) {
         flowArrows.style.display = 'block';
       } else {
         flowArrows.style.display = 'none';
       }
 
       // Check for alarm conditions
-      alarmActive = airflow < minFlow - 50 || airflow > maxFlow + 50 ||
-                    Math.abs(zoneTemp - setpoint) > 5;
+      _pb_alarmActive = _pn_airflow < _pn_minFlow - 50 || _pn_airflow > _pn_maxFlow + 50 ||
+                    Math.abs(_pn_zoneTemp - _pn_setpoint) > 5;
     }
 
     // Initialize display
@@ -202,6 +208,45 @@
 
     // Update display every 100ms
     setInterval(updateDisplay, 100);
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_damperPosition') {
+    _pn_damperPosition = Number(value) || 0;
+    update();
+  } else if (id === '_pn_airflow') {
+    _pn_airflow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_zoneTemp') {
+    _pn_zoneTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_setpoint') {
+    _pn_setpoint = Number(value) || 0;
+    update();
+  } else if (id === '_pn_supplyTemp') {
+    _pn_supplyTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_dischargeTemp') {
+    _pn_dischargeTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_reheatValve') {
+    _pn_reheatValve = Number(value) || 0;
+    update();
+  } else if (id === '_pn_minFlow') {
+    _pn_minFlow = Number(value) || 0;
+    update();
+  } else if (id === '_pn_maxFlow') {
+    _pn_maxFlow = Number(value) || 0;
+    update();
+  } else if (id === '_pb_alarmActive') {
+    _pb_alarmActive = !!value;
+    update();
+  } else if (id === '_pb_enabled') {
+    _pb_enabled = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

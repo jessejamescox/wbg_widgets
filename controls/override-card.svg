@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="280" height="220" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
   <defs>
     <style>
       .card-bg {
@@ -120,41 +120,48 @@
     <text class="btn-text" x="140" y="208">RESTORE SCHEDULE</text>
   </g>
 
-  <script type="text/javascript"><![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _ps_activeTagId = '';
+let _ps_durationTagId = '';
+let _ps_remainingTagId = '';
+let _ps_reasonTagId = '';
+let _ps_restoreCmdTagId = '';
+let _pb_isActive = true;
+let _pn_totalDuration = 180;
+let _pn_remainingMinutes = 165;
+let _ps_reason = 'Maintenance work in progress';
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Integration Variables
-      var activeTagId = '';           // Override active status (0/1)
-      var durationTagId = '';         // Total override duration in minutes
-      var remainingTagId = '';        // Remaining time in minutes
-      var reasonTagId = '';           // Override reason text
-      var restoreCmdTagId = '';       // Command to restore schedule
 
       // Current values
-      var isActive = true;
-      var totalDuration = 180;        // minutes
-      var remainingMinutes = 165;     // minutes
-      var reason = 'Maintenance work in progress';
 
       // DOM Elements
-      var statusText = document.getElementById('statusText');
-      var timeRemaining = document.getElementById('timeRemaining');
-      var reasonText = document.getElementById('reasonText');
-      var restoreBtn = document.getElementById('restoreBtn');
-      var warningIcon = document.getElementById('warningIcon');
-      var timeText = document.getElementById('timeRemaining');
+const statusText = document.getElementById('statusText');
+const timeRemaining = document.getElementById('timeRemaining');
+const reasonText = document.getElementById('reasonText');
+const restoreBtn = document.getElementById('restoreBtn');
+const warningIcon = document.getElementById('warningIcon');
+const timeText = document.getElementById('timeRemaining');
 
       // Format minutes to HH:MM
       function formatTime(minutes) {
-        var hours = Math.floor(minutes / 60);
-        var mins = minutes % 60;
+let hours = Math.floor(minutes / 60);
+let mins = minutes % 60;
         return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
       }
 
       // Update all visuals
       function updateVisuals() {
-        if (isActive) {
+        if (_pb_isActive) {
           statusText.textContent = 'Override Active';
-          timeRemaining.textContent = formatTime(remainingMinutes);
+          timeRemaining.textContent = formatTime(_pn_remainingMinutes);
           timeText.classList.add('active');
           warningIcon.style.opacity = '1';
           document.querySelector('.card-bg').classList.remove('status-inactive');
@@ -166,7 +173,7 @@
           document.querySelector('.card-bg').classList.add('status-inactive');
         }
 
-        reasonText.textContent = '"' + reason + '"';
+        reasonText.textContent = '"' + _ps_reason + '"';
       }
 
       // Restore button handler
@@ -174,28 +181,28 @@
         evt.preventDefault();
 
         // Send restore command to FUXA
-        if (typeof GAuxy !== 'undefined' && restoreCmdTagId) {
-          GAuxy.setVariable(restoreCmdTagId, 1);
+        if (typeof GAuxy !== 'undefined' && _ps_restoreCmdTagId) {
+          GAuxy.setVariable(_ps_restoreCmdTagId, 1);
 
           // Reset command after 200ms
           setTimeout(function() {
-            if (typeof GAuxy !== 'undefined' && restoreCmdTagId) {
-              GAuxy.setVariable(restoreCmdTagId, 0);
+            if (typeof GAuxy !== 'undefined' && _ps_restoreCmdTagId) {
+              GAuxy.setVariable(_ps_restoreCmdTagId, 0);
             }
           }, 200);
         }
 
         // Update local state
-        isActive = false;
+        _pb_isActive = false;
         updateVisuals();
       });
 
       // Auto-decrement timer (if not receiving updates from FUXA)
-      var timerInterval = setInterval(function() {
-        if (isActive && remainingMinutes > 0 && !remainingTagId) {
-          remainingMinutes--;
-          if (remainingMinutes <= 0) {
-            isActive = false;
+let timerInterval = setInterval(function() {
+        if (_pb_isActive && _pn_remainingMinutes > 0 && !_ps_remainingTagId) {
+          _pn_remainingMinutes--;
+          if (_pn_remainingMinutes <= 0) {
+            _pb_isActive = false;
           }
           updateVisuals();
         }
@@ -203,39 +210,39 @@
 
       // FUXA Integration Functions
       window.svgSetValue = function(sigid, value) {
-        if (sigid === activeTagId) {
-          isActive = (parseFloat(value) > 0);
-        } else if (sigid === durationTagId) {
-          totalDuration = parseFloat(value);
-        } else if (sigid === remainingTagId) {
-          remainingMinutes = parseFloat(value);
-        } else if (sigid === reasonTagId) {
-          reason = String(value);
+        if (sigid === _ps_activeTagId) {
+          _pb_isActive = (parseFloat(value) > 0);
+        } else if (sigid === _ps_durationTagId) {
+          _pn_totalDuration = parseFloat(value);
+        } else if (sigid === _ps_remainingTagId) {
+          _pn_remainingMinutes = parseFloat(value);
+        } else if (sigid === _ps_reasonTagId) {
+          _ps_reason = String(value);
         }
 
         updateVisuals();
       };
 
       window.svgGetProperty = function(name) {
-        if (name === 'activeVariableId') return activeTagId;
-        if (name === 'durationVariableId') return durationTagId;
-        if (name === 'remainingVariableId') return remainingTagId;
-        if (name === 'reasonVariableId') return reasonTagId;
-        if (name === 'restoreCmdVariableId') return restoreCmdTagId;
+        if (name === 'activeVariableId') return _ps_activeTagId;
+        if (name === 'durationVariableId') return _ps_durationTagId;
+        if (name === 'remainingVariableId') return _ps_remainingTagId;
+        if (name === 'reasonVariableId') return _ps_reasonTagId;
+        if (name === 'restoreCmdVariableId') return _ps_restoreCmdTagId;
         return null;
       };
 
       window.svgSetProperty = function(name, value) {
         if (name === 'activeVariableId') {
-          activeTagId = value;
+          _ps_activeTagId = value;
         } else if (name === 'durationVariableId') {
-          durationTagId = value;
+          _ps_durationTagId = value;
         } else if (name === 'remainingVariableId') {
-          remainingTagId = value;
+          _ps_remainingTagId = value;
         } else if (name === 'reasonVariableId') {
-          reasonTagId = value;
+          _ps_reasonTagId = value;
         } else if (name === 'restoreCmdVariableId') {
-          restoreCmdTagId = value;
+          _ps_restoreCmdTagId = value;
         }
       };
 
@@ -247,5 +254,39 @@
         clearInterval(timerInterval);
       });
     })();
-  ]]></script>
+
+function putValue(id, value) {
+  if (id === '_ps_activeTagId') {
+    _ps_activeTagId = String(value) || "";
+    update();
+  } else if (id === '_ps_durationTagId') {
+    _ps_durationTagId = String(value) || "";
+    update();
+  } else if (id === '_ps_remainingTagId') {
+    _ps_remainingTagId = String(value) || "";
+    update();
+  } else if (id === '_ps_reasonTagId') {
+    _ps_reasonTagId = String(value) || "";
+    update();
+  } else if (id === '_ps_restoreCmdTagId') {
+    _ps_restoreCmdTagId = String(value) || "";
+    update();
+  } else if (id === '_pb_isActive') {
+    _pb_isActive = !!value;
+    update();
+  } else if (id === '_pn_totalDuration') {
+    _pn_totalDuration = Number(value) || 0;
+    update();
+  } else if (id === '_pn_remainingMinutes') {
+    _pn_remainingMinutes = Number(value) || 0;
+    update();
+  } else if (id === '_ps_reason') {
+    _ps_reason = String(value) || "";
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

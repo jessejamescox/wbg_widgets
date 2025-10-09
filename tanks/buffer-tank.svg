@@ -135,14 +135,25 @@
     </text>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_tankHeight = 204;
+let _pn_tankTop = 63;
+let _ps_status = 'IDLE';
+let _ps_statusColor = '#757575';
+let _pn_animOffset = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Interface
-      var gaugeStatus = { id: 'buffer-tank', type: 'svg-ext' };
+let gaugeStatus = { id: 'buffer-tank', type: 'svg-ext' };
 
       // Default values
-      var settings = {
+let settings = {
         supplyTemp: 180,     // Supply temperature (°F)
         returnTemp: 120,     // Return temperature (°F)
         chargeLevel: 75,     // Charge level percentage (0-100)
@@ -190,12 +201,12 @@
 
       function updateTank() {
         // Constrain charge level
-        var chargeLevel = Math.max(0, Math.min(100, settings.chargeLevel));
+let chargeLevel = Math.max(0, Math.min(100, settings.chargeLevel));
 
         // Update temperature displays
-        var supplyTempEl = document.getElementById('supply-temp');
-        var returnTempEl = document.getElementById('return-temp');
-        var deltaTempEl = document.getElementById('delta-temp');
+const supplyTempEl = document.getElementById('supply-temp');
+const returnTempEl = document.getElementById('return-temp');
+const deltaTempEl = document.getElementById('delta-temp');
 
         if (supplyTempEl) {
           supplyTempEl.textContent = settings.supplyTemp.toFixed(0);
@@ -203,49 +214,45 @@
         if (returnTempEl) {
           returnTempEl.textContent = settings.returnTemp.toFixed(0);
         }
-
-        var deltaT = settings.supplyTemp - settings.returnTemp;
+let deltaT = settings.supplyTemp - settings.returnTemp;
         if (deltaTempEl) {
           deltaTempEl.textContent = deltaT.toFixed(0);
         }
 
         // Update stratification visualization
-        var avgTemp = (settings.supplyTemp + settings.returnTemp) / 2;
-        var tempRange = settings.supplyTemp - settings.returnTemp;
+let avgTemp = (settings.supplyTemp + settings.returnTemp) / 2;
+let tempRange = settings.supplyTemp - settings.returnTemp;
 
         // Calculate layer heights based on charge level and temperatures
-        var tankHeight = 204;
-        var tankTop = 63;
 
         // Hot layer (top) - size based on supply temp and charge
-        var hotHeight = Math.max(0, (chargeLevel / 100) * tankHeight * 0.3);
-        var warmHeight = Math.max(0, (chargeLevel / 100) * tankHeight * 0.4);
-        var coolHeight = tankHeight - hotHeight - warmHeight;
-
-        var hotLayer = document.getElementById('hot-layer');
-        var warmLayer = document.getElementById('warm-layer');
-        var coolLayer = document.getElementById('cool-layer');
+let hotHeight = Math.max(0, (chargeLevel / 100) * _pn_tankHeight * 0.3);
+let warmHeight = Math.max(0, (chargeLevel / 100) * _pn_tankHeight * 0.4);
+let coolHeight = _pn_tankHeight - hotHeight - warmHeight;
+const hotLayer = document.getElementById('hot-layer');
+const warmLayer = document.getElementById('warm-layer');
+const coolLayer = document.getElementById('cool-layer');
 
         if (hotLayer) {
-          hotLayer.setAttribute('y', tankTop);
+          hotLayer.setAttribute('y', _pn_tankTop);
           hotLayer.setAttribute('height', hotHeight);
         }
 
         if (warmLayer) {
-          warmLayer.setAttribute('y', tankTop + hotHeight);
+          warmLayer.setAttribute('y', _pn_tankTop + hotHeight);
           warmLayer.setAttribute('height', warmHeight);
         }
 
         if (coolLayer) {
-          coolLayer.setAttribute('y', tankTop + hotHeight + warmHeight);
+          coolLayer.setAttribute('y', _pn_tankTop + hotHeight + warmHeight);
           coolLayer.setAttribute('height', coolHeight);
         }
 
         // Update charge indicator
-        var chargeFill = document.getElementById('charge-fill');
+const chargeFill = document.getElementById('charge-fill');
         if (chargeFill) {
-          var chargeHeight = (chargeLevel / 100) * 200;
-          var chargeY = 265 - chargeHeight;
+let chargeHeight = (chargeLevel / 100) * 200;
+let chargeY = 265 - chargeHeight;
           chargeFill.setAttribute('y', chargeY);
           chargeFill.setAttribute('height', chargeHeight);
 
@@ -260,44 +267,42 @@
         }
 
         // Update charge percentage display
-        var chargePercentEl = document.getElementById('charge-percent');
+const chargePercentEl = document.getElementById('charge-percent');
         if (chargePercentEl) {
           chargePercentEl.textContent = chargeLevel.toFixed(0);
         }
 
         // Update capacity display
-        var capacityEl = document.getElementById('tank-capacity');
+const capacityEl = document.getElementById('tank-capacity');
         if (capacityEl) {
           capacityEl.textContent = settings.capacity.toFixed(0);
         }
 
-        // Determine status
-        var tankStatus = document.getElementById('tank-status');
-        var status = 'IDLE';
-        var statusColor = '#757575';
+        // Determine _ps_status
+const tankStatus = document.getElementById('tank-_ps_status');
 
         if (deltaT > 10) {
-          status = 'CHARGING';
-          statusColor = '#4caf50';
+          _ps_status = 'CHARGING';
+          _ps_statusColor = '#4caf50';
         } else if (deltaT < -10) {
-          status = 'DISCHARGING';
-          statusColor = '#ff9800';
+          _ps_status = 'DISCHARGING';
+          _ps_statusColor = '#ff9800';
         } else if (chargeLevel < 20) {
-          status = 'LOW CHARGE';
-          statusColor = '#ff5252';
+          _ps_status = 'LOW CHARGE';
+          _ps_statusColor = '#ff5252';
         } else {
-          status = 'STANDBY';
-          statusColor = '#2196f3';
+          _ps_status = 'STANDBY';
+          _ps_statusColor = '#2196f3';
         }
 
         if (tankStatus) {
-          tankStatus.textContent = status;
-          tankStatus.setAttribute('fill', statusColor);
+          tankStatus.textContent = _ps_status;
+          tankStatus.setAttribute('fill', _ps_statusColor);
         }
 
         // Animate supply/return connections based on delta T
-        var supplyConnection = document.getElementById('supply-connection');
-        var returnConnection = document.getElementById('return-connection');
+const supplyConnection = document.getElementById('supply-connection');
+const returnConnection = document.getElementById('return-connection');
 
         if (deltaT > 5 && supplyConnection) {
           supplyConnection.setAttribute('opacity', '1');
@@ -316,18 +321,17 @@
       updateTank();
 
       // Animation for thermal movement
-      var animOffset = 0;
+
       setInterval(function() {
-        animOffset += 0.02;
-        var deltaT = settings.supplyTemp - settings.returnTemp;
+        _pn_animOffset += 0.02;
+let deltaT = settings.supplyTemp - settings.returnTemp;
 
         if (deltaT > 5) {
           // Animate layers slightly to show thermal movement
-          var hotLayer = document.getElementById('hot-layer');
-          var warmLayer = document.getElementById('warm-layer');
-          var coolLayer = document.getElementById('cool-layer');
-
-          var wave = Math.sin(animOffset) * 0.5;
+const hotLayer = document.getElementById('hot-layer');
+const warmLayer = document.getElementById('warm-layer');
+const coolLayer = document.getElementById('cool-layer');
+let wave = Math.sin(_pn_animOffset) * 0.5;
 
           if (hotLayer) {
             hotLayer.setAttribute('opacity', 0.9 + wave * 0.05);
@@ -341,6 +345,27 @@
         }
       }, 50);
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_tankHeight') {
+    _pn_tankHeight = Number(value) || 0;
+    update();
+  } else if (id === '_pn_tankTop') {
+    _pn_tankTop = Number(value) || 0;
+    update();
+  } else if (id === '_ps_status') {
+    _ps_status = String(value) || "";
+    update();
+  } else if (id === '_ps_statusColor') {
+    _ps_statusColor = String(value) || "";
+    update();
+  } else if (id === '_pn_animOffset') {
+    _pn_animOffset = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

@@ -161,6 +161,13 @@ Copy only the widgets you need from the category folders.
 
 ## 📖 Usage with FUXA
 
+### Widget Format
+
+All widgets use FUXA's standard export variable format with the following naming conventions:
+- `_pn_` prefix for **numeric** variables (e.g., `_pn_status`, `_pn_speed`)
+- `_ps_` prefix for **string** variables (e.g., `_ps_mode`, `_ps_label`)
+- `_pb_` prefix for **boolean** variables (e.g., `_pb_enabled`, `_pb_alarm`)
+
 ### Basic Integration
 
 1. **Import Widget into FUXA**:
@@ -176,62 +183,72 @@ Copy only the widgets you need from the category folders.
 3. **Bind Variables**:
    - Select the widget
    - Open Properties panel
-   - Map FUXA tags to widget variables
+   - You'll see all exported variables (those between `//!export-start` and `//!export-end`)
+   - Map FUXA tags/devices to widget variables
 
 ### Example: Binding a Fan Widget
 
+The fan widget exports these variables:
 ```javascript
-// Widget exposes these variables:
-// - status: 0=off, 1=on
-// - speed: 0-100 (%)
-// - alarmState: 0=normal, 1=alarm
-
-// In FUXA, bind:
-status → PLC.AHU1_SF_Status
-speed → PLC.AHU1_SF_Speed
-alarmState → PLC.AHU1_SF_Alarm
+//!export-start
+let _pn_status = 0;      // 0=off, 1=on
+let _pn_speed = 0;       // 0-100 (%)
+let _pn_alarm = 0;       // 0=normal, 1=alarm
+//!export-end
 ```
+
+In FUXA, bind these to your device tags:
+- `_pn_status` → `PLC.AHU1_SF_Status`
+- `_pn_speed` → `PLC.AHU1_SF_Speed`
+- `_pn_alarm` → `PLC.AHU1_SF_Alarm`
+
+The widget will automatically update when tag values change.
 
 ### Example: Thermostat Control
 
+The thermostat widget exports these variables:
 ```javascript
-// Widget variables:
-// - currentTemp: Current temperature
-// - setpoint: Temperature setpoint
-// - mode: 0=Off, 1=Heat, 2=Cool, 3=Auto
-// - fanMode: 0=Auto, 1=On
-
-// Bidirectional binding:
-currentTemp → PLC.Zone1_Temp (read)
-setpoint ⟷ PLC.Zone1_Setpoint (read/write)
-mode ⟷ PLC.Zone1_Mode (read/write)
-fanMode ⟷ PLC.Zone1_Fan (read/write)
+//!export-start
+let _pn_currentTemp = 72;
+let _pn_setpoint = 72;
+let _pn_mode = 0;        // 0=Off, 1=Heat, 2=Cool, 3=Auto
+let _pn_fanMode = 0;     // 0=Auto, 1=On
+//!export-end
 ```
+
+In FUXA, bind these to your device tags:
+- `_pn_currentTemp` → `PLC.Zone1_Temp` (read-only)
+- `_pn_setpoint` ⟷ `PLC.Zone1_Setpoint` (read/write)
+- `_pn_mode` ⟷ `PLC.Zone1_Mode` (read/write)
+- `_pn_fanMode` ⟷ `PLC.Zone1_Fan` (read/write)
+
+Interactive controls (buttons) on the widget can write values back to the PLC.
 
 ## 📚 Widget Documentation
 
 ### Common Variables
 
-Most widgets share these common variable patterns:
+Most widgets share these common variable patterns (with FUXA prefixes):
 
 #### Status Variables
-- `status` - Equipment status (0=off, 1=on)
-- `alarmState` - Alarm condition (0=normal, 1=alarm)
-- `enabled` - Enable/disable (0=disabled, 1=enabled)
+- `_pn_status` - Equipment status (0=off, 1=on)
+- `_pn_alarm` - Alarm condition (0=normal, 1=alarm)
+- `_pb_enabled` - Enable/disable (false/true)
 
 #### Analog Variables
-- `position` - Position 0-100%
-- `speed` - Speed 0-100%
-- `capacity` - Capacity/load 0-100%
-- `temperature` - Temperature value
-- `pressure` - Pressure value
-- `flow` - Flow rate
+- `_pn_position` - Position 0-100%
+- `_pn_speed` - Speed 0-100%
+- `_pn_capacity` - Capacity/load 0-100%
+- `_pn_temperature` - Temperature value
+- `_pn_pressure` - Pressure value
+- `_pn_flow` - Flow rate
 
 #### Control Variables
-- `command` - Commanded value
-- `feedback` - Feedback/actual value
-- `setpoint` - Setpoint value
-- `mode` - Operating mode
+- `_pn_command` - Commanded value
+- `_pn_feedback` - Feedback/actual value
+- `_pn_setpoint` - Setpoint value
+- `_pn_mode` - Operating mode (numeric)
+- `_ps_modeText` - Mode description (string)
 
 ### Color Coding Standards
 
@@ -417,23 +434,22 @@ Each widget follows this structure:
 
 ### Complete Variable List by Category
 
-#### Primitives
-- **Fan**: status, speed, alarmState
-- **Valve (2-pos)**: position, feedback
-- **Valve (Analog)**: position, command, feedback
-- **Valve (3-way)**: position
-- **Damper**: position, command, feedback
-- **Pump**: status, alarmState, runCommand, runFeedback
-- **Pump (VFD)**: speed, status, frequency
-- **Sensors**: temperature/humidity/pressure/co2, units, highAlarm, lowAlarm, alarmState
-- **Alarm Chip**: alarmActive, alarmCount, acknowledged
-- **Filter**: pressureDrop, dpAlarmHigh, dpWarning, filterStatus
-- **Heater**: status, capacity, outputKW
-- **Coils**: valvePosition, supplyTemp, returnTemp, airTempOut, active
-- **Compressor**: status, alarmState, loadPercent, runtime
-- **Motor**: status, speed, current, alarmState
+#### Primitives (Examples)
+- **Fan**: `_pn_status`, `_pn_speed`, `_pn_alarm`
+- **Valve (2-pos)**: `_pn_position`, `_pn_feedback`
+- **Valve (Analog)**: `_pn_position`, `_pn_command`, `_pn_feedback`
+- **Valve (3-way)**: `_pn_position`
+- **Damper**: `_pn_position`, `_pn_command`, `_pn_feedback`
+- **Pump**: `_pn_status`, `_pn_alarm`
+- **Pump (VFD)**: `_pn_speed`, `_pn_status`, `_pn_frequency`
+- **Sensors**: `_pn_temperature`/`_pn_humidity`/`_pn_pressure`/`_pn_co2`, `_ps_units`, `_pn_highAlarm`, `_pn_lowAlarm`
+- **Filter**: `_pn_pressureDrop`, `_pn_dpAlarmHigh`, `_pn_dpWarning`
+- **Heater**: `_pn_status`, `_pn_capacity`, `_pn_outputKW`
+- **Coils**: `_pn_valvePosition`, `_pn_supplyTemp`, `_pn_returnTemp`, `_pn_airTempOut`
+- **Compressor**: `_pn_status`, `_pn_alarm`, `_pn_loadPercent`, `_pn_runtime`
+- **Motor**: `_pn_status`, `_pn_speed`, `_pn_current`, `_pn_alarm`
 
-See individual widget files for complete variable documentation.
+**Note**: Open any widget file and look for the `//!export-start` section to see all available variables for that widget.
 
 ## 🤝 Contributing
 

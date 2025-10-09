@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100" width="80" height="100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100" width="100%" height="100%">
   <defs>
     <style>
       .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
@@ -47,33 +47,40 @@
 
   <text x="40" y="96" class="label-text" font-size="7">PRESSURE DROP</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    var pressureDrop = 0.5;    // inches WC
-    var dpAlarmHigh = 1.0;     // High DP alarm
-    var dpWarning = 0.8;       // Warning threshold
-    var filterStatus = 0;      // 0=clean, 1=dirty, 2=clogged
+  <script><![CDATA[
+//!export-start
+let _pn_pressureDrop = 0.5;
+let _pn_dpAlarmHigh = 1.0;
+let _pn_dpWarning = 0.8;
+let _pn_filterStatus = 0;
+//!export-end
 
-    function updateWidget() {
-      var indicator = document.getElementById('statusIndicator');
-      var pressureText = document.getElementById('pressureText');
-      var media = document.getElementById('filterMedia');
+function init() {
+  update();
+}
 
-      pressureText.textContent = pressureDrop.toFixed(2) + ' in';
+    function update() {
+const indicator = document.getElementById('statusIndicator');
+const pressureText = document.getElementById('pressureText');
+const media = document.getElementById('filterMedia');
+
+  if (!indicator || !pressureText || !media) return;
+
+      pressureText.textContent = _pn_pressureDrop.toFixed(2) + ' in';
 
       // Determine status from pressure drop
-      if (pressureDrop >= dpAlarmHigh) {
+      if (_pn_pressureDrop >= _pn_dpAlarmHigh) {
         indicator.setAttribute('class', 'status-alarm');
         media.querySelector('path').setAttribute('class', 'filter-media filter-dirty');
-      } else if (pressureDrop >= dpWarning) {
+      } else if (_pn_pressureDrop >= _pn_dpWarning) {
         indicator.setAttribute('class', 'status-warning');
       } else {
         indicator.setAttribute('class', 'status-good');
       }
 
       // Visual dirt accumulation
-      var dirtLevel = Math.min(1, pressureDrop / dpAlarmHigh);
-      var paths = media.querySelectorAll('path');
+let dirtLevel = Math.min(1, _pn_pressureDrop / _pn_dpAlarmHigh);
+let paths = media.querySelectorAll('path');
       paths.forEach(function(path, index) {
         if (index / paths.length < dirtLevel) {
           path.style.fill = '#8d6e63';
@@ -83,7 +90,23 @@
       });
     }
 
-    updateWidget();
-    ]]>
-  </script>
+function putValue(id, value) {
+  if (id === '_pn_pressureDrop') {
+    _pn_pressureDrop = Number(value) || 0;
+    update();
+  } else if (id === '_pn_dpAlarmHigh') {
+    _pn_dpAlarmHigh = Number(value) || 0;
+    update();
+  } else if (id === '_pn_dpWarning') {
+    _pn_dpWarning = Number(value) || 0;
+    update();
+  } else if (id === '_pn_filterStatus') {
+    _pn_filterStatus = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

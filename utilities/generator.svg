@@ -116,10 +116,17 @@
     <text class="unit-text" x="292.5" y="520" text-anchor="middle">HH:MM:SS</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+//!export-start
+let _pb_isRunning = false;
+//!export-end
+
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       running: 'generator_running',           // boolean
       voltage: 'generator_voltage',           // V
       frequency: 'generator_frequency',       // Hz
@@ -131,15 +138,13 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       nominalVoltage: 480,    // V
       nominalFreq: 60,        // Hz
       maxPower: 500,          // kW
       lowFuelThreshold: 25,   // %
       criticalFuelThreshold: 10 // %
     };
-
-    var isRunning = false;
 
     // Update function called by FUXA
     function updateValues(tag, value) {
@@ -176,30 +181,28 @@
     }
 
     function updateRunning(value) {
-      isRunning = Boolean(value);
+      _pb_isRunning = Boolean(value);
+const statusText = document.getElementById('runStatus');
+const genStatusText = document.getElementById('genStatusText');
+const statusIndicator = document.getElementById('statusIndicator');
+const rotatingIndicator = document.getElementById('rotatingIndicator');
+let exhausts = [document.getElementById('exhaust1'), document.getElementById('exhaust2')];
 
-      var statusText = document.getElementById('runStatus');
-      var genStatusText = document.getElementById('genStatusText');
-      var statusIndicator = document.getElementById('statusIndicator');
-      var rotatingIndicator = document.getElementById('rotatingIndicator');
-      var exhausts = [document.getElementById('exhaust1'), document.getElementById('exhaust2')];
-
-      if (isRunning) {
+      if (_pb_isRunning) {
         statusText.textContent = 'RUNNING';
         statusText.setAttribute('fill', '#00ff00');
         genStatusText.textContent = 'ONLINE';
         statusIndicator.setAttribute('class', 'status-ok');
 
         // Add rotation animation
-        var animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+let animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
         animateTransform.setAttribute('attributeName', 'transform');
         animateTransform.setAttribute('type', 'rotate');
         animateTransform.setAttribute('from', '0 20 0');
         animateTransform.setAttribute('to', '360 20 0');
         animateTransform.setAttribute('dur', '2s');
         animateTransform.setAttribute('repeatCount', 'indefinite');
-
-        var oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
+let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
         while (oldAnims.length > 0) {
           rotatingIndicator.removeChild(oldAnims[0]);
         }
@@ -217,7 +220,7 @@
         statusIndicator.setAttribute('class', 'status-off');
 
         // Remove rotation animation
-        var oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
+let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
         while (oldAnims.length > 0) {
           rotatingIndicator.removeChild(oldAnims[0]);
         }
@@ -230,15 +233,14 @@
     }
 
     function updateVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('voltageValue').textContent = voltage.toFixed(0);
+const valueText = document.getElementById('voltageValue');
+let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
 
-      var valueText = document.getElementById('voltageValue');
-      var deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
-
-      if (isRunning && deviation > 0.1) {
+      if (_pb_isRunning && deviation > 0.1) {
         valueText.setAttribute('fill', '#ff0000');
-      } else if (isRunning && deviation > 0.05) {
+      } else if (_pb_isRunning && deviation > 0.05) {
         valueText.setAttribute('fill', '#ffaa00');
       } else {
         valueText.setAttribute('fill', '#ffffff');
@@ -246,15 +248,14 @@
     }
 
     function updateFrequency(value) {
-      var freq = parseFloat(value) || 0;
+let freq = parseFloat(value) || 0;
       document.getElementById('frequencyValue').textContent = freq.toFixed(1);
+const valueText = document.getElementById('frequencyValue');
+let deviation = Math.abs(freq - config.nominalFreq) / config.nominalFreq;
 
-      var valueText = document.getElementById('frequencyValue');
-      var deviation = Math.abs(freq - config.nominalFreq) / config.nominalFreq;
-
-      if (isRunning && deviation > 0.03) {
+      if (_pb_isRunning && deviation > 0.03) {
         valueText.setAttribute('fill', '#ff0000');
-      } else if (isRunning && deviation > 0.01) {
+      } else if (_pb_isRunning && deviation > 0.01) {
         valueText.setAttribute('fill', '#ffaa00');
       } else {
         valueText.setAttribute('fill', '#ffffff');
@@ -262,15 +263,14 @@
     }
 
     function updatePower(value) {
-      var power = parseFloat(value) || 0;
+let power = parseFloat(value) || 0;
       document.getElementById('powerValue').textContent = power.toFixed(0);
     }
 
     function updateLoad(value) {
-      var load = parseFloat(value) || 0;
+let load = parseFloat(value) || 0;
       document.getElementById('loadValue').textContent = load.toFixed(0);
-
-      var valueText = document.getElementById('loadValue');
+const valueText = document.getElementById('loadValue');
       if (load > 100) {
         valueText.setAttribute('fill', '#ff0000');
       } else if (load > 90) {
@@ -281,17 +281,17 @@
     }
 
     function updateFuelLevel(value) {
-      var fuel = parseFloat(value) || 0;
+let fuel = parseFloat(value) || 0;
       document.getElementById('fuelValue').textContent = fuel.toFixed(0) + '%';
 
       // Update fuel bar (inverted - fills from bottom)
-      var barHeight = (fuel / 100) * 38;
-      var fuelBar = document.getElementById('fuelBar');
+let barHeight = (fuel / 100) * 38;
+const fuelBar = document.getElementById('fuelBar');
       fuelBar.setAttribute('height', barHeight);
       fuelBar.setAttribute('y', 18 - barHeight);
 
       // Change color based on fuel level
-      var valueText = document.getElementById('fuelValue');
+const valueText = document.getElementById('fuelValue');
       if (fuel <= config.criticalFuelThreshold) {
         fuelBar.setAttribute('fill', '#ff0000');
         valueText.setAttribute('fill', '#ff0000');
@@ -305,13 +305,11 @@
     }
 
     function updateRuntime(value) {
-      var seconds = parseInt(value) || 0;
-
-      var hours = Math.floor(seconds / 3600);
-      var minutes = Math.floor((seconds % 3600) / 60);
-      var secs = seconds % 60;
-
-      var timeStr = pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
+let seconds = parseInt(value) || 0;
+let hours = Math.floor(seconds / 3600);
+let minutes = Math.floor((seconds % 3600) / 60);
+let secs = seconds % 60;
+let timeStr = pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
       document.getElementById('runtimeValue').textContent = timeStr;
     }
 
@@ -320,15 +318,15 @@
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+const indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
 
         // Add pulse animation
         indicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
-      } else if (isRunning) {
+      } else if (_pb_isRunning) {
         indicator.setAttribute('class', 'status-ok');
         indicator.innerHTML = '';
       } else {
@@ -341,6 +339,15 @@
     if (typeof window !== 'undefined') {
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pb_isRunning') {
+    _pb_isRunning = !!value;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

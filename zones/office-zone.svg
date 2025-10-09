@@ -204,11 +204,21 @@
     </g>
   </g>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
+  <script><![CDATA[
+//!export-start
+let _pn_totalTemp = 0;
+let _pn_totalOcc = 0;
+let _pn_tempCount = 0;
+let _pn_activeVavs = 0;
+//!export-end
+
+function init() {
+  update();
+}
+
+(function() {
       // FUXA Variable Bindings
-      var variables = {
+let variables = {
         zoneName: 'office_zone_name',
         spaces: [
           { temp: 'office_space1_temp', occ: 'office_space1_occ', name: 'office_space1_name' },
@@ -245,72 +255,67 @@
           }
 
           // Update spaces
-          var totalTemp = 0;
-          var totalOcc = 0;
-          var tempCount = 0;
 
           variables.spaces.forEach(function(space, index) {
-            var spaceNum = index + 1;
+let spaceNum = index + 1;
 
             if (data[space.temp] !== undefined) {
-              var temp = parseFloat(data[space.temp]);
-              totalTemp += temp;
-              tempCount++;
-
-              var tempElem = document.getElementById('temp' + spaceNum);
+let temp = parseFloat(data[space.temp]);
+              _pn_totalTemp += temp;
+              _pn_tempCount++;
+const tempElem = document.getElementById('temp' + spaceNum);
               tempElem.textContent = Math.round(temp) + '°F';
 
               // Update temperature color
-              var spaceRect = document.querySelector('#space' + spaceNum + ' rect');
+let spaceRect = document.querySelector('#space' + spaceNum + ' rect');
               spaceRect.setAttribute('class', getTempClass(temp));
             }
 
             if (data[space.occ] !== undefined) {
-              var occ = parseInt(data[space.occ]);
-              totalOcc += occ;
+let occ = parseInt(data[space.occ]);
+              _pn_totalOcc += occ;
               document.getElementById('occ' + spaceNum).textContent = occ + ' people';
             }
           });
 
           // Update average temperature
-          if (tempCount > 0) {
-            var avgTemp = Math.round(totalTemp / tempCount);
+          if (_pn_tempCount > 0) {
+let avgTemp = Math.round(_pn_totalTemp / _pn_tempCount);
             document.getElementById('avgTemp').textContent = avgTemp + '°F';
           }
 
           // Update total occupancy
-          document.getElementById('totalOccupancy').textContent = totalOcc + '/30';
+          document.getElementById('totalOccupancy').textContent = _pn_totalOcc + '/30';
 
           // Update VAV boxes
-          var activeVavs = 0;
+
           variables.vavBoxes.forEach(function(vav, index) {
-            var vavNum = index + 1;
+let vavNum = index + 1;
 
             if (data[vav.mode] !== undefined && data[vav.damper] !== undefined) {
-              var mode = data[vav.mode]; // 0=off, 1=heating, 2=cooling
-              var damper = parseFloat(data[vav.damper]);
-
-              var modeText = ['Off', 'Heating', 'Cooling'][mode] || 'Unknown';
-              var statusText = modeText + ' - ' + Math.round(damper) + '%';
+let mode = data[vav.mode]; // 0=off, 1=heating, 2=cooling
+let damper = parseFloat(data[vav.damper]);
+let modeText = ['Off', 'Heating', 'Cooling'][mode] || 'Unknown';
+let statusText = modeText + ' - ' + Math.round(damper) + '%';
 
               document.getElementById('vav' + vavNum + 'Status').textContent = statusText;
 
               // Update indicator color
-              var indicator = document.getElementById('vav' + vavNum + 'Indicator');
+const indicator = document.getElementById('vav' + vavNum + 'Indicator');
               if (mode === 0) {
                 indicator.setAttribute('fill', '#718096'); // Gray for off
               } else if (mode === 1) {
                 indicator.setAttribute('fill', '#f56565'); // Red for heating
-                activeVavs++;
+                _pn_activeVavs++;
               } else if (mode === 2) {
                 indicator.setAttribute('fill', '#48bb78'); // Green for cooling
-                activeVavs++;
+                _pn_activeVavs++;
               }
             }
           });
 
           // Update VAV status summary
-          document.getElementById('vavStatus').textContent = activeVavs + ' Active';
+          document.getElementById('vavStatus').textContent = _pn_activeVavs + ' Active';
 
         } catch (error) {
           console.error('Office Zone update error:', error);
@@ -320,7 +325,7 @@
       // Space click handlers
       for (var i = 1; i <= 7; i++) {
         (function(spaceNum) {
-          var spaceElem = document.getElementById('space' + spaceNum);
+const spaceElem = document.getElementById('space' + spaceNum);
           if (spaceElem) {
             spaceElem.addEventListener('click', function() {
               if (window.fuxa && window.fuxa.navigateToSpace) {
@@ -335,7 +340,7 @@
 
       // Register with FUXA
       if (window.fuxa) {
-        var allVars = [variables.zoneName];
+let allVars = [variables.zoneName];
         variables.spaces.forEach(function(s) {
           allVars.push(s.temp, s.occ, s.name);
         });
@@ -353,6 +358,24 @@
       // Make update function globally accessible
       window.updateOfficeZone = updateWidget;
     })();
-    ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_totalTemp') {
+    _pn_totalTemp = Number(value) || 0;
+    update();
+  } else if (id === '_pn_totalOcc') {
+    _pn_totalOcc = Number(value) || 0;
+    update();
+  } else if (id === '_pn_tempCount') {
+    _pn_tempCount = Number(value) || 0;
+    update();
+  } else if (id === '_pn_activeVavs') {
+    _pn_activeVavs = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>

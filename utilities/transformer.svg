@@ -109,10 +109,17 @@
     <text class="unit-text" x="292.5" y="475" text-anchor="middle">%</text>
   </g>
 
-  <script type="text/javascript">
-  <![CDATA[
-    // FUXA Variable Mappings
-    var variables = {
+  <script><![CDATA[
+//!export-start
+let _pn_currentMaxLoad = 1000;
+//!export-end
+
+function init() {
+  update();
+}
+
+// FUXA Variable Mappings
+let variables = {
       primaryVoltage: 'transformer_primary_voltage',      // V
       secondaryVoltage: 'transformer_secondary_voltage',  // V
       load: 'transformer_load',                           // kVA
@@ -123,15 +130,13 @@
     };
 
     // Configuration
-    var config = {
+let config = {
       maxLoad: 1000,           // kVA default rating
       maxTemp: 150,            // °C
       warningTemp: 120,        // °C
       highLoadThreshold: 0.9,  // 90%
       warnLoadThreshold: 0.75  // 75%
     };
-
-    var currentMaxLoad = 1000;
 
     // Update function called by FUXA
     function updateValues(tag, value) {
@@ -165,27 +170,27 @@
     }
 
     function updatePrimaryVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('primaryVoltage').textContent = voltage.toFixed(0);
     }
 
     function updateSecondaryVoltage(value) {
-      var voltage = parseFloat(value) || 0;
+let voltage = parseFloat(value) || 0;
       document.getElementById('secondaryVoltage').textContent = voltage.toFixed(0);
     }
 
     function updateLoad(value) {
-      var load = parseFloat(value) || 0;
+let load = parseFloat(value) || 0;
       document.getElementById('loadValue').textContent = load.toFixed(1);
 
       // Update load bar
-      var loadPercent = Math.min((load / currentMaxLoad) * 100, 100);
-      var barWidth = (loadPercent / 100) * 340;
-      var loadBar = document.getElementById('loadBar');
+let loadPercent = Math.min((load / _pn_currentMaxLoad) * 100, 100);
+let barWidth = (loadPercent / 100) * 340;
+const loadBar = document.getElementById('loadBar');
       loadBar.setAttribute('width', barWidth);
 
       // Change color based on load
-      var valueText = document.getElementById('loadValue');
+const valueText = document.getElementById('loadValue');
       if (loadPercent >= config.highLoadThreshold * 100) {
         loadBar.setAttribute('fill', '#ff0000');
         valueText.setAttribute('fill', '#ff0000');
@@ -198,11 +203,11 @@
       }
 
       // Control energy flow animation speed
-      var flowCircles = document.querySelectorAll('#energyFlow circle');
+let flowCircles = document.querySelectorAll('#energyFlow circle');
       if (load > 0) {
-        var speed = Math.max(0.5, 2 - (loadPercent / 100) * 1.5);
+let speed = Math.max(0.5, 2 - (loadPercent / 100) * 1.5);
         flowCircles.forEach(function(circle) {
-          var anims = circle.getElementsByTagName('animate');
+let anims = circle.getElementsByTagName('animate');
           for (var i = 0; i < anims.length; i++) {
             anims[i].setAttribute('dur', speed + 's');
           }
@@ -211,15 +216,14 @@
     }
 
     function updateMaxLoad(value) {
-      currentMaxLoad = parseFloat(value) || 1000;
-      config.maxLoad = currentMaxLoad;
+      _pn_currentMaxLoad = parseFloat(value) || 1000;
+      config.maxLoad = _pn_currentMaxLoad;
     }
 
     function updateTemperature(value) {
-      var temp = parseFloat(value) || 0;
+let temp = parseFloat(value) || 0;
       document.getElementById('temperatureValue').textContent = temp.toFixed(0);
-
-      var valueText = document.getElementById('temperatureValue');
+const valueText = document.getElementById('temperatureValue');
       if (temp >= config.maxTemp) {
         valueText.setAttribute('fill', '#ff0000');
       } else if (temp >= config.warningTemp) {
@@ -230,10 +234,9 @@
     }
 
     function updateEfficiency(value) {
-      var efficiency = parseFloat(value) || 0;
+let efficiency = parseFloat(value) || 0;
       document.getElementById('efficiencyValue').textContent = efficiency.toFixed(1);
-
-      var valueText = document.getElementById('efficiencyValue');
+const valueText = document.getElementById('efficiencyValue');
       if (efficiency < 85) {
         valueText.setAttribute('fill', '#ffaa00');
       } else {
@@ -242,8 +245,8 @@
     }
 
     function updateAlarmStatus(value) {
-      var alarm = Boolean(value);
-      var indicator = document.getElementById('statusIndicator');
+let alarm = Boolean(value);
+const indicator = document.getElementById('statusIndicator');
 
       if (alarm) {
         indicator.setAttribute('class', 'status-alarm');
@@ -256,6 +259,15 @@
     if (typeof window !== 'undefined') {
       window.updateValues = updateValues;
     }
-  ]]>
-  </script>
+
+function putValue(id, value) {
+  if (id === '_pn_currentMaxLoad') {
+    _pn_currentMaxLoad = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+
+]]></script>
 </svg>
