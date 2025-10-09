@@ -39,7 +39,7 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_speed = 0;
+let _pn_speed = 0;         // Fan speed: 0=off, 1=low, 2=medium, 3=high
 //!export-end
 
 function init() {
@@ -58,7 +58,7 @@ const blades = document.getElementById('fanBlades');
       for (var i = 0; i <= 3; i++) {
 const btn = document.getElementById('btn' + i);
         if (i === _pn_speed) {
-          btn.setAttribute('class', 'speed-btn _pn_speed-btn-active');
+          btn.setAttribute('class', 'speed-btn speed-btn-active');
         } else {
           btn.setAttribute('class', 'speed-btn');
         }

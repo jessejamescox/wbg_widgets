@@ -1,6 +1,6 @@
 # WBG Widgets - Building Automation SVG Widget Library
 
-A comprehensive collection of **82 professional SVG widgets** for Building Management Systems (BMS), HVAC control, and SCADA applications. All widgets are designed for [FUXA](https://github.com/frangoteam/FUXA) integration with embedded JavaScript for real-time data binding and control.
+A comprehensive collection of **66 professional SVG widgets** for Building Management Systems (BMS), HVAC control, and SCADA applications. All widgets are designed for [FUXA](https://github.com/frangoteam/FUXA) integration with embedded JavaScript for real-time data binding and control.
 
 ## 📋 Table of Contents
 
@@ -25,9 +25,10 @@ This library provides ready-to-use SVG widgets for building automation and indus
 
 ## ✨ Features
 
-- **82 Total Widgets** across 10 categories
+- **66 Total Widgets** across 8 categories
 - **Zero Dependencies** - Pure SVG + JavaScript
 - **Self-Contained** - All logic embedded in SVG files
+- **FUXA Standard Format** - All widgets use proper export/putValue/update pattern
 - **Dark Theme** optimized for control room displays
 - **Color-Coded Status** - Green (normal), Yellow (warning), Red (alarm), Blue (cooling), Orange (heating)
 - **Interactive Controls** - Buttons, sliders, toggles with visual feedback
@@ -63,21 +64,7 @@ Complete HVAC equipment and air handling:
 - `dehumidifier.svg` - Dehumidification system
 - `economizer.svg` - Economizer damper assembly
 
-### 3. Systems (10 widgets)
-Large-scale building systems and plants:
-
-- `chiller-plant.svg` - Multi-chiller plant with cooling towers
-- `chiller-air-cooled.svg` - Air-cooled chiller
-- `chiller-water-cooled.svg` - Water-cooled chiller
-- `cooling-tower.svg` - Cooling tower
-- `boiler.svg` - Boiler system
-- `boiler-plant.svg` - Multi-boiler plant
-- `heat-pump.svg` - Heat pump system
-- `vrf-system.svg` - VRF/VRV system
-- `primary-secondary.svg` - Primary-secondary pumping
-- `waterside-economizer.svg` - Waterside economizer
-
-### 4. Zones (5 widgets)
+### 3. Zones (5 widgets)
 Space and zone-level controls:
 
 - `zone-temp-card.svg` - Zone temperature display
@@ -86,7 +73,7 @@ Space and zone-level controls:
 - `conference-room.svg` - Conference room control
 - `office-zone.svg` - Multi-space office zone
 
-### 5. Utilities (8 widgets)
+### 4. Utilities (8 widgets)
 Utility metering and monitoring:
 
 - `electrical-meter.svg` - Power meter
@@ -98,7 +85,7 @@ Utility metering and monitoring:
 - `generator.svg` - Emergency generator
 - `ups.svg` - UPS system
 
-### 6. Controls (6 widgets)
+### 5. Controls (6 widgets)
 Interactive control interfaces:
 
 - `button-on-off.svg` - Toggle button
@@ -108,7 +95,7 @@ Interactive control interfaces:
 - `schedule-card.svg` - Schedule display
 - `override-card.svg` - Override control
 
-### 7. Indicators (7 widgets)
+### 6. Indicators (7 widgets)
 Display and visualization elements:
 
 - `gauge-semicircle.svg` - 180° gauge
@@ -119,7 +106,7 @@ Display and visualization elements:
 - `alarm-banner.svg` - Alarm banner
 - `mode-indicator.svg` - Mode display
 
-### 8. Tanks (4 widgets)
+### 7. Tanks (4 widgets)
 Liquid storage and containment:
 
 - `water-tank.svg` - Water storage tank
@@ -127,22 +114,13 @@ Liquid storage and containment:
 - `buffer-tank.svg` - Thermal storage tank
 - `expansion-tank.svg` - Expansion tank
 
-### 9. Safety (4 widgets)
+### 8. Safety (4 widgets)
 Life safety systems:
 
 - `smoke-detector.svg` - Smoke detector
 - `fire-damper.svg` - Fire damper
 - `fire-alarm.svg` - Fire alarm panel
 - `emergency-light.svg` - Emergency lighting
-
-### 10. Specialty (5 widgets)
-Specialized equipment:
-
-- `elevator-status.svg` - Elevator status
-- `door-contact.svg` - Door sensor
-- `weather-station.svg` - Weather data
-- `solar-panel.svg` - Solar monitoring
-- `battery-storage.svg` - Battery storage
 
 ## 🚀 Installation
 
@@ -495,7 +473,7 @@ Future enhancements:
 
 **Version**: 1.0.0
 **Last Updated**: 2025-10-09
-**Total Widgets**: 82
-**Categories**: 10
+**Total Widgets**: 66
+**Categories**: 8
 
 Made with ❤️ for the Building Automation community

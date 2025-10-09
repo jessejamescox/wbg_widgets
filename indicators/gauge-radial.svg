@@ -88,52 +88,46 @@
         max: 100,
         value: 0,
         unit: 'Units',
-        decimals: 1
-      };
+  <script><![CDATA[
+//!export-start
+let _pn_value = 75;  // Current value
+let _pn_min = 0;    // Minimum value  
+let _pn_max = 100;  // Maximum value
+let _ps_label = "Temperature"; // Label
+let _ps_units = "°F"; // Units
+//!export-end
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
-        config.value = parseFloat(value);
-        updateGauge();
-      };
+function init() { update(); }
 
-      svg.setOptions = function(options) {
-        if (options.min !== undefined) config.min = parseFloat(options.min);
-        if (options.max !== undefined) config.max = parseFloat(options.max);
-        if (options.unit !== undefined) {
-          config.unit = options.unit;
-          unitText.textContent = config.unit;
-        }
-        if (options.decimals !== undefined) config.decimals = parseInt(options.decimals);
-        updateGauge();
-      };
+function update() {
+  const arc = document.getElementById('gaugeArc');
+  const valueText = document.getElementById('valueText');
+  const labelText = document.getElementById('labelText');
+  if (!arc) return;
+  const percentage = ((_pn_value - _pn_min) / (_pn_max - _pn_min));
+  const angle = percentage * 270;
+  const radius = 50;
+  const startAngle = -135 * Math.PI / 180;
+  const endAngle = (startAngle + angle * Math.PI / 180);
+  const x1 = 100 + radius * Math.cos(startAngle);
+  const y1 = 100 + radius * Math.sin(startAngle);
+  const x2 = 100 + radius * Math.cos(endAngle);
+  const y2 = 100 + radius * Math.sin(endAngle);
+  const largeArc = angle > 180 ? 1 : 0;
+  arc.setAttribute('d', `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`);
+  if (valueText) valueText.textContent = _pn_value.toFixed(1) + ' ' + _ps_units;
+  if (labelText) labelText.textContent = _ps_label;
+}
 
-      function updateGauge() {
-        // Clamp value between min and max
-        var clampedValue = Math.max(config.min, Math.min(config.max, config.value));
+function putValue(id, value) {
+  if (id === '_pn_value') _pn_value = Number(value) || 0;
+  else if (id === '_pn_min') _pn_min = Number(value) || 0;
+  else if (id === '_pn_max') _pn_max = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  else if (id === '_ps_units') _ps_units = String(value);
+  update();
+}
 
-        // Calculate percentage
-        var percent = ((clampedValue - config.min) / (config.max - config.min)) * 100;
-
-        // Calculate needle angle (0% = -135deg, 100% = 135deg, total 270 degrees)
-        var angle = -135 + (percent * 270 / 100);
-
-        // Update needle rotation
-        needle.setAttribute('transform', 'rotate(' + angle + ' 150 150)');
-
-        // Update value text
-        valueText.textContent = clampedValue.toFixed(config.decimals);
-      }
-
-      // Initialize
-      updateGauge();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return config.value;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

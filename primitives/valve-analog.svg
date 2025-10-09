@@ -42,9 +42,9 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_position = 0;
-let _pn_command = 0;
-let _pn_feedback = 0;
+let _pn_position = 0;    // Valve position (0-100%)
+let _pn_command = 0;     // Commanded position (0-100%)
+let _pn_feedback = 0;    // Actual position feedback (0-100%)
 //!export-end
 
 function init() {

@@ -75,209 +75,59 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_minValue = 0;
-let _pn_maxValue = 100;
-let _pn_currentValue = 50;
-let _ps_units = '%';
-let _pn_decimals = 1;
-let _ps_tagId = '';
-let _pb_isDragging = false;
-let _pn_sliderX = 20;
-let _pn_sliderWidth = 260;
-let _pn_sliderY = 69;
+let _pn_minValue = 0;       // Minimum value
+let _pn_maxValue = 100;     // Maximum value
+let _pn_currentValue = 50;  // Current value
+let _ps_units = '%';        // Units string
+let _pn_decimals = 1;       // Number of decimal places
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // Configuration
+function update() {
+  const sliderThumb = document.getElementById('sliderThumb');
+  const sliderFill = document.getElementById('sliderFill');
+  const valueText = document.getElementById('valueText');
+  const unitText = document.getElementById('unitText');
+  const minText = document.getElementById('minText');
+  const maxText = document.getElementById('maxText');
 
-      // FUXA Integration Variables
+  if (!sliderThumb) return;
 
-      // Slider dimensions
+  // Slider dimensions
+  const sliderX = 20;
+  const sliderWidth = 260;
 
-      // DOM Elements
-const sliderThumb = document.getElementById('sliderThumb');
-const sliderFill = document.getElementById('sliderFill');
-const valueText = document.getElementById('valueText');
-const unitText = document.getElementById('unitText');
-const minText = document.getElementById('minText');
-const maxText = document.getElementById('maxText');
+  // Calculate position
+  const percentage = (_pn_currentValue - _pn_minValue) / (_pn_maxValue - _pn_minValue);
+  const thumbX = sliderX + (percentage * sliderWidth);
+  const fillWidth = percentage * sliderWidth;
 
-      // Update visuals based on current value
-      function updateVisuals() {
-let percentage = (_pn_currentValue - _pn_minValue) / (_pn_maxValue - _pn_minValue);
-let thumbX = _pn_sliderX + (percentage * _pn_sliderWidth);
-let fillWidth = percentage * _pn_sliderWidth;
-
-        sliderThumb.setAttribute('cx', thumbX);
-        sliderFill.setAttribute('width', fillWidth);
-        valueText.textContent = _pn_currentValue.toFixed(_pn_decimals);
-        minText.textContent = _pn_minValue.toFixed(_pn_decimals);
-        maxText.textContent = _pn_maxValue.toFixed(_pn_decimals);
-        unitText.textContent = _ps_units;
-      }
-
-      // Convert mouse position to value
-      function positionToValue(x) {
-let percentage = Math.max(0, Math.min(1, (x - _pn_sliderX) / _pn_sliderWidth));
-        return _pn_minValue + (percentage * (_pn_maxValue - _pn_minValue));
-      }
-
-      // Get mouse position relative to SVG
-      function getMousePosition(evt) {
-let CTM = evt.target.ownerSVGElement.getScreenCTM();
-        return {
-          x: (evt.clientX - CTM.e) / CTM.a,
-          y: (evt.clientY - CTM.f) / CTM.d
-        };
-      }
-
-      // Mouse/touch handlers
-      function startDrag(evt) {
-        evt.preventDefault();
-        _pb_isDragging = true;
-        updateValue(evt);
-      }
-
-      function drag(evt) {
-        if (_pb_isDragging) {
-          evt.preventDefault();
-          updateValue(evt);
-        }
-      }
-
-      function endDrag(evt) {
-        if (_pb_isDragging) {
-          evt.preventDefault();
-          _pb_isDragging = false;
-
-          // Write final value to FUXA
-          if (typeof GAuxy !== 'undefined' && _ps_tagId) {
-            GAuxy.setVariable(_ps_tagId, _pn_currentValue);
-          }
-        }
-      }
-
-      function updateValue(evt) {
-let pos = getMousePosition(evt);
-        _pn_currentValue = positionToValue(pos.x);
-        updateVisuals();
-      }
-
-      // Event listeners
-      sliderThumb.addEventListener('mousedown', startDrag);
-      document.addEventListener('mousemove', drag);
-      document.addEventListener('mouseup', endDrag);
-
-      // Touch support
-      sliderThumb.addEventListener('touchstart', function(evt) {
-let touch = evt.touches[0];
-let mouseEvent = new MouseEvent('mousedown', {
-          clientX: touch.clientX,
-          clientY: touch.clientY
-        });
-        startDrag(mouseEvent);
-      });
-
-      document.addEventListener('touchmove', function(evt) {
-        if (_pb_isDragging) {
-let touch = evt.touches[0];
-let mouseEvent = new MouseEvent('mousemove', {
-            clientX: touch.clientX,
-            clientY: touch.clientY
-          });
-          drag(mouseEvent);
-        }
-      });
-
-      document.addEventListener('touchend', endDrag);
-
-      // Click on track to jump
-let sliderTrack = document.querySelector('.slider-track');
-      sliderTrack.addEventListener('click', function(evt) {
-let pos = getMousePosition(evt);
-        _pn_currentValue = positionToValue(pos.x);
-        updateVisuals();
-
-        if (typeof GAuxy !== 'undefined' && _ps_tagId) {
-          GAuxy.setVariable(_ps_tagId, _pn_currentValue);
-        }
-      });
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-        if (sigid === _ps_tagId && !_pb_isDragging) {
-          _pn_currentValue = parseFloat(value);
-          updateVisuals();
-        }
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'variableId') return _ps_tagId;
-        if (name === 'min') return _pn_minValue;
-        if (name === 'max') return _pn_maxValue;
-        if (name === '_ps_units') return _ps_units;
-        if (name === '_pn_decimals') return _pn_decimals;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'variableId') {
-          _ps_tagId = value;
-        } else if (name === 'min') {
-          _pn_minValue = parseFloat(value);
-          updateVisuals();
-        } else if (name === 'max') {
-          _pn_maxValue = parseFloat(value);
-          updateVisuals();
-        } else if (name === '_ps_units') {
-          _ps_units = value;
-          updateVisuals();
-        } else if (name === '_pn_decimals') {
-          _pn_decimals = parseInt(value);
-          updateVisuals();
-        }
-      };
-
-      // Initialize
-      updateVisuals();
-    })();
+  // Update visuals
+  sliderThumb.setAttribute('cx', thumbX);
+  sliderFill.setAttribute('width', fillWidth);
+  valueText.textContent = _pn_currentValue.toFixed(_pn_decimals);
+  minText.textContent = _pn_minValue.toFixed(_pn_decimals);
+  maxText.textContent = _pn_maxValue.toFixed(_pn_decimals);
+  unitText.textContent = _ps_units;
+}
 
 function putValue(id, value) {
   if (id === '_pn_minValue') {
     _pn_minValue = Number(value) || 0;
-    update();
   } else if (id === '_pn_maxValue') {
     _pn_maxValue = Number(value) || 0;
-    update();
   } else if (id === '_pn_currentValue') {
     _pn_currentValue = Number(value) || 0;
-    update();
   } else if (id === '_ps_units') {
-    _ps_units = String(value) || "";
-    update();
+    _ps_units = String(value);
   } else if (id === '_pn_decimals') {
     _pn_decimals = Number(value) || 0;
-    update();
-  } else if (id === '_ps_tagId') {
-    _ps_tagId = String(value) || "";
-    update();
-  } else if (id === '_pb_isDragging') {
-    _pb_isDragging = !!value;
-    update();
-  } else if (id === '_pn_sliderX') {
-    _pn_sliderX = Number(value) || 0;
-    update();
-  } else if (id === '_pn_sliderWidth') {
-    _pn_sliderWidth = Number(value) || 0;
-    update();
-  } else if (id === '_pn_sliderY') {
-    _pn_sliderY = Number(value) || 0;
-    update();
   }
+
+  update();
 }
 
 init();

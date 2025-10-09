@@ -41,10 +41,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_status = 0;
-let _pn_speed = 0;
-let _pn_current = 0;
-let _pn_alarmState = 0;
+let _pn_status = 0;        // Motor status: 0=off, 1=running
+let _pn_speed = 0;         // Motor speed in RPM (0-3600)
+let _pn_current = 0;       // Motor current draw in Amps (0-100)
+let _pn_alarmState = 0;    // Alarm state: 0=normal, 1=alarm
 //!export-end
 
 function init() {
@@ -67,8 +67,13 @@ const infoText = document.getElementById('infoText');
         indicator.setAttribute('class', 'status-on');
         statusText.textContent = 'RUN';
 
-        if (_pn_speed > 0) {
+        // Display speed or current
+        if (_pn_speed > 0 && _pn_current > 0) {
+          infoText.textContent = Math.round(_pn_speed) + ' RPM | ' + _pn_current.toFixed(1) + 'A';
+        } else if (_pn_speed > 0) {
           infoText.textContent = Math.round(_pn_speed) + ' RPM';
+        } else if (_pn_current > 0) {
+          infoText.textContent = _pn_current.toFixed(1) + ' A';
         } else {
           infoText.textContent = 'RUNNING';
         }

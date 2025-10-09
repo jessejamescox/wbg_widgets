@@ -41,7 +41,9 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_position = 0;
+let _pn_position = 0;      // Valve position: 0=A→B, 100=A→C, 50=mixed
+let _pn_command = 0;       // Commanded position (0-100%)
+let _pn_feedback = 0;      // Actual position feedback (0-100%)
 //!export-end
 
 function init() {
@@ -56,34 +58,44 @@ const flowC = document.getElementById('flowC');
 
   if (!ball || !posText || !flowB || !flowC) return;
 
-      // Rotate ball based on _pn_position (0° = A→B, 90° = A→C)
-let angle = (_pn_position / 100) * 90;
+      // Use feedback if available, otherwise use position
+let displayPos = _pn_feedback > 0 ? _pn_feedback : _pn_position;
+      displayPos = Math.max(0, Math.min(100, displayPos));
+
+      // Rotate ball based on position (0° = A→B, 90° = A→C)
+let angle = (displayPos / 100) * 90;
       ball.setAttribute('transform', 'rotate(' + angle + ' 50 50)');
 
       // Update flow indicators
-      if (_pn_position < 25) {
+      if (displayPos < 25) {
         // Mostly to B
         flowB.setAttribute('opacity', '0.8');
         flowC.setAttribute('opacity', '0.1');
         posText.textContent = 'A→B';
-      } else if (_pn_position > 75) {
+      } else if (displayPos > 75) {
         // Mostly to C
         flowB.setAttribute('opacity', '0.1');
         flowC.setAttribute('opacity', '0.8');
         posText.textContent = 'A→C';
       } else {
-        // Mixed _pn_position
-let ratioB = 1 - (_pn_position / 100);
-let ratioC = _pn_position / 100;
+        // Mixed position
+let ratioB = 1 - (displayPos / 100);
+let ratioC = displayPos / 100;
         flowB.setAttribute('opacity', ratioB * 0.8);
         flowC.setAttribute('opacity', ratioC * 0.8);
-        posText.textContent = 'MIX ' + Math.round(_pn_position) + '%';
+        posText.textContent = 'MIX ' + Math.round(displayPos) + '%';
       }
     }
 
 function putValue(id, value) {
   if (id === '_pn_position') {
     _pn_position = Number(value) || 0;
+    update();
+  } else if (id === '_pn_command') {
+    _pn_command = Number(value) || 0;
+    update();
+  } else if (id === '_pn_feedback') {
+    _pn_feedback = Number(value) || 0;
     update();
   }
 }

@@ -123,150 +123,118 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_co2Score = 100;
-let _pn_circumference = 314;
+let _ps_roomName = "Room Comfort Monitor"; // Room name
+let _pn_temperature = 72;                   // Temperature (°F)
+let _pn_humidity = 45;                      // Humidity (%)
+let _pn_co2 = 650;                          // CO2 level (ppm)
+let _pn_occupancy = 4;                      // Number of people
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Variable Bindings
-let variables = {
-        roomName: 'room_comfort_name',
-        temperature: 'room_temp',
-        humidity: 'room_humidity',
-        co2: 'room_co2',
-        occupancy: 'room_occupancy'
-      };
+function getComfortScore(temp, humidity, co2) {
+  const scores = [];
 
-      // Comfort calculation parameters
-let comfortParams = {
-        temp: { ideal: 72, min: 68, max: 76 },
-        humidity: { ideal: 45, min: 30, max: 60 },
-        co2: { good: 600, fair: 800, max: 1000 },
-        occupancy: { capacity: 10 }
-      };
+  // Temperature score (0-100)
+  const tempIdeal = 72, tempMin = 68, tempMax = 76;
+  const tempDiff = Math.abs(temp - tempIdeal);
+  const tempRange = (tempMax - tempMin) / 2;
+  const tempScore = Math.max(0, 100 - (tempDiff / tempRange) * 100);
+  scores.push(tempScore);
 
-      function calculateComfortScore(temp, humidity, co2, occupancy) {
-let scores = [];
+  // Humidity score (0-100)
+  const humIdeal = 45, humMin = 30, humMax = 60;
+  const humDiff = Math.abs(humidity - humIdeal);
+  const humRange = (humMax - humMin) / 2;
+  const humScore = Math.max(0, 100 - (humDiff / humRange) * 100);
+  scores.push(humScore);
 
-        // Temperature score (0-100)
-let tempDiff = Math.abs(temp - comfortParams.temp.ideal);
-let tempRange = (comfortParams.temp.max - comfortParams.temp.min) / 2;
-let tempScore = Math.max(0, 100 - (tempDiff / tempRange) * 100);
-        scores.push(tempScore);
+  // CO2 score (0-100)
+  const co2Good = 600, co2Max = 1000;
+  let co2Score = 100;
+  if (co2 > co2Good) {
+    co2Score = 100 - ((co2 - co2Good) / (co2Max - co2Good)) * 100;
+  }
+  co2Score = Math.max(0, Math.min(100, co2Score));
+  scores.push(co2Score);
 
-        // Humidity score (0-100)
-let humidityDiff = Math.abs(humidity - comfortParams.humidity.ideal);
-let humidityRange = (comfortParams.humidity.max - comfortParams.humidity.min) / 2;
-let humidityScore = Math.max(0, 100 - (humidityDiff / humidityRange) * 100);
-        scores.push(humidityScore);
+  return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
+}
 
-        // CO2 score (0-100)
+function getComfortStatus(score) {
+  if (score >= 85) return 'Excellent';
+  if (score >= 70) return 'Good';
+  if (score >= 50) return 'Fair';
+  return 'Poor';
+}
 
-        if (co2 > comfortParams.co2.good) {
-          _pn_co2Score = 100 - ((co2 - comfortParams.co2.good) /
-                      (comfortParams.co2.max - comfortParams.co2.good)) * 100;
-        }
-        _pn_co2Score = Math.max(0, Math.min(100, _pn_co2Score));
-        scores.push(_pn_co2Score);
+function getComfortColor(score) {
+  if (score >= 85) return '#48bb78';
+  if (score >= 70) return '#68d391';
+  if (score >= 50) return '#ed8936';
+  return '#f56565';
+}
 
-        // Average score
-        return Math.round(scores.reduce((a, b) => a + b, 0) / scores.length);
-      }
+function update() {
+  const roomNameElem = document.getElementById('roomName');
+  const tempValueElem = document.getElementById('tempValue');
+  const humidityValueElem = document.getElementById('humidityValue');
+  const co2ValueElem = document.getElementById('co2Value');
+  const occupancyValueElem = document.getElementById('occupancyValue');
+  const comfortScoreElem = document.getElementById('comfortScore');
+  const scoreRing = document.getElementById('scoreRing');
+  const comfortStatusElem = document.getElementById('comfortStatus');
+  const statusBar = document.getElementById('statusBar');
+  const statusMarker = document.getElementById('statusMarker');
 
-      function getComfortStatus(score) {
-        if (score >= 85) return 'Excellent';
-        if (score >= 70) return 'Good';
-        if (score >= 50) return 'Fair';
-        return 'Poor';
-      }
+  if (!roomNameElem) return;
 
-      function getComfortColor(score) {
-        if (score >= 85) return '#48bb78';
-        if (score >= 70) return '#68d391';
-        if (score >= 50) return '#ed8936';
-        return '#f56565';
-      }
+  // Update room name
+  roomNameElem.textContent = _ps_roomName;
 
-      function updateWidget(data) {
-        try {
-          // Update room name
-          if (data[variables.roomName] !== undefined) {
-            document.getElementById('roomName').textContent = data[variables.roomName];
-          }
+  // Update values
+  tempValueElem.textContent = Math.round(_pn_temperature);
+  humidityValueElem.textContent = Math.round(_pn_humidity);
+  co2ValueElem.textContent = Math.round(_pn_co2);
+  occupancyValueElem.textContent = _pn_occupancy;
 
-          // Get current values
-let temp = data[variables.temperature] !== undefined ?
-                    parseFloat(data[variables.temperature]) : 72;
-let humidity = data[variables.humidity] !== undefined ?
-                        parseFloat(data[variables.humidity]) : 45;
-let co2 = data[variables.co2] !== undefined ?
-                   parseFloat(data[variables.co2]) : 650;
-let occupancy = data[variables.occupancy] !== undefined ?
-                         parseInt(data[variables.occupancy]) : 0;
+  // Calculate comfort score
+  const comfortScore = getComfortScore(_pn_temperature, _pn_humidity, _pn_co2);
+  comfortScoreElem.textContent = comfortScore;
 
-          // Update temperature
-          document.getElementById('tempValue').textContent = Math.round(temp);
+  // Update score ring
+  const circumference = 314;
+  const offset = circumference - (comfortScore / 100) * circumference;
+  scoreRing.setAttribute('stroke-dashoffset', offset);
+  scoreRing.setAttribute('stroke', getComfortColor(comfortScore));
 
-          // Update humidity
-          document.getElementById('humidityValue').textContent = Math.round(humidity);
+  // Update comfort status
+  const status = getComfortStatus(comfortScore);
+  comfortStatusElem.textContent = status;
 
-          // Update CO2
-          document.getElementById('co2Value').textContent = Math.round(co2);
-
-          // Update occupancy
-          document.getElementById('occupancyValue').textContent = occupancy;
-
-          // Calculate and update comfort score
-let comfortScore = calculateComfortScore(temp, humidity, co2, occupancy);
-          document.getElementById('comfortScore').textContent = comfortScore;
-
-          // Update score ring
-
-let offset = _pn_circumference - (comfortScore / 100) * _pn_circumference;
-const scoreRing = document.getElementById('scoreRing');
-          scoreRing.setAttribute('stroke-dashoffset', offset);
-          scoreRing.setAttribute('stroke', getComfortColor(comfortScore));
-
-          // Update comfort status
-let status = getComfortStatus(comfortScore);
-          document.getElementById('comfortStatus').textContent = status;
-
-          // Update status bar
-let statusBarWidth = (comfortScore / 100) * 460;
-          document.getElementById('statusBar').setAttribute('width', statusBarWidth);
-          document.getElementById('statusMarker').setAttribute('cx', statusBarWidth);
-          document.getElementById('statusMarker').setAttribute('fill', getComfortColor(comfortScore));
-
-        } catch (error) {
-          console.error('Room Comfort update error:', error);
-        }
-      }
-
-      // Register with FUXA
-      if (window.fuxa) {
-        window.fuxa.registerWidget({
-          id: 'room-comfort',
-          variables: Object.values(variables),
-          update: updateWidget
-        });
-      }
-
-      // Make update function globally accessible
-      window.updateRoomComfort = updateWidget;
-    })();
+  // Update status bar
+  const statusBarWidth = (comfortScore / 100) * 460;
+  statusBar.setAttribute('width', statusBarWidth);
+  statusMarker.setAttribute('cx', statusBarWidth);
+  statusMarker.setAttribute('fill', getComfortColor(comfortScore));
+}
 
 function putValue(id, value) {
-  if (id === '_pn_co2Score') {
-    _pn_co2Score = Number(value) || 0;
-    update();
-  } else if (id === '_pn_circumference') {
-    _pn_circumference = Number(value) || 0;
-    update();
+  if (id === '_ps_roomName') {
+    _ps_roomName = String(value);
+  } else if (id === '_pn_temperature') {
+    _pn_temperature = Number(value) || 0;
+  } else if (id === '_pn_humidity') {
+    _pn_humidity = Number(value) || 0;
+  } else if (id === '_pn_co2') {
+    _pn_co2 = Number(value) || 0;
+  } else if (id === '_pn_occupancy') {
+    _pn_occupancy = Number(value) || 0;
   }
+
+  update();
 }
 
 init();

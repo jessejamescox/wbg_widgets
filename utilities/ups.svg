@@ -112,254 +112,201 @@
 
   <script><![CDATA[
 //!export-start
-let _ps_currentMode = 'online';
-let _ps_timeStr = '';
+let _pn_batteryLevel = 0;        // Battery level (%)
+let _pn_runtimeRemaining = 0;    // Runtime remaining (minutes)
+let _pn_inputVoltage = 0;        // Input voltage (V)
+let _pn_outputVoltage = 0;       // Output voltage (V)
+let _pn_load = 0;                // Load (%)
+let _ps_mode = "online";         // Operating mode: online, battery, bypass, charging, fault
+let _pn_bypassActive = 0;        // Bypass active: 0=no, 1=yes
+let _pn_alarm = 0;               // Alarm status: 0=normal, 1=alarm
 //!export-end
 
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      batteryLevel: 'ups_battery_level',      // %
-      runtimeRemaining: 'ups_runtime',        // minutes
-      inputVoltage: 'ups_input_voltage',      // V
-      outputVoltage: 'ups_output_voltage',    // V
-      load: 'ups_load',                       // %
-      mode: 'ups_mode',                       // string: "online", "battery", "bypass"
-      bypassActive: 'ups_bypass',             // boolean
-      alarm: 'ups_alarm'                      // boolean
-    };
+function update() {
+  const batteryValue = document.getElementById('batteryValue');
+  const batteryFill = document.getElementById('batteryFill');
+  const runtimeValue = document.getElementById('runtimeValue');
+  const inputVoltage = document.getElementById('inputVoltage');
+  const outputVoltage = document.getElementById('outputVoltage');
+  const loadValue = document.getElementById('loadValue');
+  const loadBar = document.getElementById('loadBar');
+  const modeText = document.getElementById('modeText');
+  const bypassLine = document.getElementById('bypassLine');
+  const bypassText = document.getElementById('bypassText');
+  const statusIndicator = document.getElementById('statusIndicator');
 
-    // Configuration
-let config = {
-      nominalVoltage: 120,       // V
-      criticalBattery: 20,       // %
-      lowBattery: 40,            // %
-      highLoad: 90,              // %
-      warnLoad: 75               // %
-    };
+  if (!batteryValue) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.batteryLevel:
-            updateBatteryLevel(value);
-            break;
-          case variables.runtimeRemaining:
-            updateRuntime(value);
-            break;
-          case variables.inputVoltage:
-            updateInputVoltage(value);
-            break;
-          case variables.outputVoltage:
-            updateOutputVoltage(value);
-            break;
-          case variables.load:
-            updateLoad(value);
-            break;
-          case variables.mode:
-            updateMode(value);
-            break;
-          case variables.bypassActive:
-            updateBypass(value);
-            break;
-          case variables.alarm:
-            updateAlarmStatus(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating UPS:', e);
-      }
+  // Configuration
+  const nominalVoltage = 120;  // V
+  const criticalBattery = 20;  // %
+  const lowBattery = 40;       // %
+  const highLoad = 90;         // %
+  const warnLoad = 75;         // %
+
+  // Update battery level
+  batteryValue.textContent = _pn_batteryLevel.toFixed(0);
+
+  // Update battery fill (inverted - fills from bottom)
+  const barHeight = (_pn_batteryLevel / 100) * 38;
+  batteryFill.setAttribute('height', barHeight);
+  batteryFill.setAttribute('y', 18 - barHeight);
+
+  // Change color based on battery level
+  if (_pn_batteryLevel <= criticalBattery) {
+    batteryFill.setAttribute('fill', '#ff0000');
+    batteryValue.setAttribute('fill', '#ff0000');
+  } else if (_pn_batteryLevel <= lowBattery) {
+    batteryFill.setAttribute('fill', '#ffaa00');
+    batteryValue.setAttribute('fill', '#ffaa00');
+  } else {
+    batteryFill.setAttribute('fill', '#00ff00');
+    batteryValue.setAttribute('fill', '#ffffff');
+  }
+
+  // Update runtime
+  const mode = String(_ps_mode).toLowerCase();
+  if (mode === 'battery' && _pn_runtimeRemaining >= 0) {
+    const hours = Math.floor(_pn_runtimeRemaining / 60);
+    const mins = _pn_runtimeRemaining % 60;
+    const pad = (num) => num < 10 ? '0' + num : num;
+
+    let timeStr;
+    if (hours > 0) {
+      timeStr = hours + 'h ' + pad(mins) + 'm';
+    } else {
+      timeStr = mins + ' min';
     }
 
-    function updateBatteryLevel(value) {
-let battery = parseFloat(value) || 0;
-      document.getElementById('batteryValue').textContent = battery.toFixed(0);
+    runtimeValue.textContent = timeStr;
 
-      // Update battery fill (inverted - fills from bottom)
-let barHeight = (battery / 100) * 38;
-const batteryFill = document.getElementById('batteryFill');
-      batteryFill.setAttribute('height', barHeight);
-      batteryFill.setAttribute('y', 18 - barHeight);
-
-      // Change color based on battery level
-const valueText = document.getElementById('batteryValue');
-      if (battery <= config.criticalBattery) {
-        batteryFill.setAttribute('fill', '#ff0000');
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (battery <= config.lowBattery) {
-        batteryFill.setAttribute('fill', '#ffaa00');
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        batteryFill.setAttribute('fill', '#00ff00');
-        valueText.setAttribute('fill', '#ffffff');
-      }
+    if (_pn_runtimeRemaining < 5) {
+      runtimeValue.setAttribute('fill', '#ff0000');
+    } else if (_pn_runtimeRemaining < 15) {
+      runtimeValue.setAttribute('fill', '#ffaa00');
+    } else {
+      runtimeValue.setAttribute('fill', '#ffffff');
     }
+  } else {
+    runtimeValue.textContent = '--:--';
+    runtimeValue.setAttribute('fill', '#a0a0a0');
+  }
 
-    function updateRuntime(value) {
-let minutes = parseInt(value) || 0;
+  // Update input voltage
+  inputVoltage.textContent = _pn_inputVoltage.toFixed(0);
+  const inputDeviation = Math.abs(_pn_inputVoltage - nominalVoltage) / nominalVoltage;
+  if (_pn_inputVoltage === 0 || inputDeviation > 0.2) {
+    inputVoltage.setAttribute('fill', '#ff0000');
+  } else if (inputDeviation > 0.1) {
+    inputVoltage.setAttribute('fill', '#ffaa00');
+  } else {
+    inputVoltage.setAttribute('fill', '#ffffff');
+  }
 
-      if (_ps_currentMode === 'battery' && minutes >= 0) {
-let hours = Math.floor(minutes / 60);
-let mins = minutes % 60;
+  // Update output voltage
+  outputVoltage.textContent = _pn_outputVoltage.toFixed(0);
+  const outputDeviation = Math.abs(_pn_outputVoltage - nominalVoltage) / nominalVoltage;
+  if (outputDeviation > 0.05) {
+    outputVoltage.setAttribute('fill', '#ffaa00');
+  } else {
+    outputVoltage.setAttribute('fill', '#ffffff');
+  }
 
-        if (hours > 0) {
-          _ps_timeStr = hours + 'h ' + pad(mins) + 'm';
-        } else {
-          _ps_timeStr = mins + ' min';
-        }
+  // Update load
+  loadValue.textContent = _pn_load.toFixed(0);
 
-        document.getElementById('runtimeValue').textContent = _ps_timeStr;
-const valueText = document.getElementById('runtimeValue');
-        if (minutes < 5) {
-          valueText.setAttribute('fill', '#ff0000');
-        } else if (minutes < 15) {
-          valueText.setAttribute('fill', '#ffaa00');
-        } else {
-          valueText.setAttribute('fill', '#ffffff');
-        }
-      } else {
-        document.getElementById('runtimeValue').textContent = '--:--';
-        document.getElementById('runtimeValue').setAttribute('fill', '#a0a0a0');
-      }
-    }
+  // Update load bar
+  const barWidth = (_pn_load / 100) * 340;
+  loadBar.setAttribute('width', Math.min(barWidth, 340));
 
-    function updateInputVoltage(value) {
-let voltage = parseFloat(value) || 0;
-      document.getElementById('inputVoltage').textContent = voltage.toFixed(0);
-const valueText = document.getElementById('inputVoltage');
-let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+  // Change color based on load
+  if (_pn_load >= highLoad) {
+    loadBar.setAttribute('fill', '#ff0000');
+    loadValue.setAttribute('fill', '#ff0000');
+  } else if (_pn_load >= warnLoad) {
+    loadBar.setAttribute('fill', '#ffaa00');
+    loadValue.setAttribute('fill', '#ffaa00');
+  } else {
+    loadBar.setAttribute('fill', '#00ff00');
+    loadValue.setAttribute('fill', '#ffffff');
+  }
 
-      if (voltage === 0 || deviation > 0.2) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (deviation > 0.1) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
+  // Update mode
+  switch(mode) {
+    case 'online':
+    case 'normal':
+      modeText.textContent = 'ONLINE';
+      modeText.setAttribute('fill', '#00ff00');
+      break;
+    case 'battery':
+    case 'on_battery':
+      modeText.textContent = 'ON BATTERY';
+      modeText.setAttribute('fill', '#ffaa00');
+      break;
+    case 'bypass':
+      modeText.textContent = 'BYPASS';
+      modeText.setAttribute('fill', '#ffaa00');
+      break;
+    case 'charging':
+      modeText.textContent = 'CHARGING';
+      modeText.setAttribute('fill', '#00d4ff');
+      break;
+    case 'fault':
+      modeText.textContent = 'FAULT';
+      modeText.setAttribute('fill', '#ff0000');
+      break;
+    default:
+      modeText.textContent = 'UNKNOWN';
+      modeText.setAttribute('fill', '#666666');
+  }
 
-    function updateOutputVoltage(value) {
-let voltage = parseFloat(value) || 0;
-      document.getElementById('outputVoltage').textContent = voltage.toFixed(0);
-const valueText = document.getElementById('outputVoltage');
-let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+  // Update bypass
+  if (_pn_bypassActive) {
+    bypassLine.setAttribute('opacity', '1');
+    bypassText.setAttribute('opacity', '1');
+  } else {
+    bypassLine.setAttribute('opacity', '0');
+    bypassText.setAttribute('opacity', '0');
+  }
 
-      if (deviation > 0.05) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updateLoad(value) {
-let load = parseFloat(value) || 0;
-      document.getElementById('loadValue').textContent = load.toFixed(0);
-
-      // Update load bar
-let barWidth = (load / 100) * 340;
-const loadBar = document.getElementById('loadBar');
-      loadBar.setAttribute('width', Math.min(barWidth, 340));
-
-      // Change color based on load
-const valueText = document.getElementById('loadValue');
-      if (load >= config.highLoad) {
-        loadBar.setAttribute('fill', '#ff0000');
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (load >= config.warnLoad) {
-        loadBar.setAttribute('fill', '#ffaa00');
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        loadBar.setAttribute('fill', '#00ff00');
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updateMode(value) {
-      _ps_currentMode = String(value).toLowerCase() || 'online';
-const modeText = document.getElementById('modeText');
-
-      switch(_ps_currentMode) {
-        case 'online':
-        case 'normal':
-          modeText.textContent = 'ONLINE';
-          modeText.setAttribute('fill', '#00ff00');
-          break;
-        case 'battery':
-        case 'on_battery':
-          modeText.textContent = 'ON BATTERY';
-          modeText.setAttribute('fill', '#ffaa00');
-          break;
-        case 'bypass':
-          modeText.textContent = 'BYPASS';
-          modeText.setAttribute('fill', '#ffaa00');
-          break;
-        case 'charging':
-          modeText.textContent = 'CHARGING';
-          modeText.setAttribute('fill', '#00d4ff');
-          break;
-        case 'fault':
-          modeText.textContent = 'FAULT';
-          modeText.setAttribute('fill', '#ff0000');
-          break;
-        default:
-          modeText.textContent = 'UNKNOWN';
-          modeText.setAttribute('fill', '#666666');
-      }
-    }
-
-    function updateBypass(value) {
-let bypass = Boolean(value);
-const bypassLine = document.getElementById('bypassLine');
-const bypassText = document.getElementById('bypassText');
-
-      if (bypass) {
-        bypassLine.setAttribute('opacity', '1');
-        bypassText.setAttribute('opacity', '1');
-      } else {
-        bypassLine.setAttribute('opacity', '0');
-        bypassText.setAttribute('opacity', '0');
-      }
-    }
-
-    function updateAlarmStatus(value) {
-let alarm = Boolean(value);
-const indicator = document.getElementById('statusIndicator');
-
-      if (alarm) {
-        indicator.setAttribute('class', 'status-alarm');
-
-        // Add pulse animation
-        indicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-        indicator.innerHTML = '';
-      }
-    }
-
-    function pad(num) {
-      return num < 10 ? '0' + num : num;
-    }
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      window.updateValues = updateValues;
-    }
-
-function putValue(id, value) {
-  if (id === '_ps_currentMode') {
-    _ps_currentMode = String(value) || "";
-    update();
-  } else if (id === '_ps_timeStr') {
-    _ps_timeStr = String(value) || "";
-    update();
+  // Update alarm status
+  if (_pn_alarm) {
+    statusIndicator.setAttribute('class', 'status-alarm');
+    statusIndicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+  } else {
+    statusIndicator.setAttribute('class', 'status-ok');
+    statusIndicator.innerHTML = '';
   }
 }
 
-init();
+function putValue(id, value) {
+  const num = Number(value) || 0;
 
+  if (id === '_pn_batteryLevel') {
+    _pn_batteryLevel = num;
+  } else if (id === '_pn_runtimeRemaining') {
+    _pn_runtimeRemaining = Math.floor(num);
+  } else if (id === '_pn_inputVoltage') {
+    _pn_inputVoltage = num;
+  } else if (id === '_pn_outputVoltage') {
+    _pn_outputVoltage = num;
+  } else if (id === '_pn_load') {
+    _pn_load = num;
+  } else if (id === '_ps_mode') {
+    _ps_mode = String(value);
+  } else if (id === '_pn_bypassActive') {
+    _pn_bypassActive = num;
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = num;
+  }
+
+  update();
+}
+
+init();
 ]]></script>
 </svg>

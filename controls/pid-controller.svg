@@ -151,240 +151,92 @@
 
   <script><![CDATA[
 //!export-start
-let _ps_pvTagId = '';
-let _ps_spTagId = '';
-let _ps_outTagId = '';
-let _ps_pTagId = '';
-let _ps_iTagId = '';
-let _ps_dTagId = '';
-let _ps_errTagId = '';
-let _ps_modeTagId = '';
-let _ps_modeCmdTagId = '';
-let _pn_pv = 75.5;
-let _pn_sp = 72.0;
-let _pn_output = 45.2;
-let _pn_pTerm = 12.3;
-let _pn_iTerm = 8.5;
-let _pn_dTerm = -2.1;
-let _pn_error = 3.5;
-let _pb_isAuto = true;
-let _ps_units = '°F';
-let _pn_decimals = 1;
+let _pn_pvValue = 75.5;      // Process variable (°F)
+let _pn_spValue = 72.0;      // Setpoint (°F)
+let _pn_outValue = 45.2;     // Output (%)
+let _pn_pValue = 12.3;       // P term
+let _pn_iValue = 8.5;        // I term
+let _pn_dValue = -2.1;       // D term
+let _pn_errValue = 3.5;      // Error
+let _pn_mode = 1;            // Mode: 0=manual, 1=auto
+let _ps_units = "°F";        // Units
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Integration Variables
+function update() {
+  const pvValueElem = document.getElementById('pvValue');
+  const spValueElem = document.getElementById('spValue');
+  const outValueElem = document.getElementById('outValue');
+  const pValueElem = document.getElementById('pValue');
+  const iValueElem = document.getElementById('iValue');
+  const dValueElem = document.getElementById('dValue');
+  const errValueElem = document.getElementById('errValue');
+  const autoBtnRect = document.getElementById('autoBtnRect');
+  const autoBtnText = document.getElementById('autoBtnText');
+  const manualBtnRect = document.getElementById('manualBtnRect');
+  const manualBtnText = document.getElementById('manualBtnText');
+  const statusTextElem = document.getElementById('statusText');
+  const pvUnitElem = document.getElementById('pvUnit');
+  const spUnitElem = document.getElementById('spUnit');
 
-      // Current values
+  if (!pvValueElem) return;
 
-      // DOM Elements
-const pvValue = document.getElementById('pvValue');
-const spValue = document.getElementById('spValue');
-const outValue = document.getElementById('outValue');
-const pValue = document.getElementById('pValue');
-const iValue = document.getElementById('iValue');
-const dValue = document.getElementById('dValue');
-const errValue = document.getElementById('errValue');
-const statusText = document.getElementById('statusText');
-const autoBtnRect = document.getElementById('autoBtnRect');
-const autoBtnText = document.getElementById('autoBtnText');
-const manualBtnRect = document.getElementById('manualBtnRect');
-const manualBtnText = document.getElementById('manualBtnText');
-const autoBtn = document.getElementById('autoBtn');
-const manualBtn = document.getElementById('manualBtn');
-const pvUnit = document.getElementById('pvUnit');
-const spUnit = document.getElementById('spUnit');
+  // Update main values
+  pvValueElem.textContent = _pn_pvValue.toFixed(1);
+  spValueElem.textContent = _pn_spValue.toFixed(1);
+  outValueElem.textContent = _pn_outValue.toFixed(1);
+  if (pvUnitElem) pvUnitElem.textContent = _ps_units;
+  if (spUnitElem) spUnitElem.textContent = _ps_units;
 
-      // Update all visuals
-      function updateVisuals() {
-        pvValue.textContent = _pn_pv.toFixed(_pn_decimals);
-        spValue.textContent = _pn_sp.toFixed(_pn_decimals);
-        outValue.textContent = _pn_output.toFixed(_pn_decimals);
-        pValue.textContent = _pn_pTerm.toFixed(_pn_decimals);
-        iValue.textContent = _pn_iTerm.toFixed(_pn_decimals);
-        dValue.textContent = _pn_dTerm.toFixed(_pn_decimals);
-        errValue.textContent = _pn_error.toFixed(_pn_decimals);
-        pvUnit.textContent = _ps_units;
-        spUnit.textContent = _ps_units;
+  // Update PID terms
+  pValueElem.textContent = _pn_pValue.toFixed(1);
+  iValueElem.textContent = _pn_iValue.toFixed(1);
+  dValueElem.textContent = _pn_dValue.toFixed(1);
+  errValueElem.textContent = _pn_errValue.toFixed(1);
 
-        if (_pb_isAuto) {
-          autoBtnRect.classList.add('active');
-          autoBtnText.classList.add('active');
-          manualBtnRect.classList.remove('active');
-          manualBtnText.classList.remove('active');
-          statusText.textContent = 'Auto Mode Active';
-        } else {
-          autoBtnRect.classList.remove('active');
-          autoBtnText.classList.remove('active');
-          manualBtnRect.classList.add('active');
-          manualBtnText.classList.add('active');
-          statusText.textContent = 'Manual Mode Active';
-        }
-      }
-
-      // Mode button handlers
-      autoBtn.addEventListener('click', function(evt) {
-        evt.preventDefault();
-        if (!_pb_isAuto) {
-          _pb_isAuto = true;
-          updateVisuals();
-
-          if (typeof GAuxy !== 'undefined' && _ps_modeCmdTagId) {
-            GAuxy.setVariable(_ps_modeCmdTagId, 1);
-          }
-        }
-      });
-
-      manualBtn.addEventListener('click', function(evt) {
-        evt.preventDefault();
-        if (_pb_isAuto) {
-          _pb_isAuto = false;
-          updateVisuals();
-
-          if (typeof GAuxy !== 'undefined' && _ps_modeCmdTagId) {
-            GAuxy.setVariable(_ps_modeCmdTagId, 0);
-          }
-        }
-      });
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-let numValue = parseFloat(value);
-
-        if (sigid === _ps_pvTagId) {
-          _pn_pv = numValue;
-        } else if (sigid === _ps_spTagId) {
-          _pn_sp = numValue;
-        } else if (sigid === _ps_outTagId) {
-          _pn_output = numValue;
-        } else if (sigid === _ps_pTagId) {
-          _pn_pTerm = numValue;
-        } else if (sigid === _ps_iTagId) {
-          _pn_iTerm = numValue;
-        } else if (sigid === _ps_dTagId) {
-          _pn_dTerm = numValue;
-        } else if (sigid === _ps_errTagId) {
-          _pn_error = numValue;
-        } else if (sigid === _ps_modeTagId) {
-          _pb_isAuto = (numValue > 0);
-        }
-
-        updateVisuals();
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'pvVariableId') return _ps_pvTagId;
-        if (name === 'spVariableId') return _ps_spTagId;
-        if (name === 'outVariableId') return _ps_outTagId;
-        if (name === 'pVariableId') return _ps_pTagId;
-        if (name === 'iVariableId') return _ps_iTagId;
-        if (name === 'dVariableId') return _ps_dTagId;
-        if (name === 'errVariableId') return _ps_errTagId;
-        if (name === 'modeVariableId') return _ps_modeTagId;
-        if (name === 'modeCmdVariableId') return _ps_modeCmdTagId;
-        if (name === '_ps_units') return _ps_units;
-        if (name === '_pn_decimals') return _pn_decimals;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'pvVariableId') {
-          _ps_pvTagId = value;
-        } else if (name === 'spVariableId') {
-          _ps_spTagId = value;
-        } else if (name === 'outVariableId') {
-          _ps_outTagId = value;
-        } else if (name === 'pVariableId') {
-          _ps_pTagId = value;
-        } else if (name === 'iVariableId') {
-          _ps_iTagId = value;
-        } else if (name === 'dVariableId') {
-          _ps_dTagId = value;
-        } else if (name === 'errVariableId') {
-          _ps_errTagId = value;
-        } else if (name === 'modeVariableId') {
-          _ps_modeTagId = value;
-        } else if (name === 'modeCmdVariableId') {
-          _ps_modeCmdTagId = value;
-        } else if (name === '_ps_units') {
-          _ps_units = value;
-          updateVisuals();
-        } else if (name === '_pn_decimals') {
-          _pn_decimals = parseInt(value);
-          updateVisuals();
-        }
-      };
-
-      // Initialize
-      updateVisuals();
-    })();
-
-function putValue(id, value) {
-  if (id === '_ps_pvTagId') {
-    _ps_pvTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_spTagId') {
-    _ps_spTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_outTagId') {
-    _ps_outTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_pTagId') {
-    _ps_pTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_iTagId') {
-    _ps_iTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_dTagId') {
-    _ps_dTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_errTagId') {
-    _ps_errTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_modeTagId') {
-    _ps_modeTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_modeCmdTagId') {
-    _ps_modeCmdTagId = String(value) || "";
-    update();
-  } else if (id === '_pn_pv') {
-    _pn_pv = Number(value) || 0;
-    update();
-  } else if (id === '_pn_sp') {
-    _pn_sp = Number(value) || 0;
-    update();
-  } else if (id === '_pn_output') {
-    _pn_output = Number(value) || 0;
-    update();
-  } else if (id === '_pn_pTerm') {
-    _pn_pTerm = Number(value) || 0;
-    update();
-  } else if (id === '_pn_iTerm') {
-    _pn_iTerm = Number(value) || 0;
-    update();
-  } else if (id === '_pn_dTerm') {
-    _pn_dTerm = Number(value) || 0;
-    update();
-  } else if (id === '_pn_error') {
-    _pn_error = Number(value) || 0;
-    update();
-  } else if (id === '_pb_isAuto') {
-    _pb_isAuto = !!value;
-    update();
-  } else if (id === '_ps_units') {
-    _ps_units = String(value) || "";
-    update();
-  } else if (id === '_pn_decimals') {
-    _pn_decimals = Number(value) || 0;
-    update();
+  // Update mode buttons
+  if (_pn_mode === 1) {
+    autoBtnRect.classList.add('active');
+    autoBtnText.classList.add('active');
+    manualBtnRect.classList.remove('active');
+    manualBtnText.classList.remove('active');
+    statusTextElem.textContent = 'Auto Mode Active';
+  } else {
+    autoBtnRect.classList.remove('active');
+    autoBtnText.classList.remove('active');
+    manualBtnRect.classList.add('active');
+    manualBtnText.classList.add('active');
+    statusTextElem.textContent = 'Manual Mode Active';
   }
 }
 
-init();
+function putValue(id, value) {
+  if (id === '_pn_pvValue') {
+    _pn_pvValue = Number(value) || 0;
+  } else if (id === '_pn_spValue') {
+    _pn_spValue = Number(value) || 0;
+  } else if (id === '_pn_outValue') {
+    _pn_outValue = Number(value) || 0;
+  } else if (id === '_pn_pValue') {
+    _pn_pValue = Number(value) || 0;
+  } else if (id === '_pn_iValue') {
+    _pn_iValue = Number(value) || 0;
+  } else if (id === '_pn_dValue') {
+    _pn_dValue = Number(value) || 0;
+  } else if (id === '_pn_errValue') {
+    _pn_errValue = Number(value) || 0;
+  } else if (id === '_pn_mode') {
+    _pn_mode = Number(value) || 0;
+  } else if (id === '_ps_units') {
+    _ps_units = String(value);
+  }
 
+  update();
+}
+
+init();
 ]]></script>
 </svg>

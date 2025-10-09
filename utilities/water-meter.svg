@@ -95,162 +95,133 @@
   </g>
 
   <script><![CDATA[
+//!export-start
+let _pn_flowRate = 0;      // Flow rate (GPM - Gallons Per Minute)
+let _pn_pressure = 0;      // Pressure (PSI)
+let _pn_temperature = 0;   // Water temperature (°F)
+let _pn_totalVolume = 0;   // Total volume (gallons)
+let _pn_dailyUsage = 0;    // Daily usage (gallons)
+let _pn_leakDetected = 0;  // Leak detected: 0=no leak, 1=leak
+let _pn_alarm = 0;         // Alarm status: 0=normal, 1=alarm
+//!export-end
+
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      flowRate: 'water_meter_flow_rate',      // GPM
-      pressure: 'water_meter_pressure',       // PSI
-      temperature: 'water_meter_temp',        // °F
-      totalVolume: 'water_meter_total',       // Gallons
-      dailyUsage: 'water_meter_daily',        // Gallons
-      leakDetected: 'water_meter_leak',       // boolean
-      alarm: 'water_meter_alarm'              // boolean
-    };
+function update() {
+  const flowValue = document.getElementById('flowValue');
+  const pressureValue = document.getElementById('pressureValue');
+  const tempValue = document.getElementById('tempValue');
+  const totalValue = document.getElementById('totalValue');
+  const dailyValue = document.getElementById('dailyValue');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const leakIndicator = document.getElementById('leakIndicator');
+  const leakText = document.getElementById('leakText');
+  const leakIcon = document.querySelector('#leakIcon .leak-icon');
 
-    // Configuration
-let config = {
-      maxFlowRate: 100,      // GPM
-      minPressure: 30,       // PSI
-      maxPressure: 80,       // PSI
-      leakThreshold: 0.5     // GPM for continuous leak detection
-    };
+  if (!flowValue) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.flowRate:
-            updateFlowRate(value);
-            break;
-          case variables.pressure:
-            updatePressure(value);
-            break;
-          case variables.temperature:
-            updateTemperature(value);
-            break;
-          case variables.totalVolume:
-            updateTotalVolume(value);
-            break;
-          case variables.dailyUsage:
-            updateDailyUsage(value);
-            break;
-          case variables.leakDetected:
-            updateLeakStatus(value);
-            break;
-          case variables.alarm:
-            updateAlarmStatus(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating water meter:', e);
+  // Configuration
+  const maxFlowRate = 100;   // GPM
+  const minPressure = 30;    // PSI
+  const maxPressure = 80;    // PSI
+
+  // Update flow rate display
+  flowValue.textContent = _pn_flowRate.toFixed(1);
+
+  // Control animation speed based on flow rate
+  const particles = [
+    document.getElementById('particle1'),
+    document.getElementById('particle2'),
+    document.getElementById('particle3')
+  ];
+
+  if (_pn_flowRate > 0) {
+    const duration = Math.max(0.5, 3 - (_pn_flowRate / maxFlowRate * 2.5));
+    particles.forEach(function(particle) {
+      const anims = particle.getElementsByTagName('animate');
+      for (let i = 0; i < anims.length; i++) {
+        anims[i].setAttribute('dur', duration + 's');
       }
-    }
+    });
+  }
 
-    function updateFlowRate(value) {
-let flow = parseFloat(value) || 0;
-      document.getElementById('flowValue').textContent = flow.toFixed(1);
+  // Update pressure display
+  pressureValue.textContent = _pn_pressure.toFixed(1);
+  if (_pn_pressure < minPressure) {
+    pressureValue.setAttribute('fill', '#ffaa00');
+  } else if (_pn_pressure > maxPressure) {
+    pressureValue.setAttribute('fill', '#ff0000');
+  } else {
+    pressureValue.setAttribute('fill', '#ffffff');
+  }
 
-      // Control animation speed based on flow rate
-let particles = [
-        document.getElementById('particle1'),
-        document.getElementById('particle2'),
-        document.getElementById('particle3')
-      ];
+  // Update temperature display
+  tempValue.textContent = _pn_temperature.toFixed(1);
 
-      if (flow > 0) {
-let duration = Math.max(0.5, 3 - (flow / config.maxFlowRate * 2.5));
-        particles.forEach(function(particle, index) {
-let anims = particle.getElementsByTagName('animate');
-          for (var i = 0; i < anims.length; i++) {
-            anims[i].setAttribute('dur', duration + 's');
-          }
-        });
-      }
-    }
+  // Update total volume display
+  if (_pn_totalVolume >= 1000000) {
+    totalValue.textContent = (_pn_totalVolume / 1000000).toFixed(2);
+    document.querySelector('#totalDisplay .unit-text').textContent = 'Million Gallons';
+  } else if (_pn_totalVolume >= 1000) {
+    totalValue.textContent = (_pn_totalVolume / 1000).toFixed(1);
+    document.querySelector('#totalDisplay .unit-text').textContent = 'K Gallons';
+  } else {
+    totalValue.textContent = _pn_totalVolume.toFixed(0);
+    document.querySelector('#totalDisplay .unit-text').textContent = 'Gallons';
+  }
 
-    function updatePressure(value) {
-let pressure = parseFloat(value) || 0;
-      document.getElementById('pressureValue').textContent = pressure.toFixed(1);
-let valueText = document.getElementById('pressureValue');
-      if (pressure < config.minPressure) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else if (pressure > config.maxPressure) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
+  // Update daily usage display
+  if (_pn_dailyUsage >= 1000) {
+    dailyValue.textContent = (_pn_dailyUsage / 1000).toFixed(1) + 'K';
+  } else {
+    dailyValue.textContent = _pn_dailyUsage.toFixed(0);
+  }
 
-    function updateTemperature(value) {
-let temp = parseFloat(value) || 0;
-      document.getElementById('tempValue').textContent = temp.toFixed(1);
-    }
+  // Update leak status
+  if (_pn_leakDetected) {
+    leakIndicator.setAttribute('class', 'status-alarm');
+    leakText.textContent = 'LEAK DETECTED';
+    leakText.setAttribute('fill', '#ff0000');
+    leakIcon.setAttribute('opacity', '1');
+    leakIcon.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+  } else {
+    leakIndicator.setAttribute('class', 'status-ok');
+    leakText.textContent = 'NO LEAK';
+    leakText.setAttribute('fill', '#a0a0a0');
+    leakIcon.setAttribute('opacity', '0');
+  }
 
-    function updateTotalVolume(value) {
-let total = parseFloat(value) || 0;
+  // Update alarm status
+  if (_pn_alarm) {
+    statusIndicator.setAttribute('class', 'status-alarm');
+  } else {
+    statusIndicator.setAttribute('class', 'status-ok');
+  }
+}
 
-      if (total >= 1000000) {
-        document.getElementById('totalValue').textContent = (total / 1000000).toFixed(2);
-        document.querySelector('#totalDisplay .unit-text').textContent = 'Million Gallons';
-      } else if (total >= 1000) {
-        document.getElementById('totalValue').textContent = (total / 1000).toFixed(1);
-        document.querySelector('#totalDisplay .unit-text').textContent = 'K Gallons';
-      } else {
-        document.getElementById('totalValue').textContent = total.toFixed(0);
-        document.querySelector('#totalDisplay .unit-text').textContent = 'Gallons';
-      }
-    }
+function putValue(id, value) {
+  const num = Number(value) || 0;
 
-    function updateDailyUsage(value) {
-let daily = parseFloat(value) || 0;
+  if (id === '_pn_flowRate') {
+    _pn_flowRate = num;
+  } else if (id === '_pn_pressure') {
+    _pn_pressure = num;
+  } else if (id === '_pn_temperature') {
+    _pn_temperature = num;
+  } else if (id === '_pn_totalVolume') {
+    _pn_totalVolume = num;
+  } else if (id === '_pn_dailyUsage') {
+    _pn_dailyUsage = num;
+  } else if (id === '_pn_leakDetected') {
+    _pn_leakDetected = num;
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = num;
+  }
 
-      if (daily >= 1000) {
-        document.getElementById('dailyValue').textContent = (daily / 1000).toFixed(1) + 'K';
-      } else {
-        document.getElementById('dailyValue').textContent = daily.toFixed(0);
-      }
-    }
-
-    function updateLeakStatus(value) {
-let leak = Boolean(value);
-let indicator = document.getElementById('leakIndicator');
-let text = document.getElementById('leakText');
-let icon = document.querySelector('#leakIcon .leak-icon');
-
-      if (leak) {
-        indicator.setAttribute('class', 'status-alarm');
-        text.textContent = 'LEAK DETECTED';
-        text.setAttribute('fill', '#ff0000');
-        icon.setAttribute('opacity', '1');
-
-        // Pulsing animation for leak icon
-        icon.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-        text.textContent = 'NO LEAK';
-        text.setAttribute('fill', '#a0a0a0');
-        icon.setAttribute('opacity', '0');
-      }
-    }
-
-    function updateAlarmStatus(value) {
-let alarm = Boolean(value);
-let indicator = document.getElementById('statusIndicator');
-
-      if (alarm) {
-        indicator.setAttribute('class', 'status-alarm');
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-      }
-    }
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      window.updateValues = updateValues;
-    }
+  update();
+}
 
 init();
 ]]></script>

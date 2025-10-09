@@ -83,14 +83,14 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_damperPosition = 65;
-let _pn_airflow = 450;
-let _pn_zoneTemp = 72.5;
-let _pn_setpoint = 72.0;
-let _pn_minFlow = 150;
-let _pn_maxFlow = 800;
-let _pb_alarmActive = false;
-let _pb_enabled = true;
+let _pn_damperPosition = 65;   // Damper position (0-100%, 0=closed, 100=open)
+let _pn_airflow = 450;         // Measured airflow in CFM
+let _pn_zoneTemp = 72.5;       // Zone temperature (°F)
+let _pn_setpoint = 72.0;       // Zone temperature setpoint (°F)
+let _pn_minFlow = 150;         // Minimum airflow setpoint in CFM
+let _pn_maxFlow = 800;         // Maximum airflow setpoint in CFM
+let _pb_alarmActive = false;   // Alarm active status
+let _pb_enabled = true;        // VAV box enabled status
 //!export-end
 
 function init() {

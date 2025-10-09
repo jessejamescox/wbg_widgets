@@ -86,167 +86,109 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_currentSupplyTemp = 0;
-let _pn_currentReturnTemp = 0;
+let _pn_btuRate = 0;         // Energy rate (BTU/Hr)
+let _pn_supplyTemp = 0;      // Supply temperature (°F)
+let _pn_returnTemp = 0;      // Return temperature (°F)
+let _pn_deltaT = 0;          // Delta-T (°F)
+let _pn_flowRate = 0;        // Flow rate (GPM)
+let _pn_totalEnergy = 0;     // Total energy (MMBTU - Million BTU)
+let _pn_alarm = 0;           // Alarm status: 0=normal, 1=alarm
 //!export-end
 
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      btuRate: 'btu_meter_rate',              // MBTU/Hr (thousand BTU per hour)
-      supplyTemp: 'btu_meter_supply_temp',    // °F
-      returnTemp: 'btu_meter_return_temp',    // °F
-      deltaT: 'btu_meter_delta_t',            // °F
-      flowRate: 'btu_meter_flow_rate',        // GPM
-      totalEnergy: 'btu_meter_total_energy',  // MMBTU (Million BTU)
-      alarm: 'btu_meter_alarm'                // boolean
-    };
+function update() {
+  const btuRateValue = document.getElementById('btuRateValue');
+  const energyPercent = document.getElementById('energyPercent');
+  const gaugeFill = document.getElementById('energyGaugeFill');
+  const supplyTempValue = document.getElementById('supplyTempValue');
+  const returnTempValue = document.getElementById('returnTempValue');
+  const deltaTValue = document.getElementById('deltaTValue');
+  const flowRateValue = document.getElementById('flowRateValue');
+  const totalEnergyValue = document.getElementById('totalEnergyValue');
+  const statusIndicator = document.getElementById('statusIndicator');
 
-    // Configuration
-let config = {
-      maxBTURate: 10000,     // MBTU/Hr
-      minDeltaT: 5,          // °F
-      maxDeltaT: 50,         // °F
-      maxFlowRate: 500       // GPM
-    };
+  if (!btuRateValue) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.btuRate:
-            updateBTURate(value);
-            break;
-          case variables.supplyTemp:
-            updateSupplyTemp(value);
-            break;
-          case variables.returnTemp:
-            updateReturnTemp(value);
-            break;
-          case variables.deltaT:
-            updateDeltaT(value);
-            break;
-          case variables.flowRate:
-            updateFlowRate(value);
-            break;
-          case variables.totalEnergy:
-            updateTotalEnergy(value);
-            break;
-          case variables.alarm:
-            updateAlarmStatus(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating BTU meter:', e);
-      }
-    }
+  // Configuration
+  const maxBTURate = 10000;  // MBTU/Hr
+  const minDeltaT = 5;       // °F
+  const maxDeltaT = 50;      // °F
 
-    function updateBTURate(value) {
-let rate = parseFloat(value) || 0;
+  // Display BTU rate in MBTU/Hr (thousands)
+  const displayValue = _pn_btuRate / 1000;
+  btuRateValue.textContent = displayValue.toFixed(0);
 
-      // Display in MBTU/Hr (thousands)
-let displayValue = rate / 1000;
-      document.getElementById('btuRateValue').textContent = displayValue.toFixed(0);
+  // Update gauge
+  const percent = Math.min((_pn_btuRate / maxBTURate) * 100, 100);
+  energyPercent.textContent = percent.toFixed(0) + '%';
+  const circumference = 2 * Math.PI * 50;
+  const offset = circumference - (percent / 100) * circumference;
+  gaugeFill.setAttribute('stroke-dashoffset', offset);
 
-      // Update gauge
-let percent = Math.min((rate / config.maxBTURate) * 100, 100);
-      document.getElementById('energyPercent').textContent = percent.toFixed(0) + '%';
-let circumference = 2 * Math.PI * 50;
-let offset = circumference - (percent / 100) * circumference;
-const gaugeFill = document.getElementById('energyGaugeFill');
-      gaugeFill.setAttribute('stroke-dashoffset', offset);
+  // Change color based on load
+  if (percent > 90) {
+    gaugeFill.setAttribute('stroke', '#ff0000');
+  } else if (percent > 75) {
+    gaugeFill.setAttribute('stroke', '#ffaa00');
+  } else {
+    gaugeFill.setAttribute('stroke', '#ff6600');
+  }
 
-      // Change color based on load
-      if (percent > 90) {
-        gaugeFill.setAttribute('stroke', '#ff0000');
-      } else if (percent > 75) {
-        gaugeFill.setAttribute('stroke', '#ffaa00');
-      } else {
-        gaugeFill.setAttribute('stroke', '#ff6600');
-      }
-    }
+  // Update supply temperature
+  supplyTempValue.textContent = _pn_supplyTemp.toFixed(1);
 
-    function updateSupplyTemp(value) {
-let temp = parseFloat(value) || 0;
-      document.getElementById('supplyTempValue').textContent = temp.toFixed(1);
-    }
+  // Update return temperature
+  returnTempValue.textContent = _pn_returnTemp.toFixed(1);
 
-    function updateReturnTemp(value) {
-let temp = parseFloat(value) || 0;
-      document.getElementById('returnTempValue').textContent = temp.toFixed(1);
-    }
+  // Update delta-T
+  deltaTValue.textContent = _pn_deltaT.toFixed(1);
+  if (_pn_deltaT < minDeltaT) {
+    deltaTValue.setAttribute('fill', '#ffaa00');
+  } else if (_pn_deltaT > maxDeltaT) {
+    deltaTValue.setAttribute('fill', '#ff0000');
+  } else {
+    deltaTValue.setAttribute('fill', '#ffffff');
+  }
 
-    function updateDeltaT(value) {
-let deltaT = parseFloat(value) || 0;
-      document.getElementById('deltaTValue').textContent = deltaT.toFixed(1);
-const valueText = document.getElementById('deltaTValue');
-      if (deltaT < config.minDeltaT) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else if (deltaT > config.maxDeltaT) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
+  // Update flow rate
+  flowRateValue.textContent = _pn_flowRate.toFixed(1);
 
-    function updateFlowRate(value) {
-let flow = parseFloat(value) || 0;
-      document.getElementById('flowRateValue').textContent = flow.toFixed(1);
-    }
+  // Update total energy
+  totalEnergyValue.textContent = _pn_totalEnergy.toFixed(2);
 
-    function updateTotalEnergy(value) {
-let total = parseFloat(value) || 0;
-      document.getElementById('totalEnergyValue').textContent = total.toFixed(2);
-    }
-
-    function updateAlarmStatus(value) {
-let alarm = Boolean(value);
-const indicator = document.getElementById('statusIndicator');
-
-      if (alarm) {
-        indicator.setAttribute('class', 'status-alarm');
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-      }
-    }
-
-    // Initialize - calculate delta-T if both temps are available
-
-    // Override individual temp updates to auto-calculate delta-T
-let originalUpdateSupplyTemp = updateSupplyTemp;
-let originalUpdateReturnTemp = updateReturnTemp;
-
-    updateSupplyTemp = function(value) {
-      _pn_currentSupplyTemp = parseFloat(value) || 0;
-      originalUpdateSupplyTemp(value);
-      updateDeltaT(Math.abs(_pn_currentSupplyTemp - _pn_currentReturnTemp));
-    };
-
-    updateReturnTemp = function(value) {
-      _pn_currentReturnTemp = parseFloat(value) || 0;
-      originalUpdateReturnTemp(value);
-      updateDeltaT(Math.abs(_pn_currentSupplyTemp - _pn_currentReturnTemp));
-    };
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      window.updateValues = updateValues;
-    }
-
-function putValue(id, value) {
-  if (id === '_pn_currentSupplyTemp') {
-    _pn_currentSupplyTemp = Number(value) || 0;
-    update();
-  } else if (id === '_pn_currentReturnTemp') {
-    _pn_currentReturnTemp = Number(value) || 0;
-    update();
+  // Update alarm status
+  if (_pn_alarm) {
+    statusIndicator.setAttribute('class', 'status-alarm');
+  } else {
+    statusIndicator.setAttribute('class', 'status-ok');
   }
 }
 
-init();
+function putValue(id, value) {
+  const num = Number(value) || 0;
 
+  if (id === '_pn_btuRate') {
+    _pn_btuRate = num;
+  } else if (id === '_pn_supplyTemp') {
+    _pn_supplyTemp = num;
+  } else if (id === '_pn_returnTemp') {
+    _pn_returnTemp = num;
+  } else if (id === '_pn_deltaT') {
+    _pn_deltaT = num;
+  } else if (id === '_pn_flowRate') {
+    _pn_flowRate = num;
+  } else if (id === '_pn_totalEnergy') {
+    _pn_totalEnergy = num;
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = num;
+  }
+
+  update();
+}
+
+init();
 ]]></script>
 </svg>

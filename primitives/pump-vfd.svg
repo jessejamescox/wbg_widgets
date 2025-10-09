@@ -39,7 +39,8 @@
 
   <!-- VFD Display -->
   <rect x="92" y="15" width="20" height="14" fill="#1a1a1a" rx="1"/>
-  <text id="speedDisplay" x="102" y="25" class="value-text" font-size="10">0%</text>
+  <text id="speedDisplay" x="102" y="22" class="value-text" font-size="9">0%</text>
+  <text id="freqDisplay" x="102" y="27" class="value-text" font-size="6">0 Hz</text>
 
   <!-- Speed Bar Graph -->
   <rect x="95" y="35" width="14" height="40" class="speed-bar-bg" rx="1"/>
@@ -56,9 +57,9 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_speed = 0;
-let _pn_status = 0;
-let _pn_frequency = 0;
+let _pn_speed = 0;         // Pump speed percentage (0-100%)
+let _pn_status = 0;        // Pump status: 0=off, 1=running
+let _pn_frequency = 0;     // VFD output frequency in Hz (0-60Hz)
 //!export-end
 
 function init() {
@@ -72,12 +73,14 @@ let animationId = null;
 const impeller = document.getElementById('impeller');
 const speedBar = document.getElementById('speedBar');
 const speedDisplay = document.getElementById('speedDisplay');
+const freqDisplay = document.getElementById('freqDisplay');
 
-  if (!impeller || !speedBar || !speedDisplay) return;
+  if (!impeller || !speedBar || !speedDisplay || !freqDisplay) return;
 let displaySpeed = Math.max(0, Math.min(100, _pn_speed));
 
-      // Update _pn_speed display
+      // Update speed and frequency display
       speedDisplay.textContent = Math.round(displaySpeed) + '%';
+      freqDisplay.textContent = _pn_frequency.toFixed(1) + ' Hz';
 
       // Update _pn_speed bar (fills from bottom)
 let barHeight = (displaySpeed / 100) * 40;

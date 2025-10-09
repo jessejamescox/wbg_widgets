@@ -29,10 +29,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_co2 = 450;
-let _pn_highAlarm = 1000;
-let _pn_warningLevel = 800;
-let _pn_alarmState = 0;
+let _pn_co2 = 450;           // CO2 concentration in ppm (400-2000)
+let _pn_highAlarm = 1000;    // High alarm setpoint in ppm
+let _pn_warningLevel = 800;  // Warning level in ppm
+let _pn_alarmState = 0;      // Alarm state: 0=normal, 1=alarm
 //!export-end
 
 function init() {

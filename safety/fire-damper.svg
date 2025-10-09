@@ -93,126 +93,34 @@
       var svg = document.currentScript.closest('svg');
 
       // State variables
-      var state = {
-        position: 0,      // 0=open, 1=closed, 2=partially closed
-        linkIntact: true,
-        alarmTriggered: false,
-        temperature: 20   // Current temperature in Celsius
-      };
+  <script><![CDATA[
+//!export-start
+let _pn_position = 1;      // Position: 0=closed, 1=open
+let _pn_fault = 0;         // Fault: 0=ok, 1=fault
+let _ps_location = "Duct 12A"; // Location
+//!export-end
 
-      // Element references
-      var damperBlade = svg.getElementById('damper-blade');
-      var bladeGroup = svg.getElementById('blade-group');
-      var fusibleLink = svg.getElementById('fusible-link');
-      var airflowIndicators = svg.getElementById('airflow-indicators');
-      var positionText = svg.getElementById('position-text');
-      var linkText = svg.getElementById('link-text');
-      var alarmLight = svg.getElementById('alarm-light');
+function init() { update(); }
 
-      // Update display based on state
-      function updateDisplay() {
-        // Update damper blade position
-        switch(state.position) {
-          case 0: // Open
-            bladeGroup.setAttribute('transform', 'rotate(0, 175, 150)');
-            positionText.textContent = 'OPEN';
-            airflowIndicators.style.opacity = '1';
-            break;
-          case 1: // Closed
-            bladeGroup.setAttribute('transform', 'rotate(90, 175, 150)');
-            positionText.textContent = 'CLOSED';
-            airflowIndicators.style.opacity = '0';
-            break;
-          case 2: // Partially closed
-            bladeGroup.setAttribute('transform', 'rotate(45, 175, 150)');
-            positionText.textContent = 'PARTIAL';
-            airflowIndicators.style.opacity = '0.3';
-            break;
-        }
+function update() {
+  const positionText = document.getElementById('positionText');
+  const damperBlade = document.getElementById('damperBlade');
+  const faultIndicator = document.getElementById('faultIndicator');
+  const locationText = document.getElementById('locationText');
+  if (!positionText) return;
+  positionText.textContent = _pn_position ? 'OPEN' : 'CLOSED';
+  if (damperBlade) damperBlade.setAttribute('transform', _pn_position ? 'rotate(0)' : 'rotate(90)');
+  if (faultIndicator) faultIndicator.style.opacity = _pn_fault ? '1' : '0';
+  if (locationText) locationText.textContent = _ps_location;
+}
 
-        // Update fusible link status
-        if (state.linkIntact) {
-          fusibleLink.classList.remove('link-broken');
-          fusibleLink.classList.add('fusible-link');
-          linkText.textContent = 'INTACT';
-        } else {
-          fusibleLink.classList.remove('fusible-link');
-          fusibleLink.classList.add('link-broken');
-          linkText.textContent = 'BROKEN';
-          // If link breaks, damper should close
-          if (state.position === 0) {
-            state.position = 1;
-          }
-        }
+function putValue(id, value) {
+  if (id === '_pn_position') _pn_position = Number(value) || 0;
+  else if (id === '_pn_fault') _pn_fault = Number(value) || 0;
+  else if (id === '_ps_location') _ps_location = String(value);
+  update();
+}
 
-        // Update alarm indicator
-        if (state.alarmTriggered || !state.linkIntact || state.position === 1) {
-          alarmLight.classList.add('alarm-active');
-          alarmLight.style.opacity = '1';
-        } else {
-          alarmLight.classList.remove('alarm-active');
-          alarmLight.style.opacity = '0';
-        }
-
-        // Check temperature for fusible link activation (typically 72°C / 165°F)
-        if (state.temperature >= 72 && state.linkIntact) {
-          state.linkIntact = false;
-          state.alarmTriggered = true;
-          state.position = 1; // Close damper
-        }
-      }
-
-      // FUXA Integration
-      svg.getValue = function(property) {
-        switch(property) {
-          case 'position': return state.position;
-          case 'isOpen': return state.position === 0;
-          case 'isClosed': return state.position === 1;
-          case 'linkIntact': return state.linkIntact;
-          case 'alarmTriggered': return state.alarmTriggered;
-          case 'temperature': return state.temperature;
-          default: return null;
-        }
-      };
-
-      svg.setValue = function(property, value) {
-        switch(property) {
-          case 'position':
-            state.position = Math.max(0, Math.min(2, parseInt(value) || 0));
-            break;
-          case 'isOpen':
-            state.position = value ? 0 : 1;
-            break;
-          case 'isClosed':
-            state.position = value ? 1 : 0;
-            break;
-          case 'linkIntact':
-            state.linkIntact = !!value;
-            if (!state.linkIntact) {
-              state.alarmTriggered = true;
-              state.position = 1; // Auto-close when link breaks
-            }
-            break;
-          case 'alarmTriggered':
-            state.alarmTriggered = !!value;
-            break;
-          case 'temperature':
-            state.temperature = parseFloat(value) || 0;
-            break;
-          default:
-            return;
-        }
-        updateDisplay();
-      };
-
-      // Initialize display
-      updateDisplay();
-
-      // Simulate temperature monitoring (for demo purposes)
-      // In production, temperature would come from FUXA
-      setInterval(function() {
-        updateDisplay();
-      }, 1000);
-    })();
-  ]]></script>
+init();
+]]></script>
 </svg>

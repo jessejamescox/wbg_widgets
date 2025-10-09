@@ -118,236 +118,183 @@
 
   <script><![CDATA[
 //!export-start
-let _pb_isRunning = false;
+let _pn_running = 0;         // Running status: 0=stopped, 1=running
+let _pn_voltage = 0;         // Output voltage (V)
+let _pn_frequency = 0;       // Output frequency (Hz)
+let _pn_power = 0;           // Power output (kW)
+let _pn_load = 0;            // Load percentage (%)
+let _pn_fuelLevel = 0;       // Fuel level (%)
+let _pn_runtime = 0;         // Runtime (seconds)
+let _pn_alarm = 0;           // Alarm status: 0=normal, 1=alarm
 //!export-end
 
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      running: 'generator_running',           // boolean
-      voltage: 'generator_voltage',           // V
-      frequency: 'generator_frequency',       // Hz
-      power: 'generator_power',               // kW
-      load: 'generator_load',                 // %
-      fuelLevel: 'generator_fuel_level',      // %
-      runtime: 'generator_runtime',           // seconds
-      alarm: 'generator_alarm'                // boolean
-    };
+function update() {
+  const runStatus = document.getElementById('runStatus');
+  const genStatusText = document.getElementById('genStatusText');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const rotatingIndicator = document.getElementById('rotatingIndicator');
+  const voltageValue = document.getElementById('voltageValue');
+  const frequencyValue = document.getElementById('frequencyValue');
+  const powerValue = document.getElementById('powerValue');
+  const loadValue = document.getElementById('loadValue');
+  const fuelValue = document.getElementById('fuelValue');
+  const fuelBar = document.getElementById('fuelBar');
+  const runtimeValue = document.getElementById('runtimeValue');
 
-    // Configuration
-let config = {
-      nominalVoltage: 480,    // V
-      nominalFreq: 60,        // Hz
-      maxPower: 500,          // kW
-      lowFuelThreshold: 25,   // %
-      criticalFuelThreshold: 10 // %
-    };
+  if (!runStatus) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.running:
-            updateRunning(value);
-            break;
-          case variables.voltage:
-            updateVoltage(value);
-            break;
-          case variables.frequency:
-            updateFrequency(value);
-            break;
-          case variables.power:
-            updatePower(value);
-            break;
-          case variables.load:
-            updateLoad(value);
-            break;
-          case variables.fuelLevel:
-            updateFuelLevel(value);
-            break;
-          case variables.runtime:
-            updateRuntime(value);
-            break;
-          case variables.alarm:
-            updateAlarmStatus(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating generator:', e);
-      }
+  // Configuration
+  const nominalVoltage = 480;         // V
+  const nominalFreq = 60;             // Hz
+  const lowFuelThreshold = 25;        // %
+  const criticalFuelThreshold = 10;   // %
+
+  const isRunning = _pn_running > 0;
+  const exhausts = [document.getElementById('exhaust1'), document.getElementById('exhaust2')];
+
+  // Update running status
+  if (isRunning) {
+    runStatus.textContent = 'RUNNING';
+    runStatus.setAttribute('fill', '#00ff00');
+    genStatusText.textContent = 'ONLINE';
+    statusIndicator.setAttribute('class', 'status-ok');
+
+    // Add rotation animation
+    const animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+    animateTransform.setAttribute('attributeName', 'transform');
+    animateTransform.setAttribute('type', 'rotate');
+    animateTransform.setAttribute('from', '0 20 0');
+    animateTransform.setAttribute('to', '360 20 0');
+    animateTransform.setAttribute('dur', '2s');
+    animateTransform.setAttribute('repeatCount', 'indefinite');
+    let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
+    while (oldAnims.length > 0) {
+      rotatingIndicator.removeChild(oldAnims[0]);
+    }
+    rotatingIndicator.appendChild(animateTransform);
+
+    // Show exhaust
+    exhausts.forEach(function(exhaust) {
+      exhaust.style.display = 'block';
+    });
+  } else {
+    runStatus.textContent = 'STOPPED';
+    runStatus.setAttribute('fill', '#666666');
+    genStatusText.textContent = 'STANDBY';
+    statusIndicator.setAttribute('class', 'status-off');
+
+    // Remove rotation animation
+    let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
+    while (oldAnims.length > 0) {
+      rotatingIndicator.removeChild(oldAnims[0]);
     }
 
-    function updateRunning(value) {
-      _pb_isRunning = Boolean(value);
-const statusText = document.getElementById('runStatus');
-const genStatusText = document.getElementById('genStatusText');
-const statusIndicator = document.getElementById('statusIndicator');
-const rotatingIndicator = document.getElementById('rotatingIndicator');
-let exhausts = [document.getElementById('exhaust1'), document.getElementById('exhaust2')];
+    // Hide exhaust
+    exhausts.forEach(function(exhaust) {
+      exhaust.style.display = 'none';
+    });
+  }
 
-      if (_pb_isRunning) {
-        statusText.textContent = 'RUNNING';
-        statusText.setAttribute('fill', '#00ff00');
-        genStatusText.textContent = 'ONLINE';
-        statusIndicator.setAttribute('class', 'status-ok');
+  // Update voltage
+  voltageValue.textContent = _pn_voltage.toFixed(0);
+  const voltageDeviation = Math.abs(_pn_voltage - nominalVoltage) / nominalVoltage;
+  if (isRunning && voltageDeviation > 0.1) {
+    voltageValue.setAttribute('fill', '#ff0000');
+  } else if (isRunning && voltageDeviation > 0.05) {
+    voltageValue.setAttribute('fill', '#ffaa00');
+  } else {
+    voltageValue.setAttribute('fill', '#ffffff');
+  }
 
-        // Add rotation animation
-let animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
-        animateTransform.setAttribute('attributeName', 'transform');
-        animateTransform.setAttribute('type', 'rotate');
-        animateTransform.setAttribute('from', '0 20 0');
-        animateTransform.setAttribute('to', '360 20 0');
-        animateTransform.setAttribute('dur', '2s');
-        animateTransform.setAttribute('repeatCount', 'indefinite');
-let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
-        while (oldAnims.length > 0) {
-          rotatingIndicator.removeChild(oldAnims[0]);
-        }
+  // Update frequency
+  frequencyValue.textContent = _pn_frequency.toFixed(1);
+  const freqDeviation = Math.abs(_pn_frequency - nominalFreq) / nominalFreq;
+  if (isRunning && freqDeviation > 0.03) {
+    frequencyValue.setAttribute('fill', '#ff0000');
+  } else if (isRunning && freqDeviation > 0.01) {
+    frequencyValue.setAttribute('fill', '#ffaa00');
+  } else {
+    frequencyValue.setAttribute('fill', '#ffffff');
+  }
 
-        rotatingIndicator.appendChild(animateTransform);
+  // Update power
+  powerValue.textContent = _pn_power.toFixed(0);
 
-        // Show exhaust
-        exhausts.forEach(function(exhaust) {
-          exhaust.style.display = 'block';
-        });
-      } else {
-        statusText.textContent = 'STOPPED';
-        statusText.setAttribute('fill', '#666666');
-        genStatusText.textContent = 'STANDBY';
-        statusIndicator.setAttribute('class', 'status-off');
+  // Update load
+  loadValue.textContent = _pn_load.toFixed(0);
+  if (_pn_load > 100) {
+    loadValue.setAttribute('fill', '#ff0000');
+  } else if (_pn_load > 90) {
+    loadValue.setAttribute('fill', '#ffaa00');
+  } else {
+    loadValue.setAttribute('fill', '#ffffff');
+  }
 
-        // Remove rotation animation
-let oldAnims = rotatingIndicator.getElementsByTagName('animateTransform');
-        while (oldAnims.length > 0) {
-          rotatingIndicator.removeChild(oldAnims[0]);
-        }
+  // Update fuel level
+  fuelValue.textContent = _pn_fuelLevel.toFixed(0) + '%';
+  const barHeight = (_pn_fuelLevel / 100) * 38;
+  fuelBar.setAttribute('height', barHeight);
+  fuelBar.setAttribute('y', 18 - barHeight);
 
-        // Hide exhaust
-        exhausts.forEach(function(exhaust) {
-          exhaust.style.display = 'none';
-        });
-      }
-    }
+  if (_pn_fuelLevel <= criticalFuelThreshold) {
+    fuelBar.setAttribute('fill', '#ff0000');
+    fuelValue.setAttribute('fill', '#ff0000');
+  } else if (_pn_fuelLevel <= lowFuelThreshold) {
+    fuelBar.setAttribute('fill', '#ffaa00');
+    fuelValue.setAttribute('fill', '#ffaa00');
+  } else {
+    fuelBar.setAttribute('fill', '#00ff00');
+    fuelValue.setAttribute('fill', '#ffffff');
+  }
 
-    function updateVoltage(value) {
-let voltage = parseFloat(value) || 0;
-      document.getElementById('voltageValue').textContent = voltage.toFixed(0);
-const valueText = document.getElementById('voltageValue');
-let deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+  // Update runtime
+  const hours = Math.floor(_pn_runtime / 3600);
+  const minutes = Math.floor((_pn_runtime % 3600) / 60);
+  const secs = _pn_runtime % 60;
+  const pad = (num) => num < 10 ? '0' + num : num;
+  runtimeValue.textContent = pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
 
-      if (_pb_isRunning && deviation > 0.1) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (_pb_isRunning && deviation > 0.05) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updateFrequency(value) {
-let freq = parseFloat(value) || 0;
-      document.getElementById('frequencyValue').textContent = freq.toFixed(1);
-const valueText = document.getElementById('frequencyValue');
-let deviation = Math.abs(freq - config.nominalFreq) / config.nominalFreq;
-
-      if (_pb_isRunning && deviation > 0.03) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (_pb_isRunning && deviation > 0.01) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updatePower(value) {
-let power = parseFloat(value) || 0;
-      document.getElementById('powerValue').textContent = power.toFixed(0);
-    }
-
-    function updateLoad(value) {
-let load = parseFloat(value) || 0;
-      document.getElementById('loadValue').textContent = load.toFixed(0);
-const valueText = document.getElementById('loadValue');
-      if (load > 100) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (load > 90) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updateFuelLevel(value) {
-let fuel = parseFloat(value) || 0;
-      document.getElementById('fuelValue').textContent = fuel.toFixed(0) + '%';
-
-      // Update fuel bar (inverted - fills from bottom)
-let barHeight = (fuel / 100) * 38;
-const fuelBar = document.getElementById('fuelBar');
-      fuelBar.setAttribute('height', barHeight);
-      fuelBar.setAttribute('y', 18 - barHeight);
-
-      // Change color based on fuel level
-const valueText = document.getElementById('fuelValue');
-      if (fuel <= config.criticalFuelThreshold) {
-        fuelBar.setAttribute('fill', '#ff0000');
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (fuel <= config.lowFuelThreshold) {
-        fuelBar.setAttribute('fill', '#ffaa00');
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        fuelBar.setAttribute('fill', '#00ff00');
-        valueText.setAttribute('fill', '#ffffff');
-      }
-    }
-
-    function updateRuntime(value) {
-let seconds = parseInt(value) || 0;
-let hours = Math.floor(seconds / 3600);
-let minutes = Math.floor((seconds % 3600) / 60);
-let secs = seconds % 60;
-let timeStr = pad(hours) + ':' + pad(minutes) + ':' + pad(secs);
-      document.getElementById('runtimeValue').textContent = timeStr;
-    }
-
-    function pad(num) {
-      return num < 10 ? '0' + num : num;
-    }
-
-    function updateAlarmStatus(value) {
-let alarm = Boolean(value);
-const indicator = document.getElementById('statusIndicator');
-
-      if (alarm) {
-        indicator.setAttribute('class', 'status-alarm');
-
-        // Add pulse animation
-        indicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
-      } else if (_pb_isRunning) {
-        indicator.setAttribute('class', 'status-ok');
-        indicator.innerHTML = '';
-      } else {
-        indicator.setAttribute('class', 'status-off');
-        indicator.innerHTML = '';
-      }
-    }
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      window.updateValues = updateValues;
-    }
-
-function putValue(id, value) {
-  if (id === '_pb_isRunning') {
-    _pb_isRunning = !!value;
-    update();
+  // Update alarm status
+  if (_pn_alarm) {
+    statusIndicator.setAttribute('class', 'status-alarm');
+    statusIndicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+  } else if (isRunning) {
+    statusIndicator.setAttribute('class', 'status-ok');
+    statusIndicator.innerHTML = '';
+  } else {
+    statusIndicator.setAttribute('class', 'status-off');
+    statusIndicator.innerHTML = '';
   }
 }
 
-init();
+function putValue(id, value) {
+  const num = Number(value) || 0;
 
+  if (id === '_pn_running') {
+    _pn_running = num;
+  } else if (id === '_pn_voltage') {
+    _pn_voltage = num;
+  } else if (id === '_pn_frequency') {
+    _pn_frequency = num;
+  } else if (id === '_pn_power') {
+    _pn_power = num;
+  } else if (id === '_pn_load') {
+    _pn_load = num;
+  } else if (id === '_pn_fuelLevel') {
+    _pn_fuelLevel = num;
+  } else if (id === '_pn_runtime') {
+    _pn_runtime = Math.floor(num);
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = num;
+  }
+
+  update();
+}
+
+init();
 ]]></script>
 </svg>

@@ -184,170 +184,127 @@
   </g>
 
   <script><![CDATA[
+//!export-start
+let _ps_roomName = "Conference Room B";  // Room name
+let _pn_status = 0;                       // Status: 0=Available, 1=Booked, 2=In Use
+let _ps_bookingTitle = "Team Standup";   // Current booking title
+let _ps_bookingTime = "2:00 PM - 3:00 PM"; // Booking time
+let _ps_bookingOrganizer = "John Smith"; // Booking organizer
+let _ps_nextBooking = "Budget Review - 3:30 PM"; // Next booking
+let _pn_temperature = 72;                 // Temperature (°F)
+let _pn_lightLevel = 75;                  // Light level (%)
+let _pn_displayOn = 0;                    // Display on/off: 0=off, 1=on
+let _pn_projectorOn = 0;                  // Projector on/off: 0=off, 1=on
+let _pn_audioOn = 0;                      // Audio on/off: 0=off, 1=on
+let _pn_videoOn = 0;                      // Video on/off: 0=off, 1=on
+let _pn_occupancy = 6;                    // Number of people
+let _ps_airQuality = "Good";              // Air quality status
+let _pn_timeRemaining = 45;               // Time remaining (min)
+//!export-end
+
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Variable Bindings
-let variables = {
-        roomName: 'conf_room_name',
-        status: 'conf_status',
-        bookingTitle: 'conf_booking_title',
-        bookingTime: 'conf_booking_time',
-        bookingOrganizer: 'conf_booking_organizer',
-        nextBooking: 'conf_next_booking',
-        temperature: 'conf_temperature',
-        lightLevel: 'conf_light_level',
-        displayOn: 'conf_display_on',
-        projectorOn: 'conf_projector_on',
-        audioOn: 'conf_audio_on',
-        videoOn: 'conf_video_on',
-        occupancy: 'conf_occupancy',
-        airQuality: 'conf_air_quality',
-        timeRemaining: 'conf_time_remaining'
-      };
+function update() {
+  const roomNameElem = document.getElementById('roomName');
+  const statusBadge = document.getElementById('statusBadge');
+  const statusText = document.getElementById('statusText');
+  const bookingTitleElem = document.getElementById('bookingTitle');
+  const bookingTimeElem = document.getElementById('bookingTime');
+  const bookingOrganizerElem = document.getElementById('bookingOrganizer');
+  const nextBookingElem = document.getElementById('nextBooking');
+  const confTempElem = document.getElementById('confTemp');
+  const lightLevelElem = document.getElementById('lightLevel');
+  const displayStatusElem = document.getElementById('displayStatus');
+  const projectorStatusElem = document.getElementById('projectorStatus');
+  const audioStatusElem = document.getElementById('audioStatus');
+  const videoStatusElem = document.getElementById('videoStatus');
+  const occupancyElem = document.getElementById('occupancy');
+  const airQualityElem = document.getElementById('airQuality');
+  const timeRemainingElem = document.getElementById('timeRemaining');
 
-      function updateWidget(data) {
-        try {
-          // Update room name
-          if (data[variables.roomName] !== undefined) {
-            document.getElementById('roomName').textContent = data[variables.roomName];
-          }
+  if (!roomNameElem) return;
 
-          // Update status
-          if (data[variables.status] !== undefined) {
-let status = data[variables.status];
-let statusBadge = document.getElementById('statusBadge');
-let statusText = document.getElementById('statusText');
-let statusMap = {
-              0: { text: 'Available', class: 'conf-available' },
-              1: { text: 'Booked', class: 'conf-booked' },
-              2: { text: 'In Use', class: 'conf-in-use' }
-            };
-let statusInfo = statusMap[status] || statusMap[0];
-            statusBadge.setAttribute('class', statusInfo.class);
-            statusText.textContent = statusInfo.text;
-          }
+  // Update room name
+  roomNameElem.textContent = _ps_roomName;
 
-          // Update booking information
-          if (data[variables.bookingTitle] !== undefined) {
-            document.getElementById('bookingTitle').textContent = data[variables.bookingTitle];
-          }
-          if (data[variables.bookingTime] !== undefined) {
-            document.getElementById('bookingTime').textContent = data[variables.bookingTime];
-          }
-          if (data[variables.bookingOrganizer] !== undefined) {
-            document.getElementById('bookingOrganizer').textContent =
-              'Organizer: ' + data[variables.bookingOrganizer];
-          }
-          if (data[variables.nextBooking] !== undefined) {
-            document.getElementById('nextBooking').textContent = data[variables.nextBooking];
-          }
+  // Update status
+  const statusMap = {
+    0: { text: 'Available', class: 'conf-available' },
+    1: { text: 'Booked', class: 'conf-booked' },
+    2: { text: 'In Use', class: 'conf-in-use' }
+  };
+  const statusInfo = statusMap[_pn_status] || statusMap[0];
+  statusBadge.setAttribute('class', statusInfo.class);
+  statusText.textContent = statusInfo.text;
 
-          // Update temperature
-          if (data[variables.temperature] !== undefined) {
-let temp = Math.round(parseFloat(data[variables.temperature]));
-            document.getElementById('confTemp').textContent = temp + '°F';
-          }
+  // Update booking information
+  bookingTitleElem.textContent = _ps_bookingTitle;
+  bookingTimeElem.textContent = _ps_bookingTime;
+  bookingOrganizerElem.textContent = 'Organizer: ' + _ps_bookingOrganizer;
+  nextBookingElem.textContent = _ps_nextBooking;
 
-          // Update light level
-          if (data[variables.lightLevel] !== undefined) {
-let light = Math.round(parseFloat(data[variables.lightLevel]));
-            document.getElementById('lightLevel').textContent = light + '%';
-          }
+  // Update temperature
+  confTempElem.textContent = Math.round(_pn_temperature) + '°F';
 
-          // Update AV system status
-let avStates = [
-            { var: variables.displayOn, elem: 'displayStatus', onText: 'Display On', offText: 'Display Off' },
-            { var: variables.projectorOn, elem: 'projectorStatus', onText: 'Projector On', offText: 'Projector Off' },
-            { var: variables.audioOn, elem: 'audioStatus', onText: 'Audio On', offText: 'Audio Off' },
-            { var: variables.videoOn, elem: 'videoStatus', onText: 'Video On', offText: 'Video Off' }
-          ];
+  // Update light level
+  lightLevelElem.textContent = Math.round(_pn_lightLevel) + '%';
 
-          avStates.forEach(function(item) {
-            if (data[item.var] !== undefined) {
-let elem = document.getElementById(item.elem);
-              elem.textContent = data[item.var] ? item.onText : item.offText;
-              elem.setAttribute('fill', data[item.var] ? '#48bb78' : '#ffffff');
-            }
-          });
+  // Update AV system status
+  displayStatusElem.textContent = _pn_displayOn ? 'Display On' : 'Display Off';
+  displayStatusElem.setAttribute('fill', _pn_displayOn ? '#48bb78' : '#ffffff');
 
-          // Update room statistics
-          if (data[variables.occupancy] !== undefined) {
-            document.getElementById('occupancy').textContent = data[variables.occupancy] + ' people';
-          }
-          if (data[variables.airQuality] !== undefined) {
-            document.getElementById('airQuality').textContent = data[variables.airQuality];
-          }
-          if (data[variables.timeRemaining] !== undefined) {
-            document.getElementById('timeRemaining').textContent = data[variables.timeRemaining] + ' min';
-          }
+  projectorStatusElem.textContent = _pn_projectorOn ? 'Projector On' : 'Projector Off';
+  projectorStatusElem.setAttribute('fill', _pn_projectorOn ? '#48bb78' : '#ffffff');
 
-        } catch (error) {
-          console.error('Conference Room update error:', error);
-        }
-      }
+  audioStatusElem.textContent = _pn_audioOn ? 'Audio On' : 'Audio Off';
+  audioStatusElem.setAttribute('fill', _pn_audioOn ? '#48bb78' : '#ffffff');
 
-      // Control button handlers
-      function setupControls() {
-        // Temperature controls
-        document.getElementById('tempDown').addEventListener('click', function() {
-          if (window.fuxa && window.fuxa.setVariable) {
-let currentTemp = parseFloat(document.getElementById('confTemp').textContent);
-            window.fuxa.setVariable(variables.temperature, currentTemp - 1);
-          }
-        });
+  videoStatusElem.textContent = _pn_videoOn ? 'Video On' : 'Video Off';
+  videoStatusElem.setAttribute('fill', _pn_videoOn ? '#48bb78' : '#ffffff');
 
-        document.getElementById('tempUp').addEventListener('click', function() {
-          if (window.fuxa && window.fuxa.setVariable) {
-let currentTemp = parseFloat(document.getElementById('confTemp').textContent);
-            window.fuxa.setVariable(variables.temperature, currentTemp + 1);
-          }
-        });
+  // Update room statistics
+  occupancyElem.textContent = _pn_occupancy + ' people';
+  airQualityElem.textContent = _ps_airQuality;
+  timeRemainingElem.textContent = _pn_timeRemaining + ' min';
+}
 
-        // Light controls
-        document.getElementById('lightDown').addEventListener('click', function() {
-          if (window.fuxa && window.fuxa.setVariable) {
-let currentLight = parseFloat(document.getElementById('lightLevel').textContent);
-            window.fuxa.setVariable(variables.lightLevel, Math.max(0, currentLight - 10));
-          }
-        });
+function putValue(id, value) {
+  if (id === '_ps_roomName') {
+    _ps_roomName = String(value);
+  } else if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+  } else if (id === '_ps_bookingTitle') {
+    _ps_bookingTitle = String(value);
+  } else if (id === '_ps_bookingTime') {
+    _ps_bookingTime = String(value);
+  } else if (id === '_ps_bookingOrganizer') {
+    _ps_bookingOrganizer = String(value);
+  } else if (id === '_ps_nextBooking') {
+    _ps_nextBooking = String(value);
+  } else if (id === '_pn_temperature') {
+    _pn_temperature = Number(value) || 0;
+  } else if (id === '_pn_lightLevel') {
+    _pn_lightLevel = Number(value) || 0;
+  } else if (id === '_pn_displayOn') {
+    _pn_displayOn = Number(value) || 0;
+  } else if (id === '_pn_projectorOn') {
+    _pn_projectorOn = Number(value) || 0;
+  } else if (id === '_pn_audioOn') {
+    _pn_audioOn = Number(value) || 0;
+  } else if (id === '_pn_videoOn') {
+    _pn_videoOn = Number(value) || 0;
+  } else if (id === '_pn_occupancy') {
+    _pn_occupancy = Number(value) || 0;
+  } else if (id === '_ps_airQuality') {
+    _ps_airQuality = String(value);
+  } else if (id === '_pn_timeRemaining') {
+    _pn_timeRemaining = Number(value) || 0;
+  }
 
-        document.getElementById('lightUp').addEventListener('click', function() {
-          if (window.fuxa && window.fuxa.setVariable) {
-let currentLight = parseFloat(document.getElementById('lightLevel').textContent);
-            window.fuxa.setVariable(variables.lightLevel, Math.min(100, currentLight + 10));
-          }
-        });
-
-        // AV system toggles
-        ['display', 'projector', 'audio', 'video'].forEach(function(device) {
-          document.getElementById(device + 'Btn').addEventListener('click', function() {
-            if (window.fuxa && window.fuxa.setVariable && window.fuxa.getVariable) {
-let varName = variables[device + 'On'];
-let currentState = window.fuxa.getVariable(varName);
-              window.fuxa.setVariable(varName, !currentState);
-            }
-          });
-        });
-      }
-
-      // Initialize
-      setupControls();
-
-      // Register with FUXA
-      if (window.fuxa) {
-        window.fuxa.registerWidget({
-          id: 'conference-room',
-          variables: Object.values(variables),
-          update: updateWidget
-        });
-      }
-
-      // Make update function globally accessible
-      window.updateConferenceRoom = updateWidget;
-    })();
+  update();
+}
 
 init();
 ]]></script>

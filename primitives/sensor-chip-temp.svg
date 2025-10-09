@@ -33,11 +33,11 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_temperature = 72.5;
-let _ps_units = 'F';
-let _pn_highAlarm = 80;
-let _pn_lowAlarm = 60;
-let _pn_alarmState = 0;
+let _pn_temperature = 72.5;  // Temperature value
+let _ps_units = 'F';         // Temperature units: 'F' or 'C'
+let _pn_highAlarm = 80;      // High temperature alarm setpoint
+let _pn_lowAlarm = 60;       // Low temperature alarm setpoint
+let _pn_alarmState = 0;      // Alarm state: 0=normal, 1=alarm
 //!export-end
 
 function init() {

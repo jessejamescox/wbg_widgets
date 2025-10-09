@@ -58,137 +58,32 @@
       </feMerge>
     </filter>
     <filter id="glowBlue">
-      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-      <feMerge>
-        <feMergeNode in="coloredBlur"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
+  <script><![CDATA[
+//!export-start
+let _pn_state = 1;      // State: 0=off, 1=on
+let _ps_label = "Running"; // Label
+let _ps_colorOn = "#48bb78"; // Color when on
+let _ps_colorOff = "#718096"; // Color when off
+//!export-end
 
-  <!-- Background -->
-  <rect width="200" height="120" class="led-bg"/>
+function init() { update(); }
 
-  <!-- LED container with border -->
-  <rect x="10" y="10" width="180" height="100" rx="5" fill="#0a0a0a" stroke="#333" stroke-width="2"/>
+function update() {
+  const led = document.getElementById('led');
+  const label = document.getElementById('labelText');
+  if (!led) return;
+  led.setAttribute('fill', _pn_state ? _ps_colorOn : _ps_colorOff);
+  if (label) label.textContent = _ps_label;
+}
 
-  <!-- LED circle with glow -->
-  <g id="ledGlow" class="led-glow">
-    <circle cx="60" cy="60" r="35" fill="#4caf50" opacity="0.3"/>
-  </g>
+function putValue(id, value) {
+  if (id === '_pn_state') _pn_state = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  else if (id === '_ps_colorOn') _ps_colorOn = String(value);
+  else if (id === '_ps_colorOff') _ps_colorOff = String(value);
+  update();
+}
 
-  <!-- LED circle -->
-  <circle id="ledCircle" cx="60" cy="60" r="25" fill="url(#ledOff)" class="led-circle" stroke="#000"/>
-
-  <!-- Highlight for 3D effect -->
-  <ellipse cx="52" cy="50" rx="10" ry="8" fill="#fff" opacity="0.3"/>
-
-  <!-- Label -->
-  <text id="labelText" x="110" y="55" class="led-text led-label" text-anchor="start">Status</text>
-  <text id="stateText" x="110" y="75" class="led-text led-sublabel" text-anchor="start">OFF</text>
-
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
-      var svg = document.getElementById('status-led');
-      var ledCircle = document.getElementById('ledCircle');
-      var ledGlow = document.getElementById('ledGlow');
-      var labelText = document.getElementById('labelText');
-      var stateText = document.getElementById('stateText');
-
-      // Configuration
-      var config = {
-        state: 0, // 0=off, 1=green, 2=yellow, 3=red, 4=blue
-        label: 'Status',
-        blink: false,
-        blinkInterval: 500
-      };
-
-      // State definitions
-      var states = {
-        0: { name: 'OFF', fill: 'url(#ledOff)', stroke: '#000', glow: false, filter: 'none' },
-        1: { name: 'OK', fill: 'url(#ledGreen)', stroke: '#4caf50', glow: true, filter: 'url(#glowGreen)', glowColor: '#4caf50' },
-        2: { name: 'WARNING', fill: 'url(#ledYellow)', stroke: '#ffc107', glow: true, filter: 'url(#glowYellow)', glowColor: '#ffc107' },
-        3: { name: 'ALARM', fill: 'url(#ledRed)', stroke: '#f44336', glow: true, filter: 'url(#glowRed)', glowColor: '#ff0000' },
-        4: { name: 'RUNNING', fill: 'url(#ledBlue)', stroke: '#2196f3', glow: true, filter: 'url(#glowBlue)', glowColor: '#2196f3' }
-      };
-
-      var blinkTimer = null;
-      var blinkState = false;
-
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
-        config.state = parseInt(value);
-        if (config.state < 0) config.state = 0;
-        if (config.state > 4) config.state = 4;
-        updateLED();
-      };
-
-      svg.setOptions = function(options) {
-        if (options.label !== undefined) {
-          config.label = options.label;
-          labelText.textContent = config.label;
-        }
-        if (options.blink !== undefined) {
-          config.blink = options.blink;
-          setupBlink();
-        }
-        if (options.blinkInterval !== undefined) {
-          config.blinkInterval = parseInt(options.blinkInterval);
-          if (config.blink) setupBlink();
-        }
-        updateLED();
-      };
-
-      function updateLED(forceOff) {
-        var currentState = states[config.state];
-        var isOff = forceOff || false;
-
-        if (isOff) {
-          currentState = states[0];
-        }
-
-        ledCircle.setAttribute('fill', currentState.fill);
-        ledCircle.setAttribute('stroke', currentState.stroke);
-
-        if (currentState.glow && !isOff) {
-          ledCircle.setAttribute('filter', currentState.filter);
-          var glowCircle = ledGlow.querySelector('circle');
-          glowCircle.setAttribute('fill', currentState.glowColor);
-          ledGlow.setAttribute('opacity', '1');
-        } else {
-          ledCircle.setAttribute('filter', 'none');
-          ledGlow.setAttribute('opacity', '0');
-        }
-
-        stateText.textContent = isOff ? 'OFF' : currentState.name;
-      }
-
-      function setupBlink() {
-        if (blinkTimer) {
-          clearInterval(blinkTimer);
-          blinkTimer = null;
-        }
-
-        if (config.blink && config.state > 0) {
-          blinkTimer = setInterval(function() {
-            blinkState = !blinkState;
-            updateLED(blinkState);
-          }, config.blinkInterval);
-        } else {
-          updateLED();
-        }
-      }
-
-      // Initialize
-      updateLED();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return config.state;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

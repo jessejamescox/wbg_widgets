@@ -83,122 +83,36 @@
   <!-- Test Button -->
   <rect x="160" y="300" width="100" height="30" rx="5" id="test-button" class="button"/>
   <text x="210" y="320" class="button-text">TEST</text>
+  <script><![CDATA[
+//!export-start
+let _pn_alarm = 0;          // Alarm: 0=normal, 1=alarm
+let _pn_batteryLow = 0;     // Battery low: 0=ok, 1=low
+let _ps_zone = "Office 301"; // Zone label
+let _ps_lastTest = "12/01/2024"; // Last test date
+//!export-end
 
-  <script type="text/javascript"><![CDATA[
-    (function() {
-      var svg = document.currentScript.closest('svg');
+function init() { update(); }
 
-      // State variables
-      var state = {
-        status: 0,        // 0=normal, 1=smoke, 2=fault
-        batteryLevel: 100, // 0-100
-        alarmActive: false,
-        testing: false
-      };
+function update() {
+  const alarmIndicator = document.getElementById('alarmIndicator');
+  const batteryIndicator = document.getElementById('batteryIndicator');
+  const zoneText = document.getElementById('zoneText');
+  const lastTestText = document.getElementById('lastTestText');
+  if (!alarmIndicator) return;
+  alarmIndicator.setAttribute('fill', _pn_alarm ? '#f56565' : '#48bb78');
+  if (batteryIndicator) batteryIndicator.setAttribute('fill', _pn_batteryLow ? '#ed8936' : '#48bb78');
+  if (zoneText) zoneText.textContent = _ps_zone;
+  if (lastTestText) lastTestText.textContent = _ps_lastTest;
+}
 
-      // Element references
-      var statusLed = svg.getElementById('status-led');
-      var alarmRing = svg.getElementById('alarm-ring');
-      var statusText = svg.getElementById('status-text');
-      var batteryFill = svg.getElementById('battery-fill');
-      var batteryText = svg.getElementById('battery-text');
-      var testButton = svg.getElementById('test-button');
+function putValue(id, value) {
+  if (id === '_pn_alarm') _pn_alarm = Number(value) || 0;
+  else if (id === '_pn_batteryLow') _pn_batteryLow = Number(value) || 0;
+  else if (id === '_ps_zone') _ps_zone = String(value);
+  else if (id === '_ps_lastTest') _ps_lastTest = String(value);
+  update();
+}
 
-      // Update display based on state
-      function updateDisplay() {
-        // Update status LED and text
-        statusLed.classList.remove('status-normal', 'status-smoke', 'status-fault');
-
-        switch(state.status) {
-          case 0: // Normal
-            statusLed.classList.add('status-normal');
-            statusText.textContent = 'NORMAL';
-            state.alarmActive = false;
-            break;
-          case 1: // Smoke detected
-            statusLed.classList.add('status-smoke');
-            statusText.textContent = 'SMOKE DETECTED';
-            state.alarmActive = true;
-            break;
-          case 2: // Fault
-            statusLed.classList.add('status-fault');
-            statusText.textContent = 'FAULT';
-            state.alarmActive = false;
-            break;
-        }
-
-        // Update alarm ring
-        if (state.alarmActive || state.testing) {
-          alarmRing.classList.add('alarm-active');
-          alarmRing.style.opacity = '1';
-        } else {
-          alarmRing.classList.remove('alarm-active');
-          alarmRing.style.opacity = '0';
-        }
-
-        // Update battery level
-        var batteryWidth = (state.batteryLevel / 100) * 76;
-        batteryFill.setAttribute('width', batteryWidth);
-        batteryText.textContent = state.batteryLevel + '%';
-
-        if (state.batteryLevel < 20) {
-          batteryFill.classList.remove('battery-level');
-          batteryFill.classList.add('battery-low');
-        } else {
-          batteryFill.classList.remove('battery-low');
-          batteryFill.classList.add('battery-level');
-        }
-      }
-
-      // Test button handler
-      testButton.addEventListener('click', function() {
-        if (!state.testing) {
-          state.testing = true;
-          updateDisplay();
-
-          // Test for 3 seconds
-          setTimeout(function() {
-            state.testing = false;
-            updateDisplay();
-
-            // Trigger test event for FUXA
-            if (typeof(svg.setValue) === 'function') {
-              svg.setValue('test', true);
-            }
-          }, 3000);
-        }
-      });
-
-      // FUXA Integration
-      svg.getValue = function(property) {
-        switch(property) {
-          case 'status': return state.status;
-          case 'batteryLevel': return state.batteryLevel;
-          case 'alarmActive': return state.alarmActive;
-          case 'testing': return state.testing;
-          default: return null;
-        }
-      };
-
-      svg.setValue = function(property, value) {
-        switch(property) {
-          case 'status':
-            state.status = parseInt(value) || 0;
-            break;
-          case 'batteryLevel':
-            state.batteryLevel = Math.max(0, Math.min(100, parseInt(value) || 0));
-            break;
-          case 'alarmActive':
-            state.alarmActive = !!value;
-            break;
-          default:
-            return;
-        }
-        updateDisplay();
-      };
-
-      // Initialize display
-      updateDisplay();
-    })();
-  ]]></script>
+init();
+]]></script>
 </svg>

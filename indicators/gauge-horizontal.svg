@@ -78,65 +78,44 @@
         value: 0,
         unit: '',
         decimals: 1,
-        title: 'Horizontal Gauge'
-      };
 
-      // Constants
-      var trackWidth = 300;
-      var trackStart = 50;
+  <script><![CDATA[
+//!export-start
+let _pn_value = 65;        // Current value
+let _pn_min = 0;           // Minimum value
+let _pn_max = 100;         // Maximum value
+let _ps_label = "Pressure"; // Label
+let _ps_units = "PSI";     // Units
+//!export-end
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
-        config.value = parseFloat(value);
-        updateGauge();
-      };
+function init() { update(); }
 
-      svg.setOptions = function(options) {
-        if (options.min !== undefined) config.min = parseFloat(options.min);
-        if (options.max !== undefined) config.max = parseFloat(options.max);
-        if (options.unit !== undefined) config.unit = options.unit;
-        if (options.decimals !== undefined) config.decimals = parseInt(options.decimals);
-        if (options.title !== undefined) {
-          config.title = options.title;
-          titleText.textContent = config.title;
-        }
-        updateGauge();
-      };
+function update() {
+  const fillBar = document.getElementById('gaugeFill');
+  const valueText = document.getElementById('valueText');
+  const labelText = document.getElementById('labelText');
+  const unitsText = document.getElementById('units');
+  
+  if (!fillBar) return;
+  
+  const percentage = ((_pn_value - _pn_min) / (_pn_max - _pn_min)) * 100;
+  const fillWidth = Math.max(0, Math.min(100, percentage)) * 2.5;
+  fillBar.setAttribute('width', fillWidth);
+  
+  if (valueText) valueText.textContent = _pn_value.toFixed(1);
+  if (labelText) labelText.textContent = _ps_label;
+  if (unitsText) unitsText.textContent = _ps_units;
+}
 
-      function updateGauge() {
-        // Clamp value between min and max
-        var clampedValue = Math.max(config.min, Math.min(config.max, config.value));
+function putValue(id, value) {
+  if (id === '_pn_value') _pn_value = Number(value) || 0;
+  else if (id === '_pn_min') _pn_min = Number(value) || 0;
+  else if (id === '_pn_max') _pn_max = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  else if (id === '_ps_units') _ps_units = String(value);
+  update();
+}
 
-        // Calculate percentage
-        var percent = ((clampedValue - config.min) / (config.max - config.min)) * 100;
-
-        // Calculate fill width
-        var fillWidth = (percent / 100) * trackWidth;
-
-        // Update fill bar
-        fillBar.setAttribute('width', fillWidth);
-
-        // Update pointer position
-        var pointerX = trackStart + fillWidth;
-        pointer.setAttribute('transform', 'translate(' + pointerX + ', 0)');
-
-        // Update value text
-        var displayValue = clampedValue.toFixed(config.decimals);
-        if (config.unit) {
-          displayValue += ' ' + config.unit;
-        }
-        valueText.textContent = displayValue;
-      }
-
-      // Initialize
-      updateGauge();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return config.value;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

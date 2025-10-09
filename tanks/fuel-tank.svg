@@ -119,228 +119,40 @@ function init() {
   update();
 }
 
-(function() {
-      // FUXA Interface
-let gaugeStatus = { id: 'fuel-tank', type: 'svg-ext' };
+  <script><![CDATA[
+//!export-start
+let _pn_level = 65;      // Tank level (%)
+let _pn_capacity = 1000; // Tank capacity (gallons)
+let _pn_temperature = 72; // Temperature (°F)
+let _ps_label = "Fuel Tank"; // Tank label
+//!export-end
 
-      // Default values
-let settings = {
-        level: 50,           // Percentage (0-100)
-        capacity: 5000,      // Total capacity in gallons
-        temperature: 72,     // Temperature in Fahrenheit
-        leakDetected: false, // Leak detection _ps_status
-        tempWarning: 100,    // Temperature warning threshold
-        lowLevelWarning: 15  // Low level warning
-      };
+function init() { update(); }
 
-      // Initialize
-      if (window.svgData) {
-        gaugeStatus.onaction = function (data) {
-          // No actions for this widget
-        };
-
-        gaugeStatus.onsignal = function (signal) {
-          // Update based on FUXA signals
-          if (signal.id === 'level' && signal.value !== undefined) {
-            settings.level = parseFloat(signal.value);
-          }
-          if (signal.id === 'capacity' && signal.value !== undefined) {
-            settings.capacity = parseFloat(signal.value);
-          }
-          if (signal.id === 'temperature' && signal.value !== undefined) {
-            settings.temperature = parseFloat(signal.value);
-          }
-          if (signal.id === 'leakDetected' && signal.value !== undefined) {
-            settings.leakDetected = signal.value === true || signal.value === 1 || signal.value === '1';
-          }
-          if (signal.id === 'tempWarning' && signal.value !== undefined) {
-            settings.tempWarning = parseFloat(signal.value);
-          }
-          if (signal.id === 'lowLevelWarning' && signal.value !== undefined) {
-            settings.lowLevelWarning = parseFloat(signal.value);
-          }
-          updateTank();
-        };
-
-        gaugeStatus.oninit = function (data) {
-          if (data) {
-            if (data.level !== undefined) settings.level = data.level;
-            if (data.capacity !== undefined) settings.capacity = data.capacity;
-            if (data.temperature !== undefined) settings.temperature = data.temperature;
-            if (data.leakDetected !== undefined) settings.leakDetected = data.leakDetected;
-            if (data.tempWarning !== undefined) settings.tempWarning = data.tempWarning;
-            if (data.lowLevelWarning !== undefined) settings.lowLevelWarning = data.lowLevelWarning;
-          }
-          updateTank();
-        };
-
-        window.svgData.init(gaugeStatus);
-      }
-
-      function updateTank() {
-        // Constrain level between 0 and 100
-let level = Math.max(0, Math.min(100, settings.level));
-
-        // Calculate fuel height (tank body is 200px tall, from y=70 to y=270)
-
-let fuelHeight = (level / 100) * _pn_tankHeight;
-let fuelY = _pn_tankBottom - fuelHeight;
-
-        // Update fuel level
-const fuelLevelRect = document.getElementById('fuel-level');
-const fuelSurface = document.getElementById('fuel-surface');
-
-        if (fuelLevelRect) {
-          fuelLevelRect.setAttribute('y', fuelY);
-          fuelLevelRect.setAttribute('height', fuelHeight);
-        }
-
-        if (fuelSurface) {
-          fuelSurface.setAttribute('cy', fuelY);
-        }
-
-        // Update gauge fill
-const gaugeFill = document.getElementById('gauge-fill');
-        if (gaugeFill) {
-          gaugeFill.setAttribute('y', fuelY);
-          gaugeFill.setAttribute('height', fuelHeight);
-
-          // Color based on level
-          if (level <= settings.lowLevelWarning) {
-            gaugeFill.setAttribute('fill', '#ff5252');
-          } else if (level <= 30) {
-            gaugeFill.setAttribute('fill', '#ffa726');
-          } else {
-            gaugeFill.setAttribute('fill', '#4caf50');
-          }
-        }
-
-        // Update level percentage display
-const levelPercent = document.getElementById('level-percent');
-        if (levelPercent) {
-          levelPercent.textContent = level.toFixed(1);
-        }
-
-        // Calculate current volume
-let currentVolume = (level / 100) * settings.capacity;
-const currentVolumeEl = document.getElementById('current-volume');
-const maxCapacityEl = document.getElementById('max-capacity');
-
-        if (currentVolumeEl) {
-          currentVolumeEl.textContent = currentVolume.toFixed(0);
-        }
-        if (maxCapacityEl) {
-          maxCapacityEl.textContent = settings.capacity.toFixed(0);
-        }
-
-        // Update temperature display
-const tempValueEl = document.getElementById('temp-value');
-        if (tempValueEl) {
-          tempValueEl.textContent = settings.temperature.toFixed(1);
-        }
-
-        // Update temperature indicator
-const tempFill = document.getElementById('temp-fill');
-        if (tempFill) {
-          // Temperature scale (assume 0-150°F range for visual)
-let tempPercent = Math.min(100, (settings.temperature / 150) * 100);
-let tempHeight = (tempPercent / 100) * 115;
-let tempY = 185 - tempHeight;
-          tempFill.setAttribute('y', tempY);
-          tempFill.setAttribute('height', tempHeight);
-
-          // Color based on temperature
-          if (settings.temperature >= settings.tempWarning) {
-            tempFill.setAttribute('fill', '#ff5252');
-          } else if (settings.temperature >= settings.tempWarning * 0.8) {
-            tempFill.setAttribute('fill', '#ffa726');
-          } else {
-            tempFill.setAttribute('fill', '#ff9800');
-          }
-        }
-
-        // Update leak detection
-const leakLight = document.getElementById('leak-light');
-const leakDroplets = document.getElementById('leak-droplets');
-
-        if (settings.leakDetected) {
-          if (leakLight) {
-            leakLight.setAttribute('fill', '#ff5252');
-            leakLight.setAttribute('filter', 'url(#glow)');
-          }
-          if (leakDroplets) {
-            leakDroplets.setAttribute('opacity', '1');
-          }
-        } else {
-          if (leakLight) {
-            leakLight.setAttribute('fill', '#4caf50');
-            leakLight.removeAttribute('filter');
-          }
-          if (leakDroplets) {
-            leakDroplets.setAttribute('opacity', '0');
-          }
-        }
-
-        // Update _ps_status
-const tankStatus = document.getElementById('tank-_ps_status');
-
-        if (settings.leakDetected) {
-          _ps_status = 'LEAK DETECTED';
-          _ps_statusColor = '#ff5252';
-        } else if (settings.temperature >= settings.tempWarning) {
-          _ps_status = 'HIGH TEMP';
-          _ps_statusColor = '#ff5252';
-        } else if (level <= settings.lowLevelWarning) {
-          _ps_status = 'LOW LEVEL';
-          _ps_statusColor = '#ffa726';
-        }
-
-        if (tankStatus) {
-          tankStatus.textContent = _ps_status;
-          tankStatus.setAttribute('fill', _ps_statusColor);
-        }
-      }
-
-      // Initial update
-      updateTank();
-
-      // Animation for leak droplets
-let dropletY = [275, 278, 280];
-      setInterval(function() {
-        if (settings.leakDetected) {
-const leakDroplets = document.getElementById('leak-droplets');
-          if (leakDroplets) {
-let droplets = leakDroplets.getElementsByTagName('ellipse');
-            for (var i = 0; i < droplets.length; i++) {
-              dropletY[i] += 0.5;
-              if (dropletY[i] > 290) dropletY[i] = 275;
-              droplets[i].setAttribute('cy', dropletY[i]);
-            }
-          }
-        }
-      }, 100);
-    })();
+function update() {
+  const fillRect = document.getElementById('tankFill');
+  const levelText = document.getElementById('levelText');
+  const capacityText = document.getElementById('capacityText');
+  const tempText = document.getElementById('tempText');
+  const labelText = document.getElementById('tankLabel');
+  if (!fillRect) return;
+  const fillHeight = (_pn_level / 100) * 150;
+  fillRect.setAttribute('height', fillHeight);
+  fillRect.setAttribute('y', 150 - fillHeight);
+  if (levelText) levelText.textContent = _pn_level + '%';
+  if (capacityText) capacityText.textContent = Math.round(_pn_capacity * _pn_level / 100) + ' gal';
+  if (tempText) tempText.textContent = _pn_temperature + '°F';
+  if (labelText) labelText.textContent = _ps_label;
+}
 
 function putValue(id, value) {
-  if (id === '_pn_tankHeight') {
-    _pn_tankHeight = Number(value) || 0;
-    update();
-  } else if (id === '_pn_tankTop') {
-    _pn_tankTop = Number(value) || 0;
-    update();
-  } else if (id === '_pn_tankBottom') {
-    _pn_tankBottom = Number(value) || 0;
-    update();
-  } else if (id === '_ps_status') {
-    _ps_status = String(value) || "";
-    update();
-  } else if (id === '_ps_statusColor') {
-    _ps_statusColor = String(value) || "";
-    update();
-  }
+  if (id === '_pn_level') _pn_level = Number(value) || 0;
+  else if (id === '_pn_capacity') _pn_capacity = Number(value) || 0;
+  else if (id === '_pn_temperature') _pn_temperature = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  update();
 }
 
 init();
-
 ]]></script>
 </svg>

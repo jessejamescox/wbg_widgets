@@ -42,10 +42,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_status = 0;
-let _pn_alarmState = 0;
-let _pn_runCommand = 0;
-let _pn_runFeedback = 0;
+let _pn_status = 0;        // Pump status: 0=off, 1=running
+let _pn_alarmState = 0;    // Alarm state: 0=normal, 1=alarm
+let _pn_runCommand = 0;    // Run command: 0=stop, 1=start
+let _pn_runFeedback = 0;   // Run feedback: 0=stopped, 1=running
 //!export-end
 
 let rotation = 0;

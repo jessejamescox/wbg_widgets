@@ -46,14 +46,15 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_status = 0;
-let _pn_alarmState = 0;
-let _pn_loadPercent = 0;
-let _pn_runtime = 0;
-let _pn_pistonY = 42;
-let _pn_pistonDir = 1;
+let _pn_status = 0;        // Compressor status: 0=off, 1=running
+let _pn_alarmState = 0;    // Alarm state: 0=normal, 1=alarm
+let _pn_loadPercent = 0;   // Compressor load percentage (0-100%)
+let _pn_runtime = 0;       // Total runtime in hours
 //!export-end
 
+// Internal animation variables
+let _pn_pistonY = 42;
+let _pn_pistonDir = 1;
 let animationId = null;
 
 function init() {
@@ -73,8 +74,13 @@ function update() {
     indicator.setAttribute('class', 'status-on');
     statusText.textContent = 'RUN';
 
-    if (_pn_runtime > 0) {
+    // Display runtime or load percentage
+    if (_pn_runtime > 0 && _pn_loadPercent > 0) {
+      infoText.textContent = _pn_loadPercent.toFixed(0) + '% | ' + Math.round(_pn_runtime) + ' hrs';
+    } else if (_pn_runtime > 0) {
       infoText.textContent = Math.round(_pn_runtime) + ' hrs';
+    } else if (_pn_loadPercent > 0) {
+      infoText.textContent = _pn_loadPercent.toFixed(0) + '% LOAD';
     } else {
       infoText.textContent = 'RUNNING';
     }
@@ -127,12 +133,6 @@ function putValue(id, value) {
     update();
   } else if (id === '_pn_runtime') {
     _pn_runtime = Number(value) || 0;
-    update();
-  } else if (id === '_pn_pistonY') {
-    _pn_pistonY = Number(value) || 0;
-    update();
-  } else if (id === '_pn_pistonDir') {
-    _pn_pistonDir = Number(value) || 0;
     update();
   }
 }

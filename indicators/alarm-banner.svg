@@ -98,160 +98,50 @@
       };
 
       var scrollPosition = 0;
-      var scrollAnimationFrame = null;
-      var messageWidth = 0;
-      var lastTime = Date.now();
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        // Value can be alarm object or priority number
-        if (typeof value === 'object' && value !== null) {
-          if (value.priority !== undefined) config.priority = parseInt(value.priority);
-          if (value.message !== undefined) config.message = value.message;
-          if (value.timestamp !== undefined) config.timestamp = value.timestamp;
-          if (value.acknowledged !== undefined) config.acknowledged = value.acknowledged;
-          if (value.count !== undefined) config.alarmCount = parseInt(value.count);
-        } else if (value !== null && value !== undefined) {
-          config.priority = parseInt(value);
-        }
-        updateBanner();
-      };
+  <script><![CDATA[
+//!export-start
+let _pn_alarmActive = 1;         // Alarm active: 0=inactive, 1=active
+let _ps_alarmMessage = "High Temperature Alert"; // Alarm message
+let _pn_priority = 2;            // Priority: 1=low, 2=medium, 3=high
+let _ps_timestamp = "14:35:22";  // Timestamp
+//!export-end
 
-      svg.setOptions = function(options) {
-        if (options.scroll !== undefined) {
-          config.scroll = options.scroll;
-          if (config.scroll) startScroll();
-          else stopScroll();
-        }
-        if (options.scrollSpeed !== undefined) config.scrollSpeed = parseFloat(options.scrollSpeed);
-        if (options.message !== undefined) config.message = options.message;
-        if (options.timestamp !== undefined) config.timestamp = options.timestamp;
-        updateBanner();
-      };
+function init() { update(); }
 
-      svg.acknowledge = function() {
-        config.acknowledged = true;
-        updateBanner();
-        // Emit event for FUXA
-        var event = new CustomEvent('alarm-acknowledged', {
-          detail: { priority: config.priority, message: config.message }
-        });
-        svg.dispatchEvent(event);
-      };
+function update() {
+  const bannerElem = document.querySelector('.alarm-banner');
+  const messageElem = document.getElementById('alarmMessage');
+  const timestampElem = document.getElementById('timestamp');
+  const priorityIcon = document.getElementById('priorityIcon');
+  
+  if (!bannerElem) return;
+  
+  if (_pn_alarmActive) {
+    bannerElem.style.display = 'block';
+    if (_pn_priority === 3) {
+      bannerElem.setAttribute('fill', '#f56565');
+    } else if (_pn_priority === 2) {
+      bannerElem.setAttribute('fill', '#ed8936');
+    } else {
+      bannerElem.setAttribute('fill', '#ecc94b');
+    }
+  } else {
+    bannerElem.style.display = 'none';
+  }
+  
+  if (messageElem) messageElem.textContent = _ps_alarmMessage;
+  if (timestampElem) timestampElem.textContent = _ps_timestamp;
+}
 
-      function updateBanner() {
-        var priority = priorities[config.priority] || priorities[0];
+function putValue(id, value) {
+  if (id === '_pn_alarmActive') _pn_alarmActive = Number(value) || 0;
+  else if (id === '_ps_alarmMessage') _ps_alarmMessage = String(value);
+  else if (id === '_pn_priority') _pn_priority = Number(value) || 0;
+  else if (id === '_ps_timestamp') _ps_timestamp = String(value);
+  update();
+}
 
-        // Update priority bar
-        priorityBar.setAttribute('class', 'banner-bg ' + priority.class);
-
-        // Update priority text
-        priorityText.textContent = priority.name;
-        priorityText.setAttribute('fill', priority.color);
-
-        // Update timestamp
-        if (config.timestamp) {
-          timestampText.textContent = config.timestamp;
-        } else {
-          var now = new Date();
-          timestampText.textContent = now.toISOString().replace('T', ' ').substring(0, 19);
-        }
-
-        // Update message
-        messageText.textContent = config.message;
-
-        // Update notification dot
-        if (config.priority > 0 && !config.acknowledged) {
-          notificationDot.setAttribute('opacity', '1');
-        } else {
-          notificationDot.setAttribute('opacity', '0');
-        }
-
-        // Update alarm count badge
-        if (config.alarmCount > 0) {
-          countBadge.setAttribute('opacity', '1');
-          countText.textContent = config.alarmCount > 99 ? '99+' : config.alarmCount;
-        } else {
-          countBadge.setAttribute('opacity', '0');
-        }
-
-        // Update button visibility
-        if (config.priority > 0 && !config.acknowledged) {
-          ackButton.setAttribute('opacity', '1');
-          ackButton.style.pointerEvents = 'auto';
-        } else {
-          ackButton.setAttribute('opacity', '0.3');
-          ackButton.style.pointerEvents = 'none';
-        }
-
-        // Calculate message width for scrolling
-        messageWidth = messageText.getBBox().width;
-
-        // Start/restart scroll if enabled
-        if (config.scroll && messageWidth > 450) {
-          scrollPosition = 0;
-          startScroll();
-        } else {
-          stopScroll();
-          scrollContainer.setAttribute('transform', 'translate(50, 0)');
-        }
-      }
-
-      function startScroll() {
-        if (scrollAnimationFrame) return;
-
-        function animate() {
-          var currentTime = Date.now();
-          var deltaTime = (currentTime - lastTime) / 1000; // Convert to seconds
-          lastTime = currentTime;
-
-          scrollPosition += config.scrollSpeed * deltaTime;
-
-          // Reset when message scrolls off screen
-          if (scrollPosition > messageWidth + 100) {
-            scrollPosition = -450;
-          }
-
-          scrollContainer.setAttribute('transform', 'translate(' + (50 - scrollPosition) + ', 0)');
-
-          scrollAnimationFrame = requestAnimationFrame(animate);
-        }
-
-        lastTime = Date.now();
-        scrollAnimationFrame = requestAnimationFrame(animate);
-      }
-
-      function stopScroll() {
-        if (scrollAnimationFrame) {
-          cancelAnimationFrame(scrollAnimationFrame);
-          scrollAnimationFrame = null;
-        }
-      }
-
-      // Button click handler
-      ackButton.addEventListener('click', function() {
-        if (!config.acknowledged && config.priority > 0) {
-          svg.acknowledge();
-        }
-      });
-
-      // Initialize with demo alarm
-      config.priority = 4;
-      config.message = 'High temperature alarm on Tank 101 - Immediate action required';
-      config.alarmCount = 3;
-      updateBanner();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return {
-          priority: config.priority,
-          message: config.message,
-          timestamp: config.timestamp,
-          acknowledged: config.acknowledged,
-          count: config.alarmCount
-        };
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

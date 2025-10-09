@@ -49,10 +49,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_pressureDrop = 0.5;
-let _pn_dpAlarmHigh = 1.0;
-let _pn_dpWarning = 0.8;
-let _pn_filterStatus = 0;
+let _pn_pressureDrop = 0.5;  // Pressure drop across filter in inches WC
+let _pn_dpAlarmHigh = 1.0;   // High pressure drop alarm setpoint
+let _pn_dpWarning = 0.8;     // Pressure drop warning level
+let _pn_filterStatus = 0;    // Filter status: 0=good, 1=change needed
 //!export-end
 
 function init() {

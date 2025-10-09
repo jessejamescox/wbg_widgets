@@ -101,13 +101,13 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_currentTemp = 72;
-let _pn_setpoint = 70;
-let _pn_mode = 0;
-let _pn_fanMode = 0;
-let _pb_heating = false;
-let _pb_cooling = false;
-let _pb_fanRunning = false;
+let _pn_currentTemp = 72;    // Current temperature reading (°F)
+let _pn_setpoint = 70;       // Temperature setpoint (°F, 50-90)
+let _pn_mode = 0;            // Mode: 0=off, 1=heat, 2=cool, 3=auto
+let _pn_fanMode = 0;         // Fan mode: 0=auto, 1=on
+let _pb_heating = false;     // Heating active status
+let _pb_cooling = false;     // Cooling active status
+let _pb_fanRunning = false;  // Fan running status
 //!export-end
 
 function init() {

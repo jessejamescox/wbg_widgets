@@ -53,139 +53,40 @@
   <text id="maxValue" x="10" y="138" class="trend-text trend-stats" text-anchor="start">Max: 0</text>
   <text id="avgValue" x="10" y="148" class="trend-text trend-stats" text-anchor="start">Avg: 0</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
-      var svg = document.getElementById('trend-mini');
-      var linePath = document.getElementById('linePath');
-      var areaPath = document.getElementById('areaPath');
-      var currentDot = document.getElementById('currentDot');
-      var currentValue = document.getElementById('currentValue');
-      var minValue = document.getElementById('minValue');
-      var maxValue = document.getElementById('maxValue');
-      var avgValue = document.getElementById('avgValue');
+  <script><![CDATA[
+//!export-start
+let _pn_value = 72.5;   // Current value
+let _pn_min = 60;      // Minimum value for scale
+let _pn_max = 85;      // Maximum value for scale
+let _ps_label = "Temp"; // Label
+let _ps_trend = "up";   // Trend: up, down, stable
+//!export-end
 
-      // Configuration
-      var config = {
-        maxPoints: 24,
-        decimals: 1,
-        unit: '',
-        autoScale: true,
-        minScale: 0,
-        maxScale: 100
-      };
+function init() { update(); }
 
-      // Data storage
-      var dataPoints = [];
+function update() {
+  const valueText = document.getElementById('valueText');
+  const labelText = document.getElementById('labelText');
+  const trendIcon = document.getElementById('trendIcon');
+  if (!valueText) return;
+  valueText.textContent = _pn_value.toFixed(1);
+  if (labelText) labelText.textContent = _ps_label;
+  if (trendIcon) {
+    if (_ps_trend === 'up') trendIcon.textContent = '↑';
+    else if (_ps_trend === 'down') trendIcon.textContent = '↓';
+    else trendIcon.textContent = '→';
+  }
+}
 
-      // Chart dimensions
-      var chartX = 20;
-      var chartY = 25;
-      var chartWidth = 260;
-      var chartHeight = 100;
+function putValue(id, value) {
+  if (id === '_pn_value') _pn_value = Number(value) || 0;
+  else if (id === '_pn_min') _pn_min = Number(value) || 0;
+  else if (id === '_pn_max') _pn_max = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  else if (id === '_ps_trend') _ps_trend = String(value);
+  update();
+}
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
-        addDataPoint(parseFloat(value));
-        updateChart();
-      };
-
-      svg.setOptions = function(options) {
-        if (options.maxPoints !== undefined) config.maxPoints = parseInt(options.maxPoints);
-        if (options.decimals !== undefined) config.decimals = parseInt(options.decimals);
-        if (options.unit !== undefined) config.unit = options.unit;
-        if (options.autoScale !== undefined) config.autoScale = options.autoScale;
-        if (options.minScale !== undefined) config.minScale = parseFloat(options.minScale);
-        if (options.maxScale !== undefined) config.maxScale = parseFloat(options.maxScale);
-        updateChart();
-      };
-
-      svg.clearData = function() {
-        dataPoints = [];
-        updateChart();
-      };
-
-      function addDataPoint(value) {
-        dataPoints.push(value);
-        if (dataPoints.length > config.maxPoints) {
-          dataPoints.shift();
-        }
-      }
-
-      function updateChart() {
-        if (dataPoints.length === 0) {
-          linePath.setAttribute('d', 'M ' + chartX + ',' + (chartY + chartHeight/2));
-          areaPath.setAttribute('d', 'M ' + chartX + ',' + (chartY + chartHeight) +
-                                      ' L ' + chartX + ',' + (chartY + chartHeight) +
-                                      ' L ' + (chartX + chartWidth) + ',' + (chartY + chartHeight) + ' Z');
-          currentValue.textContent = '0';
-          return;
-        }
-
-        // Calculate statistics
-        var min = Math.min.apply(null, dataPoints);
-        var max = Math.max.apply(null, dataPoints);
-        var sum = dataPoints.reduce(function(a, b) { return a + b; }, 0);
-        var avg = sum / dataPoints.length;
-
-        // Determine scale
-        var scaleMin = config.autoScale ? min : config.minScale;
-        var scaleMax = config.autoScale ? max : config.maxScale;
-
-        // Prevent division by zero
-        if (scaleMax === scaleMin) {
-          scaleMax = scaleMin + 1;
-        }
-
-        // Build path
-        var pointSpacing = chartWidth / (config.maxPoints - 1);
-        var linePathData = 'M ';
-        var areaPathData = 'M ' + chartX + ',' + (chartY + chartHeight) + ' L ';
-
-        for (var i = 0; i < dataPoints.length; i++) {
-          var x = chartX + (i * pointSpacing);
-          var normalizedValue = (dataPoints[i] - scaleMin) / (scaleMax - scaleMin);
-          var y = chartY + chartHeight - (normalizedValue * chartHeight);
-
-          linePathData += x + ',' + y + ' ';
-          areaPathData += x + ',' + y + ' ';
-        }
-
-        areaPathData += ' L ' + (chartX + ((dataPoints.length - 1) * pointSpacing)) + ',' +
-                       (chartY + chartHeight) + ' Z';
-
-        linePath.setAttribute('d', linePathData);
-        areaPath.setAttribute('d', areaPathData);
-
-        // Update current value dot
-        var lastValue = dataPoints[dataPoints.length - 1];
-        var lastX = chartX + ((dataPoints.length - 1) * pointSpacing);
-        var lastNormalized = (lastValue - scaleMin) / (scaleMax - scaleMin);
-        var lastY = chartY + chartHeight - (lastNormalized * chartHeight);
-
-        currentDot.setAttribute('cx', lastX);
-        currentDot.setAttribute('cy', lastY);
-
-        // Update text displays
-        var unitStr = config.unit ? ' ' + config.unit : '';
-        currentValue.textContent = lastValue.toFixed(config.decimals) + unitStr;
-        minValue.textContent = 'Min: ' + min.toFixed(config.decimals) + unitStr;
-        maxValue.textContent = 'Max: ' + max.toFixed(config.decimals) + unitStr;
-        avgValue.textContent = 'Avg: ' + avg.toFixed(config.decimals) + unitStr;
-      }
-
-      // Initialize with some demo data
-      for (var i = 0; i < 24; i++) {
-        addDataPoint(50 + Math.sin(i / 3) * 20 + (Math.random() - 0.5) * 10);
-      }
-      updateChart();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return dataPoints.length > 0 ? dataPoints[dataPoints.length - 1] : 0;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

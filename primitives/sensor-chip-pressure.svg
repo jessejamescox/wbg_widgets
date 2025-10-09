@@ -21,7 +21,7 @@
 
   <!-- Value Display -->
   <text id="valueText" x="42" y="22" class="value-text" text-anchor="middle">45.2</text>
-  <text x="64" y="22" class="unit-text">PSI</text>
+  <text id="unitText" x="64" y="22" class="unit-text">PSI</text>
 
   <!-- Label -->
   <text x="40" y="34" class="label-text" text-anchor="middle">PRESSURE</text>
@@ -31,11 +31,11 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_pressure = 45.2;
-let _ps_units = 'PSI';
-let _pn_highAlarm = 60;
-let _pn_lowAlarm = 20;
-let _pn_alarmState = 0;
+let _pn_pressure = 45.2;     // Pressure value
+let _ps_units = 'PSI';       // Pressure units: 'PSI', 'kPa', 'bar', etc.
+let _pn_highAlarm = 60;      // High pressure alarm setpoint
+let _pn_lowAlarm = 20;       // Low pressure alarm setpoint
+let _pn_alarmState = 0;      // Alarm state: 0=normal, 1=alarm
 //!export-end
 
 function init() {
@@ -44,12 +44,14 @@ function init() {
 
     function update() {
 const valueText = document.getElementById('valueText');
+const unitText = document.getElementById('unitText');
 const statusDot = document.getElementById('statusDot');
 
-  if (!valueText || !statusDot) return;
+  if (!valueText || !unitText || !statusDot) return;
 
-      // Update value
+      // Update value and units
       valueText.textContent = _pn_pressure.toFixed(1);
+      unitText.textContent = _ps_units;
 
       // Check alarm conditions
       if (_pn_pressure > _pn_highAlarm || _pn_pressure < _pn_lowAlarm || _pn_alarmState === 1) {

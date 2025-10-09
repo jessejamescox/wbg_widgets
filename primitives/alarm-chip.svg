@@ -28,10 +28,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_alarmActive = 0;
-let _pn_alarmCount = 0;
-let _pn_acknowledged = 0;
-let _pb_blinkState = false;
+let _pn_alarmActive = 0;    // Alarm active state: 0=normal, 1=alarm
+let _pn_alarmCount = 0;     // Number of active alarms (0-99)
+let _pn_acknowledged = 0;   // Acknowledgement status: 0=unack, 1=ack
+let _pb_blinkState = false; // Blink state for unacknowledged alarms
 //!export-end
 
 function init() {

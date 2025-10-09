@@ -112,205 +112,78 @@
     <text x="250" y="143" text-anchor="middle" fill="white" font-size="12px" font-weight="bold">!</text>
   </g>
 
+
   <script><![CDATA[
 //!export-start
-let _ps_currentPeriodTagId = '';
-let _ps_currentTempTagId = '';
-let _ps_nextPeriodTagId = '';
-let _ps_nextTimeTagId = '';
-let _ps_nextTempTagId = '';
-let _ps_overrideActiveTagId = '';
-let _ps_currentTimeTagId = '';
-let _ps_currentPeriodName = 'Morning';
-let _pn_currentTemp = 72.0;
-let _ps_currentTimeStr = '08:45';
-let _ps_nextPeriodName = 'Day';
-let _ps_nextTimeStr = '09:00';
-let _pn_nextTemp = 68.0;
-let _pb_isOverrideActive = false;
-let _ps_units = '°F';
+let _ps_currentPeriod = "Morning";    // Current period name
+let _ps_currentTime = "08:45";        // Current time (HH:MM)
+let _pn_currentTemp = 72.0;           // Current temperature setpoint (°F)
+let _ps_nextPeriod = "Day";           // Next period name
+let _ps_nextTime = "09:00";           // Next event time (HH:MM)
+let _pn_nextTemp = 68.0;              // Next temperature setpoint (°F)
+let _pn_isOverride = 0;               // Override active: 0=no, 1=yes
+let _ps_units = "°F";                 // Temperature units
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Integration Variables
+function update() {
+  const currentPeriodElem = document.getElementById('currentPeriod');
+  const currentTimeElem = document.getElementById('currentTime');
+  const currentTempElem = document.getElementById('currentTemp');
+  const nextPeriodElem = document.getElementById('nextPeriod');
+  const nextTimeElem = document.getElementById('nextTime');
+  const statusBadgeRect = document.getElementById('statusBadgeRect');
+  const statusBadgeText = document.getElementById('statusBadgeText');
+  const overrideIndicator = document.getElementById('overrideIndicator');
 
-      // Current values
+  if (!currentPeriodElem) return;
 
-      // DOM Elements
-const currentPeriod = document.getElementById('currentPeriod');
-const currentTime = document.getElementById('currentTime');
-const currentTempEl = document.getElementById('currentTemp');
-const nextPeriod = document.getElementById('nextPeriod');
-const nextTime = document.getElementById('nextTime');
-const statusBadgeRect = document.getElementById('statusBadgeRect');
-const statusBadgeText = document.getElementById('statusBadgeText');
-const overrideIndicator = document.getElementById('overrideIndicator');
+  // Update current period
+  currentPeriodElem.textContent = _ps_currentPeriod;
+  currentTimeElem.textContent = _ps_currentTime;
+  currentTempElem.textContent = 'Heating to ' + _pn_currentTemp.toFixed(0) + _ps_units;
 
-      // Format time string
-      function formatTime(value) {
-        // If value is a number (minutes since midnight), convert to HH:MM
-        if (typeof value === 'number') {
-let hours = Math.floor(value / 60);
-let minutes = value % 60;
-          return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
-        }
-        return value;
-      }
+  // Update next event
+  nextPeriodElem.textContent = _ps_nextPeriod;
+  nextTimeElem.textContent = 'at ' + _ps_nextTime + ' - ' + _pn_nextTemp.toFixed(0) + _ps_units;
 
-      // Update all visuals
-      function updateVisuals() {
-        currentPeriod.textContent = _ps_currentPeriodName;
-        currentTime.textContent = formatTime(_ps_currentTimeStr);
-        currentTempEl.textContent = 'Heating to ' + _pn_currentTemp.toFixed(1) + _ps_units;
-
-        nextPeriod.textContent = _ps_nextPeriodName;
-        nextTime.textContent = 'at ' + formatTime(_ps_nextTimeStr) + ' - ' + _pn_nextTemp.toFixed(1) + _ps_units;
-
-        if (_pb_isOverrideActive) {
-          statusBadgeRect.classList.add('override');
-          statusBadgeText.textContent = 'OVERRIDE';
-          overrideIndicator.style.opacity = '1';
-        } else {
-          statusBadgeRect.classList.remove('override');
-          statusBadgeText.textContent = 'ACTIVE';
-          overrideIndicator.style.opacity = '0';
-        }
-      }
-
-      // Update current time every minute
-      function updateCurrentTime() {
-let now = new Date();
-let hours = now.getHours();
-let minutes = now.getMinutes();
-        _ps_currentTimeStr = String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
-        updateVisuals();
-      }
-
-      // Start clock if not receiving time from FUXA
-let clockInterval = setInterval(function() {
-        if (!_ps_currentTimeTagId) {
-          updateCurrentTime();
-        }
-      }, 60000); // Update every minute
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-        if (sigid === _ps_currentPeriodTagId) {
-          _ps_currentPeriodName = String(value);
-        } else if (sigid === _ps_currentTempTagId) {
-          _pn_currentTemp = parseFloat(value);
-        } else if (sigid === _ps_currentTimeTagId) {
-          _ps_currentTimeStr = value;
-        } else if (sigid === _ps_nextPeriodTagId) {
-          _ps_nextPeriodName = String(value);
-        } else if (sigid === _ps_nextTimeTagId) {
-          _ps_nextTimeStr = value;
-        } else if (sigid === _ps_nextTempTagId) {
-          _pn_nextTemp = parseFloat(value);
-        } else if (sigid === _ps_overrideActiveTagId) {
-          _pb_isOverrideActive = (parseFloat(value) > 0);
-        }
-
-        updateVisuals();
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'currentPeriodVariableId') return _ps_currentPeriodTagId;
-        if (name === 'currentTempVariableId') return _ps_currentTempTagId;
-        if (name === 'currentTimeVariableId') return _ps_currentTimeTagId;
-        if (name === 'nextPeriodVariableId') return _ps_nextPeriodTagId;
-        if (name === 'nextTimeVariableId') return _ps_nextTimeTagId;
-        if (name === 'nextTempVariableId') return _ps_nextTempTagId;
-        if (name === 'overrideActiveVariableId') return _ps_overrideActiveTagId;
-        if (name === '_ps_units') return _ps_units;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'currentPeriodVariableId') {
-          _ps_currentPeriodTagId = value;
-        } else if (name === 'currentTempVariableId') {
-          _ps_currentTempTagId = value;
-        } else if (name === 'currentTimeVariableId') {
-          _ps_currentTimeTagId = value;
-        } else if (name === 'nextPeriodVariableId') {
-          _ps_nextPeriodTagId = value;
-        } else if (name === 'nextTimeVariableId') {
-          _ps_nextTimeTagId = value;
-        } else if (name === 'nextTempVariableId') {
-          _ps_nextTempTagId = value;
-        } else if (name === 'overrideActiveVariableId') {
-          _ps_overrideActiveTagId = value;
-        } else if (name === '_ps_units') {
-          _ps_units = value;
-          updateVisuals();
-        }
-      };
-
-      // Initialize
-      updateCurrentTime();
-      updateVisuals();
-
-      // Cleanup on unload
-      window.addEventListener('unload', function() {
-        clearInterval(clockInterval);
-      });
-    })();
-
-function putValue(id, value) {
-  if (id === '_ps_currentPeriodTagId') {
-    _ps_currentPeriodTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_currentTempTagId') {
-    _ps_currentTempTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_nextPeriodTagId') {
-    _ps_nextPeriodTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_nextTimeTagId') {
-    _ps_nextTimeTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_nextTempTagId') {
-    _ps_nextTempTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_overrideActiveTagId') {
-    _ps_overrideActiveTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_currentTimeTagId') {
-    _ps_currentTimeTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_currentPeriodName') {
-    _ps_currentPeriodName = String(value) || "";
-    update();
-  } else if (id === '_pn_currentTemp') {
-    _pn_currentTemp = Number(value) || 0;
-    update();
-  } else if (id === '_ps_currentTimeStr') {
-    _ps_currentTimeStr = String(value) || "";
-    update();
-  } else if (id === '_ps_nextPeriodName') {
-    _ps_nextPeriodName = String(value) || "";
-    update();
-  } else if (id === '_ps_nextTimeStr') {
-    _ps_nextTimeStr = String(value) || "";
-    update();
-  } else if (id === '_pn_nextTemp') {
-    _pn_nextTemp = Number(value) || 0;
-    update();
-  } else if (id === '_pb_isOverrideActive') {
-    _pb_isOverrideActive = !!value;
-    update();
-  } else if (id === '_ps_units') {
-    _ps_units = String(value) || "";
-    update();
+  // Update status badge
+  if (_pn_isOverride) {
+    statusBadgeRect.classList.add('override');
+    statusBadgeText.textContent = 'OVERRIDE';
+    if (overrideIndicator) overrideIndicator.style.opacity = '1';
+  } else {
+    statusBadgeRect.classList.remove('override');
+    statusBadgeText.textContent = 'ACTIVE';
+    if (overrideIndicator) overrideIndicator.style.opacity = '0';
   }
 }
 
-init();
+function putValue(id, value) {
+  if (id === '_ps_currentPeriod') {
+    _ps_currentPeriod = String(value);
+  } else if (id === '_ps_currentTime') {
+    _ps_currentTime = String(value);
+  } else if (id === '_pn_currentTemp') {
+    _pn_currentTemp = Number(value) || 0;
+  } else if (id === '_ps_nextPeriod') {
+    _ps_nextPeriod = String(value);
+  } else if (id === '_ps_nextTime') {
+    _ps_nextTime = String(value);
+  } else if (id === '_pn_nextTemp') {
+    _pn_nextTemp = Number(value) || 0;
+  } else if (id === '_pn_isOverride') {
+    _pn_isOverride = Number(value) || 0;
+  } else if (id === '_ps_units') {
+    _ps_units = String(value);
+  }
 
+  update();
+}
+
+init();
 ]]></script>
 </svg>

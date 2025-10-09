@@ -87,118 +87,92 @@
   </g>
 
   <script><![CDATA[
+//!export-start
+let _ps_zoneName = "Conference Room A"; // Zone name
+let _pn_currentTemp = 72;                // Current temperature (°F)
+let _pn_setpoint = 70;                   // Setpoint temperature (°F)
+let _pn_occupied = 0;                    // Occupancy: 0=unoccupied, 1=occupied
+let _pn_mode = 2;                        // Mode: 0=Off, 1=Heating, 2=Cooling, 3=Auto, 4=Fan Only
+//!export-end
+
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Variable Bindings
-let variables = {
-        zoneName: 'zone1_name',
-        currentTemp: 'zone1_temp',
-        setpoint: 'zone1_setpoint',
-        occupied: 'zone1_occupied',
-        mode: 'zone1_mode'
-      };
+function update() {
+  const zoneNameElem = document.getElementById('zoneName');
+  const currentTempElem = document.getElementById('currentTemp');
+  const setpointTempElem = document.getElementById('setpointTemp');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const statusTextElem = document.getElementById('statusText');
+  const modeTextElem = document.getElementById('modeText');
+  const tempBar = document.getElementById('tempBar');
+  const tempMarker = document.getElementById('tempMarker');
 
-      // Temperature range for bar indicator
-let tempRange = { min: 60, max: 85 };
+  if (!zoneNameElem) return;
 
-      // Update function called by FUXA
-      function updateWidget(data) {
-        try {
-          // Update zone name
-          if (data[variables.zoneName] !== undefined) {
-            document.getElementById('zoneName').textContent = data[variables.zoneName];
-          }
+  // Temperature range for bar indicator
+  const tempMin = 60, tempMax = 85;
 
-          // Update current temperature
-          if (data[variables.currentTemp] !== undefined) {
-let temp = parseFloat(data[variables.currentTemp]);
-            document.getElementById('currentTemp').textContent = Math.round(temp);
+  // Update zone name
+  zoneNameElem.textContent = _ps_zoneName;
 
-            // Update temperature bar
-let percentage = ((temp - tempRange.min) / (tempRange.max - tempRange.min)) * 360;
-            percentage = Math.max(0, Math.min(360, percentage));
-            document.getElementById('tempBar').setAttribute('width', percentage);
-            document.getElementById('tempMarker').setAttribute('cx', percentage);
+  // Update current temperature
+  currentTempElem.textContent = Math.round(_pn_currentTemp);
 
-            // Color code the temperature marker based on comfort
-let marker = document.getElementById('tempMarker');
-            if (temp < 68 || temp > 76) {
-              marker.setAttribute('fill', '#f56565'); // Red for uncomfortable
-            } else if (temp < 70 || temp > 74) {
-              marker.setAttribute('fill', '#ed8936'); // Orange for marginal
-            } else {
-              marker.setAttribute('fill', '#48bb78'); // Green for comfortable
-            }
-          }
+  // Update temperature bar
+  let percentage = ((_pn_currentTemp - tempMin) / (tempMax - tempMin)) * 360;
+  percentage = Math.max(0, Math.min(360, percentage));
+  tempBar.setAttribute('width', percentage);
+  tempMarker.setAttribute('cx', percentage);
 
-          // Update setpoint
-          if (data[variables.setpoint] !== undefined) {
-let setpoint = parseFloat(data[variables.setpoint]);
-            document.getElementById('setpointTemp').textContent = Math.round(setpoint);
-          }
+  // Color code the temperature marker based on comfort
+  if (_pn_currentTemp < 68 || _pn_currentTemp > 76) {
+    tempMarker.setAttribute('fill', '#f56565'); // Red for uncomfortable
+  } else if (_pn_currentTemp < 70 || _pn_currentTemp > 74) {
+    tempMarker.setAttribute('fill', '#ed8936'); // Orange for marginal
+  } else {
+    tempMarker.setAttribute('fill', '#48bb78'); // Green for comfortable
+  }
 
-          // Update occupancy status
-          if (data[variables.occupied] !== undefined) {
-let occupied = data[variables.occupied];
-let indicator = document.getElementById('statusIndicator');
-let statusText = document.getElementById('statusText');
+  // Update setpoint
+  setpointTempElem.textContent = Math.round(_pn_setpoint);
 
-            if (occupied) {
-              indicator.setAttribute('class', 'zone-status-occupied');
-              statusText.textContent = 'Occupied';
-            } else {
-              indicator.setAttribute('class', 'zone-status-unoccupied');
-              statusText.textContent = 'Unoccupied';
-            }
-          }
+  // Update occupancy status
+  if (_pn_occupied) {
+    statusIndicator.setAttribute('class', 'zone-status-occupied');
+    statusTextElem.textContent = 'Occupied';
+  } else {
+    statusIndicator.setAttribute('class', 'zone-status-unoccupied');
+    statusTextElem.textContent = 'Unoccupied';
+  }
 
-          // Update mode
-          if (data[variables.mode] !== undefined) {
-let mode = data[variables.mode];
-let modeNames = {
-              0: 'Off',
-              1: 'Heating',
-              2: 'Cooling',
-              3: 'Auto',
-              4: 'Fan Only'
-            };
-            document.getElementById('modeText').textContent = modeNames[mode] || mode;
-          }
-        } catch (error) {
-          console.error('Zone Temp Card update error:', error);
-        }
-      }
+  // Update mode
+  const modeNames = {
+    0: 'Off',
+    1: 'Heating',
+    2: 'Cooling',
+    3: 'Auto',
+    4: 'Fan Only'
+  };
+  modeTextElem.textContent = modeNames[_pn_mode] || 'Unknown';
+}
 
-      // Button handlers for setpoint adjustment
-      document.getElementById('decreaseBtn').addEventListener('click', function() {
-        if (window.fuxa && window.fuxa.setVariable) {
-let currentSetpoint = parseFloat(document.getElementById('setpointTemp').textContent);
-          window.fuxa.setVariable(variables.setpoint, currentSetpoint - 1);
-        }
-      });
+function putValue(id, value) {
+  if (id === '_ps_zoneName') {
+    _ps_zoneName = String(value);
+  } else if (id === '_pn_currentTemp') {
+    _pn_currentTemp = Number(value) || 0;
+  } else if (id === '_pn_setpoint') {
+    _pn_setpoint = Number(value) || 0;
+  } else if (id === '_pn_occupied') {
+    _pn_occupied = Number(value) || 0;
+  } else if (id === '_pn_mode') {
+    _pn_mode = Number(value) || 0;
+  }
 
-      document.getElementById('increaseBtn').addEventListener('click', function() {
-        if (window.fuxa && window.fuxa.setVariable) {
-let currentSetpoint = parseFloat(document.getElementById('setpointTemp').textContent);
-          window.fuxa.setVariable(variables.setpoint, currentSetpoint + 1);
-        }
-      });
-
-      // Register with FUXA
-      if (window.fuxa) {
-        window.fuxa.registerWidget({
-          id: 'zone-temp-card',
-          variables: Object.values(variables),
-          update: updateWidget
-        });
-      }
-
-      // Make update function globally accessible
-      window.updateZoneTempCard = updateWidget;
-    })();
+  update();
+}
 
 init();
 ]]></script>

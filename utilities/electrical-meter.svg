@@ -87,152 +87,121 @@
   </g>
 
   <script><![CDATA[
+//!export-start
+let _pn_power = 0;           // Active power (kW)
+let _pn_voltage = 0;         // Voltage (V)
+let _pn_current = 0;         // Current (A)
+let _pn_powerFactor = 1.0;   // Power factor (0-1)
+let _pn_frequency = 60;      // Frequency (Hz)
+let _pn_energy = 0;          // Energy consumption (kWh)
+let _pn_demand = 0;          // Demand (kW)
+let _pn_alarm = 0;           // Alarm status (0=normal, 1=alarm)
+let _pn_maxPower = 500;      // Maximum power rating (kW)
+//!export-end
+
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      power: 'electrical_meter_power',           // kW
-      voltage: 'electrical_meter_voltage',       // V
-      current: 'electrical_meter_current',       // A
-      powerFactor: 'electrical_meter_pf',        // 0-1
-      frequency: 'electrical_meter_freq',        // Hz
-      energy: 'electrical_meter_energy',         // kWh
-      demand: 'electrical_meter_demand',         // kW
-      maxDemand: 'electrical_meter_max_demand',  // kW
-      alarm: 'electrical_meter_alarm'            // boolean
-    };
+function update() {
+  const powerValue = document.getElementById('powerValue');
+  const voltageValue = document.getElementById('voltageValue');
+  const currentValue = document.getElementById('currentValue');
+  const pfValue = document.getElementById('pfValue');
+  const freqValue = document.getElementById('freqValue');
+  const energyValue = document.getElementById('energyValue');
+  const demandValue = document.getElementById('demandValue');
+  const powerPercent = document.getElementById('powerPercent');
+  const powerGaugeFill = document.getElementById('powerGaugeFill');
+  const pfIndicator = document.getElementById('pfIndicator');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const demandBar = document.getElementById('demandBar');
 
-    // Configuration
-let config = {
-      maxPower: 500,      // kW
-      maxCurrent: 1000,   // A
-      nominalVoltage: 480, // V
-      nominalFreq: 60,    // Hz
-      lowPF: 0.85         // Power factor threshold
-    };
+  if (!powerValue || !voltageValue || !currentValue) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.power:
-            updatePower(value);
-            break;
-          case variables.voltage:
-            updateVoltage(value);
-            break;
-          case variables.current:
-            updateCurrent(value);
-            break;
-          case variables.powerFactor:
-            updatePowerFactor(value);
-            break;
-          case variables.frequency:
-            updateFrequency(value);
-            break;
-          case variables.energy:
-            updateEnergy(value);
-            break;
-          case variables.demand:
-            updateDemand(value);
-            break;
-          case variables.alarm:
-            updateAlarmStatus(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating electrical meter:', e);
-      }
-    }
+  // Update power display and gauge
+  powerValue.textContent = _pn_power.toFixed(2);
+  const percent = Math.min((_pn_power / _pn_maxPower) * 100, 100);
+  powerPercent.textContent = Math.round(percent) + '%';
 
-    function updatePower(value) {
-let power = parseFloat(value) || 0;
-      document.getElementById('powerValue').textContent = power.toFixed(2);
+  const circumference = 2 * Math.PI * 60;
+  const offset = circumference - (percent / 100) * circumference;
+  powerGaugeFill.setAttribute('stroke-dashoffset', offset);
 
-      // Update gauge
-let percent = Math.min((power / config.maxPower) * 100, 100);
-      document.getElementById('powerPercent').textContent = percent.toFixed(0) + '%';
-let circumference = 2 * Math.PI * 60;
-let offset = circumference - (percent / 100) * circumference;
-let gaugeFill = document.getElementById('powerGaugeFill');
-      gaugeFill.setAttribute('stroke-dashoffset', offset);
+  // Change gauge color based on load
+  if (percent > 90) {
+    powerGaugeFill.setAttribute('stroke', '#ff0000');
+  } else if (percent > 75) {
+    powerGaugeFill.setAttribute('stroke', '#ffaa00');
+  } else {
+    powerGaugeFill.setAttribute('stroke', '#00d4ff');
+  }
 
-      // Change color based on load
-      if (percent > 90) {
-        gaugeFill.setAttribute('stroke', '#ff0000');
-      } else if (percent > 75) {
-        gaugeFill.setAttribute('stroke', '#ffaa00');
-      } else {
-        gaugeFill.setAttribute('stroke', '#00d4ff');
-      }
-    }
+  // Update voltage and current
+  voltageValue.textContent = Math.round(_pn_voltage);
+  currentValue.textContent = _pn_current.toFixed(1);
 
-    function updateVoltage(value) {
-let voltage = parseFloat(value) || 0;
-      document.getElementById('voltageValue').textContent = voltage.toFixed(0);
-    }
+  // Update power factor
+  pfValue.textContent = _pn_powerFactor.toFixed(2);
+  if (_pn_powerFactor < 0.85) {
+    pfIndicator.setAttribute('class', 'status-alarm');
+  } else if (_pn_powerFactor < 0.95) {
+    pfIndicator.setAttribute('class', 'status-warning');
+  } else {
+    pfIndicator.setAttribute('class', 'status-ok');
+  }
 
-    function updateCurrent(value) {
-let current = parseFloat(value) || 0;
-      document.getElementById('currentValue').textContent = current.toFixed(1);
-    }
+  // Update frequency
+  freqValue.textContent = _pn_frequency.toFixed(1);
 
-    function updatePowerFactor(value) {
-let pf = parseFloat(value) || 0;
-      document.getElementById('pfValue').textContent = pf.toFixed(2);
-let indicator = document.getElementById('pfIndicator');
-      if (pf < config.lowPF) {
-        indicator.setAttribute('class', 'status-alarm');
-      } else if (pf < 0.95) {
-        indicator.setAttribute('class', 'status-warning');
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-      }
-    }
+  // Update energy (convert to MWh if >= 1000 kWh)
+  const energyDisplay = document.querySelector('#energyDisplay .unit-text');
+  if (_pn_energy >= 1000) {
+    energyValue.textContent = (_pn_energy / 1000).toFixed(2);
+    energyDisplay.textContent = 'MWh';
+  } else {
+    energyValue.textContent = _pn_energy.toFixed(2);
+    energyDisplay.textContent = 'kWh';
+  }
 
-    function updateFrequency(value) {
-let freq = parseFloat(value) || 0;
-      document.getElementById('freqValue').textContent = freq.toFixed(1);
-    }
+  // Update demand bar
+  demandValue.textContent = Math.round(_pn_demand) + ' kW';
+  const demandWidth = Math.min((_pn_demand / _pn_maxPower) * 340, 340);
+  demandBar.setAttribute('width', demandWidth);
 
-    function updateEnergy(value) {
-let energy = parseFloat(value) || 0;
-      if (energy >= 1000) {
-        document.getElementById('energyValue').textContent = (energy / 1000).toFixed(2);
-        document.querySelector('#energyDisplay .unit-text').textContent = 'MWh';
-      } else {
-        document.getElementById('energyValue').textContent = energy.toFixed(2);
-        document.querySelector('#energyDisplay .unit-text').textContent = 'kWh';
-      }
-    }
+  // Update status indicator
+  if (_pn_alarm === 1) {
+    statusIndicator.setAttribute('class', 'status-alarm');
+  } else {
+    statusIndicator.setAttribute('class', 'status-ok');
+  }
+}
 
-    function updateDemand(value) {
-let demand = parseFloat(value) || 0;
-let maxDemand = config.maxPower;
+function putValue(id, value) {
+  const numValue = Number(value) || 0;
 
-      document.getElementById('demandValue').textContent = demand.toFixed(0) + ' kW';
-let width = Math.min((demand / maxDemand) * 340, 340);
-      document.getElementById('demandBar').setAttribute('width', width);
-    }
+  if (id === '_pn_power') {
+    _pn_power = numValue;
+  } else if (id === '_pn_voltage') {
+    _pn_voltage = numValue;
+  } else if (id === '_pn_current') {
+    _pn_current = numValue;
+  } else if (id === '_pn_powerFactor') {
+    _pn_powerFactor = numValue;
+  } else if (id === '_pn_frequency') {
+    _pn_frequency = numValue;
+  } else if (id === '_pn_energy') {
+    _pn_energy = numValue;
+  } else if (id === '_pn_demand') {
+    _pn_demand = numValue;
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = numValue;
+  } else if (id === '_pn_maxPower') {
+    _pn_maxPower = numValue;
+  }
 
-    function updateAlarmStatus(value) {
-let alarm = Boolean(value);
-let indicator = document.getElementById('statusIndicator');
-
-      if (alarm) {
-        indicator.setAttribute('class', 'status-alarm');
-      } else {
-        indicator.setAttribute('class', 'status-ok');
-      }
-    }
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      // For FUXA integration
-      window.updateValues = updateValues;
-    }
+  update();
+}
 
 init();
 ]]></script>

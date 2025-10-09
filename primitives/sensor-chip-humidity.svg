@@ -29,10 +29,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_humidity = 55;
-let _pn_highAlarm = 70;
-let _pn_lowAlarm = 30;
-let _pn_alarmState = 0;
+let _pn_humidity = 55;       // Relative humidity percentage (0-100%)
+let _pn_highAlarm = 70;      // High humidity alarm setpoint
+let _pn_lowAlarm = 30;       // Low humidity alarm setpoint
+let _pn_alarmState = 0;      // Alarm state: 0=normal, 1=alarm
 //!export-end
 
 function init() {

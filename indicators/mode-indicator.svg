@@ -68,153 +68,29 @@
       var modeText = document.getElementById('modeText');
       var modeSubtext = document.getElementById('modeSubtext');
       var iconPath = document.getElementById('iconPath');
-      var statusDots = document.getElementById('statusDots');
-      var dot1 = document.getElementById('dot1');
-      var dot2 = document.getElementById('dot2');
-      var dot3 = document.getElementById('dot3');
+  <script><![CDATA[
+//!export-start
+let _pn_mode = 2;        // Mode: 0=Off, 1=Heat, 2=Cool, 3=Auto
+let _ps_modeText = "Cooling"; // Mode text
+//!export-end
 
-      // Configuration
-      var config = {
-        mode: 0, // 0=auto, 1=manual, 2=off, 3=error, 4=maintenance, 5=standby
-        showStatus: true
-      };
+function init() { update(); }
 
-      // Mode definitions
-      var modes = {
-        0: {
-          name: 'AUTO',
-          subtext: 'Automatic Operation',
-          class: 'mode-auto',
-          color: '#4caf50',
-          icon: 'M 0,-20 L 5,-18 L 7,-23 L 12,-21 L 10,-16 L 15,-14 L 13,-9 L 18,-7 L 16,-2 L 20,0 L 16,2 L 18,7 L 13,9 L 15,14 L 10,16 L 12,21 L 7,23 L 5,18 L 0,20 L -5,18 L -7,23 L -12,21 L -10,16 L -15,14 L -13,9 L -18,7 L -16,2 L -20,0 L -16,-2 L -18,-7 L -13,-9 L -15,-14 L -10,-16 L -12,-21 L -7,-23 L -5,-18 Z M 0,-12 A 12,12 0 1,1 0,12 A 12,12 0 1,1 0,-12',
-          animate: true
-        },
-        1: {
-          name: 'MANUAL',
-          subtext: 'Manual Control',
-          class: 'mode-manual',
-          color: '#2196f3',
-          icon: 'M -8,-15 L -8,0 L -15,0 L 0,15 L 15,0 L 8,0 L 8,-15 Z M -10,-20 L -10,-17 L 10,-17 L 10,-20 Z',
-          animate: false
-        },
-        2: {
-          name: 'OFF',
-          subtext: 'System Disabled',
-          class: 'mode-off',
-          color: '#757575',
-          icon: 'M -15,-15 L 15,15 M 15,-15 L -15,15 M 0,-20 A 20,20 0 1,1 0,20 A 20,20 0 1,1 0,-20',
-          animate: false
-        },
-        3: {
-          name: 'ERROR',
-          subtext: 'Fault Condition',
-          class: 'mode-error',
-          color: '#f44336',
-          icon: 'M -3,-20 L 3,-20 L 3,-5 L -3,-5 Z M 0,0 A 4,4 0 1,1 0,8 A 4,4 0 1,1 0,0 M 0,-15 L -15,18 L 15,18 Z',
-          animate: true
-        },
-        4: {
-          name: 'MAINT',
-          subtext: 'Maintenance Mode',
-          class: 'mode-maintenance',
-          color: '#ff9800',
-          icon: 'M -5,-15 L -5,-5 L -15,-5 L -15,5 L -5,5 L -5,15 L 5,15 L 5,5 L 15,5 L 15,-5 L 5,-5 L 5,-15 Z M -18,-8 L -18,-2 L -12,-2 L -12,-8 Z',
-          animate: false
-        },
-        5: {
-          name: 'STANDBY',
-          subtext: 'Ready to Start',
-          class: 'mode-standby',
-          color: '#9c27b0',
-          icon: 'M 0,-20 A 20,20 0 1,1 0,20 A 20,20 0 1,1 0,-20 M 0,-15 A 15,15 0 1,1 0,15 A 15,15 0 1,1 0,-15 M -2,-20 L -2,20 M 2,-20 L 2,20',
-          animate: true
-        }
-      };
+function update() {
+  const modeText = document.getElementById('modeText');
+  const indicator = document.getElementById('modeIndicator');
+  if (!modeText) return;
+  modeText.textContent = _ps_modeText;
+  const colors = ['#718096', '#f56565', '#4299e1', '#48bb78'];
+  if (indicator) indicator.setAttribute('fill', colors[_pn_mode] || colors[0]);
+}
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
+function putValue(id, value) {
+  if (id === '_pn_mode') _pn_mode = Number(value) || 0;
+  else if (id === '_ps_modeText') _ps_modeText = String(value);
+  update();
+}
 
-        // Handle string mode names or numeric values
-        if (typeof value === 'string') {
-          value = value.toUpperCase();
-          for (var key in modes) {
-            if (modes[key].name === value) {
-              config.mode = parseInt(key);
-              break;
-            }
-          }
-        } else {
-          config.mode = parseInt(value);
-        }
-
-        if (config.mode < 0) config.mode = 0;
-        if (config.mode > 5) config.mode = 5;
-        updateMode();
-      };
-
-      svg.setOptions = function(options) {
-        if (options.showStatus !== undefined) {
-          config.showStatus = options.showStatus;
-          statusDots.setAttribute('opacity', config.showStatus ? '1' : '0');
-        }
-        updateMode();
-      };
-
-      function updateMode() {
-        var mode = modes[config.mode];
-
-        // Update container color
-        modeContainer.setAttribute('class', 'mode-container ' + mode.class);
-
-        // Update text
-        modeText.textContent = mode.name;
-        modeSubtext.textContent = mode.subtext;
-
-        // Update icon
-        iconPath.setAttribute('d', mode.icon);
-
-        // Update status dots
-        if (config.showStatus) {
-          dot1.setAttribute('fill', mode.color);
-          dot2.setAttribute('fill', mode.color);
-          dot3.setAttribute('fill', mode.color);
-
-          // Enable/disable animation based on mode
-          if (mode.animate) {
-            enableDotAnimation();
-          } else {
-            disableDotAnimation();
-          }
-        }
-      }
-
-      function enableDotAnimation() {
-        var animations = statusDots.querySelectorAll('animate');
-        for (var i = 0; i < animations.length; i++) {
-          animations[i].beginElement();
-        }
-      }
-
-      function disableDotAnimation() {
-        dot1.setAttribute('opacity', '1');
-        dot2.setAttribute('opacity', '1');
-        dot3.setAttribute('opacity', '1');
-      }
-
-      // Initialize
-      updateMode();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return config.mode;
-      };
-
-      // Expose mode name
-      svg.getModeName = function() {
-        return modes[config.mode].name;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

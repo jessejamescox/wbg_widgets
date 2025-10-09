@@ -206,176 +206,189 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_totalTemp = 0;
-let _pn_totalOcc = 0;
-let _pn_tempCount = 0;
-let _pn_activeVavs = 0;
+let _ps_zoneName = "Office Zone - 3rd Floor"; // Zone name
+let _pn_avgTemp = 72;                          // Average temperature (°F)
+let _pn_totalOccupancy = 24;                   // Total occupancy count
+let _pn_maxOccupancy = 30;                     // Maximum occupancy
+let _pn_vavActive = 6;                         // Number of active VAV boxes
+let _pn_temp1 = 72;                            // Space 1 temperature (°F)
+let _pn_occ1 = 3;                              // Space 1 occupancy
+let _pn_temp2 = 70;                            // Space 2 temperature (°F)
+let _pn_occ2 = 2;                              // Space 2 occupancy
+let _pn_temp3 = 74;                            // Space 3 temperature (°F)
+let _pn_occ3 = 5;                              // Space 3 occupancy
+let _pn_temp4 = 71;                            // Space 4 temperature (°F)
+let _pn_occ4 = 8;                              // Space 4 occupancy
+let _pn_temp5 = 69;                            // Space 5 temperature (°F)
+let _pn_occ5 = 4;                              // Space 5 occupancy
+let _pn_temp6 = 73;                            // Space 6 temperature (°F)
+let _pn_occ6 = 2;                              // Space 6 occupancy
+let _pn_temp7 = 65;                            // Space 7 temperature (°F)
+let _pn_occ7 = 0;                              // Space 7 occupancy
+let _pn_vav1Damper = 65;                       // VAV 1 damper position (%)
+let _pn_vav1Mode = 2;                          // VAV 1 mode: 0=off, 1=heating, 2=cooling
+let _pn_vav2Damper = 45;                       // VAV 2 damper position (%)
+let _pn_vav2Mode = 2;                          // VAV 2 mode
+let _pn_vav3Damper = 30;                       // VAV 3 damper position (%)
+let _pn_vav3Mode = 1;                          // VAV 3 mode
+let _pn_vav4Damper = 55;                       // VAV 4 damper position (%)
+let _pn_vav4Mode = 2;                          // VAV 4 mode
+let _pn_vav5Damper = 40;                       // VAV 5 damper position (%)
+let _pn_vav5Mode = 2;                          // VAV 5 mode
+let _pn_vav6Damper = 85;                       // VAV 6 damper position (%)
+let _pn_vav6Mode = 2;                          // VAV 6 mode
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Variable Bindings
-let variables = {
-        zoneName: 'office_zone_name',
-        spaces: [
-          { temp: 'office_space1_temp', occ: 'office_space1_occ', name: 'office_space1_name' },
-          { temp: 'office_space2_temp', occ: 'office_space2_occ', name: 'office_space2_name' },
-          { temp: 'office_space3_temp', occ: 'office_space3_occ', name: 'office_space3_name' },
-          { temp: 'office_space4_temp', occ: 'office_space4_occ', name: 'office_space4_name' },
-          { temp: 'office_space5_temp', occ: 'office_space5_occ', name: 'office_space5_name' },
-          { temp: 'office_space6_temp', occ: 'office_space6_occ', name: 'office_space6_name' },
-          { temp: 'office_space7_temp', occ: 'office_space7_occ', name: 'office_space7_name' }
-        ],
-        vavBoxes: [
-          { status: 'office_vav1_status', damper: 'office_vav1_damper', mode: 'office_vav1_mode' },
-          { status: 'office_vav2_status', damper: 'office_vav2_damper', mode: 'office_vav2_mode' },
-          { status: 'office_vav3_status', damper: 'office_vav3_damper', mode: 'office_vav3_mode' },
-          { status: 'office_vav4_status', damper: 'office_vav4_damper', mode: 'office_vav4_mode' },
-          { status: 'office_vav5_status', damper: 'office_vav5_damper', mode: 'office_vav5_mode' },
-          { status: 'office_vav6_status', damper: 'office_vav6_damper', mode: 'office_vav6_mode' }
-        ]
-      };
+function getTempClass(temp) {
+  if (temp < 68) return 'temp-cold';
+  if (temp < 70) return 'temp-cool';
+  if (temp < 74) return 'temp-neutral';
+  if (temp < 76) return 'temp-warm';
+  return 'temp-hot';
+}
 
-      function getTempClass(temp) {
-        if (temp < 68) return 'temp-cold';
-        if (temp < 70) return 'temp-cool';
-        if (temp < 74) return 'temp-neutral';
-        if (temp < 76) return 'temp-warm';
-        return 'temp-hot';
+function update() {
+  const zoneNameElem = document.getElementById('zoneName');
+  const avgTempElem = document.getElementById('avgTemp');
+  const totalOccupancyElem = document.getElementById('totalOccupancy');
+  const vavStatusElem = document.getElementById('vavStatus');
+
+  if (!zoneNameElem) return;
+
+  // Update zone name
+  zoneNameElem.textContent = _ps_zoneName;
+
+  // Update average temperature
+  avgTempElem.textContent = Math.round(_pn_avgTemp) + '°F';
+
+  // Update total occupancy
+  totalOccupancyElem.textContent = _pn_totalOccupancy + '/' + _pn_maxOccupancy;
+
+  // Update VAV status
+  vavStatusElem.textContent = _pn_vavActive + ' Active';
+
+  // Update space temperatures and occupancy
+  const spaces = [
+    { temp: _pn_temp1, occ: _pn_occ1, num: 1 },
+    { temp: _pn_temp2, occ: _pn_occ2, num: 2 },
+    { temp: _pn_temp3, occ: _pn_occ3, num: 3 },
+    { temp: _pn_temp4, occ: _pn_occ4, num: 4 },
+    { temp: _pn_temp5, occ: _pn_occ5, num: 5 },
+    { temp: _pn_temp6, occ: _pn_occ6, num: 6 },
+    { temp: _pn_temp7, occ: _pn_occ7, num: 7 }
+  ];
+
+  spaces.forEach(function(space) {
+    const tempElem = document.getElementById('temp' + space.num);
+    const occElem = document.getElementById('occ' + space.num);
+    const spaceRect = document.querySelector('#space' + space.num + ' rect');
+
+    if (tempElem) tempElem.textContent = Math.round(space.temp) + '°F';
+    if (occElem) occElem.textContent = space.occ + ' people';
+    if (spaceRect) spaceRect.setAttribute('class', getTempClass(space.temp));
+  });
+
+  // Update VAV boxes
+  const vavs = [
+    { damper: _pn_vav1Damper, mode: _pn_vav1Mode, num: 1 },
+    { damper: _pn_vav2Damper, mode: _pn_vav2Mode, num: 2 },
+    { damper: _pn_vav3Damper, mode: _pn_vav3Mode, num: 3 },
+    { damper: _pn_vav4Damper, mode: _pn_vav4Mode, num: 4 },
+    { damper: _pn_vav5Damper, mode: _pn_vav5Mode, num: 5 },
+    { damper: _pn_vav6Damper, mode: _pn_vav6Mode, num: 6 }
+  ];
+
+  vavs.forEach(function(vav) {
+    const modeText = ['Off', 'Heating', 'Cooling'][vav.mode] || 'Unknown';
+    const statusText = modeText + ' - ' + Math.round(vav.damper) + '%';
+    const statusElem = document.getElementById('vav' + vav.num + 'Status');
+    const indicator = document.getElementById('vav' + vav.num + 'Indicator');
+
+    if (statusElem) statusElem.textContent = statusText;
+    if (indicator) {
+      if (vav.mode === 0) {
+        indicator.setAttribute('fill', '#718096');
+      } else if (vav.mode === 1) {
+        indicator.setAttribute('fill', '#f56565');
+      } else if (vav.mode === 2) {
+        indicator.setAttribute('fill', '#48bb78');
       }
-
-      function updateWidget(data) {
-        try {
-          // Update zone name
-          if (data[variables.zoneName] !== undefined) {
-            document.getElementById('zoneName').textContent = data[variables.zoneName];
-          }
-
-          // Update spaces
-
-          variables.spaces.forEach(function(space, index) {
-let spaceNum = index + 1;
-
-            if (data[space.temp] !== undefined) {
-let temp = parseFloat(data[space.temp]);
-              _pn_totalTemp += temp;
-              _pn_tempCount++;
-const tempElem = document.getElementById('temp' + spaceNum);
-              tempElem.textContent = Math.round(temp) + '°F';
-
-              // Update temperature color
-let spaceRect = document.querySelector('#space' + spaceNum + ' rect');
-              spaceRect.setAttribute('class', getTempClass(temp));
-            }
-
-            if (data[space.occ] !== undefined) {
-let occ = parseInt(data[space.occ]);
-              _pn_totalOcc += occ;
-              document.getElementById('occ' + spaceNum).textContent = occ + ' people';
-            }
-          });
-
-          // Update average temperature
-          if (_pn_tempCount > 0) {
-let avgTemp = Math.round(_pn_totalTemp / _pn_tempCount);
-            document.getElementById('avgTemp').textContent = avgTemp + '°F';
-          }
-
-          // Update total occupancy
-          document.getElementById('totalOccupancy').textContent = _pn_totalOcc + '/30';
-
-          // Update VAV boxes
-
-          variables.vavBoxes.forEach(function(vav, index) {
-let vavNum = index + 1;
-
-            if (data[vav.mode] !== undefined && data[vav.damper] !== undefined) {
-let mode = data[vav.mode]; // 0=off, 1=heating, 2=cooling
-let damper = parseFloat(data[vav.damper]);
-let modeText = ['Off', 'Heating', 'Cooling'][mode] || 'Unknown';
-let statusText = modeText + ' - ' + Math.round(damper) + '%';
-
-              document.getElementById('vav' + vavNum + 'Status').textContent = statusText;
-
-              // Update indicator color
-const indicator = document.getElementById('vav' + vavNum + 'Indicator');
-              if (mode === 0) {
-                indicator.setAttribute('fill', '#718096'); // Gray for off
-              } else if (mode === 1) {
-                indicator.setAttribute('fill', '#f56565'); // Red for heating
-                _pn_activeVavs++;
-              } else if (mode === 2) {
-                indicator.setAttribute('fill', '#48bb78'); // Green for cooling
-                _pn_activeVavs++;
-              }
-            }
-          });
-
-          // Update VAV status summary
-          document.getElementById('vavStatus').textContent = _pn_activeVavs + ' Active';
-
-        } catch (error) {
-          console.error('Office Zone update error:', error);
-        }
-      }
-
-      // Space click handlers
-      for (var i = 1; i <= 7; i++) {
-        (function(spaceNum) {
-const spaceElem = document.getElementById('space' + spaceNum);
-          if (spaceElem) {
-            spaceElem.addEventListener('click', function() {
-              if (window.fuxa && window.fuxa.navigateToSpace) {
-                window.fuxa.navigateToSpace('space' + spaceNum);
-              } else {
-                console.log('Clicked space ' + spaceNum);
-              }
-            });
-          }
-        })(i);
-      }
-
-      // Register with FUXA
-      if (window.fuxa) {
-let allVars = [variables.zoneName];
-        variables.spaces.forEach(function(s) {
-          allVars.push(s.temp, s.occ, s.name);
-        });
-        variables.vavBoxes.forEach(function(v) {
-          allVars.push(v.status, v.damper, v.mode);
-        });
-
-        window.fuxa.registerWidget({
-          id: 'office-zone',
-          variables: allVars,
-          update: updateWidget
-        });
-      }
-
-      // Make update function globally accessible
-      window.updateOfficeZone = updateWidget;
-    })();
+    }
+  });
+}
 
 function putValue(id, value) {
-  if (id === '_pn_totalTemp') {
-    _pn_totalTemp = Number(value) || 0;
-    update();
-  } else if (id === '_pn_totalOcc') {
-    _pn_totalOcc = Number(value) || 0;
-    update();
-  } else if (id === '_pn_tempCount') {
-    _pn_tempCount = Number(value) || 0;
-    update();
-  } else if (id === '_pn_activeVavs') {
-    _pn_activeVavs = Number(value) || 0;
-    update();
+  if (id === '_ps_zoneName') {
+    _ps_zoneName = String(value);
+  } else if (id === '_pn_avgTemp') {
+    _pn_avgTemp = Number(value) || 0;
+  } else if (id === '_pn_totalOccupancy') {
+    _pn_totalOccupancy = Number(value) || 0;
+  } else if (id === '_pn_maxOccupancy') {
+    _pn_maxOccupancy = Number(value) || 0;
+  } else if (id === '_pn_vavActive') {
+    _pn_vavActive = Number(value) || 0;
+  } else if (id === '_pn_temp1') {
+    _pn_temp1 = Number(value) || 0;
+  } else if (id === '_pn_occ1') {
+    _pn_occ1 = Number(value) || 0;
+  } else if (id === '_pn_temp2') {
+    _pn_temp2 = Number(value) || 0;
+  } else if (id === '_pn_occ2') {
+    _pn_occ2 = Number(value) || 0;
+  } else if (id === '_pn_temp3') {
+    _pn_temp3 = Number(value) || 0;
+  } else if (id === '_pn_occ3') {
+    _pn_occ3 = Number(value) || 0;
+  } else if (id === '_pn_temp4') {
+    _pn_temp4 = Number(value) || 0;
+  } else if (id === '_pn_occ4') {
+    _pn_occ4 = Number(value) || 0;
+  } else if (id === '_pn_temp5') {
+    _pn_temp5 = Number(value) || 0;
+  } else if (id === '_pn_occ5') {
+    _pn_occ5 = Number(value) || 0;
+  } else if (id === '_pn_temp6') {
+    _pn_temp6 = Number(value) || 0;
+  } else if (id === '_pn_occ6') {
+    _pn_occ6 = Number(value) || 0;
+  } else if (id === '_pn_temp7') {
+    _pn_temp7 = Number(value) || 0;
+  } else if (id === '_pn_occ7') {
+    _pn_occ7 = Number(value) || 0;
+  } else if (id === '_pn_vav1Damper') {
+    _pn_vav1Damper = Number(value) || 0;
+  } else if (id === '_pn_vav1Mode') {
+    _pn_vav1Mode = Number(value) || 0;
+  } else if (id === '_pn_vav2Damper') {
+    _pn_vav2Damper = Number(value) || 0;
+  } else if (id === '_pn_vav2Mode') {
+    _pn_vav2Mode = Number(value) || 0;
+  } else if (id === '_pn_vav3Damper') {
+    _pn_vav3Damper = Number(value) || 0;
+  } else if (id === '_pn_vav3Mode') {
+    _pn_vav3Mode = Number(value) || 0;
+  } else if (id === '_pn_vav4Damper') {
+    _pn_vav4Damper = Number(value) || 0;
+  } else if (id === '_pn_vav4Mode') {
+    _pn_vav4Mode = Number(value) || 0;
+  } else if (id === '_pn_vav5Damper') {
+    _pn_vav5Damper = Number(value) || 0;
+  } else if (id === '_pn_vav5Mode') {
+    _pn_vav5Mode = Number(value) || 0;
+  } else if (id === '_pn_vav6Damper') {
+    _pn_vav6Damper = Number(value) || 0;
+  } else if (id === '_pn_vav6Mode') {
+    _pn_vav6Mode = Number(value) || 0;
   }
+
+  update();
 }
 
 init();
-
 ]]></script>
 </svg>

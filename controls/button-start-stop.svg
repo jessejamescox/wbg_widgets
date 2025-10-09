@@ -54,94 +54,39 @@
 
   <script><![CDATA[
 //!export-start
-let _pb_isRunning = false;
-let _ps_tagId = '';
-let _ps_cmdTagId = '';
+let _pn_isRunning = 0;  // Running state: 0=stopped, 1=running
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Integration Variables
+function update() {
+  const btnRect = document.getElementById('btnRect');
+  const btnText = document.getElementById('btnText');
+  const statusLED = document.getElementById('statusLED');
 
-      // DOM Elements
-const btnRect = document.getElementById('btnRect');
-const btnText = document.getElementById('btnText');
-const statusLED = document.getElementById('statusLED');
-const btnGroup = document.getElementById('btnGroup');
+  if (!btnRect) return;
 
-      // Update visual state
-      function updateVisuals() {
-        if (_pb_isRunning) {
-          btnRect.classList.add('running');
-          btnText.textContent = 'STOP';
-          statusLED.setAttribute('fill', '#4CAF50');
-          statusLED.classList.add('running');
-        } else {
-          btnRect.classList.remove('running');
-          btnText.textContent = 'START';
-          statusLED.setAttribute('fill', '#999');
-          statusLED.classList.remove('running');
-        }
-      }
-
-      // Click handler - momentary action
-      btnGroup.addEventListener('mousedown', function(evt) {
-        evt.preventDefault();
-
-        // Send momentary pulse command
-        if (typeof GAuxy !== 'undefined' && _ps_cmdTagId) {
-let command = _pb_isRunning ? 0 : 1; // 1 for START, 0 for STOP
-          GAuxy.setVariable(_ps_cmdTagId, command);
-
-          // Reset command after 200ms (momentary)
-          setTimeout(function() {
-            if (typeof GAuxy !== 'undefined' && _ps_cmdTagId) {
-              GAuxy.setVariable(_ps_cmdTagId, -1); // Reset command
-            }
-          }, 200);
-        }
-      });
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-        if (sigid === _ps_tagId) {
-          _pb_isRunning = (value > 0);
-          updateVisuals();
-        }
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'variableId') return _ps_tagId;
-        if (name === 'cmdVariableId') return _ps_cmdTagId;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'variableId') {
-          _ps_tagId = value;
-        } else if (name === 'cmdVariableId') {
-          _ps_cmdTagId = value;
-        }
-      };
-
-      // Initialize
-      updateVisuals();
-    })();
+  if (_pn_isRunning) {
+    btnRect.classList.add('running');
+    btnText.textContent = 'STOP';
+    statusLED.setAttribute('fill', '#4CAF50');
+    statusLED.classList.add('running');
+  } else {
+    btnRect.classList.remove('running');
+    btnText.textContent = 'START';
+    statusLED.setAttribute('fill', '#999');
+    statusLED.classList.remove('running');
+  }
+}
 
 function putValue(id, value) {
-  if (id === '_pb_isRunning') {
-    _pb_isRunning = !!value;
-    update();
-  } else if (id === '_ps_tagId') {
-    _ps_tagId = String(value) || "";
-    update();
-  } else if (id === '_ps_cmdTagId') {
-    _ps_cmdTagId = String(value) || "";
-    update();
+  if (id === '_pn_isRunning') {
+    _pn_isRunning = Number(value) || 0;
   }
+
+  update();
 }
 
 init();

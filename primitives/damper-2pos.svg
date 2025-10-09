@@ -26,8 +26,8 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_position = 0;
-let _pn_feedback = 0;
+let _pn_position = 0;    // Commanded damper position: 0=closed, 1=open
+let _pn_feedback = 0;    // Actual position feedback: 0=closed, 1=open
 //!export-end
 
 function init() {

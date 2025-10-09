@@ -119,253 +119,40 @@
   <g id="info-panel">
     <rect x="20" y="335" width="260" height="55" fill="#ffffff" stroke="#333" stroke-width="2" rx="5"/>
 
-    <!-- Charge Level -->
-    <text x="30" y="353" font-family="Arial" font-size="13" fill="#555">
-      Charge: <tspan id="charge-percent" font-weight="bold">75</tspan>%
-    </text>
-
-    <!-- Capacity -->
-    <text x="30" y="370" font-family="Arial" font-size="12" fill="#555">
-      Capacity: <tspan id="tank-capacity">500</tspan> gal
-    </text>
-
-    <!-- Status -->
-    <text x="150" y="385" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">
-      Status: <tspan id="tank-status" fill="#4caf50">CHARGING</tspan>
-    </text>
-  </g>
-
   <script><![CDATA[
 //!export-start
-let _pn_tankHeight = 204;
-let _pn_tankTop = 63;
-let _ps_status = 'IDLE';
-let _ps_statusColor = '#757575';
-let _pn_animOffset = 0;
+let _pn_level = 65;      // Tank level (%)
+let _pn_capacity = 1000; // Tank capacity (gallons)
+let _pn_temperature = 72; // Temperature (°F)
+let _ps_label = "Buffer Tank"; // Tank label
 //!export-end
 
-function init() {
+function init() { update(); }
+
+function update() {
+  const fillRect = document.getElementById('tankFill');
+  const levelText = document.getElementById('levelText');
+  const capacityText = document.getElementById('capacityText');
+  const tempText = document.getElementById('tempText');
+  const labelText = document.getElementById('tankLabel');
+  if (!fillRect) return;
+  const fillHeight = (_pn_level / 100) * 150;
+  fillRect.setAttribute('height', fillHeight);
+  fillRect.setAttribute('y', 150 - fillHeight);
+  if (levelText) levelText.textContent = _pn_level + '%';
+  if (capacityText) capacityText.textContent = Math.round(_pn_capacity * _pn_level / 100) + ' gal';
+  if (tempText) tempText.textContent = _pn_temperature + '°F';
+  if (labelText) labelText.textContent = _ps_label;
+}
+
+function putValue(id, value) {
+  if (id === '_pn_level') _pn_level = Number(value) || 0;
+  else if (id === '_pn_capacity') _pn_capacity = Number(value) || 0;
+  else if (id === '_pn_temperature') _pn_temperature = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
   update();
 }
 
-(function() {
-      // FUXA Interface
-let gaugeStatus = { id: 'buffer-tank', type: 'svg-ext' };
-
-      // Default values
-let settings = {
-        supplyTemp: 180,     // Supply temperature (°F)
-        returnTemp: 120,     // Return temperature (°F)
-        chargeLevel: 75,     // Charge level percentage (0-100)
-        capacity: 500,       // Tank capacity in gallons
-        hotThreshold: 160,   // Temperature considered hot
-        warmThreshold: 130,  // Temperature considered warm
-        coolThreshold: 100   // Temperature considered cool
-      };
-
-      // Initialize
-      if (window.svgData) {
-        gaugeStatus.onaction = function (data) {
-          // No actions for this widget
-        };
-
-        gaugeStatus.onsignal = function (signal) {
-          // Update based on FUXA signals
-          if (signal.id === 'supplyTemp' && signal.value !== undefined) {
-            settings.supplyTemp = parseFloat(signal.value);
-          }
-          if (signal.id === 'returnTemp' && signal.value !== undefined) {
-            settings.returnTemp = parseFloat(signal.value);
-          }
-          if (signal.id === 'chargeLevel' && signal.value !== undefined) {
-            settings.chargeLevel = parseFloat(signal.value);
-          }
-          if (signal.id === 'capacity' && signal.value !== undefined) {
-            settings.capacity = parseFloat(signal.value);
-          }
-          updateTank();
-        };
-
-        gaugeStatus.oninit = function (data) {
-          if (data) {
-            if (data.supplyTemp !== undefined) settings.supplyTemp = data.supplyTemp;
-            if (data.returnTemp !== undefined) settings.returnTemp = data.returnTemp;
-            if (data.chargeLevel !== undefined) settings.chargeLevel = data.chargeLevel;
-            if (data.capacity !== undefined) settings.capacity = data.capacity;
-          }
-          updateTank();
-        };
-
-        window.svgData.init(gaugeStatus);
-      }
-
-      function updateTank() {
-        // Constrain charge level
-let chargeLevel = Math.max(0, Math.min(100, settings.chargeLevel));
-
-        // Update temperature displays
-const supplyTempEl = document.getElementById('supply-temp');
-const returnTempEl = document.getElementById('return-temp');
-const deltaTempEl = document.getElementById('delta-temp');
-
-        if (supplyTempEl) {
-          supplyTempEl.textContent = settings.supplyTemp.toFixed(0);
-        }
-        if (returnTempEl) {
-          returnTempEl.textContent = settings.returnTemp.toFixed(0);
-        }
-let deltaT = settings.supplyTemp - settings.returnTemp;
-        if (deltaTempEl) {
-          deltaTempEl.textContent = deltaT.toFixed(0);
-        }
-
-        // Update stratification visualization
-let avgTemp = (settings.supplyTemp + settings.returnTemp) / 2;
-let tempRange = settings.supplyTemp - settings.returnTemp;
-
-        // Calculate layer heights based on charge level and temperatures
-
-        // Hot layer (top) - size based on supply temp and charge
-let hotHeight = Math.max(0, (chargeLevel / 100) * _pn_tankHeight * 0.3);
-let warmHeight = Math.max(0, (chargeLevel / 100) * _pn_tankHeight * 0.4);
-let coolHeight = _pn_tankHeight - hotHeight - warmHeight;
-const hotLayer = document.getElementById('hot-layer');
-const warmLayer = document.getElementById('warm-layer');
-const coolLayer = document.getElementById('cool-layer');
-
-        if (hotLayer) {
-          hotLayer.setAttribute('y', _pn_tankTop);
-          hotLayer.setAttribute('height', hotHeight);
-        }
-
-        if (warmLayer) {
-          warmLayer.setAttribute('y', _pn_tankTop + hotHeight);
-          warmLayer.setAttribute('height', warmHeight);
-        }
-
-        if (coolLayer) {
-          coolLayer.setAttribute('y', _pn_tankTop + hotHeight + warmHeight);
-          coolLayer.setAttribute('height', coolHeight);
-        }
-
-        // Update charge indicator
-const chargeFill = document.getElementById('charge-fill');
-        if (chargeFill) {
-let chargeHeight = (chargeLevel / 100) * 200;
-let chargeY = 265 - chargeHeight;
-          chargeFill.setAttribute('y', chargeY);
-          chargeFill.setAttribute('height', chargeHeight);
-
-          // Color based on charge level
-          if (chargeLevel >= 75) {
-            chargeFill.setAttribute('fill', '#4caf50');
-          } else if (chargeLevel >= 40) {
-            chargeFill.setAttribute('fill', '#ffa726');
-          } else {
-            chargeFill.setAttribute('fill', '#ff5252');
-          }
-        }
-
-        // Update charge percentage display
-const chargePercentEl = document.getElementById('charge-percent');
-        if (chargePercentEl) {
-          chargePercentEl.textContent = chargeLevel.toFixed(0);
-        }
-
-        // Update capacity display
-const capacityEl = document.getElementById('tank-capacity');
-        if (capacityEl) {
-          capacityEl.textContent = settings.capacity.toFixed(0);
-        }
-
-        // Determine _ps_status
-const tankStatus = document.getElementById('tank-_ps_status');
-
-        if (deltaT > 10) {
-          _ps_status = 'CHARGING';
-          _ps_statusColor = '#4caf50';
-        } else if (deltaT < -10) {
-          _ps_status = 'DISCHARGING';
-          _ps_statusColor = '#ff9800';
-        } else if (chargeLevel < 20) {
-          _ps_status = 'LOW CHARGE';
-          _ps_statusColor = '#ff5252';
-        } else {
-          _ps_status = 'STANDBY';
-          _ps_statusColor = '#2196f3';
-        }
-
-        if (tankStatus) {
-          tankStatus.textContent = _ps_status;
-          tankStatus.setAttribute('fill', _ps_statusColor);
-        }
-
-        // Animate supply/return connections based on delta T
-const supplyConnection = document.getElementById('supply-connection');
-const returnConnection = document.getElementById('return-connection');
-
-        if (deltaT > 5 && supplyConnection) {
-          supplyConnection.setAttribute('opacity', '1');
-        } else if (supplyConnection) {
-          supplyConnection.setAttribute('opacity', '0.5');
-        }
-
-        if (deltaT > 5 && returnConnection) {
-          returnConnection.setAttribute('opacity', '1');
-        } else if (returnConnection) {
-          returnConnection.setAttribute('opacity', '0.5');
-        }
-      }
-
-      // Initial update
-      updateTank();
-
-      // Animation for thermal movement
-
-      setInterval(function() {
-        _pn_animOffset += 0.02;
-let deltaT = settings.supplyTemp - settings.returnTemp;
-
-        if (deltaT > 5) {
-          // Animate layers slightly to show thermal movement
-const hotLayer = document.getElementById('hot-layer');
-const warmLayer = document.getElementById('warm-layer');
-const coolLayer = document.getElementById('cool-layer');
-let wave = Math.sin(_pn_animOffset) * 0.5;
-
-          if (hotLayer) {
-            hotLayer.setAttribute('opacity', 0.9 + wave * 0.05);
-          }
-          if (warmLayer) {
-            warmLayer.setAttribute('opacity', 0.85 + wave * 0.05);
-          }
-          if (coolLayer) {
-            coolLayer.setAttribute('opacity', 0.85 - wave * 0.05);
-          }
-        }
-      }, 50);
-    })();
-
-function putValue(id, value) {
-  if (id === '_pn_tankHeight') {
-    _pn_tankHeight = Number(value) || 0;
-    update();
-  } else if (id === '_pn_tankTop') {
-    _pn_tankTop = Number(value) || 0;
-    update();
-  } else if (id === '_ps_status') {
-    _ps_status = String(value) || "";
-    update();
-  } else if (id === '_ps_statusColor') {
-    _ps_statusColor = String(value) || "";
-    update();
-  } else if (id === '_pn_animOffset') {
-    _pn_animOffset = Number(value) || 0;
-    update();
-  }
-}
-
 init();
-
 ]]></script>
 </svg>

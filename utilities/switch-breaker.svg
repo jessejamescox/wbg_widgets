@@ -84,208 +84,131 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_currentRating = 100;
-let _pb_isOn = false;
-let _pb_isTripped = false;
+let _pn_status = 0;          // Status: 0=OFF, 1=ON
+let _pn_current = 0;         // Current (Amps)
+let _pn_rating = 100;        // Rating (Amps)
+let _pn_tripped = 0;         // Tripped: 0=normal, 1=tripped
+let _ps_name = "CB-001";     // Breaker name/ID
 //!export-end
 
 function init() {
   update();
 }
 
-// FUXA Variable Mappings
-let variables = {
-      status: 'breaker_status',           // boolean (true=ON, false=OFF)
-      current: 'breaker_current',         // Amps
-      rating: 'breaker_rating',           // Amps (max rating)
-      tripped: 'breaker_tripped',         // boolean
-      name: 'breaker_name',               // string
-      command: 'breaker_command'          // boolean (control)
-    };
+function update() {
+  const handle = document.getElementById('switchHandle');
+  const statusText = document.getElementById('statusText');
+  const contactLine = document.getElementById('contactLine');
+  const statusIndicator = document.getElementById('statusIndicator');
+  const tripIndicator = document.getElementById('tripIndicator');
+  const currentValue = document.getElementById('currentValue');
+  const ratingValue = document.getElementById('ratingValue');
+  const breakerName = document.getElementById('breakerName');
 
-    // Configuration
-let config = {
-      tripThreshold: 0.9,    // 90% of rating
-      warnThreshold: 0.75    // 75% of rating
-    };
+  if (!handle) return;
 
-    // Update function called by FUXA
-    function updateValues(tag, value) {
-      try {
-        switch(tag) {
-          case variables.status:
-            updateStatus(value);
-            break;
-          case variables.current:
-            updateCurrent(value);
-            break;
-          case variables.rating:
-            updateRating(value);
-            break;
-          case variables.tripped:
-            updateTripped(value);
-            break;
-          case variables.name:
-            updateName(value);
-            break;
-          case variables.command:
-            handleCommand(value);
-            break;
-        }
-      } catch(e) {
-        console.error('Error updating breaker:', e);
-      }
+  // Configuration
+  const tripThreshold = 0.9;   // 90% of rating
+  const warnThreshold = 0.75;  // 75% of rating
+
+  const isOn = _pn_status > 0;
+  const isTripped = _pn_tripped > 0;
+
+  // Update breaker name
+  breakerName.textContent = _ps_name;
+
+  // Update current display
+  currentValue.textContent = _pn_current.toFixed(1);
+  const loadPercent = _pn_current / _pn_rating;
+
+  if (loadPercent >= tripThreshold) {
+    currentValue.setAttribute('fill', '#ff0000');
+  } else if (loadPercent >= warnThreshold) {
+    currentValue.setAttribute('fill', '#ffaa00');
+  } else {
+    currentValue.setAttribute('fill', '#ffffff');
+  }
+
+  // Update rating display
+  ratingValue.textContent = _pn_rating.toFixed(0);
+
+  // Update trip indicator
+  if (isTripped) {
+    tripIndicator.setAttribute('class', 'status-alarm');
+    statusIndicator.setAttribute('class', 'status-alarm');
+    tripIndicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+  } else {
+    tripIndicator.setAttribute('class', 'status-off');
+    tripIndicator.innerHTML = '';
+
+    if (isOn) {
+      statusIndicator.setAttribute('class', 'status-ok');
+    } else {
+      statusIndicator.setAttribute('class', 'status-off');
+    }
+  }
+
+  // Update breaker visualization
+  if (isOn && !isTripped) {
+    // ON position
+    handle.setAttribute('transform', 'rotate(-30)');
+    statusText.textContent = 'ON';
+    statusText.setAttribute('fill', '#00ff00');
+    contactLine.setAttribute('class', 'contact-closed');
+    statusIndicator.setAttribute('class', 'status-ok');
+
+    animateSwitch(handle, -30);
+  } else {
+    // OFF position
+    handle.setAttribute('transform', 'rotate(30)');
+    statusText.textContent = isTripped ? 'TRIPPED' : 'OFF';
+    statusText.setAttribute('fill', isTripped ? '#ff0000' : '#666666');
+    contactLine.setAttribute('class', 'contact-open');
+
+    if (!isTripped) {
+      statusIndicator.setAttribute('class', 'status-off');
     }
 
-    function updateStatus(value) {
-      _pb_isOn = Boolean(value);
-      updateBreakerVisualization();
-    }
-
-    function updateCurrent(value) {
-let current = parseFloat(value) || 0;
-      document.getElementById('currentValue').textContent = current.toFixed(1);
-
-      // Check for overload
-let loadPercent = current / _pn_currentRating;
-const valueText = document.getElementById('currentValue');
-
-      if (loadPercent >= config.tripThreshold) {
-        valueText.setAttribute('fill', '#ff0000');
-      } else if (loadPercent >= config.warnThreshold) {
-        valueText.setAttribute('fill', '#ffaa00');
-      } else {
-        valueText.setAttribute('fill', '#ffffff');
-      }
-
-      // Auto-trip if overload and breaker is on
-      if (_pb_isOn && loadPercent >= 1.0 && !_pb_isTripped) {
-        updateTripped(true);
-      }
-    }
-
-    function updateRating(value) {
-      _pn_currentRating = parseFloat(value) || 100;
-      document.getElementById('ratingValue').textContent = _pn_currentRating.toFixed(0);
-    }
-
-    function updateTripped(value) {
-      _pb_isTripped = Boolean(value);
-const tripIndicator = document.getElementById('tripIndicator');
-const statusIndicator = document.getElementById('statusIndicator');
-
-      if (_pb_isTripped) {
-        tripIndicator.setAttribute('class', 'status-alarm');
-        statusIndicator.setAttribute('class', 'status-alarm');
-
-        // Add pulsing animation
-        tripIndicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
-
-        // Force breaker off
-        _pb_isOn = false;
-        updateBreakerVisualization();
-      } else {
-        tripIndicator.setAttribute('class', 'status-off');
-        tripIndicator.innerHTML = '';
-
-        if (_pb_isOn) {
-          statusIndicator.setAttribute('class', 'status-ok');
-        } else {
-          statusIndicator.setAttribute('class', 'status-off');
-        }
-      }
-    }
-
-    function updateName(value) {
-      document.getElementById('breakerName').textContent = value || 'CB-001';
-    }
-
-    function handleCommand(value) {
-let command = Boolean(value);
-
-      // Cannot close if tripped
-      if (command && _pb_isTripped) {
-        console.warn('Cannot close breaker - TRIPPED');
-        return;
-      }
-
-      updateStatus(command);
-    }
-
-    function updateBreakerVisualization() {
-const handle = document.getElementById('switchHandle');
-const statusText = document.getElementById('statusText');
-const contactLine = document.getElementById('contactLine');
-const statusIndicator = document.getElementById('statusIndicator');
-
-      if (_pb_isOn && !_pb_isTripped) {
-        // ON position
-        handle.setAttribute('transform', 'rotate(-30)');
-        statusText.textContent = 'ON';
-        statusText.setAttribute('fill', '#00ff00');
-        contactLine.setAttribute('class', 'contact-closed');
-        statusIndicator.setAttribute('class', 'status-ok');
-
-        // Animate switch
-        animateSwitch(handle, -30);
-      } else {
-        // OFF position
-        handle.setAttribute('transform', 'rotate(30)');
-        statusText.textContent = _pb_isTripped ? 'TRIPPED' : 'OFF';
-        statusText.setAttribute('fill', _pb_isTripped ? '#ff0000' : '#666666');
-        contactLine.setAttribute('class', 'contact-open');
-
-        if (!_pb_isTripped) {
-          statusIndicator.setAttribute('class', 'status-off');
-        }
-
-        // Animate switch
-        animateSwitch(handle, 30);
-      }
-    }
-
-    function animateSwitch(element, toAngle) {
-      // Simple rotation animation
-let animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
-      animateTransform.setAttribute('attributeName', 'transform');
-      animateTransform.setAttribute('type', 'rotate');
-      animateTransform.setAttribute('from', '0 0 0');
-      animateTransform.setAttribute('to', toAngle + ' 0 0');
-      animateTransform.setAttribute('dur', '0.3s');
-      animateTransform.setAttribute('fill', 'freeze');
-
-      // Remove old animations
-let oldAnims = element.getElementsByTagName('animateTransform');
-      while (oldAnims.length > 0) {
-        element.removeChild(oldAnims[0]);
-      }
-
-      element.appendChild(animateTransform);
-      animateTransform.beginElement();
-    }
-
-    // Initialize
-    if (typeof window !== 'undefined') {
-      window.updateValues = updateValues;
-    }
-
-    // Initialize display
-    updateBreakerVisualization();
-
-function putValue(id, value) {
-  if (id === '_pn_currentRating') {
-    _pn_currentRating = Number(value) || 0;
-    update();
-  } else if (id === '_pb_isOn') {
-    _pb_isOn = !!value;
-    update();
-  } else if (id === '_pb_isTripped') {
-    _pb_isTripped = !!value;
-    update();
+    animateSwitch(handle, 30);
   }
 }
 
-init();
+function animateSwitch(element, toAngle) {
+  const animateTransform = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');
+  animateTransform.setAttribute('attributeName', 'transform');
+  animateTransform.setAttribute('type', 'rotate');
+  animateTransform.setAttribute('from', '0 0 0');
+  animateTransform.setAttribute('to', toAngle + ' 0 0');
+  animateTransform.setAttribute('dur', '0.3s');
+  animateTransform.setAttribute('fill', 'freeze');
 
+  let oldAnims = element.getElementsByTagName('animateTransform');
+  while (oldAnims.length > 0) {
+    element.removeChild(oldAnims[0]);
+  }
+
+  element.appendChild(animateTransform);
+  animateTransform.beginElement();
+}
+
+function putValue(id, value) {
+  const num = Number(value) || 0;
+
+  if (id === '_pn_status') {
+    _pn_status = num;
+  } else if (id === '_pn_current') {
+    _pn_current = num;
+  } else if (id === '_pn_rating') {
+    _pn_rating = num;
+  } else if (id === '_pn_tripped') {
+    _pn_tripped = num;
+  } else if (id === '_ps_name') {
+    _ps_name = String(value);
+  }
+
+  update();
+}
+
+init();
 ]]></script>
 </svg>

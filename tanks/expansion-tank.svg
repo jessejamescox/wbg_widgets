@@ -118,333 +118,41 @@
 
   <!-- Status indicators -->
   <g id="status-indicators">
-    <!-- Overpressure warning -->
-    <circle cx="230" cy="120" r="6" fill="#4caf50" id="overpressure-light" opacity="0.3"/>
-    <text x="240" y="124" font-family="Arial" font-size="9" fill="#333">Over P</text>
-
-    <!-- Low pressure warning -->
-    <circle cx="230" cy="210" r="6" fill="#ffa726" id="lowpressure-light" opacity="0.3"/>
-    <text x="240" y="214" font-family="Arial" font-size="9" fill="#333">Low P</text>
-  </g>
-
-  <!-- Info Panel -->
-  <g id="info-panel">
-    <rect x="20" y="260" width="260" height="125" fill="#ffffff" stroke="#333" stroke-width="2" rx="5"/>
-
-    <!-- Pressure Display -->
-    <text x="150" y="280" font-family="Arial" font-size="14" font-weight="bold" text-anchor="middle" fill="#333">
-      System Pressure: <tspan id="system-pressure">18</tspan> PSI
-    </text>
-
-    <!-- Level Display -->
-    <text x="30" y="302" font-family="Arial" font-size="12" fill="#555">
-      Water Level: <tspan id="level-percent" font-weight="bold">65</tspan>%
-    </text>
-
-    <!-- Capacity -->
-    <text x="30" y="320" font-family="Arial" font-size="12" fill="#555">
-      Capacity: <tspan id="tank-capacity">20</tspan> gal
-    </text>
-
-    <!-- Acceptance Volume -->
-    <text x="30" y="338" font-family="Arial" font-size="12" fill="#555">
-      Acceptance: <tspan id="acceptance-volume">13</tspan> gal
-    </text>
-
-    <!-- Temperature -->
-    <text x="170" y="302" font-family="Arial" font-size="12" fill="#555">
-      Temp: <tspan id="temp-value">68</tspan>°F
-    </text>
-
-    <!-- Working pressure range -->
-    <text x="170" y="320" font-family="Arial" font-size="11" fill="#555">
-      Range: <tspan id="min-pressure">12</tspan>-<tspan id="max-pressure">30</tspan> PSI
-    </text>
-
-    <!-- Status -->
-    <text x="150" y="360" font-family="Arial" font-size="13" text-anchor="middle" fill="#666">
-      Status: <tspan id="tank-status" fill="#4caf50" font-weight="bold">NORMAL</tspan>
-    </text>
-
-    <!-- Connection Status -->
-    <text x="150" y="378" font-family="Arial" font-size="11" text-anchor="middle" fill="#666">
-      <tspan id="connection-status" fill="#2196f3">CONNECTED</tspan>
-    </text>
-  </g>
 
   <script><![CDATA[
 //!export-start
-let _ps_path = 'M 75 ' + diaphragmY + ' Q 75 240 150 260 Q 225 240 225 ' + diaphragmY + ' Z';
-let _ps_status = 'NORMAL';
-let _ps_statusColor = '#4caf50';
-let _pn_pressureFluctuation = 0;
+let _pn_level = 65;      // Tank level (%)
+let _pn_capacity = 1000; // Tank capacity (gallons)
+let _pn_temperature = 72; // Temperature (°F)
+let _ps_label = "Expansion Tank"; // Tank label
 //!export-end
 
-function init() {
+function init() { update(); }
+
+function update() {
+  const fillRect = document.getElementById('tankFill');
+  const levelText = document.getElementById('levelText');
+  const capacityText = document.getElementById('capacityText');
+  const tempText = document.getElementById('tempText');
+  const labelText = document.getElementById('tankLabel');
+  if (!fillRect) return;
+  const fillHeight = (_pn_level / 100) * 150;
+  fillRect.setAttribute('height', fillHeight);
+  fillRect.setAttribute('y', 150 - fillHeight);
+  if (levelText) levelText.textContent = _pn_level + '%';
+  if (capacityText) capacityText.textContent = Math.round(_pn_capacity * _pn_level / 100) + ' gal';
+  if (tempText) tempText.textContent = _pn_temperature + '°F';
+  if (labelText) labelText.textContent = _ps_label;
+}
+
+function putValue(id, value) {
+  if (id === '_pn_level') _pn_level = Number(value) || 0;
+  else if (id === '_pn_capacity') _pn_capacity = Number(value) || 0;
+  else if (id === '_pn_temperature') _pn_temperature = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
   update();
 }
 
-(function() {
-      // FUXA Interface
-let gaugeStatus = { id: 'expansion-tank', type: 'svg-ext' };
-
-      // Default values
-let settings = {
-        pressure: 18,          // Current system pressure (PSI)
-        preCharge: 12,         // Pre-charge pressure (PSI)
-        waterLevel: 65,        // Water level percentage (0-100)
-        capacity: 20,          // Tank capacity in gallons
-        temperature: 68,       // Temperature in Fahrenheit
-        minPressure: 12,       // Minimum working pressure
-        maxPressure: 30,       // Maximum working pressure
-        connected: true        // System connection _ps_status
-      };
-
-      // Initialize
-      if (window.svgData) {
-        gaugeStatus.onaction = function (data) {
-          // No actions for this widget
-        };
-
-        gaugeStatus.onsignal = function (signal) {
-          // Update based on FUXA signals
-          if (signal.id === 'pressure' && signal.value !== undefined) {
-            settings.pressure = parseFloat(signal.value);
-          }
-          if (signal.id === 'preCharge' && signal.value !== undefined) {
-            settings.preCharge = parseFloat(signal.value);
-          }
-          if (signal.id === 'waterLevel' && signal.value !== undefined) {
-            settings.waterLevel = parseFloat(signal.value);
-          }
-          if (signal.id === 'capacity' && signal.value !== undefined) {
-            settings.capacity = parseFloat(signal.value);
-          }
-          if (signal.id === 'temperature' && signal.value !== undefined) {
-            settings.temperature = parseFloat(signal.value);
-          }
-          if (signal.id === 'connected' && signal.value !== undefined) {
-            settings.connected = signal.value === true || signal.value === 1 || signal.value === '1';
-          }
-          updateTank();
-        };
-
-        gaugeStatus.oninit = function (data) {
-          if (data) {
-            if (data.pressure !== undefined) settings.pressure = data.pressure;
-            if (data.preCharge !== undefined) settings.preCharge = data.preCharge;
-            if (data.waterLevel !== undefined) settings.waterLevel = data.waterLevel;
-            if (data.capacity !== undefined) settings.capacity = data.capacity;
-            if (data.temperature !== undefined) settings.temperature = data.temperature;
-            if (data.connected !== undefined) settings.connected = data.connected;
-          }
-          updateTank();
-        };
-
-        window.svgData.init(gaugeStatus);
-      }
-
-      function updateTank() {
-        // Update pressure gauge needle
-const pressureNeedle = document.getElementById('pressure-needle');
-        if (pressureNeedle) {
-          // Gauge range 0-30 PSI, angle from -90 (0 PSI) to +90 (30 PSI) degrees
-let angle = ((settings.pressure / 30) * 180) - 90;
-          angle = Math.max(-90, Math.min(90, angle));
-          pressureNeedle.setAttribute('transform', 'rotate(' + angle + ')');
-
-          // Color based on pressure range
-          if (settings.pressure > settings.maxPressure) {
-            pressureNeedle.setAttribute('stroke', '#ff5252');
-          } else if (settings.pressure < settings.preCharge) {
-            pressureNeedle.setAttribute('stroke', '#ffa726');
-          } else {
-            pressureNeedle.setAttribute('stroke', '#4caf50');
-          }
-        }
-
-        // Update displays
-const systemPressureEl = document.getElementById('system-pressure');
-        if (systemPressureEl) {
-          systemPressureEl.textContent = settings.pressure.toFixed(1);
-        }
-const preChargePsiEl = document.getElementById('precharge-psi');
-        if (preChargePsiEl) {
-          preChargePsiEl.textContent = settings.preCharge.toFixed(0);
-        }
-
-        // Update water level
-const levelFill = document.getElementById('level-fill');
-let waterLevel = Math.max(0, Math.min(100, settings.waterLevel));
-
-        if (levelFill) {
-let levelHeight = (waterLevel / 100) * 158;
-let levelY = 238 - levelHeight;
-          levelFill.setAttribute('y', levelY);
-          levelFill.setAttribute('height', levelHeight);
-        }
-const levelPercentEl = document.getElementById('level-percent');
-        if (levelPercentEl) {
-          levelPercentEl.textContent = waterLevel.toFixed(0);
-        }
-
-        // Update diaphragm position based on water level
-const diaphragm = document.getElementById('diaphragm');
-        if (diaphragm) {
-let diaphragmY = 80 + (waterLevel / 100) * 160;
-          diaphragm.setAttribute('cy', diaphragmY);
-        }
-
-        // Update water chamber _ps_path
-const waterChamber = document.getElementById('water-chamber');
-        if (waterChamber) {
-let diaphragmY = 80 + (waterLevel / 100) * 160;
-
-          waterChamber.setAttribute('d', _ps_path);
-        }
-
-        // Update air chamber
-const airChamber = document.getElementById('air-chamber');
-        if (airChamber) {
-let diaphragmY = 80 + (waterLevel / 100) * 160;
-let airHeight = diaphragmY - 50;
-          airChamber.setAttribute('cy', 50 + airHeight / 2);
-          airChamber.setAttribute('ry', airHeight / 2);
-        }
-
-        // Calculate acceptance volume
-let acceptanceVolume = (settings.waterLevel / 100) * settings.capacity;
-const acceptanceVolumeEl = document.getElementById('acceptance-volume');
-        if (acceptanceVolumeEl) {
-          acceptanceVolumeEl.textContent = acceptanceVolume.toFixed(1);
-        }
-
-        // Update capacity
-const capacityEl = document.getElementById('tank-capacity');
-        if (capacityEl) {
-          capacityEl.textContent = settings.capacity.toFixed(0);
-        }
-
-        // Update temperature
-const tempValueEl = document.getElementById('temp-value');
-        if (tempValueEl) {
-          tempValueEl.textContent = settings.temperature.toFixed(0);
-        }
-
-        // Update pressure range display
-const minPressureEl = document.getElementById('min-pressure');
-const maxPressureEl = document.getElementById('max-pressure');
-        if (minPressureEl) {
-          minPressureEl.textContent = settings.minPressure.toFixed(0);
-        }
-        if (maxPressureEl) {
-          maxPressureEl.textContent = settings.maxPressure.toFixed(0);
-        }
-
-        // Update _ps_status indicators
-const overpressureLight = document.getElementById('overpressure-light');
-const lowpressureLight = document.getElementById('lowpressure-light');
-
-        if (settings.pressure > settings.maxPressure) {
-          if (overpressureLight) {
-            overpressureLight.setAttribute('fill', '#ff5252');
-            overpressureLight.setAttribute('opacity', '1');
-            overpressureLight.setAttribute('filter', 'url(#glow)');
-          }
-        } else {
-          if (overpressureLight) {
-            overpressureLight.setAttribute('fill', '#4caf50');
-            overpressureLight.setAttribute('opacity', '0.3');
-            overpressureLight.removeAttribute('filter');
-          }
-        }
-
-        if (settings.pressure < settings.preCharge) {
-          if (lowpressureLight) {
-            lowpressureLight.setAttribute('fill', '#ffa726');
-            lowpressureLight.setAttribute('opacity', '1');
-            lowpressureLight.setAttribute('filter', 'url(#glow)');
-          }
-        } else {
-          if (lowpressureLight) {
-            lowpressureLight.setAttribute('fill', '#4caf50');
-            lowpressureLight.setAttribute('opacity', '0.3');
-            lowpressureLight.removeAttribute('filter');
-          }
-        }
-
-        // Determine _ps_status
-const tankStatus = document.getElementById('tank-_ps_status');
-
-        if (!settings.connected) {
-          _ps_status = 'DISCONNECTED';
-          _ps_statusColor = '#757575';
-        } else if (settings.pressure > settings.maxPressure) {
-          _ps_status = 'OVERPRESSURE';
-          _ps_statusColor = '#ff5252';
-        } else if (settings.pressure < settings.preCharge) {
-          _ps_status = 'LOW PRESSURE';
-          _ps_statusColor = '#ffa726';
-        } else if (waterLevel > 95) {
-          _ps_status = 'WATERLOGGED';
-          _ps_statusColor = '#ff9800';
-        }
-
-        if (tankStatus) {
-          tankStatus.textContent = _ps_status;
-          tankStatus.setAttribute('fill', _ps_statusColor);
-        }
-
-        // Update connection _ps_status
-const connectionStatus = document.getElementById('connection-_ps_status');
-        if (connectionStatus) {
-          if (settings.connected) {
-            connectionStatus.textContent = 'CONNECTED';
-            connectionStatus.setAttribute('fill', '#2196f3');
-          } else {
-            connectionStatus.textContent = 'DISCONNECTED';
-            connectionStatus.setAttribute('fill', '#757575');
-          }
-        }
-      }
-
-      // Initial update
-      updateTank();
-
-      // Animation for pressure fluctuation
-
-      setInterval(function() {
-        if (settings.connected) {
-          _pn_pressureFluctuation += 0.1;
-let fluctuation = Math.sin(_pn_pressureFluctuation) * 0.2;
-const pressureNeedle = document.getElementById('pressure-needle');
-          if (pressureNeedle) {
-let baseAngle = ((settings.pressure / 30) * 180) - 90;
-let angle = baseAngle + fluctuation;
-            angle = Math.max(-90, Math.min(90, angle));
-            pressureNeedle.setAttribute('transform', 'rotate(' + angle + ')');
-          }
-        }
-      }, 100);
-    })();
-
-function putValue(id, value) {
-  if (id === '_ps_path') {
-    _ps_path = String(value) || "";
-    update();
-  } else if (id === '_ps_status') {
-    _ps_status = String(value) || "";
-    update();
-  } else if (id === '_ps_statusColor') {
-    _ps_statusColor = String(value) || "";
-    update();
-  } else if (id === '_pn_pressureFluctuation') {
-    _pn_pressureFluctuation = Number(value) || 0;
-    update();
-  }
-}
-
 init();
-
 ]]></script>
 </svg>

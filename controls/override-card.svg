@@ -122,171 +122,59 @@
 
   <script><![CDATA[
 //!export-start
-let _ps_activeTagId = '';
-let _ps_durationTagId = '';
-let _ps_remainingTagId = '';
-let _ps_reasonTagId = '';
-let _ps_restoreCmdTagId = '';
-let _pb_isActive = true;
-let _pn_totalDuration = 180;
-let _pn_remainingMinutes = 165;
-let _ps_reason = 'Maintenance work in progress';
+let _pn_isActive = 1;                            // Override active: 0=inactive, 1=active
+let _pn_remainingMinutes = 165;                  // Time remaining (minutes)
+let _ps_reason = "Maintenance work in progress"; // Override reason
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Integration Variables
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
+}
 
-      // Current values
+function update() {
+  const statusText = document.getElementById('statusText');
+  const timeRemaining = document.getElementById('timeRemaining');
+  const reasonText = document.getElementById('reasonText');
+  const warningIcon = document.getElementById('warningIcon');
+  const cardBg = document.querySelector('.card-bg');
 
-      // DOM Elements
-const statusText = document.getElementById('statusText');
-const timeRemaining = document.getElementById('timeRemaining');
-const reasonText = document.getElementById('reasonText');
-const restoreBtn = document.getElementById('restoreBtn');
-const warningIcon = document.getElementById('warningIcon');
-const timeText = document.getElementById('timeRemaining');
+  if (!statusText) return;
 
-      // Format minutes to HH:MM
-      function formatTime(minutes) {
-let hours = Math.floor(minutes / 60);
-let mins = minutes % 60;
-        return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
-      }
+  if (_pn_isActive) {
+    statusText.textContent = 'Override Active';
+    timeRemaining.textContent = formatTime(_pn_remainingMinutes);
+    timeRemaining.classList.add('active');
+    warningIcon.style.opacity = '1';
+    if (cardBg) cardBg.classList.remove('status-inactive');
+  } else {
+    statusText.textContent = 'Schedule Normal';
+    timeRemaining.textContent = '--:--';
+    timeRemaining.classList.remove('active');
+    warningIcon.style.opacity = '0.3';
+    if (cardBg) cardBg.classList.add('status-inactive');
+  }
 
-      // Update all visuals
-      function updateVisuals() {
-        if (_pb_isActive) {
-          statusText.textContent = 'Override Active';
-          timeRemaining.textContent = formatTime(_pn_remainingMinutes);
-          timeText.classList.add('active');
-          warningIcon.style.opacity = '1';
-          document.querySelector('.card-bg').classList.remove('status-inactive');
-        } else {
-          statusText.textContent = 'Schedule Normal';
-          timeRemaining.textContent = '--:--';
-          timeText.classList.remove('active');
-          warningIcon.style.opacity = '0.3';
-          document.querySelector('.card-bg').classList.add('status-inactive');
-        }
-
-        reasonText.textContent = '"' + _ps_reason + '"';
-      }
-
-      // Restore button handler
-      restoreBtn.addEventListener('click', function(evt) {
-        evt.preventDefault();
-
-        // Send restore command to FUXA
-        if (typeof GAuxy !== 'undefined' && _ps_restoreCmdTagId) {
-          GAuxy.setVariable(_ps_restoreCmdTagId, 1);
-
-          // Reset command after 200ms
-          setTimeout(function() {
-            if (typeof GAuxy !== 'undefined' && _ps_restoreCmdTagId) {
-              GAuxy.setVariable(_ps_restoreCmdTagId, 0);
-            }
-          }, 200);
-        }
-
-        // Update local state
-        _pb_isActive = false;
-        updateVisuals();
-      });
-
-      // Auto-decrement timer (if not receiving updates from FUXA)
-let timerInterval = setInterval(function() {
-        if (_pb_isActive && _pn_remainingMinutes > 0 && !_ps_remainingTagId) {
-          _pn_remainingMinutes--;
-          if (_pn_remainingMinutes <= 0) {
-            _pb_isActive = false;
-          }
-          updateVisuals();
-        }
-      }, 60000); // Update every minute
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-        if (sigid === _ps_activeTagId) {
-          _pb_isActive = (parseFloat(value) > 0);
-        } else if (sigid === _ps_durationTagId) {
-          _pn_totalDuration = parseFloat(value);
-        } else if (sigid === _ps_remainingTagId) {
-          _pn_remainingMinutes = parseFloat(value);
-        } else if (sigid === _ps_reasonTagId) {
-          _ps_reason = String(value);
-        }
-
-        updateVisuals();
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'activeVariableId') return _ps_activeTagId;
-        if (name === 'durationVariableId') return _ps_durationTagId;
-        if (name === 'remainingVariableId') return _ps_remainingTagId;
-        if (name === 'reasonVariableId') return _ps_reasonTagId;
-        if (name === 'restoreCmdVariableId') return _ps_restoreCmdTagId;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'activeVariableId') {
-          _ps_activeTagId = value;
-        } else if (name === 'durationVariableId') {
-          _ps_durationTagId = value;
-        } else if (name === 'remainingVariableId') {
-          _ps_remainingTagId = value;
-        } else if (name === 'reasonVariableId') {
-          _ps_reasonTagId = value;
-        } else if (name === 'restoreCmdVariableId') {
-          _ps_restoreCmdTagId = value;
-        }
-      };
-
-      // Initialize
-      updateVisuals();
-
-      // Cleanup on unload
-      window.addEventListener('unload', function() {
-        clearInterval(timerInterval);
-      });
-    })();
+  reasonText.textContent = '"' + _ps_reason + '"';
+}
 
 function putValue(id, value) {
-  if (id === '_ps_activeTagId') {
-    _ps_activeTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_durationTagId') {
-    _ps_durationTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_remainingTagId') {
-    _ps_remainingTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_reasonTagId') {
-    _ps_reasonTagId = String(value) || "";
-    update();
-  } else if (id === '_ps_restoreCmdTagId') {
-    _ps_restoreCmdTagId = String(value) || "";
-    update();
-  } else if (id === '_pb_isActive') {
-    _pb_isActive = !!value;
-    update();
-  } else if (id === '_pn_totalDuration') {
-    _pn_totalDuration = Number(value) || 0;
-    update();
+  if (id === '_pn_isActive') {
+    _pn_isActive = Number(value) || 0;
   } else if (id === '_pn_remainingMinutes') {
     _pn_remainingMinutes = Number(value) || 0;
-    update();
   } else if (id === '_ps_reason') {
-    _ps_reason = String(value) || "";
-    update();
+    _ps_reason = String(value);
   }
+
+  update();
 }
 
 init();
-
 ]]></script>
 </svg>

@@ -56,66 +56,36 @@
   <text id="valueText" x="150" y="180" class="gauge-text gauge-value" text-anchor="middle">0</text>
   <text id="unitText" x="150" y="195" class="gauge-text gauge-label" text-anchor="middle">Units</text>
 
-  <script type="text/javascript">
-    <![CDATA[
-    (function() {
-      var svg = document.getElementById('gauge-semicircle');
-      var needle = document.getElementById('needle');
-      var valueText = document.getElementById('valueText');
-      var unitText = document.getElementById('unitText');
+  <script><![CDATA[
+//!export-start
+let _pn_value = 68;  // Current value
+let _pn_min = 0;    // Minimum value
+let _pn_max = 100;  // Maximum value
+let _ps_label = "Flow"; // Label
+let _ps_units = "GPM"; // Units
+//!export-end
 
-      // Configuration
-      var config = {
-        min: 0,
-        max: 100,
-        value: 0,
-        unit: 'Units',
-        decimals: 1
-      };
+function init() { update(); }
 
-      // FUXA interface
-      svg.setValue = function(value) {
-        if (value === null || value === undefined) return;
-        config.value = parseFloat(value);
-        updateGauge();
-      };
+function update() {
+  const needle = document.getElementById('needle');
+  const valueText = document.getElementById('valueText');
+  if (!needle) return;
+  const percentage = ((_pn_value - _pn_min) / (_pn_max - _pn_min));
+  const angle = -90 + (percentage * 180);
+  needle.setAttribute('transform', `rotate(${angle} 100 100)`);
+  if (valueText) valueText.textContent = _pn_value.toFixed(1) + ' ' + _ps_units;
+}
 
-      svg.setOptions = function(options) {
-        if (options.min !== undefined) config.min = parseFloat(options.min);
-        if (options.max !== undefined) config.max = parseFloat(options.max);
-        if (options.unit !== undefined) {
-          config.unit = options.unit;
-          unitText.textContent = config.unit;
-        }
-        if (options.decimals !== undefined) config.decimals = parseInt(options.decimals);
-        updateGauge();
-      };
+function putValue(id, value) {
+  if (id === '_pn_value') _pn_value = Number(value) || 0;
+  else if (id === '_pn_min') _pn_min = Number(value) || 0;
+  else if (id === '_pn_max') _pn_max = Number(value) || 0;
+  else if (id === '_ps_label') _ps_label = String(value);
+  else if (id === '_ps_units') _ps_units = String(value);
+  update();
+}
 
-      function updateGauge() {
-        // Clamp value between min and max
-        var clampedValue = Math.max(config.min, Math.min(config.max, config.value));
-
-        // Calculate percentage
-        var percent = ((clampedValue - config.min) / (config.max - config.min)) * 100;
-
-        // Calculate needle angle (0% = -90deg, 100% = 90deg)
-        var angle = -90 + (percent * 180 / 100);
-
-        // Update needle rotation
-        needle.setAttribute('transform', 'rotate(' + angle + ' 150 150)');
-
-        // Update value text
-        valueText.textContent = clampedValue.toFixed(config.decimals);
-      }
-
-      // Initialize
-      updateGauge();
-
-      // Expose getValue for FUXA
-      svg.getValue = function() {
-        return config.value;
-      };
-    })();
-    ]]>
-  </script>
+init();
+]]></script>
 </svg>

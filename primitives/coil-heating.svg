@@ -60,11 +60,10 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_valvePosition = 0;
-let _pn_supplyTemp = 0;
-let _pn_returnTemp = 0;
-let _pn_airTempOut = 0;
-let _pn_active = 0;
+let _pn_valvePosition = 0;  // Hot water valve position (0-100%)
+let _pn_supplyTemp = 0;     // Hot water supply temperature (°F)
+let _pn_returnTemp = 0;     // Hot water return temperature (°F)
+let _pn_airTempOut = 0;     // Leaving air temperature (°F)
 //!export-end
 
 function init() {
@@ -111,9 +110,6 @@ function putValue(id, value) {
     update();
   } else if (id === '_pn_airTempOut') {
     _pn_airTempOut = Number(value) || 0;
-    update();
-  } else if (id === '_pn_active') {
-    _pn_active = Number(value) || 0;
     update();
   }
 }

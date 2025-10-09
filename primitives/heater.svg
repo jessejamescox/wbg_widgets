@@ -39,15 +39,17 @@
   <text id="statusText" x="40" y="82" class="status-text">OFF</text>
 
   <!-- Capacity/Output Display -->
-  <text id="outputText" x="40" y="12" class="value-text">0%</text>
+  <text id="outputText" x="40" y="10" class="value-text">0%</text>
+  <text id="kwText" x="40" y="18" class="value-text" font-size="8">0 kW</text>
 
   <script><![CDATA[
 //!export-start
-let _pn_status = 0;
-let _pn_capacity = 0;
-let _pn_outputKW = 0;
-let _pn_waveOffset = 0;
+let _pn_status = 0;        // Heater status: 0=off, 1=heating
+let _pn_capacity = 0;      // Heater output capacity (0-100%)
+let _pn_outputKW = 0;      // Power output in kilowatts (0-100kW)
 //!export-end
+
+let _pn_waveOffset = 0;    // Internal animation variable
 
 function init() {
   update();
@@ -60,11 +62,10 @@ const body = document.getElementById('heaterBody');
 const elements = document.getElementById('elements');
 const statusText = document.getElementById('statusText');
 const outputText = document.getElementById('outputText');
+const kwText = document.getElementById('kwText');
 const heatWaves = document.getElementById('heatWaves');
 
-  if (!body || !elements || !statusText || !outputText || !heatWaves) return;
-
-  if (!body || !elements || !statusText || !outputText || !heatWaves) return;
+  if (!body || !elements || !statusText || !outputText || !kwText || !heatWaves) return;
 
       if (_pn_status === 1 && _pn_capacity > 0) {
         // Heating
@@ -76,6 +77,13 @@ let paths = elements.querySelectorAll('path');
 
         statusText.textContent = 'HEATING';
         outputText.textContent = Math.round(_pn_capacity) + '%';
+
+        // Display power output if available
+        if (_pn_outputKW > 0) {
+          kwText.textContent = _pn_outputKW.toFixed(1) + ' kW';
+        } else {
+          kwText.textContent = '';
+        }
 
         // Animate heat waves
         heatWaves.setAttribute('opacity', _pn_capacity / 100);
@@ -104,6 +112,7 @@ let paths = elements.querySelectorAll('path');
         heatWaves.setAttribute('opacity', '0');
         statusText.textContent = 'OFF';
         outputText.textContent = '0%';
+        kwText.textContent = '0 kW';
       }
     }
 
@@ -116,9 +125,6 @@ function putValue(id, value) {
     update();
   } else if (id === '_pn_outputKW') {
     _pn_outputKW = Number(value) || 0;
-    update();
-  } else if (id === '_pn_waveOffset') {
-    _pn_waveOffset = Number(value) || 0;
     update();
   }
 }

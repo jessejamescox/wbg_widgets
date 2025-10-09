@@ -41,88 +41,39 @@
 
   <script><![CDATA[
 //!export-start
-let _pb_currentState = false;
-let _ps_tagId = '';
-let _ps_cmdTagId = '';
+let _pn_state = 0;  // Button state: 0=off, 1=on
 //!export-end
 
 function init() {
   update();
 }
 
-(function() {
-      // FUXA Integration Variables
+function update() {
+  const btnRect = document.getElementById('btnRect');
+  const btnText = document.getElementById('btnText');
+  const statusLED = document.getElementById('statusLED');
 
-      // DOM Elements
-const btnRect = document.getElementById('btnRect');
-const btnText = document.getElementById('btnText');
-const statusLED = document.getElementById('statusLED');
-const btnGroup = document.getElementById('btnGroup');
+  if (!btnRect) return;
 
-      // Update visual state
-      function updateVisuals() {
-        if (_pb_currentState) {
-          btnRect.classList.add('active');
-          btnText.classList.add('active');
-          btnText.textContent = 'ON';
-          statusLED.setAttribute('fill', '#4CAF50');
-        } else {
-          btnRect.classList.remove('active');
-          btnText.classList.remove('active');
-          btnText.textContent = 'OFF';
-          statusLED.setAttribute('fill', '#999');
-        }
-      }
-
-      // Click handler
-      btnGroup.addEventListener('click', function(evt) {
-        evt.preventDefault();
-        _pb_currentState = !_pb_currentState;
-        updateVisuals();
-
-        // FUXA callback - write command to PLC
-        if (typeof GAuxy !== 'undefined' && _ps_cmdTagId) {
-          GAuxy.setVariable(_ps_cmdTagId, _pb_currentState ? 1 : 0);
-        }
-      });
-
-      // FUXA Integration Functions
-      window.svgSetValue = function(sigid, value) {
-        if (sigid === _ps_tagId) {
-          _pb_currentState = (value > 0);
-          updateVisuals();
-        }
-      };
-
-      window.svgGetProperty = function(name) {
-        if (name === 'variableId') return _ps_tagId;
-        if (name === 'cmdVariableId') return _ps_cmdTagId;
-        return null;
-      };
-
-      window.svgSetProperty = function(name, value) {
-        if (name === 'variableId') {
-          _ps_tagId = value;
-        } else if (name === 'cmdVariableId') {
-          _ps_cmdTagId = value;
-        }
-      };
-
-      // Initialize
-      updateVisuals();
-    })();
+  if (_pn_state) {
+    btnRect.classList.add('active');
+    btnText.classList.add('active');
+    btnText.textContent = 'ON';
+    statusLED.setAttribute('fill', '#4CAF50');
+  } else {
+    btnRect.classList.remove('active');
+    btnText.classList.remove('active');
+    btnText.textContent = 'OFF';
+    statusLED.setAttribute('fill', '#999');
+  }
+}
 
 function putValue(id, value) {
-  if (id === '_pb_currentState') {
-    _pb_currentState = !!value;
-    update();
-  } else if (id === '_ps_tagId') {
-    _ps_tagId = String(value) || "";
-    update();
-  } else if (id === '_ps_cmdTagId') {
-    _ps_cmdTagId = String(value) || "";
-    update();
+  if (id === '_pn_state') {
+    _pn_state = Number(value) || 0;
   }
+
+  update();
 }
 
 init();

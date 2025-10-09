@@ -128,16 +128,16 @@
 
   <script><![CDATA[
 //!export-start
-let _pn_supplyFanSpeed = 65;
-let _pn_returnFanSpeed = 60;
-let _pb_supplyFanStatus = true;
-let _pb_returnFanStatus = true;
-let _pn_coolingValve = 0;
-let _pn_heatingValve = 25;
-let _pn_returnTemp = 72;
-let _pn_supplyTemp = 58;
-let _pb_filterDirty = false;
-let _pb_alarmActive = false;
+let _pn_supplyFanSpeed = 65;    // Supply fan speed (0-100%)
+let _pn_returnFanSpeed = 60;    // Return fan speed (0-100%)
+let _pb_supplyFanStatus = true; // Supply fan running status
+let _pb_returnFanStatus = true; // Return fan running status
+let _pn_coolingValve = 0;       // Cooling coil valve position (0-100%)
+let _pn_heatingValve = 25;      // Heating coil valve position (0-100%)
+let _pn_returnTemp = 72;        // Return air temperature (°F)
+let _pn_supplyTemp = 58;        // Supply air temperature (°F)
+let _pb_filterDirty = false;    // Filter status: true=dirty/change needed
+let _pb_alarmActive = false;    // Alarm active status
 //!export-end
 
 function init() {
