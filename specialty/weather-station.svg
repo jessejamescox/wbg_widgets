@@ -1,0 +1,446 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 450" width="400" height="450">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e3c72;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2a5298;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="compassGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#34495e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c3e50;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="sunGradient">
+      <stop offset="0%" style="stop-color:#fff700;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffa500;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:0.8" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="dropShadow">
+      <feDropShadow dx="1" dy="1" stdDeviation="2" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="450" fill="url(#skyGradient)" rx="10"/>
+
+  <!-- Title -->
+  <text x="200" y="25" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="#ecf0f1" text-anchor="middle">WEATHER STATION</text>
+
+  <!-- Sun/Moon Icon (changes based on time) -->
+  <g id="celestialBody">
+    <circle id="sun" cx="350" cy="50" r="20" fill="url(#sunGradient)" filter="url(#glow)"/>
+  </g>
+
+  <!-- Temperature Display -->
+  <g id="temperatureGroup">
+    <rect x="20" y="50" width="180" height="80" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="110" y="70" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">TEMPERATURE</text>
+    <text id="temperature" x="110" y="110" font-family="Arial" font-size="40" font-weight="bold" fill="#e74c3c" text-anchor="middle" filter="url(#glow)">22.5°C</text>
+    <text id="feelsLike" x="110" y="125" font-family="Arial" font-size="10" fill="#95a5a6" text-anchor="middle">Feels like: 21.2°C</text>
+  </g>
+
+  <!-- Humidity Display -->
+  <g id="humidityGroup">
+    <rect x="210" y="50" width="170" height="80" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="295" y="70" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">HUMIDITY</text>
+
+    <!-- Water droplet icon -->
+    <path d="M 225 100 Q 225 85 235 85 Q 245 85 245 100 Q 245 110 235 110 Q 225 110 225 100" fill="#3498db" opacity="0.6"/>
+
+    <text id="humidity" x="295" y="110" font-family="Arial" font-size="40" font-weight="bold" fill="#3498db" text-anchor="middle" filter="url(#glow)">65%</text>
+  </g>
+
+  <!-- Wind Display -->
+  <g id="windGroup">
+    <rect x="20" y="145" width="180" height="120" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="110" y="165" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">WIND</text>
+
+    <!-- Compass -->
+    <g id="compass" transform="translate(110, 215)">
+      <circle cx="0" cy="0" r="35" fill="url(#compassGradient)" stroke="#7f8c8d" stroke-width="2"/>
+
+      <!-- Compass marks -->
+      <text x="0" y="-22" font-family="Arial" font-size="11" font-weight="bold" fill="#e74c3c" text-anchor="middle">N</text>
+      <text x="22" y="4" font-family="Arial" font-size="10" fill="#ecf0f1" text-anchor="middle">E</text>
+      <text x="0" y="26" font-family="Arial" font-size="10" fill="#ecf0f1" text-anchor="middle">S</text>
+      <text x="-22" y="4" font-family="Arial" font-size="10" fill="#ecf0f1" text-anchor="middle">W</text>
+
+      <!-- Wind direction arrow -->
+      <g id="windArrow">
+        <polygon points="0,-25 -4,-15 0,-18 4,-15" fill="#f39c12" stroke="#d68910" stroke-width="1" filter="url(#glow)"/>
+        <line x1="0" y1="-18" x2="0" y2="20" stroke="#f39c12" stroke-width="2"/>
+      </g>
+    </g>
+
+    <text id="windSpeed" x="110" y="250" font-family="Arial" font-size="20" font-weight="bold" fill="#ecf0f1" text-anchor="middle">12.5 km/h</text>
+    <text id="windDirection" x="110" y="265" font-family="Arial" font-size="11" fill="#95a5a6" text-anchor="middle">NE (45°)</text>
+  </g>
+
+  <!-- Precipitation Display -->
+  <g id="precipitationGroup">
+    <rect x="210" y="145" width="170" height="120" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="295" y="165" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">PRECIPITATION</text>
+
+    <!-- Rain animation drops -->
+    <g id="rainDrops" opacity="0.6">
+      <line id="drop1" x1="230" y1="180" x2="230" y2="195" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop2" x1="250" y1="185" x2="250" y2="200" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop3" x1="270" y1="180" x2="270" y2="195" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop4" x1="290" y1="185" x2="290" y2="200" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop5" x1="310" y1="180" x2="310" y2="195" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop6" x1="330" y1="185" x2="330" y2="200" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+      <line id="drop7" x1="350" y1="180" x2="350" y2="195" stroke="#3498db" stroke-width="2" stroke-linecap="round"/>
+    </g>
+
+    <text x="295" y="225" font-family="Arial" font-size="11" fill="#95a5a6" text-anchor="middle">Current Rate</text>
+    <text id="precipRate" x="295" y="245" font-family="Arial" font-size="24" font-weight="bold" fill="#3498db" text-anchor="middle">2.5 mm/h</text>
+    <text x="295" y="260" font-family="Arial" font-size="10" fill="#95a5a6" text-anchor="middle">Today Total</text>
+    <text id="precipTotal" x="295" y="274" font-family="Arial" font-size="14" fill="#ecf0f1" text-anchor="middle">15.2 mm</text>
+  </g>
+
+  <!-- Barometric Pressure Display -->
+  <g id="pressureGroup">
+    <rect x="20" y="280" width="180" height="80" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="110" y="300" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">PRESSURE</text>
+    <text id="pressure" x="110" y="330" font-family="Arial" font-size="28" font-weight="bold" fill="#9b59b6" text-anchor="middle">1013.2</text>
+    <text x="110" y="345" font-family="Arial" font-size="11" fill="#95a5a6" text-anchor="middle">hPa (mbar)</text>
+
+    <!-- Trend indicator -->
+    <g id="pressureTrend">
+      <polygon id="trendArrow" points="155,315 165,315 160,305" fill="#27ae60" opacity="0.8"/>
+      <text id="trendText" x="160" y="338" font-family="Arial" font-size="9" fill="#27ae60" text-anchor="middle">Rising</text>
+    </g>
+  </g>
+
+  <!-- UV Index / Light Level -->
+  <g id="uvGroup">
+    <rect x="210" y="280" width="170" height="80" fill="rgba(44, 62, 80, 0.8)" stroke="#7f8c8d" stroke-width="2" rx="8" filter="url(#dropShadow)"/>
+    <text x="295" y="300" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">UV INDEX</text>
+    <text id="uvIndex" x="295" y="330" font-family="Arial" font-size="36" font-weight="bold" fill="#f39c12" text-anchor="middle">5</text>
+    <text id="uvLevel" x="295" y="350" font-family="Arial" font-size="12" fill="#f39c12" text-anchor="middle">MODERATE</text>
+  </g>
+
+  <!-- Additional Info Panel -->
+  <g id="infoPanel">
+    <rect x="20" y="375" width="360" height="60" fill="rgba(26, 26, 26, 0.9)" stroke="#7f8c8d" stroke-width="2" rx="8"/>
+
+    <!-- Dew Point -->
+    <text x="30" y="393" font-family="Arial" font-size="10" fill="#95a5a6">Dew Point:</text>
+    <text id="dewPoint" x="30" y="408" font-family="Arial" font-size="14" font-weight="bold" fill="#3498db">15.2°C</text>
+
+    <!-- Visibility -->
+    <text x="115" y="393" font-family="Arial" font-size="10" fill="#95a5a6">Visibility:</text>
+    <text id="visibility" x="115" y="408" font-family="Arial" font-size="14" font-weight="bold" fill="#ecf0f1">10 km</text>
+
+    <!-- Cloud Cover -->
+    <text x="190" y="393" font-family="Arial" font-size="10" fill="#95a5a6">Clouds:</text>
+    <text id="cloudCover" x="190" y="408" font-family="Arial" font-size="14" font-weight="bold" fill="#95a5a6">25%</text>
+
+    <!-- Wind Gust -->
+    <text x="260" y="393" font-family="Arial" font-size="10" fill="#95a5a6">Gust:</text>
+    <text id="windGust" x="260" y="408" font-family="Arial" font-size="14" font-weight="bold" fill="#e67e22">18.5 km/h</text>
+
+    <!-- Last Update -->
+    <text id="lastUpdate" x="200" y="428" font-family="Arial" font-size="9" fill="#7f8c8d" text-anchor="middle">Last updated: 2 min ago</text>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      // FUXA Variable Bindings
+      var bindings = {
+        temperature: 'weather.temperature',         // Celsius
+        feelsLike: 'weather.feelsLike',            // Celsius
+        humidity: 'weather.humidity',              // Percentage 0-100
+        windSpeed: 'weather.windSpeed',            // km/h
+        windDirection: 'weather.windDirection',    // Degrees 0-360
+        windGust: 'weather.windGust',              // km/h
+        precipRate: 'weather.precipRate',          // mm/h
+        precipTotal: 'weather.precipTotal',        // mm (daily)
+        pressure: 'weather.pressure',              // hPa
+        pressureTrend: 'weather.pressureTrend',    // -1=falling, 0=steady, 1=rising
+        uvIndex: 'weather.uvIndex',                // 0-11+
+        dewPoint: 'weather.dewPoint',              // Celsius
+        visibility: 'weather.visibility',          // km
+        cloudCover: 'weather.cloudCover',          // Percentage 0-100
+        timestamp: 'weather.timestamp'             // Unix timestamp
+      };
+
+      var rainAnimationId = null;
+
+      function getDirectionName(degrees) {
+        var directions = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+        var index = Math.round(degrees / 22.5) % 16;
+        return directions[index];
+      }
+
+      function updateTemperature(temp, feelsLike) {
+        var tempText = document.getElementById('temperature');
+        if (tempText) {
+          tempText.textContent = temp.toFixed(1) + '°C';
+
+          // Color based on temperature
+          if (temp < 0) {
+            tempText.setAttribute('fill', '#3498db');
+          } else if (temp < 15) {
+            tempText.setAttribute('fill', '#5dade2');
+          } else if (temp < 25) {
+            tempText.setAttribute('fill', '#27ae60');
+          } else if (temp < 30) {
+            tempText.setAttribute('fill', '#f39c12');
+          } else {
+            tempText.setAttribute('fill', '#e74c3c');
+          }
+        }
+
+        if (feelsLike !== undefined) {
+          var feelsText = document.getElementById('feelsLike');
+          if (feelsText) {
+            feelsText.textContent = 'Feels like: ' + feelsLike.toFixed(1) + '°C';
+          }
+        }
+      }
+
+      function updateHumidity(humidity) {
+        var humidityText = document.getElementById('humidity');
+        if (humidityText) {
+          var value = Math.max(0, Math.min(100, humidity));
+          humidityText.textContent = value.toFixed(0) + '%';
+        }
+      }
+
+      function updateWind(speed, direction) {
+        if (speed !== undefined) {
+          var speedText = document.getElementById('windSpeed');
+          if (speedText) {
+            speedText.textContent = speed.toFixed(1) + ' km/h';
+          }
+        }
+
+        if (direction !== undefined) {
+          var windArrow = document.getElementById('windArrow');
+          var dirText = document.getElementById('windDirection');
+
+          if (windArrow) {
+            windArrow.setAttribute('transform', 'rotate(' + direction + ')');
+          }
+
+          if (dirText) {
+            var dirName = getDirectionName(direction);
+            dirText.textContent = dirName + ' (' + direction.toFixed(0) + '°)';
+          }
+        }
+      }
+
+      function animateRain(rate) {
+        if (rainAnimationId) {
+          cancelAnimationFrame(rainAnimationId);
+        }
+
+        var drops = document.querySelectorAll('#rainDrops line');
+        var rainGroup = document.getElementById('rainDrops');
+
+        if (rate < 0.1) {
+          rainGroup.setAttribute('opacity', '0');
+          return;
+        }
+
+        rainGroup.setAttribute('opacity', Math.min(1, rate / 10));
+
+        var positions = [0, 0, 0, 0, 0, 0, 0];
+
+        function animate() {
+          drops.forEach(function(drop, i) {
+            positions[i] += (rate * 2 + 5);
+            if (positions[i] > 80) positions[i] = 0;
+
+            var y1 = 180 + positions[i];
+            var y2 = y1 + 15;
+
+            drop.setAttribute('y1', y1);
+            drop.setAttribute('y2', y2);
+          });
+
+          rainAnimationId = requestAnimationFrame(animate);
+        }
+
+        animate();
+      }
+
+      function updatePrecipitation(rate, total) {
+        if (rate !== undefined) {
+          var rateText = document.getElementById('precipRate');
+          if (rateText) {
+            rateText.textContent = rate.toFixed(1) + ' mm/h';
+          }
+          animateRain(rate);
+        }
+
+        if (total !== undefined) {
+          var totalText = document.getElementById('precipTotal');
+          if (totalText) {
+            totalText.textContent = total.toFixed(1) + ' mm';
+          }
+        }
+      }
+
+      function updatePressure(pressure, trend) {
+        if (pressure !== undefined) {
+          var pressureText = document.getElementById('pressure');
+          if (pressureText) {
+            pressureText.textContent = pressure.toFixed(1);
+          }
+        }
+
+        if (trend !== undefined) {
+          var trendArrow = document.getElementById('trendArrow');
+          var trendText = document.getElementById('trendText');
+
+          if (trendArrow && trendText) {
+            if (trend > 0) {
+              trendArrow.setAttribute('points', '155,315 165,315 160,305');
+              trendArrow.setAttribute('fill', '#27ae60');
+              trendText.textContent = 'Rising';
+              trendText.setAttribute('fill', '#27ae60');
+            } else if (trend < 0) {
+              trendArrow.setAttribute('points', '155,325 165,325 160,335');
+              trendArrow.setAttribute('fill', '#e74c3c');
+              trendText.textContent = 'Falling';
+              trendText.setAttribute('fill', '#e74c3c');
+            } else {
+              trendArrow.setAttribute('points', '153,320 167,320 167,325 153,325');
+              trendArrow.setAttribute('fill', '#95a5a6');
+              trendText.textContent = 'Steady';
+              trendText.setAttribute('fill', '#95a5a6');
+            }
+          }
+        }
+      }
+
+      function updateUVIndex(uvIndex) {
+        var uvText = document.getElementById('uvIndex');
+        var uvLevelText = document.getElementById('uvLevel');
+
+        if (uvText && uvLevelText) {
+          uvText.textContent = Math.round(uvIndex);
+
+          var level, color;
+          if (uvIndex < 3) {
+            level = 'LOW';
+            color = '#27ae60';
+          } else if (uvIndex < 6) {
+            level = 'MODERATE';
+            color = '#f39c12';
+          } else if (uvIndex < 8) {
+            level = 'HIGH';
+            color = '#e67e22';
+          } else if (uvIndex < 11) {
+            level = 'VERY HIGH';
+            color = '#e74c3c';
+          } else {
+            level = 'EXTREME';
+            color = '#8e44ad';
+          }
+
+          uvLevelText.textContent = level;
+          uvText.setAttribute('fill', color);
+          uvLevelText.setAttribute('fill', color);
+        }
+      }
+
+      function updateAdditionalInfo(values) {
+        if (values.dewPoint !== undefined) {
+          var dewText = document.getElementById('dewPoint');
+          if (dewText) {
+            dewText.textContent = values.dewPoint.toFixed(1) + '°C';
+          }
+        }
+
+        if (values.visibility !== undefined) {
+          var visText = document.getElementById('visibility');
+          if (visText) {
+            visText.textContent = values.visibility.toFixed(1) + ' km';
+          }
+        }
+
+        if (values.cloudCover !== undefined) {
+          var cloudText = document.getElementById('cloudCover');
+          if (cloudText) {
+            cloudText.textContent = values.cloudCover.toFixed(0) + '%';
+          }
+        }
+
+        if (values.windGust !== undefined) {
+          var gustText = document.getElementById('windGust');
+          if (gustText) {
+            gustText.textContent = values.windGust.toFixed(1) + ' km/h';
+          }
+        }
+
+        if (values.timestamp !== undefined) {
+          var updateText = document.getElementById('lastUpdate');
+          if (updateText) {
+            var now = Date.now() / 1000;
+            var diff = now - values.timestamp;
+            var minutes = Math.floor(diff / 60);
+
+            if (minutes < 1) {
+              updateText.textContent = 'Last updated: Just now';
+            } else if (minutes < 60) {
+              updateText.textContent = 'Last updated: ' + minutes + ' min ago';
+            } else {
+              var hours = Math.floor(minutes / 60);
+              updateText.textContent = 'Last updated: ' + hours + ' hr ago';
+            }
+          }
+        }
+      }
+
+      // Main update function called by FUXA
+      window.updateWeatherStation = function(values) {
+        if (values.temperature !== undefined) {
+          updateTemperature(values.temperature, values.feelsLike);
+        }
+
+        if (values.humidity !== undefined) {
+          updateHumidity(values.humidity);
+        }
+
+        if (values.windSpeed !== undefined || values.windDirection !== undefined) {
+          updateWind(values.windSpeed, values.windDirection);
+        }
+
+        if (values.precipRate !== undefined || values.precipTotal !== undefined) {
+          updatePrecipitation(values.precipRate, values.precipTotal);
+        }
+
+        if (values.pressure !== undefined || values.pressureTrend !== undefined) {
+          updatePressure(values.pressure, values.pressureTrend);
+        }
+
+        if (values.uvIndex !== undefined) {
+          updateUVIndex(values.uvIndex);
+        }
+
+        updateAdditionalInfo(values);
+      };
+
+      // Initialize
+      updateTemperature(22.5, 21.2);
+      updateHumidity(65);
+      updateWind(12.5, 45);
+      updatePrecipitation(2.5, 15.2);
+      updatePressure(1013.2, 1);
+      updateUVIndex(5);
+
+      // Expose bindings for FUXA
+      window.weatherStationBindings = bindings;
+    })();
+    ]]>
+  </script>
+</svg>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="280" height="180" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .card-bg {
+        fill: white;
+        stroke: #ccc;
+        stroke-width: 2;
+      }
+      .header-bg {
+        fill: #673AB7;
+      }
+      .header-text {
+        fill: white;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .section-label {
+        fill: #666;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+      .value-text {
+        fill: #333;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .time-text {
+        fill: #673AB7;
+        font-family: 'Courier New', monospace;
+        font-size: 16px;
+        font-weight: bold;
+      }
+      .status-badge {
+        transition: all 0.3s;
+      }
+      .status-badge-rect {
+        fill: #4CAF50;
+        stroke: none;
+      }
+      .status-badge-rect.override {
+        fill: #FF9800;
+      }
+      .status-badge-text {
+        fill: white;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        font-weight: bold;
+        text-anchor: middle;
+      }
+      .divider {
+        stroke: #e0e0e0;
+        stroke-width: 1;
+      }
+      .icon-text {
+        fill: #999;
+        font-family: Arial, sans-serif;
+        font-size: 18px;
+      }
+      .secondary-text {
+        fill: #999;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+      }
+      @keyframes blink {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+      .override-indicator {
+        animation: blink 1.5s infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- Card Background -->
+  <rect class="card-bg" x="0" y="0" width="280" height="180" rx="5"/>
+
+  <!-- Header -->
+  <rect class="header-bg" x="0" y="0" width="280" height="30" rx="5"/>
+  <text class="header-text" x="10" y="20">SCHEDULE</text>
+
+  <!-- Status Badge -->
+  <g class="status-badge" id="statusBadge">
+    <rect class="status-badge-rect" id="statusBadgeRect" x="200" y="7" width="70" height="16" rx="8"/>
+    <text class="status-badge-text" id="statusBadgeText" x="235" y="18">ACTIVE</text>
+  </g>
+
+  <!-- Current Period Section -->
+  <text class="section-label" x="15" y="50">CURRENT PERIOD</text>
+  <text class="icon-text" x="15" y="73">⏰</text>
+  <text class="value-text" id="currentPeriod" x="45" y="73">Morning</text>
+
+  <!-- Current Time -->
+  <text class="time-text" id="currentTime" x="15" y="95">08:45</text>
+  <text class="secondary-text" id="currentTemp" x="80" y="95">Heating to 72°F</text>
+
+  <!-- Divider -->
+  <line class="divider" x1="15" y1="105" x2="265" y2="105"/>
+
+  <!-- Next Event Section -->
+  <text class="section-label" x="15" y="122">NEXT EVENT</text>
+  <text class="icon-text" x="15" y="143">▶</text>
+  <text class="value-text" id="nextPeriod" x="45" y="143">Day</text>
+  <text class="secondary-text" id="nextTime" x="45" y="158">at 09:00 - 68°F</text>
+
+  <!-- Override Indicator -->
+  <g id="overrideIndicator" style="opacity: 0;">
+    <circle class="override-indicator" cx="250" cy="138" r="8" fill="#FF9800"/>
+    <text x="250" y="143" text-anchor="middle" fill="white" font-size="12px" font-weight="bold">!</text>
+  </g>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      // FUXA Integration Variables
+      var currentPeriodTagId = '';
+      var currentTempTagId = '';
+      var nextPeriodTagId = '';
+      var nextTimeTagId = '';
+      var nextTempTagId = '';
+      var overrideActiveTagId = '';
+      var currentTimeTagId = '';
+
+      // Current values
+      var currentPeriodName = 'Morning';
+      var currentTemp = 72.0;
+      var currentTimeStr = '08:45';
+      var nextPeriodName = 'Day';
+      var nextTimeStr = '09:00';
+      var nextTemp = 68.0;
+      var isOverrideActive = false;
+      var units = '°F';
+
+      // DOM Elements
+      var currentPeriod = document.getElementById('currentPeriod');
+      var currentTime = document.getElementById('currentTime');
+      var currentTempEl = document.getElementById('currentTemp');
+      var nextPeriod = document.getElementById('nextPeriod');
+      var nextTime = document.getElementById('nextTime');
+      var statusBadgeRect = document.getElementById('statusBadgeRect');
+      var statusBadgeText = document.getElementById('statusBadgeText');
+      var overrideIndicator = document.getElementById('overrideIndicator');
+
+      // Format time string
+      function formatTime(value) {
+        // If value is a number (minutes since midnight), convert to HH:MM
+        if (typeof value === 'number') {
+          var hours = Math.floor(value / 60);
+          var minutes = value % 60;
+          return String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+        }
+        return value;
+      }
+
+      // Update all visuals
+      function updateVisuals() {
+        currentPeriod.textContent = currentPeriodName;
+        currentTime.textContent = formatTime(currentTimeStr);
+        currentTempEl.textContent = 'Heating to ' + currentTemp.toFixed(1) + units;
+
+        nextPeriod.textContent = nextPeriodName;
+        nextTime.textContent = 'at ' + formatTime(nextTimeStr) + ' - ' + nextTemp.toFixed(1) + units;
+
+        if (isOverrideActive) {
+          statusBadgeRect.classList.add('override');
+          statusBadgeText.textContent = 'OVERRIDE';
+          overrideIndicator.style.opacity = '1';
+        } else {
+          statusBadgeRect.classList.remove('override');
+          statusBadgeText.textContent = 'ACTIVE';
+          overrideIndicator.style.opacity = '0';
+        }
+      }
+
+      // Update current time every minute
+      function updateCurrentTime() {
+        var now = new Date();
+        var hours = now.getHours();
+        var minutes = now.getMinutes();
+        currentTimeStr = String(hours).padStart(2, '0') + ':' + String(minutes).padStart(2, '0');
+        updateVisuals();
+      }
+
+      // Start clock if not receiving time from FUXA
+      var clockInterval = setInterval(function() {
+        if (!currentTimeTagId) {
+          updateCurrentTime();
+        }
+      }, 60000); // Update every minute
+
+      // FUXA Integration Functions
+      window.svgSetValue = function(sigid, value) {
+        if (sigid === currentPeriodTagId) {
+          currentPeriodName = String(value);
+        } else if (sigid === currentTempTagId) {
+          currentTemp = parseFloat(value);
+        } else if (sigid === currentTimeTagId) {
+          currentTimeStr = value;
+        } else if (sigid === nextPeriodTagId) {
+          nextPeriodName = String(value);
+        } else if (sigid === nextTimeTagId) {
+          nextTimeStr = value;
+        } else if (sigid === nextTempTagId) {
+          nextTemp = parseFloat(value);
+        } else if (sigid === overrideActiveTagId) {
+          isOverrideActive = (parseFloat(value) > 0);
+        }
+
+        updateVisuals();
+      };
+
+      window.svgGetProperty = function(name) {
+        if (name === 'currentPeriodVariableId') return currentPeriodTagId;
+        if (name === 'currentTempVariableId') return currentTempTagId;
+        if (name === 'currentTimeVariableId') return currentTimeTagId;
+        if (name === 'nextPeriodVariableId') return nextPeriodTagId;
+        if (name === 'nextTimeVariableId') return nextTimeTagId;
+        if (name === 'nextTempVariableId') return nextTempTagId;
+        if (name === 'overrideActiveVariableId') return overrideActiveTagId;
+        if (name === 'units') return units;
+        return null;
+      };
+
+      window.svgSetProperty = function(name, value) {
+        if (name === 'currentPeriodVariableId') {
+          currentPeriodTagId = value;
+        } else if (name === 'currentTempVariableId') {
+          currentTempTagId = value;
+        } else if (name === 'currentTimeVariableId') {
+          currentTimeTagId = value;
+        } else if (name === 'nextPeriodVariableId') {
+          nextPeriodTagId = value;
+        } else if (name === 'nextTimeVariableId') {
+          nextTimeTagId = value;
+        } else if (name === 'nextTempVariableId') {
+          nextTempTagId = value;
+        } else if (name === 'overrideActiveVariableId') {
+          overrideActiveTagId = value;
+        } else if (name === 'units') {
+          units = value;
+          updateVisuals();
+        }
+      };
+
+      // Initialize
+      updateCurrentTime();
+      updateVisuals();
+
+      // Cleanup on unload
+      window.addEventListener('unload', function() {
+        clearInterval(clockInterval);
+      });
+    })();
+  ]]></script>
+</svg>

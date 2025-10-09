@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="400" height="350">
+  <defs>
+    <style>
+      .hum-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .hum-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .hum-water { fill: #3498db; opacity: 0.6; }
+      .hum-steam { fill: none; stroke: #ecf0f1; stroke-width: 1.5; opacity: 0.5; }
+      .hum-steam-active { animation: steam 2s ease-in-out infinite; }
+      .hum-spray { fill: #3498db; opacity: 0.4; }
+      .hum-spray-active { animation: spray 1.5s ease-in-out infinite; }
+      .hum-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .hum-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .hum-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .hum-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .status-ok { fill: #27ae60; }
+      .status-active { fill: #3498db; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes steam {
+        0% { transform: translateY(0); opacity: 0.5; }
+        50% { opacity: 0.3; }
+        100% { transform: translateY(-15px); opacity: 0; }
+      }
+      @keyframes spray {
+        0% { transform: translateY(0) scale(1); opacity: 0.4; }
+        100% { transform: translateY(30px) scale(1.5); opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="hum-text" x="200" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Humidification System
+  </text>
+
+  <!-- Air Inlet Duct -->
+  <rect class="hum-duct" x="20" y="95" width="80" height="50"/>
+  <text class="hum-label" x="60" y="90" text-anchor="middle">DRY AIR</text>
+  <text id="inletRH" class="hum-value" x="60" y="123" text-anchor="middle" font-size="10">20% RH</text>
+
+  <!-- Airflow Arrow -->
+  <path class="hum-arrow" d="M 40 115 L 60 115 M 55 110 L 60 115 L 55 120"/>
+
+  <!-- Humidifier Chamber -->
+  <rect class="hum-box" x="100" y="70" width="200" height="100" rx="5"/>
+
+  <!-- Steam/Spray Nozzles -->
+  <g id="nozzles">
+    <!-- Nozzle 1 -->
+    <rect fill="#2c3e50" x="130" y="80" width="10" height="15" rx="2"/>
+    <g id="steam1">
+      <path class="hum-steam hum-steam-active" d="M 135 95 Q 130 105 135 115"/>
+      <path class="hum-steam hum-steam-active" d="M 135 95 Q 140 105 135 115" style="animation-delay: 0.5s"/>
+    </g>
+    <g id="spray1">
+      <circle class="hum-spray hum-spray-active" cx="135" cy="95" r="2"/>
+      <circle class="hum-spray hum-spray-active" cx="132" cy="100" r="2" style="animation-delay: 0.2s"/>
+      <circle class="hum-spray hum-spray-active" cx="138" cy="100" r="2" style="animation-delay: 0.4s"/>
+    </g>
+
+    <!-- Nozzle 2 -->
+    <rect fill="#2c3e50" x="180" y="80" width="10" height="15" rx="2"/>
+    <g id="steam2">
+      <path class="hum-steam hum-steam-active" d="M 185 95 Q 180 105 185 115" style="animation-delay: 0.3s"/>
+      <path class="hum-steam hum-steam-active" d="M 185 95 Q 190 105 185 115" style="animation-delay: 0.8s"/>
+    </g>
+    <g id="spray2">
+      <circle class="hum-spray hum-spray-active" cx="185" cy="95" r="2" style="animation-delay: 0.1s"/>
+      <circle class="hum-spray hum-spray-active" cx="182" cy="100" r="2" style="animation-delay: 0.3s"/>
+      <circle class="hum-spray hum-spray-active" cx="188" cy="100" r="2" style="animation-delay: 0.5s"/>
+    </g>
+
+    <!-- Nozzle 3 -->
+    <rect fill="#2c3e50" x="230" y="80" width="10" height="15" rx="2"/>
+    <g id="steam3">
+      <path class="hum-steam hum-steam-active" d="M 235 95 Q 230 105 235 115" style="animation-delay: 0.6s"/>
+      <path class="hum-steam hum-steam-active" d="M 235 95 Q 240 105 235 115" style="animation-delay: 0.1s"/>
+    </g>
+    <g id="spray3">
+      <circle class="hum-spray hum-spray-active" cx="235" cy="95" r="2" style="animation-delay: 0.2s"/>
+      <circle class="hum-spray hum-spray-active" cx="232" cy="100" r="2" style="animation-delay: 0.4s"/>
+      <circle class="hum-spray hum-spray-active" cx="238" cy="100" r="2" style="animation-delay: 0.6s"/>
+    </g>
+  </g>
+
+  <!-- Water/Steam Supply -->
+  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="110" y="45" width="180" height="25" rx="3"/>
+  <text class="hum-label" x="200" y="61" text-anchor="middle" font-size="9">STEAM/WATER SUPPLY</text>
+
+  <!-- Drain Pan -->
+  <rect class="hum-water" x="110" y="150" width="180" height="10" rx="2"/>
+
+  <!-- Air Outlet Duct -->
+  <rect class="hum-duct" x="300" y="95" width="80" height="50"/>
+  <text class="hum-label" x="340" y="90" text-anchor="middle">HUMID AIR</text>
+  <text id="outletRH" class="hum-value" x="340" y="123" text-anchor="middle" font-size="10">45% RH</text>
+
+  <!-- Airflow Arrow -->
+  <path class="hum-arrow" d="M 310 125 L 330 125 M 325 120 L 330 125 L 325 130"/>
+
+  <!-- Water Supply Pipe -->
+  <rect fill="#3498db" stroke="#2980b9" stroke-width="1" x="20" y="55" width="90" height="8" rx="2"/>
+  <text class="hum-label" x="65" y="52" text-anchor="middle" font-size="9">WATER IN</text>
+
+  <!-- Valve -->
+  <circle fill="#34495e" stroke="#2c3e50" stroke-width="2" cx="110" cy="59" r="8"/>
+  <text class="hum-label" x="110" y="62" text-anchor="middle" font-size="7">V</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="190" width="360" height="140" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="hum-label" x="40" y="215">Inlet RH:</text>
+  <text id="inletRHData" class="hum-value" x="40" y="235">20%</text>
+
+  <text class="hum-label" x="140" y="215">Outlet RH:</text>
+  <text id="outletRHData" class="hum-value" x="140" y="235">45%</text>
+
+  <text class="hum-label" x="240" y="215">Setpoint:</text>
+  <text id="setpoint" class="hum-value" x="240" y="235">45%</text>
+
+  <!-- Row 2 -->
+  <text class="hum-label" x="40" y="260">Inlet Temp:</text>
+  <text id="inletTemp" class="hum-value" x="40" y="280">72°F</text>
+
+  <text class="hum-label" x="140" y="260">Outlet Temp:</text>
+  <text id="outletTemp" class="hum-value" x="140" y="280">71°F</text>
+
+  <text class="hum-label" x="240" y="260">Output:</text>
+  <text id="output" class="hum-value" x="240" y="280">65%</text>
+
+  <!-- Row 3 -->
+  <text class="hum-label" x="40" y="300">Water Flow:</text>
+  <text id="waterFlow" class="hum-value" x="40" y="320">2.5 GPM</text>
+
+  <text class="hum-label" x="140" y="300">Type:</text>
+  <text id="typeText" class="hum-value" x="140" y="320">Steam</text>
+
+  <text class="hum-label" x="240" y="300">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="283" cy="312" r="5"/>
+    <text id="statusText" class="hum-value" x="293" y="320">Off</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var inletRH = 20; // percent
+    var outletRH = 45; // percent (calculated)
+    var setpointRH = 45; // percent
+    var inletTemp = 72; // degrees F
+    var outletTemp = 71; // degrees F (calculated)
+    var output = 65; // 0-100% valve/output
+    var waterFlow = 2.5; // GPM
+    var enabled = false;
+    var humidifierType = 'steam'; // 'steam' or 'spray'
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Calculate outlet RH based on output
+      if (enabled && output > 0) {
+        var rhIncrease = (output / 100) * 30; // Max 30% RH increase
+        outletRH = Math.min(inletRH + rhIncrease, 95);
+
+        // Calculate temp change (humidification can slightly cool air)
+        if (humidifierType === 'spray') {
+          outletTemp = inletTemp - (output / 100) * 2; // Evaporative cooling
+        } else {
+          outletTemp = inletTemp + (output / 100) * 1; // Steam slightly warms
+        }
+      } else {
+        outletRH = inletRH;
+        outletTemp = inletTemp;
+      }
+
+      // Calculate water flow based on output
+      waterFlow = (output / 100) * 4.0; // Max 4 GPM
+
+      // Update displays
+      document.getElementById('inletRH').textContent = inletRH.toFixed(0) + '% RH';
+      document.getElementById('outletRH').textContent = outletRH.toFixed(0) + '% RH';
+      document.getElementById('inletRHData').textContent = inletRH.toFixed(0) + '%';
+      document.getElementById('outletRHData').textContent = outletRH.toFixed(0) + '%';
+      document.getElementById('setpoint').textContent = setpointRH.toFixed(0) + '%';
+      document.getElementById('inletTemp').textContent = inletTemp.toFixed(0) + '°F';
+      document.getElementById('outletTemp').textContent = outletTemp.toFixed(0) + '°F';
+      document.getElementById('output').textContent = output.toFixed(0) + '%';
+      document.getElementById('waterFlow').textContent = waterFlow.toFixed(1) + ' GPM';
+
+      // Update type
+      var typeText = humidifierType === 'steam' ? 'Steam' : 'Spray';
+      document.getElementById('typeText').textContent = typeText;
+
+      // Show/hide steam or spray based on type
+      var steam1 = document.getElementById('steam1');
+      var steam2 = document.getElementById('steam2');
+      var steam3 = document.getElementById('steam3');
+      var spray1 = document.getElementById('spray1');
+      var spray2 = document.getElementById('spray2');
+      var spray3 = document.getElementById('spray3');
+
+      if (enabled && output > 5) {
+        if (humidifierType === 'steam') {
+          steam1.style.display = 'block';
+          steam2.style.display = 'block';
+          steam3.style.display = 'block';
+          spray1.style.display = 'none';
+          spray2.style.display = 'none';
+          spray3.style.display = 'none';
+        } else {
+          steam1.style.display = 'none';
+          steam2.style.display = 'none';
+          steam3.style.display = 'none';
+          spray1.style.display = 'block';
+          spray2.style.display = 'block';
+          spray3.style.display = 'block';
+        }
+      } else {
+        steam1.style.display = 'none';
+        steam2.style.display = 'none';
+        steam3.style.display = 'none';
+        spray1.style.display = 'none';
+        spray2.style.display = 'none';
+        spray3.style.display = 'none';
+      }
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else if (enabled && output > 5) {
+        statusLight.setAttribute('class', 'status-active');
+        statusText.textContent = 'Active';
+        statusText.style.fill = '#27ae60';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Off';
+        statusText.style.fill = '#7f8c8d';
+      }
+
+      // Auto control based on setpoint
+      if (enabled) {
+        var error = setpointRH - inletRH;
+        if (error > 0) {
+          output = Math.min((error / 25) * 100, 100); // Proportional control
+        } else {
+          output = 0;
+        }
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

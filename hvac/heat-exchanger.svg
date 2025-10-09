@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="450" height="350">
+  <defs>
+    <style>
+      .hx-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .hx-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .hx-wheel { fill: none; stroke: #7f8c8d; stroke-width: 2; }
+      .hx-wheel-active { animation: spin 4s linear infinite; }
+      .hx-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .hx-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .hx-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .hx-value-warm { fill: #e74c3c; }
+      .hx-value-cold { fill: #3498db; }
+      .hx-arrow { fill: none; stroke-width: 2; }
+      .hx-arrow-supply { stroke: #3498db; }
+      .hx-arrow-exhaust { stroke: #e74c3c; }
+      .hx-flow { opacity: 0.3; }
+      .hx-flow-active { animation: flow 2s linear infinite; }
+      .status-ok { fill: #27ae60; }
+      .status-running { fill: #3498db; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes flow {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="hx-text" x="225" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Heat Recovery Unit
+  </text>
+
+  <!-- Supply Air Path (Bottom) -->
+  <!-- Outside Air In -->
+  <rect class="hx-duct" x="20" y="140" width="80" height="40"/>
+  <text class="hx-label" x="60" y="133" text-anchor="middle">OUTSIDE AIR</text>
+  <text id="oaTemp" class="hx-value hx-value-cold" x="60" y="163" text-anchor="middle" font-size="11">35°F</text>
+
+  <!-- Supply Air Out -->
+  <rect class="hx-duct" x="350" y="140" width="80" height="40"/>
+  <text class="hx-label" x="390" y="133" text-anchor="middle">SUPPLY AIR</text>
+  <text id="saTemp" class="hx-value hx-value-warm" x="390" y="163" text-anchor="middle" font-size="11">62°F</text>
+
+  <!-- Exhaust Air Path (Top) -->
+  <!-- Return Air In -->
+  <rect class="hx-duct" x="350" y="60" width="80" height="40"/>
+  <text class="hx-label" x="390" y="53" text-anchor="middle">RETURN AIR</text>
+  <text id="raTemp" class="hx-value hx-value-warm" x="390" y="83" text-anchor="middle" font-size="11">70°F</text>
+
+  <!-- Exhaust Air Out -->
+  <rect class="hx-duct" x="20" y="60" width="80" height="40"/>
+  <text class="hx-label" x="60" y="53" text-anchor="middle">EXHAUST AIR</text>
+  <text id="eaTemp" class="hx-value hx-value-cold" x="60" y="83" text-anchor="middle" font-size="11">43°F</text>
+
+  <!-- Heat Exchanger Core -->
+  <rect class="hx-box" x="150" y="50" width="150" height="140" rx="5"/>
+  <text class="hx-label" x="225" y="125" text-anchor="middle" font-size="10">ENERGY RECOVERY</text>
+
+  <!-- Energy Wheel Visualization -->
+  <g id="wheel" transform="translate(225, 100)">
+    <circle class="hx-wheel" cx="0" cy="0" r="40"/>
+    <circle class="hx-wheel" cx="0" cy="0" r="30"/>
+    <circle class="hx-wheel" cx="0" cy="0" r="20"/>
+    <circle class="hx-wheel" cx="0" cy="0" r="10"/>
+    <line class="hx-wheel" x1="-40" y1="0" x2="40" y2="0"/>
+    <line class="hx-wheel" x1="0" y1="-40" x2="0" y2="40"/>
+    <line class="hx-wheel" x1="-28" y1="-28" x2="28" y2="28"/>
+    <line class="hx-wheel" x1="-28" y1="28" x2="28" y2="-28"/>
+  </g>
+
+  <!-- Airflow Arrows -->
+  <g id="supplyFlow">
+    <path class="hx-arrow hx-arrow-supply" d="M 110 160 L 140 160 M 135 155 L 140 160 L 135 165"/>
+    <circle class="hx-flow hx-flow-active" fill="#3498db" cx="120" cy="160" r="3"/>
+    <path class="hx-arrow hx-arrow-supply" d="M 310 160 L 340 160 M 335 155 L 340 160 L 335 165"/>
+    <circle class="hx-flow hx-flow-active" fill="#3498db" cx="320" cy="160" r="3" style="animation-delay: 1s"/>
+  </g>
+
+  <g id="exhaustFlow">
+    <path class="hx-arrow hx-arrow-exhaust" d="M 340 80 L 310 80 M 315 75 L 310 80 L 315 85"/>
+    <circle class="hx-flow hx-flow-active" fill="#e74c3c" cx="330" cy="80" r="3" style="animation-delay: 0.5s"/>
+    <path class="hx-arrow hx-arrow-exhaust" d="M 140 80 L 110 80 M 115 75 L 110 80 L 115 85"/>
+    <circle class="hx-flow hx-flow-active" fill="#e74c3c" cx="120" cy="80" r="3" style="animation-delay: 1.5s"/>
+  </g>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="hx-label" x="35" y="235">Outside Air:</text>
+  <text id="oaTempData" class="hx-value hx-value-cold" x="35" y="255">35°F</text>
+
+  <text class="hx-label" x="140" y="235">Supply Air:</text>
+  <text id="saTempData" class="hx-value hx-value-warm" x="140" y="255">62°F</text>
+
+  <text class="hx-label" x="240" y="235">Temp Rise:</text>
+  <text id="tempRise" class="hx-value" x="240" y="255">27°F</text>
+
+  <text class="hx-label" x="330" y="235">Efficiency:</text>
+  <text id="efficiency" class="hx-value" x="330" y="255">77%</text>
+
+  <!-- Row 2 -->
+  <text class="hx-label" x="35" y="275">Return Air:</text>
+  <text id="raTempData" class="hx-value hx-value-warm" x="35" y="295">70°F</text>
+
+  <text class="hx-label" x="140" y="275">Exhaust Air:</text>
+  <text id="eaTempData" class="hx-value hx-value-cold" x="140" y="295">43°F</text>
+
+  <text class="hx-label" x="240" y="275">Temp Drop:</text>
+  <text id="tempDrop" class="hx-value" x="240" y="295">27°F</text>
+
+  <text class="hx-label" x="330" y="275">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="373" cy="287" r="5"/>
+    <text id="statusText" class="hx-value" x="383" y="295">Off</text>
+  </g>
+
+  <!-- Row 3 -->
+  <text class="hx-label" x="35" y="310">Supply Flow:</text>
+  <text id="supplyFlow" class="hx-value" x="35" y="325">0 CFM</text>
+
+  <text class="hx-label" x="140" y="310">Exhaust Flow:</text>
+  <text id="exhaustFlow" class="hx-value" x="140" y="325">0 CFM</text>
+
+  <text class="hx-label" x="240" y="310">Energy Saved:</text>
+  <text id="energySaved" class="hx-value" x="240" y="325">0 kW</text>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var oaTemp = 35; // degrees F
+    var raTemp = 70; // degrees F
+    var saTemp = 62; // degrees F (calculated)
+    var eaTemp = 43; // degrees F (calculated)
+    var supplyAirflow = 0; // CFM
+    var exhaustAirflow = 0; // CFM
+    var wheelSpeed = 0; // RPM
+    var enabled = false;
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Calculate heat exchanger performance
+      var tempDiff = raTemp - oaTemp;
+      var efficiency = 0.77; // 77% efficient
+
+      if (enabled && supplyAirflow > 0) {
+        // Calculate outlet temperatures based on efficiency
+        var tempTransfer = tempDiff * efficiency;
+        saTemp = oaTemp + tempTransfer;
+        eaTemp = raTemp - tempTransfer;
+      } else {
+        // No heat transfer when off
+        saTemp = oaTemp;
+        eaTemp = raTemp;
+      }
+
+      var tempRise = saTemp - oaTemp;
+      var tempDrop = raTemp - eaTemp;
+
+      // Update temperature displays
+      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
+      document.getElementById('eaTemp').textContent = eaTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('saTempData').textContent = saTemp.toFixed(0) + '°F';
+      document.getElementById('eaTempData').textContent = eaTemp.toFixed(0) + '°F';
+
+      // Update calculated values
+      document.getElementById('tempRise').textContent = tempRise.toFixed(0) + '°F';
+      document.getElementById('tempDrop').textContent = tempDrop.toFixed(0) + '°F';
+      document.getElementById('efficiency').textContent = (efficiency * 100).toFixed(0) + '%';
+
+      // Update airflows
+      document.getElementById('supplyFlow').textContent = supplyAirflow.toFixed(0) + ' CFM';
+      document.getElementById('exhaustFlow').textContent = exhaustAirflow.toFixed(0) + ' CFM';
+
+      // Calculate energy savings (rough estimate)
+      // Energy (kW) = CFM × temp_rise × 1.08 / 3412 (BTU to kW conversion)
+      var energySaved = 0;
+      if (enabled && supplyAirflow > 0) {
+        var btuh = supplyAirflow * tempRise * 1.08;
+        energySaved = btuh / 3412; // Convert to kW
+      }
+      document.getElementById('energySaved').textContent = energySaved.toFixed(1) + ' kW';
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else if (enabled && supplyAirflow > 0) {
+        statusLight.setAttribute('class', 'status-running');
+        statusText.textContent = 'Running';
+        statusText.style.fill = '#27ae60';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Off';
+        statusText.style.fill = '#7f8c8d';
+      }
+
+      // Wheel animation
+      var wheel = document.getElementById('wheel');
+      if (enabled && supplyAirflow > 0) {
+        wheel.classList.add('hx-wheel-active');
+      } else {
+        wheel.classList.remove('hx-wheel-active');
+      }
+
+      // Show/hide flow arrows
+      var supplyFlowGroup = document.getElementById('supplyFlow');
+      var exhaustFlowGroup = document.getElementById('exhaustFlow');
+      if (enabled && supplyAirflow > 0) {
+        supplyFlowGroup.style.display = 'block';
+        exhaustFlowGroup.style.display = 'block';
+      } else {
+        supplyFlowGroup.style.display = 'none';
+        exhaustFlowGroup.style.display = 'none';
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

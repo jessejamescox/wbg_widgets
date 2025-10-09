@@ -1,0 +1,506 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+  <defs>
+    <linearGradient id="oduGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="iduGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a6f98;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="fanGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#6a9fc8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="500" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">VRF SYSTEM (Variable Refrigerant Flow)</text>
+
+  <!-- Outdoor Unit -->
+  <g id="outdoor-unit">
+    <rect x="50" y="80" width="400" height="320" fill="url(#oduGrad)" stroke="#4a9eff" stroke-width="3" rx="8"/>
+    <text x="250" y="110" font-family="Arial" font-size="20" font-weight="bold" fill="#ffffff" text-anchor="middle">OUTDOOR UNIT</text>
+
+    <!-- Status -->
+    <circle id="odu-status" cx="420" cy="100" r="12" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Compressor 1 -->
+    <g id="compressor-1">
+      <rect x="80" y="140" width="100" height="100" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+      <text x="130" y="162" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">COMP 1</text>
+
+      <circle cx="130" cy="190" r="28" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+      <circle cx="130" cy="190" r="20" fill="none" stroke="#4a9eff" stroke-width="2"/>
+
+      <g id="comp1-rotation">
+        <line x1="130" y1="170" x2="130" y2="190" stroke="#00ff00" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="130" y1="190" x2="150" y2="190" stroke="#00ff00" stroke-width="2.5" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 130 190"
+          to="360 130 190"
+          dur="2s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="comp1-status" cx="160" cy="150" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="130" y="228" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="comp1-speed">90%</text>
+    </g>
+
+    <!-- Compressor 2 -->
+    <g id="compressor-2">
+      <rect x="200" y="140" width="100" height="100" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+      <text x="250" y="162" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">COMP 2</text>
+
+      <circle cx="250" cy="190" r="28" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+      <circle cx="250" cy="190" r="20" fill="none" stroke="#4a9eff" stroke-width="2"/>
+
+      <g id="comp2-rotation">
+        <line x1="250" y1="170" x2="250" y2="190" stroke="#00ff00" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="250" y1="190" x2="270" y2="190" stroke="#00ff00" stroke-width="2.5" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 250 190"
+          to="360 250 190"
+          dur="2s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="comp2-status" cx="280" cy="150" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="250" y="228" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="comp2-speed">85%</text>
+    </g>
+
+    <!-- Heat Exchanger/Condenser -->
+    <g id="outdoor-hx">
+      <rect x="320" y="140" width="110" height="160" fill="#1a3a5a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+      <text x="375" y="162" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">HEAT EX</text>
+
+      <!-- Coil representation -->
+      <g opacity="0.5">
+        <line x1="330" y1="175" x2="420" y2="175" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="188" x2="420" y2="188" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="201" x2="420" y2="201" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="214" x2="420" y2="214" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="227" x2="420" y2="227" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="240" x2="420" y2="240" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="253" x2="420" y2="253" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="266" x2="420" y2="266" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="330" y1="279" x2="420" y2="279" stroke="#ff6b35" stroke-width="1"/>
+      </g>
+
+      <!-- Fans -->
+      <circle cx="355" cy="225" r="22" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <circle cx="395" cy="225" r="22" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+
+      <g id="odu-fan">
+        <path d="M 355 210 L 355 240 M 340 225 L 370 225" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+        <path d="M 395 210 L 395 240 M 380 225 L 410 225" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 375 225"
+          to="360 375 225"
+          dur="1.5s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="odu-fan-status" cx="405" cy="150" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="375" y="285" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="odu-fan-speed">Fan: 88%</text>
+    </g>
+
+    <!-- Inverter -->
+    <rect x="80" y="260" width="220" height="60" fill="#2a4a6a" stroke="#ffaa00" stroke-width="2" rx="3"/>
+    <text x="190" y="282" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">INVERTER CONTROL</text>
+    <text x="100" y="302" font-family="Arial" font-size="10" fill="#ffaa00">Frequency:</text>
+    <text x="270" y="302" font-family="Arial" font-size="12" font-weight="bold" fill="#00ff00" text-anchor="end" id="inverter-freq">75 Hz</text>
+
+    <!-- ODU Values -->
+    <text x="80" y="345" font-family="Arial" font-size="11" fill="#ffffff">Outdoor Temp:</text>
+    <text x="230" y="345" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="end" id="outdoor-temp">85.5°F</text>
+
+    <text x="80" y="365" font-family="Arial" font-size="11" fill="#4a9eff">Discharge Temp:</text>
+    <text x="230" y="365" font-family="Arial" font-size="13" font-weight="bold" fill="#ff6b35" text-anchor="end" id="discharge-temp">125.3°F</text>
+
+    <text x="80" y="385" font-family="Arial" font-size="11" fill="#4a9eff">Total Power:</text>
+    <text x="230" y="385" font-family="Arial" font-size="13" font-weight="bold" fill="#ffaa00" text-anchor="end" id="odu-power">12.5 kW</text>
+  </g>
+
+  <!-- Branch Controller -->
+  <g id="branch-controller">
+    <rect x="500" y="150" width="120" height="200" fill="#2a4a6a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="560" y="175" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">BRANCH</text>
+    <text x="560" y="192" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CONTROLLER</text>
+
+    <!-- Branch valves -->
+    <circle cx="560" cy="220" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="580" y="224" font-family="Arial" font-size="9" fill="#ffffff">BC-1</text>
+
+    <circle cx="560" cy="245" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="580" y="249" font-family="Arial" font-size="9" fill="#ffffff">BC-2</text>
+
+    <circle cx="560" cy="270" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="580" y="274" font-family="Arial" font-size="9" fill="#ffffff">BC-3</text>
+
+    <circle cx="560" cy="295" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="580" y="299" font-family="Arial" font-size="9" fill="#ffffff">BC-4</text>
+
+    <circle cx="560" cy="320" r="8" fill="#666666" stroke="#ffffff" stroke-width="1"/>
+    <text x="580" y="324" font-family="Arial" font-size="9" fill="#999999">BC-5</text>
+  </g>
+
+  <!-- Refrigerant Lines -->
+  <g id="refrigerant-lines">
+    <!-- Main lines from ODU to BC -->
+    <line x1="450" y1="200" x2="500" y2="200" stroke="#ff0000" stroke-width="6"/>
+    <line x1="450" y1="280" x2="500" y2="280" stroke="#4a9eff" stroke-width="6"/>
+
+    <text x="465" y="195" font-family="Arial" font-size="10" fill="#ff0000">HOT</text>
+    <text x="465" y="295" font-family="Arial" font-size="10" fill="#4a9eff">COLD</text>
+
+    <!-- Lines from BC to IDUs -->
+    <line x1="620" y1="220" x2="700" y2="180" stroke="#ff6b35" stroke-width="4"/>
+    <line x1="620" y1="245" x2="700" y2="315" stroke="#ff6b35" stroke-width="4"/>
+    <line x1="620" y1="270" x2="700" y2="450" stroke="#ff6b35" stroke-width="4"/>
+    <line x1="620" y1="295" x2="700" y2="585" stroke="#ff6b35" stroke-width="4"/>
+  </g>
+
+  <!-- Indoor Unit 1 -->
+  <g id="idu-1">
+    <rect x="700" y="100" width="260" height="160" fill="url(#iduGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="830" y="125" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">IDU-1 (ZONE 1)</text>
+
+    <circle id="idu1-status" cx="930" cy="115" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <circle cx="760" cy="165" r="25" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <g id="idu1-fan">
+      <path d="M 760 148 L 760 182 M 743 165 L 777 165" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 760 165"
+        to="360 760 165"
+        dur="1.3s"
+        repeatCount="indefinite"/>
+    </g>
+
+    <text x="720" y="210" font-family="Arial" font-size="10" fill="#4a9eff">Temp:</text>
+    <text x="720" y="228" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" id="idu1-temp">72.5°F</text>
+    <text x="720" y="245" font-family="Arial" font-size="10" fill="#ffffff">Setpoint:</text>
+    <text x="790" y="245" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" id="idu1-setpoint">72.0°F</text>
+
+    <text x="840" y="165" font-family="Arial" font-size="10" fill="#ffaa00">Mode:</text>
+    <text x="940" y="165" font-family="Arial" font-size="11" font-weight="bold" fill="#ff6b35" text-anchor="end" id="idu1-mode">HEAT</text>
+
+    <text x="840" y="185" font-family="Arial" font-size="10" fill="#4a9eff">Capacity:</text>
+    <text x="940" y="185" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="end" id="idu1-capacity">85%</text>
+
+    <text x="840" y="210" font-family="Arial" font-size="10" fill="#4a9eff">Fan:</text>
+    <text x="940" y="210" font-family="Arial" font-size="11" font-weight="bold" fill="#4a9eff" text-anchor="end" id="idu1-fan-speed">MED</text>
+
+    <text x="840" y="235" font-family="Arial" font-size="10" fill="#4a9eff">Power:</text>
+    <text x="940" y="235" font-family="Arial" font-size="11" font-weight="bold" fill="#ffaa00" text-anchor="end" id="idu1-power">2.8 kW</text>
+  </g>
+
+  <!-- Indoor Unit 2 -->
+  <g id="idu-2">
+    <rect x="700" y="280" width="260" height="160" fill="url(#iduGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="830" y="305" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">IDU-2 (ZONE 2)</text>
+
+    <circle id="idu2-status" cx="930" cy="295" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <circle cx="760" cy="345" r="25" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <g id="idu2-fan">
+      <path d="M 760 328 L 760 362 M 743 345 L 777 345" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 760 345"
+        to="360 760 345"
+        dur="1.3s"
+        repeatCount="indefinite"/>
+    </g>
+
+    <text x="720" y="390" font-family="Arial" font-size="10" fill="#4a9eff">Temp:</text>
+    <text x="720" y="408" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" id="idu2-temp">70.8°F</text>
+    <text x="720" y="425" font-family="Arial" font-size="10" fill="#ffffff">Setpoint:</text>
+    <text x="790" y="425" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" id="idu2-setpoint">71.0°F</text>
+
+    <text x="840" y="345" font-family="Arial" font-size="10" fill="#ffaa00">Mode:</text>
+    <text x="940" y="345" font-family="Arial" font-size="11" font-weight="bold" fill="#ff6b35" text-anchor="end" id="idu2-mode">HEAT</text>
+
+    <text x="840" y="365" font-family="Arial" font-size="10" fill="#4a9eff">Capacity:</text>
+    <text x="940" y="365" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="end" id="idu2-capacity">92%</text>
+
+    <text x="840" y="390" font-family="Arial" font-size="10" fill="#4a9eff">Fan:</text>
+    <text x="940" y="390" font-family="Arial" font-size="11" font-weight="bold" fill="#4a9eff" text-anchor="end" id="idu2-fan-speed">HIGH</text>
+
+    <text x="840" y="415" font-family="Arial" font-size="10" fill="#4a9eff">Power:</text>
+    <text x="940" y="415" font-family="Arial" font-size="11" font-weight="bold" fill="#ffaa00" text-anchor="end" id="idu2-power">3.2 kW</text>
+  </g>
+
+  <!-- Indoor Unit 3 -->
+  <g id="idu-3">
+    <rect x="700" y="460" width="260" height="160" fill="url(#iduGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="830" y="485" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">IDU-3 (ZONE 3)</text>
+
+    <circle id="idu3-status" cx="930" cy="475" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <circle cx="760" cy="525" r="25" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <g id="idu3-fan">
+      <path d="M 760 508 L 760 542 M 743 525 L 777 525" stroke="#4a9eff" stroke-width="2" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 760 525"
+        to="360 760 525"
+        dur="1.3s"
+        repeatCount="indefinite"/>
+    </g>
+
+    <text x="720" y="570" font-family="Arial" font-size="10" fill="#4a9eff">Temp:</text>
+    <text x="720" y="588" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" id="idu3-temp">73.2°F</text>
+    <text x="720" y="605" font-family="Arial" font-size="10" fill="#ffffff">Setpoint:</text>
+    <text x="790" y="605" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" id="idu3-setpoint">72.0°F</text>
+
+    <text x="840" y="525" font-family="Arial" font-size="10" fill="#ffaa00">Mode:</text>
+    <text x="940" y="525" font-family="Arial" font-size="11" font-weight="bold" fill="#ff6b35" text-anchor="end" id="idu3-mode">HEAT</text>
+
+    <text x="840" y="545" font-family="Arial" font-size="10" fill="#4a9eff">Capacity:</text>
+    <text x="940" y="545" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="end" id="idu3-capacity">68%</text>
+
+    <text x="840" y="570" font-family="Arial" font-size="10" fill="#4a9eff">Fan:</text>
+    <text x="940" y="570" font-family="Arial" font-size="11" font-weight="bold" fill="#4a9eff" text-anchor="end" id="idu3-fan-speed">LOW</text>
+
+    <text x="840" y="595" font-family="Arial" font-size="10" fill="#4a9eff">Power:</text>
+    <text x="940" y="595" font-family="Arial" font-size="11" font-weight="bold" fill="#ffaa00" text-anchor="end" id="idu3-power">2.3 kW</text>
+  </g>
+
+  <!-- Indoor Unit 4 -->
+  <g id="idu-4">
+    <rect x="700" y="640" width="260" height="120" fill="url(#iduGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="830" y="665" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">IDU-4 (ZONE 4)</text>
+
+    <circle id="idu4-status" cx="930" cy="655" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <text x="720" y="690" font-family="Arial" font-size="10" fill="#4a9eff">Temp:</text>
+    <text x="720" y="708" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" id="idu4-temp">71.8°F</text>
+    <text x="720" y="728" font-family="Arial" font-size="10" fill="#ffffff">Setpoint:</text>
+    <text x="790" y="728" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" id="idu4-setpoint">72.0°F</text>
+
+    <text x="840" y="690" font-family="Arial" font-size="10" fill="#ffaa00">Mode:</text>
+    <text x="940" y="690" font-family="Arial" font-size="11" font-weight="bold" fill="#ff6b35" text-anchor="end" id="idu4-mode">HEAT</text>
+
+    <text x="840" y="710" font-family="Arial" font-size="10" fill="#4a9eff">Capacity:</text>
+    <text x="940" y="710" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="end" id="idu4-capacity">75%</text>
+
+    <text x="840" y="735" font-family="Arial" font-size="10" fill="#4a9eff">Power:</text>
+    <text x="940" y="735" font-family="Arial" font-size="11" font-weight="bold" fill="#ffaa00" text-anchor="end" id="idu4-power">2.5 kW</text>
+  </g>
+
+  <!-- System Summary -->
+  <g id="system-summary">
+    <rect x="50" y="450" width="400" height="310" fill="#0d1b2a" stroke="#00ff00" stroke-width="2" rx="5"/>
+    <text x="250" y="480" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">VRF SYSTEM SUMMARY</text>
+
+    <!-- Total Capacity -->
+    <text x="70" y="510" font-family="Arial" font-size="12" fill="#4a9eff">Total Capacity:</text>
+    <text x="400" y="510" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="total-capacity">20 Tons</text>
+
+    <!-- Active IDUs -->
+    <text x="70" y="535" font-family="Arial" font-size="12" fill="#4a9eff">Active IDUs:</text>
+    <text x="400" y="535" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="active-idus">4 of 5</text>
+
+    <!-- System Load -->
+    <text x="70" y="560" font-family="Arial" font-size="12" fill="#4a9eff">System Load:</text>
+    <text x="400" y="560" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="system-load">80%</text>
+
+    <!-- Total Power -->
+    <text x="70" y="585" font-family="Arial" font-size="12" fill="#ffaa00">Total Power:</text>
+    <text x="400" y="585" font-family="Arial" font-size="16" font-weight="bold" fill="#ffaa00" text-anchor="end" id="total-power">13.3 kW</text>
+
+    <!-- COP -->
+    <text x="70" y="610" font-family="Arial" font-size="12" fill="#4a9eff">System COP:</text>
+    <text x="400" y="610" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="system-cop">4.2</text>
+
+    <!-- Operating Mode -->
+    <text x="70" y="635" font-family="Arial" font-size="12" fill="#4a9eff">Operating Mode:</text>
+    <text x="400" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="system-mode">HEATING</text>
+
+    <!-- Discharge Pressure -->
+    <text x="70" y="660" font-family="Arial" font-size="12" fill="#4a9eff">Discharge Pressure:</text>
+    <text x="400" y="660" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="discharge-pressure">420 PSI</text>
+
+    <!-- Suction Pressure -->
+    <text x="70" y="685" font-family="Arial" font-size="12" fill="#4a9eff">Suction Pressure:</text>
+    <text x="400" y="685" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="suction-pressure">135 PSI</text>
+
+    <!-- Communication -->
+    <text x="70" y="710" font-family="Arial" font-size="12" fill="#4a9eff">Communication:</text>
+    <text x="400" y="710" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="communication">NORMAL</text>
+
+    <!-- System Status -->
+    <text x="70" y="740" font-family="Arial" font-size="12" fill="#4a9eff">System Status:</text>
+    <text x="400" y="740" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="system-status">RUNNING</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var vrfSystem = {
+      // ODU
+      odu_status: true,
+      comp1_status: true,
+      comp1_speed: 90,
+      comp2_status: true,
+      comp2_speed: 85,
+      odu_fan_status: true,
+      odu_fan_speed: 88,
+      inverter_freq: 75,
+      outdoor_temp: 85.5,
+      discharge_temp: 125.3,
+      odu_power: 12.5,
+
+      // IDU 1
+      idu1_status: true,
+      idu1_temp: 72.5,
+      idu1_setpoint: 72.0,
+      idu1_mode: "HEAT",
+      idu1_capacity: 85,
+      idu1_fan_speed: "MED",
+      idu1_power: 2.8,
+
+      // IDU 2
+      idu2_status: true,
+      idu2_temp: 70.8,
+      idu2_setpoint: 71.0,
+      idu2_mode: "HEAT",
+      idu2_capacity: 92,
+      idu2_fan_speed: "HIGH",
+      idu2_power: 3.2,
+
+      // IDU 3
+      idu3_status: true,
+      idu3_temp: 73.2,
+      idu3_setpoint: 72.0,
+      idu3_mode: "HEAT",
+      idu3_capacity: 68,
+      idu3_fan_speed: "LOW",
+      idu3_power: 2.3,
+
+      // IDU 4
+      idu4_status: true,
+      idu4_temp: 71.8,
+      idu4_setpoint: 72.0,
+      idu4_mode: "HEAT",
+      idu4_capacity: 75,
+      idu4_power: 2.5,
+
+      // System Summary
+      total_capacity: 20,
+      active_idus: "4 of 5",
+      system_load: 80,
+      total_power: 13.3,
+      system_cop: 4.2,
+      system_mode: "HEATING",
+      discharge_pressure: 420,
+      suction_pressure: 135,
+      communication: "NORMAL",
+      system_status: "RUNNING"
+    };
+
+    function updateDisplay() {
+      // Update ODU
+      document.getElementById('odu-status').setAttribute('fill', vrfSystem.odu_status ? '#00ff00' : '#ff0000');
+      document.getElementById('comp1-status').setAttribute('fill', vrfSystem.comp1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('comp1-speed').textContent = vrfSystem.comp1_speed + '%';
+      document.getElementById('comp2-status').setAttribute('fill', vrfSystem.comp2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('comp2-speed').textContent = vrfSystem.comp2_speed + '%';
+      document.getElementById('odu-fan-status').setAttribute('fill', vrfSystem.odu_fan_status ? '#00ff00' : '#ff0000');
+      document.getElementById('odu-fan-speed').textContent = 'Fan: ' + vrfSystem.odu_fan_speed + '%';
+      document.getElementById('inverter-freq').textContent = vrfSystem.inverter_freq + ' Hz';
+      document.getElementById('outdoor-temp').textContent = vrfSystem.outdoor_temp.toFixed(1) + '°F';
+      document.getElementById('discharge-temp').textContent = vrfSystem.discharge_temp.toFixed(1) + '°F';
+      document.getElementById('odu-power').textContent = vrfSystem.odu_power.toFixed(1) + ' kW';
+
+      // Update IDU 1
+      document.getElementById('idu1-status').setAttribute('fill', vrfSystem.idu1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('idu1-temp').textContent = vrfSystem.idu1_temp.toFixed(1) + '°F';
+      document.getElementById('idu1-setpoint').textContent = vrfSystem.idu1_setpoint.toFixed(1) + '°F';
+      document.getElementById('idu1-mode').textContent = vrfSystem.idu1_mode;
+      document.getElementById('idu1-capacity').textContent = vrfSystem.idu1_capacity + '%';
+      document.getElementById('idu1-fan-speed').textContent = vrfSystem.idu1_fan_speed;
+      document.getElementById('idu1-power').textContent = vrfSystem.idu1_power.toFixed(1) + ' kW';
+
+      // Update IDU 2
+      document.getElementById('idu2-status').setAttribute('fill', vrfSystem.idu2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('idu2-temp').textContent = vrfSystem.idu2_temp.toFixed(1) + '°F';
+      document.getElementById('idu2-setpoint').textContent = vrfSystem.idu2_setpoint.toFixed(1) + '°F';
+      document.getElementById('idu2-mode').textContent = vrfSystem.idu2_mode;
+      document.getElementById('idu2-capacity').textContent = vrfSystem.idu2_capacity + '%';
+      document.getElementById('idu2-fan-speed').textContent = vrfSystem.idu2_fan_speed;
+      document.getElementById('idu2-power').textContent = vrfSystem.idu2_power.toFixed(1) + ' kW';
+
+      // Update IDU 3
+      document.getElementById('idu3-status').setAttribute('fill', vrfSystem.idu3_status ? '#00ff00' : '#ff0000');
+      document.getElementById('idu3-temp').textContent = vrfSystem.idu3_temp.toFixed(1) + '°F';
+      document.getElementById('idu3-setpoint').textContent = vrfSystem.idu3_setpoint.toFixed(1) + '°F';
+      document.getElementById('idu3-mode').textContent = vrfSystem.idu3_mode;
+      document.getElementById('idu3-capacity').textContent = vrfSystem.idu3_capacity + '%';
+      document.getElementById('idu3-fan-speed').textContent = vrfSystem.idu3_fan_speed;
+      document.getElementById('idu3-power').textContent = vrfSystem.idu3_power.toFixed(1) + ' kW';
+
+      // Update IDU 4
+      document.getElementById('idu4-status').setAttribute('fill', vrfSystem.idu4_status ? '#00ff00' : '#ff0000');
+      document.getElementById('idu4-temp').textContent = vrfSystem.idu4_temp.toFixed(1) + '°F';
+      document.getElementById('idu4-setpoint').textContent = vrfSystem.idu4_setpoint.toFixed(1) + '°F';
+      document.getElementById('idu4-mode').textContent = vrfSystem.idu4_mode;
+      document.getElementById('idu4-capacity').textContent = vrfSystem.idu4_capacity + '%';
+      document.getElementById('idu4-power').textContent = vrfSystem.idu4_power.toFixed(1) + ' kW';
+
+      // Update System Summary
+      document.getElementById('total-capacity').textContent = vrfSystem.total_capacity + ' Tons';
+      document.getElementById('active-idus').textContent = vrfSystem.active_idus;
+      document.getElementById('system-load').textContent = vrfSystem.system_load + '%';
+      document.getElementById('total-power').textContent = vrfSystem.total_power.toFixed(1) + ' kW';
+      document.getElementById('system-cop').textContent = vrfSystem.system_cop.toFixed(1);
+      document.getElementById('system-mode').textContent = vrfSystem.system_mode;
+      document.getElementById('discharge-pressure').textContent = vrfSystem.discharge_pressure + ' PSI';
+      document.getElementById('suction-pressure').textContent = vrfSystem.suction_pressure + ' PSI';
+      document.getElementById('communication').textContent = vrfSystem.communication;
+      document.getElementById('system-status').textContent = vrfSystem.system_status;
+
+      var statusColor = vrfSystem.system_status === 'RUNNING' ? '#00ff00' :
+                       vrfSystem.system_status === 'ALARM' ? '#ff0000' : '#ffaa00';
+      document.getElementById('system-status').setAttribute('fill', statusColor);
+
+      var commColor = vrfSystem.communication === 'NORMAL' ? '#00ff00' : '#ff0000';
+      document.getElementById('communication').setAttribute('fill', commColor);
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

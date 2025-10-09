@@ -1,0 +1,254 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" id="water-meter">
+  <defs>
+    <style>
+      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #00aaff; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .status-ok { fill: #00ff00; }
+      .status-warning { fill: #ffaa00; }
+      .status-alarm { fill: #ff0000; }
+      .water-fill { fill: #00aaff; opacity: 0.7; }
+      .pipe-stroke { stroke: #00aaff; stroke-width: 3; fill: none; }
+      .leak-icon { fill: #ff0000; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="meter-bg" x="10" y="10" width="380" height="480" rx="10"/>
+
+  <!-- Title -->
+  <text class="title-text" x="200" y="35" text-anchor="middle">WATER METER</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" class="status-ok" cx="370" cy="25" r="8"/>
+
+  <!-- Flow Rate Display (Large) -->
+  <g id="flowDisplay">
+    <text class="label-text" x="200" y="65" text-anchor="middle">FLOW RATE</text>
+    <text id="flowValue" class="value-text" x="200" y="95" text-anchor="middle" font-size="32">0.0</text>
+    <text class="unit-text" x="200" y="115" text-anchor="middle">GPM</text>
+  </g>
+
+  <!-- Flow Visualization -->
+  <g id="flowVisualization" transform="translate(50, 140)">
+    <rect class="meter-bg" x="0" y="0" width="300" height="60" rx="5"/>
+    <rect x="5" y="15" width="290" height="30" rx="15" fill="#0a3d5c"/>
+
+    <!-- Animated flow particles -->
+    <circle id="particle1" class="water-fill" cx="20" cy="30" r="5">
+      <animate attributeName="cx" from="20" to="280" dur="2s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle id="particle2" class="water-fill" cx="20" cy="30" r="5">
+      <animate attributeName="cx" from="20" to="280" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle id="particle3" class="water-fill" cx="20" cy="30" r="5">
+      <animate attributeName="cx" from="20" to="280" dur="2s" begin="1s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0;0.7;0" dur="2s" begin="1s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Pressure Display -->
+  <g id="pressureDisplay">
+    <rect class="meter-bg" x="25" y="220" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="240" text-anchor="middle">PRESSURE</text>
+    <text id="pressureValue" class="value-text" x="107.5" y="270" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="107.5" y="290" text-anchor="middle">PSI</text>
+  </g>
+
+  <!-- Temperature Display -->
+  <g id="tempDisplay">
+    <rect class="meter-bg" x="210" y="220" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="240" text-anchor="middle">TEMPERATURE</text>
+    <text id="tempValue" class="value-text" x="292.5" y="270" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="292.5" y="290" text-anchor="middle">°F</text>
+  </g>
+
+  <!-- Total Volume Display -->
+  <g id="totalDisplay">
+    <rect class="meter-bg" x="25" y="315" width="350" height="70" rx="5"/>
+    <text class="label-text" x="200" y="335" text-anchor="middle">TOTAL VOLUME</text>
+    <text id="totalValue" class="value-text" x="200" y="365" text-anchor="middle">0</text>
+    <text class="unit-text" x="200" y="380" text-anchor="middle">Gallons</text>
+  </g>
+
+  <!-- Daily Usage -->
+  <g id="dailyDisplay">
+    <rect class="meter-bg" x="25" y="400" width="165" height="70" rx="5"/>
+    <text class="label-text" x="107.5" y="420" text-anchor="middle">TODAY'S USAGE</text>
+    <text id="dailyValue" class="value-text" x="107.5" y="450" text-anchor="middle">0</text>
+    <text class="unit-text" x="107.5" y="465" text-anchor="middle">Gal</text>
+  </g>
+
+  <!-- Leak Detection -->
+  <g id="leakDisplay">
+    <rect class="meter-bg" x="210" y="400" width="165" height="70" rx="5"/>
+    <text class="label-text" x="292.5" y="420" text-anchor="middle">LEAK STATUS</text>
+    <g id="leakIcon" transform="translate(292.5, 445)">
+      <path class="leak-icon" d="M0,-12 Q-5,-12 -8,-8 Q-10,-4 -8,0 Q-5,4 0,8 Q5,4 8,0 Q10,-4 8,-8 Q5,-12 0,-12 Z" opacity="0"/>
+      <circle id="leakIndicator" class="status-ok" cx="0" cy="0" r="8"/>
+    </g>
+    <text id="leakText" class="unit-text" x="292.5" y="465" text-anchor="middle">NO LEAK</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Variable Mappings
+    var variables = {
+      flowRate: 'water_meter_flow_rate',      // GPM
+      pressure: 'water_meter_pressure',       // PSI
+      temperature: 'water_meter_temp',        // °F
+      totalVolume: 'water_meter_total',       // Gallons
+      dailyUsage: 'water_meter_daily',        // Gallons
+      leakDetected: 'water_meter_leak',       // boolean
+      alarm: 'water_meter_alarm'              // boolean
+    };
+
+    // Configuration
+    var config = {
+      maxFlowRate: 100,      // GPM
+      minPressure: 30,       // PSI
+      maxPressure: 80,       // PSI
+      leakThreshold: 0.5     // GPM for continuous leak detection
+    };
+
+    // Update function called by FUXA
+    function updateValues(tag, value) {
+      try {
+        switch(tag) {
+          case variables.flowRate:
+            updateFlowRate(value);
+            break;
+          case variables.pressure:
+            updatePressure(value);
+            break;
+          case variables.temperature:
+            updateTemperature(value);
+            break;
+          case variables.totalVolume:
+            updateTotalVolume(value);
+            break;
+          case variables.dailyUsage:
+            updateDailyUsage(value);
+            break;
+          case variables.leakDetected:
+            updateLeakStatus(value);
+            break;
+          case variables.alarm:
+            updateAlarmStatus(value);
+            break;
+        }
+      } catch(e) {
+        console.error('Error updating water meter:', e);
+      }
+    }
+
+    function updateFlowRate(value) {
+      var flow = parseFloat(value) || 0;
+      document.getElementById('flowValue').textContent = flow.toFixed(1);
+
+      // Control animation speed based on flow rate
+      var particles = [
+        document.getElementById('particle1'),
+        document.getElementById('particle2'),
+        document.getElementById('particle3')
+      ];
+
+      if (flow > 0) {
+        var duration = Math.max(0.5, 3 - (flow / config.maxFlowRate * 2.5));
+        particles.forEach(function(particle, index) {
+          var anims = particle.getElementsByTagName('animate');
+          for (var i = 0; i < anims.length; i++) {
+            anims[i].setAttribute('dur', duration + 's');
+          }
+        });
+      }
+    }
+
+    function updatePressure(value) {
+      var pressure = parseFloat(value) || 0;
+      document.getElementById('pressureValue').textContent = pressure.toFixed(1);
+
+      var valueText = document.getElementById('pressureValue');
+      if (pressure < config.minPressure) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else if (pressure > config.maxPressure) {
+        valueText.setAttribute('fill', '#ff0000');
+      } else {
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateTemperature(value) {
+      var temp = parseFloat(value) || 0;
+      document.getElementById('tempValue').textContent = temp.toFixed(1);
+    }
+
+    function updateTotalVolume(value) {
+      var total = parseFloat(value) || 0;
+
+      if (total >= 1000000) {
+        document.getElementById('totalValue').textContent = (total / 1000000).toFixed(2);
+        document.querySelector('#totalDisplay .unit-text').textContent = 'Million Gallons';
+      } else if (total >= 1000) {
+        document.getElementById('totalValue').textContent = (total / 1000).toFixed(1);
+        document.querySelector('#totalDisplay .unit-text').textContent = 'K Gallons';
+      } else {
+        document.getElementById('totalValue').textContent = total.toFixed(0);
+        document.querySelector('#totalDisplay .unit-text').textContent = 'Gallons';
+      }
+    }
+
+    function updateDailyUsage(value) {
+      var daily = parseFloat(value) || 0;
+
+      if (daily >= 1000) {
+        document.getElementById('dailyValue').textContent = (daily / 1000).toFixed(1) + 'K';
+      } else {
+        document.getElementById('dailyValue').textContent = daily.toFixed(0);
+      }
+    }
+
+    function updateLeakStatus(value) {
+      var leak = Boolean(value);
+      var indicator = document.getElementById('leakIndicator');
+      var text = document.getElementById('leakText');
+      var icon = document.querySelector('#leakIcon .leak-icon');
+
+      if (leak) {
+        indicator.setAttribute('class', 'status-alarm');
+        text.textContent = 'LEAK DETECTED';
+        text.setAttribute('fill', '#ff0000');
+        icon.setAttribute('opacity', '1');
+
+        // Pulsing animation for leak icon
+        icon.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+      } else {
+        indicator.setAttribute('class', 'status-ok');
+        text.textContent = 'NO LEAK';
+        text.setAttribute('fill', '#a0a0a0');
+        icon.setAttribute('opacity', '0');
+      }
+    }
+
+    function updateAlarmStatus(value) {
+      var alarm = Boolean(value);
+      var indicator = document.getElementById('statusIndicator');
+
+      if (alarm) {
+        indicator.setAttribute('class', 'status-alarm');
+      } else {
+        indicator.setAttribute('class', 'status-ok');
+      }
+    }
+
+    // Initialize
+    if (typeof window !== 'undefined') {
+      window.updateValues = updateValues;
+    }
+  ]]>
+  </script>
+</svg>

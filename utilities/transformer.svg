@@ -1,0 +1,261 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" id="transformer">
+  <defs>
+    <style>
+      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #ff9900; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .status-ok { fill: #00ff00; }
+      .status-warning { fill: #ffaa00; }
+      .status-alarm { fill: #ff0000; }
+      .coil-primary { fill: none; stroke: #ff4444; stroke-width: 3; }
+      .coil-secondary { fill: none; stroke: #4444ff; stroke-width: 3; }
+      .core { fill: #606060; stroke: #404040; stroke-width: 2; }
+      .load-bar { fill: #00d4ff; }
+      .temp-bar { fill: #ff6600; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="meter-bg" x="10" y="10" width="380" height="480" rx="10"/>
+
+  <!-- Title -->
+  <text class="title-text" x="200" y="35" text-anchor="middle">TRANSFORMER</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" class="status-ok" cx="370" cy="25" r="8"/>
+
+  <!-- Transformer Visual Representation -->
+  <g id="transformerVisual" transform="translate(200, 130)">
+    <!-- Core -->
+    <rect class="core" x="-8" y="-50" width="16" height="100" rx="3"/>
+
+    <!-- Primary Coil (Left) -->
+    <g id="primaryCoil" transform="translate(-40, 0)">
+      <circle class="coil-primary" cx="0" cy="-30" r="8"/>
+      <circle class="coil-primary" cx="0" cy="-15" r="8"/>
+      <circle class="coil-primary" cx="0" cy="0" r="8"/>
+      <circle class="coil-primary" cx="0" cy="15" r="8"/>
+      <circle class="coil-primary" cx="0" cy="30" r="8"/>
+      <text class="label-text" x="0" y="-45" text-anchor="middle">PRIMARY</text>
+    </g>
+
+    <!-- Secondary Coil (Right) -->
+    <g id="secondaryCoil" transform="translate(40, 0)">
+      <circle class="coil-secondary" cx="0" cy="-30" r="8"/>
+      <circle class="coil-secondary" cx="0" cy="-15" r="8"/>
+      <circle class="coil-secondary" cx="0" cy="0" r="8"/>
+      <circle class="coil-secondary" cx="0" cy="15" r="8"/>
+      <circle class="coil-secondary" cx="0" cy="30" r="8"/>
+      <text class="label-text" x="0" y="-45" text-anchor="middle">SECONDARY</text>
+    </g>
+
+    <!-- Energy Flow Animation -->
+    <g id="energyFlow">
+      <circle class="status-ok" cx="-40" cy="0" r="3" opacity="0">
+        <animate attributeName="cx" from="-40" to="40" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle class="status-ok" cx="-40" cy="0" r="3" opacity="0">
+        <animate attributeName="cx" from="-40" to="40" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0;0.8;0" dur="2s" begin="0.5s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- Voltage Displays -->
+  <g id="primaryVoltageDisplay">
+    <rect class="meter-bg" x="25" y="230" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="250" text-anchor="middle">PRIMARY VOLTAGE</text>
+    <circle class="coil-primary" cx="70" cy="245" r="4"/>
+    <text id="primaryVoltage" class="value-text" x="107.5" y="280" text-anchor="middle">0</text>
+    <text class="unit-text" x="107.5" y="300" text-anchor="middle">V</text>
+  </g>
+
+  <g id="secondaryVoltageDisplay">
+    <rect class="meter-bg" x="210" y="230" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="250" text-anchor="middle">SECONDARY VOLTAGE</text>
+    <circle class="coil-secondary" cx="255" cy="245" r="4"/>
+    <text id="secondaryVoltage" class="value-text" x="292.5" y="280" text-anchor="middle">0</text>
+    <text class="unit-text" x="292.5" y="300" text-anchor="middle">V</text>
+  </g>
+
+  <!-- Load Display -->
+  <g id="loadDisplay">
+    <rect class="meter-bg" x="25" y="325" width="350" height="70" rx="5"/>
+    <text class="label-text" x="200" y="345" text-anchor="middle">LOAD</text>
+    <text id="loadValue" class="value-text" x="200" y="375" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="250" y="375">kVA</text>
+
+    <!-- Load Bar -->
+    <rect x="30" y="385" width="340" height="5" rx="2" fill="#333"/>
+    <rect id="loadBar" class="load-bar" x="30" y="385" width="0" height="5" rx="2"/>
+  </g>
+
+  <!-- Temperature Display -->
+  <g id="temperatureDisplay">
+    <rect class="meter-bg" x="25" y="410" width="165" height="70" rx="5"/>
+    <text class="label-text" x="107.5" y="430" text-anchor="middle">TEMPERATURE</text>
+    <text id="temperatureValue" class="value-text" x="107.5" y="460" text-anchor="middle">0</text>
+    <text class="unit-text" x="107.5" y="475" text-anchor="middle">°C</text>
+  </g>
+
+  <!-- Efficiency Display -->
+  <g id="efficiencyDisplay">
+    <rect class="meter-bg" x="210" y="410" width="165" height="70" rx="5"/>
+    <text class="label-text" x="292.5" y="430" text-anchor="middle">EFFICIENCY</text>
+    <text id="efficiencyValue" class="value-text" x="292.5" y="460" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="292.5" y="475" text-anchor="middle">%</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Variable Mappings
+    var variables = {
+      primaryVoltage: 'transformer_primary_voltage',      // V
+      secondaryVoltage: 'transformer_secondary_voltage',  // V
+      load: 'transformer_load',                           // kVA
+      maxLoad: 'transformer_max_load',                    // kVA (rating)
+      temperature: 'transformer_temperature',             // °C
+      efficiency: 'transformer_efficiency',               // %
+      alarm: 'transformer_alarm'                          // boolean
+    };
+
+    // Configuration
+    var config = {
+      maxLoad: 1000,           // kVA default rating
+      maxTemp: 150,            // °C
+      warningTemp: 120,        // °C
+      highLoadThreshold: 0.9,  // 90%
+      warnLoadThreshold: 0.75  // 75%
+    };
+
+    var currentMaxLoad = 1000;
+
+    // Update function called by FUXA
+    function updateValues(tag, value) {
+      try {
+        switch(tag) {
+          case variables.primaryVoltage:
+            updatePrimaryVoltage(value);
+            break;
+          case variables.secondaryVoltage:
+            updateSecondaryVoltage(value);
+            break;
+          case variables.load:
+            updateLoad(value);
+            break;
+          case variables.maxLoad:
+            updateMaxLoad(value);
+            break;
+          case variables.temperature:
+            updateTemperature(value);
+            break;
+          case variables.efficiency:
+            updateEfficiency(value);
+            break;
+          case variables.alarm:
+            updateAlarmStatus(value);
+            break;
+        }
+      } catch(e) {
+        console.error('Error updating transformer:', e);
+      }
+    }
+
+    function updatePrimaryVoltage(value) {
+      var voltage = parseFloat(value) || 0;
+      document.getElementById('primaryVoltage').textContent = voltage.toFixed(0);
+    }
+
+    function updateSecondaryVoltage(value) {
+      var voltage = parseFloat(value) || 0;
+      document.getElementById('secondaryVoltage').textContent = voltage.toFixed(0);
+    }
+
+    function updateLoad(value) {
+      var load = parseFloat(value) || 0;
+      document.getElementById('loadValue').textContent = load.toFixed(1);
+
+      // Update load bar
+      var loadPercent = Math.min((load / currentMaxLoad) * 100, 100);
+      var barWidth = (loadPercent / 100) * 340;
+      var loadBar = document.getElementById('loadBar');
+      loadBar.setAttribute('width', barWidth);
+
+      // Change color based on load
+      var valueText = document.getElementById('loadValue');
+      if (loadPercent >= config.highLoadThreshold * 100) {
+        loadBar.setAttribute('fill', '#ff0000');
+        valueText.setAttribute('fill', '#ff0000');
+      } else if (loadPercent >= config.warnLoadThreshold * 100) {
+        loadBar.setAttribute('fill', '#ffaa00');
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        loadBar.setAttribute('fill', '#00d4ff');
+        valueText.setAttribute('fill', '#ffffff');
+      }
+
+      // Control energy flow animation speed
+      var flowCircles = document.querySelectorAll('#energyFlow circle');
+      if (load > 0) {
+        var speed = Math.max(0.5, 2 - (loadPercent / 100) * 1.5);
+        flowCircles.forEach(function(circle) {
+          var anims = circle.getElementsByTagName('animate');
+          for (var i = 0; i < anims.length; i++) {
+            anims[i].setAttribute('dur', speed + 's');
+          }
+        });
+      }
+    }
+
+    function updateMaxLoad(value) {
+      currentMaxLoad = parseFloat(value) || 1000;
+      config.maxLoad = currentMaxLoad;
+    }
+
+    function updateTemperature(value) {
+      var temp = parseFloat(value) || 0;
+      document.getElementById('temperatureValue').textContent = temp.toFixed(0);
+
+      var valueText = document.getElementById('temperatureValue');
+      if (temp >= config.maxTemp) {
+        valueText.setAttribute('fill', '#ff0000');
+      } else if (temp >= config.warningTemp) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateEfficiency(value) {
+      var efficiency = parseFloat(value) || 0;
+      document.getElementById('efficiencyValue').textContent = efficiency.toFixed(1);
+
+      var valueText = document.getElementById('efficiencyValue');
+      if (efficiency < 85) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        valueText.setAttribute('fill', '#00ff00');
+      }
+    }
+
+    function updateAlarmStatus(value) {
+      var alarm = Boolean(value);
+      var indicator = document.getElementById('statusIndicator');
+
+      if (alarm) {
+        indicator.setAttribute('class', 'status-alarm');
+      } else {
+        indicator.setAttribute('class', 'status-ok');
+      }
+    }
+
+    // Initialize
+    if (typeof window !== 'undefined') {
+      window.updateValues = updateValues;
+    }
+  ]]>
+  </script>
+</svg>

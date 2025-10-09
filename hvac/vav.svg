@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="400" height="300">
+  <defs>
+    <style>
+      .vav-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .vav-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .vav-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .vav-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .vav-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .vav-value { fill: #3498db; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
+      .vav-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .vav-flow { fill: #3498db; opacity: 0.3; }
+      .vav-flow-active { animation: flow 2s linear infinite; }
+      .status-ok { fill: #27ae60; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes flow {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="vav-text" x="200" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    VAV Box
+  </text>
+
+  <!-- Supply Duct -->
+  <rect class="vav-duct" x="20" y="100" width="120" height="60"/>
+  <text class="vav-label" x="80" y="95" text-anchor="middle">SUPPLY</text>
+
+  <!-- VAV Box Body -->
+  <rect class="vav-box" x="140" y="80" width="140" height="100" rx="5"/>
+
+  <!-- Damper (rotatable) -->
+  <g id="damper" transform="translate(210, 130)">
+    <rect class="vav-damper" x="-40" y="-3" width="80" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="5"/>
+  </g>
+
+  <!-- Discharge Duct -->
+  <rect class="vav-duct" x="280" y="100" width="100" height="60"/>
+  <text class="vav-label" x="330" y="95" text-anchor="middle">ZONE</text>
+
+  <!-- Airflow Arrows -->
+  <g id="flowArrows">
+    <path class="vav-arrow" d="M 50 120 L 70 120 M 65 115 L 70 120 L 65 125" stroke-width="2"/>
+    <path class="vav-arrow" d="M 80 140 L 100 140 M 95 135 L 100 140 L 95 145" stroke-width="2"/>
+    <circle class="vav-flow vav-flow-active" cx="60" cy="120" r="4"/>
+    <circle class="vav-flow vav-flow-active" cx="90" cy="140" r="4" style="animation-delay: 0.5s"/>
+  </g>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="200" width="360" height="80" rx="5"/>
+
+  <!-- Damper Position -->
+  <text class="vav-label" x="40" y="225">Damper Position:</text>
+  <text id="damperPos" class="vav-value" x="40" y="245">65%</text>
+
+  <!-- Airflow -->
+  <text class="vav-label" x="150" y="225">Airflow:</text>
+  <text id="airflow" class="vav-value" x="150" y="245">450 CFM</text>
+
+  <!-- Zone Temperature -->
+  <text class="vav-label" x="260" y="225">Zone Temp:</text>
+  <text id="zoneTemp" class="vav-value" x="260" y="245">72.5°F</text>
+
+  <!-- Setpoint -->
+  <text class="vav-label" x="40" y="260">Setpoint:</text>
+  <text id="setpoint" class="vav-value" x="40" y="275">72.0°F</text>
+
+  <!-- Status -->
+  <text class="vav-label" x="150" y="260">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="195" cy="268" r="6"/>
+    <text id="statusText" class="vav-value" x="210" y="275">Normal</text>
+  </g>
+
+  <!-- Min/Max Flow -->
+  <text class="vav-label" x="260" y="260">Min/Max:</text>
+  <text id="minMaxFlow" class="vav-value" x="260" y="275">150/800 CFM</text>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var damperPosition = 65; // 0-100%
+    var airflow = 450; // CFM
+    var zoneTemp = 72.5; // degrees F
+    var setpoint = 72.0; // degrees F
+    var minFlow = 150; // CFM
+    var maxFlow = 800; // CFM
+    var alarmActive = false;
+    var enabled = true;
+
+    function updateDisplay() {
+      // Update damper position text
+      document.getElementById('damperPos').textContent = damperPosition.toFixed(0) + '%';
+
+      // Rotate damper visual (0% = closed/horizontal, 100% = open/vertical)
+      var damperAngle = (damperPosition / 100) * 90;
+      document.getElementById('damper').setAttribute('transform',
+        'translate(210, 130) rotate(' + damperAngle + ')');
+
+      // Update airflow
+      document.getElementById('airflow').textContent = airflow.toFixed(0) + ' CFM';
+
+      // Update zone temperature
+      document.getElementById('zoneTemp').textContent = zoneTemp.toFixed(1) + '°F';
+
+      // Update setpoint
+      document.getElementById('setpoint').textContent = setpoint.toFixed(1) + '°F';
+
+      // Update min/max
+      document.getElementById('minMaxFlow').textContent = minFlow + '/' + maxFlow + ' CFM';
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (!enabled) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Disabled';
+        statusText.style.fill = '#e74c3c';
+      } else if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      }
+
+      // Show/hide flow arrows based on airflow
+      var flowArrows = document.getElementById('flowArrows');
+      if (airflow > 50) {
+        flowArrows.style.display = 'block';
+      } else {
+        flowArrows.style.display = 'none';
+      }
+
+      // Check for alarm conditions
+      alarmActive = airflow < minFlow - 50 || airflow > maxFlow + 50 ||
+                    Math.abs(zoneTemp - setpoint) > 5;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

@@ -1,0 +1,352 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400">
+  <defs>
+    <style>
+      .conf-bg { fill: #1a1a2e; }
+      .conf-header { fill: #16213e; }
+      .conf-card { fill: #2d3748; }
+      .conf-text-primary { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; }
+      .conf-text-secondary { fill: #a0aec0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; }
+      .conf-text-large { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 24px; font-weight: 700; }
+      .conf-text-medium { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 18px; font-weight: 600; }
+      .conf-text-small { fill: #cbd5e0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; }
+      .conf-icon { fill: none; stroke: #4299e1; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .conf-available { fill: #48bb78; }
+      .conf-booked { fill: #ed8936; }
+      .conf-in-use { fill: #4299e1; }
+      .conf-border { fill: none; stroke: #2d3748; stroke-width: 2; }
+      .conf-button { cursor: pointer; }
+      .conf-button-bg { fill: #2d3748; stroke: #4299e1; stroke-width: 1; }
+      .conf-button-bg:hover { fill: #3d4758; }
+    </style>
+  </defs>
+
+  <!-- Main Background -->
+  <rect class="conf-bg" x="0" y="0" width="600" height="400" rx="12"/>
+  <rect class="conf-border" x="0" y="0" width="600" height="400" rx="12"/>
+
+  <!-- Header -->
+  <rect class="conf-header" x="0" y="0" width="600" height="60" rx="12"/>
+  <rect class="conf-header" x="0" y="30" width="600" height="30"/>
+  <text class="conf-text-large" x="20" y="38" id="roomName">Conference Room B</text>
+
+  <!-- Status Indicator -->
+  <g transform="translate(450, 30)">
+    <rect id="statusBadge" class="conf-available" x="0" y="-15" width="120" height="30" rx="15"/>
+    <text class="conf-text-primary" x="60" y="5" text-anchor="middle" id="statusText">Available</text>
+  </g>
+
+  <!-- Booking Information Card -->
+  <g transform="translate(20, 80)">
+    <rect class="conf-card" x="0" y="0" width="360" height="140" rx="8"/>
+    <rect class="conf-border" x="0" y="0" width="360" height="140" rx="8"/>
+
+    <text class="conf-text-secondary" x="15" y="25">Current Booking</text>
+
+    <!-- Calendar Icon -->
+    <g transform="translate(20, 45)" class="conf-icon">
+      <rect x="0" y="5" width="35" height="35" rx="4"/>
+      <line x1="10" y1="0" x2="10" y2="10"/>
+      <line x1="25" y1="0" x2="25" y2="10"/>
+      <line x1="0" y1="15" x2="35" y2="15"/>
+    </g>
+
+    <g transform="translate(70, 55)">
+      <text class="conf-text-medium" x="0" y="0" id="bookingTitle">Team Standup</text>
+      <text class="conf-text-secondary" x="0" y="22" id="bookingTime">2:00 PM - 3:00 PM</text>
+      <text class="conf-text-small" x="0" y="40" id="bookingOrganizer">Organizer: John Smith</text>
+    </g>
+
+    <!-- Next Booking -->
+    <g transform="translate(15, 110)">
+      <text class="conf-text-small" x="0" y="0">Next:</text>
+      <text class="conf-text-small" x="40" y="0" id="nextBooking">Budget Review - 3:30 PM</text>
+    </g>
+  </g>
+
+  <!-- Environment Controls -->
+  <g transform="translate(400, 80)">
+    <rect class="conf-card" x="0" y="0" width="180" height="140" rx="8"/>
+    <rect class="conf-border" x="0" y="0" width="180" height="140" rx="8"/>
+
+    <text class="conf-text-secondary" x="15" y="25">Environment</text>
+
+    <!-- Temperature -->
+    <g transform="translate(15, 45)">
+      <g class="conf-icon" transform="translate(0, 0)">
+        <rect x="0" y="0" width="12" height="24" rx="6"/>
+        <circle cx="6" cy="28" r="8"/>
+      </g>
+      <text class="conf-text-medium" x="25" y="18" id="confTemp">72°F</text>
+
+      <!-- Temp controls -->
+      <g id="tempDown" class="conf-button" transform="translate(100, 0)">
+        <rect class="conf-button-bg" x="0" y="0" width="25" height="25" rx="4"/>
+        <line x1="8" y1="12.5" x2="17" y2="12.5" stroke="#4299e1" stroke-width="2"/>
+      </g>
+      <g id="tempUp" class="conf-button" transform="translate(135, 0)">
+        <rect class="conf-button-bg" x="0" y="0" width="25" height="25" rx="4"/>
+        <line x1="8" y1="12.5" x2="17" y2="12.5" stroke="#4299e1" stroke-width="2"/>
+        <line x1="12.5" y1="8" x2="12.5" y2="17" stroke="#4299e1" stroke-width="2"/>
+      </g>
+    </g>
+
+    <!-- Lighting -->
+    <g transform="translate(15, 85)">
+      <g class="conf-icon" transform="translate(0, 0)">
+        <circle cx="6" cy="6" r="6"/>
+        <line x1="6" y1="-4" x2="6" y2="-8"/>
+        <line x1="14" y1="0" x2="18" y2="-3"/>
+        <line x1="14" y1="12" x2="18" y2="15"/>
+        <line x1="-2" y1="0" x2="-6" y2="-3"/>
+        <line x1="-2" y1="12" x2="-6" y2="15"/>
+      </g>
+      <text class="conf-text-medium" x="25" y="12" id="lightLevel">75%</text>
+
+      <!-- Light controls -->
+      <g id="lightDown" class="conf-button" transform="translate(100, -5)">
+        <rect class="conf-button-bg" x="0" y="0" width="25" height="25" rx="4"/>
+        <line x1="8" y1="12.5" x2="17" y2="12.5" stroke="#4299e1" stroke-width="2"/>
+      </g>
+      <g id="lightUp" class="conf-button" transform="translate(135, -5)">
+        <rect class="conf-button-bg" x="0" y="0" width="25" height="25" rx="4"/>
+        <line x1="8" y1="12.5" x2="17" y2="12.5" stroke="#4299e1" stroke-width="2"/>
+        <line x1="12.5" y1="8" x2="12.5" y2="17" stroke="#4299e1" stroke-width="2"/>
+      </g>
+    </g>
+  </g>
+
+  <!-- AV System Controls -->
+  <g transform="translate(20, 240)">
+    <rect class="conf-card" x="0" y="0" width="560" height="80" rx="8"/>
+    <rect class="conf-border" x="0" y="0" width="560" height="80" rx="8"/>
+
+    <text class="conf-text-secondary" x="15" y="25">AV System Controls</text>
+
+    <!-- Display Button -->
+    <g id="displayBtn" class="conf-button" transform="translate(15, 35)">
+      <rect class="conf-button-bg" x="0" y="0" width="110" height="35" rx="6"/>
+      <g class="conf-icon" transform="translate(15, 10)">
+        <rect x="0" y="0" width="25" height="18" rx="2"/>
+        <line x1="12.5" y1="18" x2="12.5" y2="22"/>
+        <line x1="5" y1="22" x2="20" y2="22"/>
+      </g>
+      <text class="conf-text-primary" x="50" y="20" id="displayStatus">Display Off</text>
+    </g>
+
+    <!-- Projector Button -->
+    <g id="projectorBtn" class="conf-button" transform="translate(145, 35)">
+      <rect class="conf-button-bg" x="0" y="0" width="120" height="35" rx="6"/>
+      <g class="conf-icon" transform="translate(15, 12)">
+        <rect x="0" y="0" width="20" height="12" rx="2"/>
+        <line x1="20" y1="3" x2="28" y2="0"/>
+        <line x1="20" y1="9" x2="28" y2="12"/>
+      </g>
+      <text class="conf-text-primary" x="50" y="20" id="projectorStatus">Projector Off</text>
+    </g>
+
+    <!-- Audio Button -->
+    <g id="audioBtn" class="conf-button" transform="translate(285, 35)">
+      <rect class="conf-button-bg" x="0" y="0" width="110" height="35" rx="6"/>
+      <g class="conf-icon" transform="translate(15, 8)">
+        <path d="M 0 5 L 8 5 L 15 0 L 15 18 L 8 13 L 0 13 Z"/>
+        <path d="M 18 4 Q 23 9, 18 14"/>
+      </g>
+      <text class="conf-text-primary" x="50" y="20" id="audioStatus">Audio Off</text>
+    </g>
+
+    <!-- Video Conf Button -->
+    <g id="videoBtn" class="conf-button" transform="translate(415, 35)">
+      <rect class="conf-button-bg" x="0" y="0" width="130" height="35" rx="6"/>
+      <g class="conf-icon" transform="translate(15, 10)">
+        <rect x="0" y="0" width="18" height="14" rx="2"/>
+        <path d="M 18 3 L 24 0 L 24 14 L 18 11"/>
+      </g>
+      <text class="conf-text-primary" x="50" y="20" id="videoStatus">Video Off</text>
+    </g>
+  </g>
+
+  <!-- Room Statistics -->
+  <g transform="translate(20, 340)">
+    <g transform="translate(0, 0)">
+      <text class="conf-text-small" x="0" y="0">Occupancy:</text>
+      <text class="conf-text-secondary" x="75" y="0" id="occupancy">6 people</text>
+    </g>
+
+    <g transform="translate(200, 0)">
+      <text class="conf-text-small" x="0" y="0">Air Quality:</text>
+      <text class="conf-text-secondary" x="75" y="0" id="airQuality">Good</text>
+    </g>
+
+    <g transform="translate(380, 0)">
+      <text class="conf-text-small" x="0" y="0">Time Remaining:</text>
+      <text class="conf-text-secondary" x="105" y="0" id="timeRemaining">45 min</text>
+    </g>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      // FUXA Variable Bindings
+      var variables = {
+        roomName: 'conf_room_name',
+        status: 'conf_status',
+        bookingTitle: 'conf_booking_title',
+        bookingTime: 'conf_booking_time',
+        bookingOrganizer: 'conf_booking_organizer',
+        nextBooking: 'conf_next_booking',
+        temperature: 'conf_temperature',
+        lightLevel: 'conf_light_level',
+        displayOn: 'conf_display_on',
+        projectorOn: 'conf_projector_on',
+        audioOn: 'conf_audio_on',
+        videoOn: 'conf_video_on',
+        occupancy: 'conf_occupancy',
+        airQuality: 'conf_air_quality',
+        timeRemaining: 'conf_time_remaining'
+      };
+
+      function updateWidget(data) {
+        try {
+          // Update room name
+          if (data[variables.roomName] !== undefined) {
+            document.getElementById('roomName').textContent = data[variables.roomName];
+          }
+
+          // Update status
+          if (data[variables.status] !== undefined) {
+            var status = data[variables.status];
+            var statusBadge = document.getElementById('statusBadge');
+            var statusText = document.getElementById('statusText');
+
+            var statusMap = {
+              0: { text: 'Available', class: 'conf-available' },
+              1: { text: 'Booked', class: 'conf-booked' },
+              2: { text: 'In Use', class: 'conf-in-use' }
+            };
+
+            var statusInfo = statusMap[status] || statusMap[0];
+            statusBadge.setAttribute('class', statusInfo.class);
+            statusText.textContent = statusInfo.text;
+          }
+
+          // Update booking information
+          if (data[variables.bookingTitle] !== undefined) {
+            document.getElementById('bookingTitle').textContent = data[variables.bookingTitle];
+          }
+          if (data[variables.bookingTime] !== undefined) {
+            document.getElementById('bookingTime').textContent = data[variables.bookingTime];
+          }
+          if (data[variables.bookingOrganizer] !== undefined) {
+            document.getElementById('bookingOrganizer').textContent =
+              'Organizer: ' + data[variables.bookingOrganizer];
+          }
+          if (data[variables.nextBooking] !== undefined) {
+            document.getElementById('nextBooking').textContent = data[variables.nextBooking];
+          }
+
+          // Update temperature
+          if (data[variables.temperature] !== undefined) {
+            var temp = Math.round(parseFloat(data[variables.temperature]));
+            document.getElementById('confTemp').textContent = temp + '°F';
+          }
+
+          // Update light level
+          if (data[variables.lightLevel] !== undefined) {
+            var light = Math.round(parseFloat(data[variables.lightLevel]));
+            document.getElementById('lightLevel').textContent = light + '%';
+          }
+
+          // Update AV system status
+          var avStates = [
+            { var: variables.displayOn, elem: 'displayStatus', onText: 'Display On', offText: 'Display Off' },
+            { var: variables.projectorOn, elem: 'projectorStatus', onText: 'Projector On', offText: 'Projector Off' },
+            { var: variables.audioOn, elem: 'audioStatus', onText: 'Audio On', offText: 'Audio Off' },
+            { var: variables.videoOn, elem: 'videoStatus', onText: 'Video On', offText: 'Video Off' }
+          ];
+
+          avStates.forEach(function(item) {
+            if (data[item.var] !== undefined) {
+              var elem = document.getElementById(item.elem);
+              elem.textContent = data[item.var] ? item.onText : item.offText;
+              elem.setAttribute('fill', data[item.var] ? '#48bb78' : '#ffffff');
+            }
+          });
+
+          // Update room statistics
+          if (data[variables.occupancy] !== undefined) {
+            document.getElementById('occupancy').textContent = data[variables.occupancy] + ' people';
+          }
+          if (data[variables.airQuality] !== undefined) {
+            document.getElementById('airQuality').textContent = data[variables.airQuality];
+          }
+          if (data[variables.timeRemaining] !== undefined) {
+            document.getElementById('timeRemaining').textContent = data[variables.timeRemaining] + ' min';
+          }
+
+        } catch (error) {
+          console.error('Conference Room update error:', error);
+        }
+      }
+
+      // Control button handlers
+      function setupControls() {
+        // Temperature controls
+        document.getElementById('tempDown').addEventListener('click', function() {
+          if (window.fuxa && window.fuxa.setVariable) {
+            var currentTemp = parseFloat(document.getElementById('confTemp').textContent);
+            window.fuxa.setVariable(variables.temperature, currentTemp - 1);
+          }
+        });
+
+        document.getElementById('tempUp').addEventListener('click', function() {
+          if (window.fuxa && window.fuxa.setVariable) {
+            var currentTemp = parseFloat(document.getElementById('confTemp').textContent);
+            window.fuxa.setVariable(variables.temperature, currentTemp + 1);
+          }
+        });
+
+        // Light controls
+        document.getElementById('lightDown').addEventListener('click', function() {
+          if (window.fuxa && window.fuxa.setVariable) {
+            var currentLight = parseFloat(document.getElementById('lightLevel').textContent);
+            window.fuxa.setVariable(variables.lightLevel, Math.max(0, currentLight - 10));
+          }
+        });
+
+        document.getElementById('lightUp').addEventListener('click', function() {
+          if (window.fuxa && window.fuxa.setVariable) {
+            var currentLight = parseFloat(document.getElementById('lightLevel').textContent);
+            window.fuxa.setVariable(variables.lightLevel, Math.min(100, currentLight + 10));
+          }
+        });
+
+        // AV system toggles
+        ['display', 'projector', 'audio', 'video'].forEach(function(device) {
+          document.getElementById(device + 'Btn').addEventListener('click', function() {
+            if (window.fuxa && window.fuxa.setVariable && window.fuxa.getVariable) {
+              var varName = variables[device + 'On'];
+              var currentState = window.fuxa.getVariable(varName);
+              window.fuxa.setVariable(varName, !currentState);
+            }
+          });
+        });
+      }
+
+      // Initialize
+      setupControls();
+
+      // Register with FUXA
+      if (window.fuxa) {
+        window.fuxa.registerWidget({
+          id: 'conference-room',
+          variables: Object.values(variables),
+          update: updateWidget
+        });
+      }
+
+      // Make update function globally accessible
+      window.updateConferenceRoom = updateWidget;
+    })();
+    ]]>
+  </script>
+</svg>

@@ -1,0 +1,305 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600">
+  <defs>
+    <linearGradient id="chillerBodyGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c5f8d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a5a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="compressorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="fanGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="600" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">AIR-COOLED CHILLER</text>
+
+  <!-- Main Chiller Body -->
+  <rect x="50" y="80" width="700" height="450" fill="url(#chillerBodyGrad)" stroke="#4a9eff" stroke-width="3" rx="8"/>
+
+  <!-- Compressor Section -->
+  <g id="compressor-section">
+    <rect x="80" y="280" width="200" height="200" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="180" y="305" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">COMPRESSOR</text>
+
+    <!-- Compressor Body -->
+    <circle cx="180" cy="370" r="50" fill="url(#compressorGrad)" stroke="#4a9eff" stroke-width="3"/>
+    <circle cx="180" cy="370" r="40" fill="none" stroke="#4a9eff" stroke-width="2"/>
+    <circle cx="180" cy="370" r="30" fill="none" stroke="#4a9eff" stroke-width="1"/>
+
+    <!-- Rotation indicator -->
+    <g id="compressor-rotation">
+      <line x1="180" y1="340" x2="180" y2="370" stroke="#00ff00" stroke-width="3" stroke-linecap="round"/>
+      <line x1="180" y1="370" x2="210" y2="370" stroke="#00ff00" stroke-width="3" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 180 370"
+        to="360 180 370"
+        dur="2s"
+        repeatCount="indefinite"/>
+    </g>
+
+    <!-- Compressor Status -->
+    <circle id="comp-status" cx="250" cy="295" r="10" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Compressor Values -->
+    <text x="180" y="440" font-family="Arial" font-size="12" fill="#4a9eff" text-anchor="middle" id="comp-load">Load: 85%</text>
+    <text x="180" y="460" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="comp-amps">245 Amps</text>
+  </g>
+
+  <!-- Evaporator Section -->
+  <g id="evaporator-section">
+    <rect x="320" y="330" width="140" height="100" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="390" y="355" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">EVAPORATOR</text>
+
+    <!-- Heat exchanger tubes -->
+    <line x1="330" y1="375" x2="450" y2="375" stroke="#4a9eff" stroke-width="2"/>
+    <line x1="330" y1="385" x2="450" y2="385" stroke="#4a9eff" stroke-width="2"/>
+    <line x1="330" y1="395" x2="450" y2="395" stroke="#4a9eff" stroke-width="2"/>
+    <line x1="330" y1="405" x2="450" y2="405" stroke="#4a9eff" stroke-width="2"/>
+    <line x1="330" y1="415" x2="450" y2="415" stroke="#4a9eff" stroke-width="2"/>
+
+    <!-- CHW In -->
+    <text x="340" y="370" font-family="Arial" font-size="9" fill="#ffaa00">IN</text>
+    <!-- CHW Out -->
+    <text x="430" y="370" font-family="Arial" font-size="9" fill="#4a9eff">OUT</text>
+  </g>
+
+  <!-- Air-Cooled Condenser Section -->
+  <g id="condenser-section">
+    <rect x="490" y="110" width="240" height="360" fill="#2a4a6a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+    <text x="610" y="135" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">AIR-COOLED CONDENSER</text>
+
+    <!-- Condenser Coils -->
+    <rect x="510" y="150" width="200" height="200" fill="#1a3a5a" stroke="#ff6b35" stroke-width="1" rx="3"/>
+
+    <!-- Coil fins representation -->
+    <g opacity="0.6">
+      <line x1="520" y1="160" x2="700" y2="160" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="175" x2="700" y2="175" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="190" x2="700" y2="190" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="205" x2="700" y2="205" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="220" x2="700" y2="220" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="235" x2="700" y2="235" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="250" x2="700" y2="250" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="265" x2="700" y2="265" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="280" x2="700" y2="280" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="295" x2="700" y2="295" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="310" x2="700" y2="310" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="325" x2="700" y2="325" stroke="#ff6b35" stroke-width="1"/>
+      <line x1="520" y1="340" x2="700" y2="340" stroke="#ff6b35" stroke-width="1"/>
+    </g>
+
+    <!-- Condenser Fan 1 -->
+    <circle cx="570" cy="390" r="35" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <g id="fan1-blades">
+      <path d="M 570 365 L 570 415 M 545 390 L 595 390" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 552 372 L 588 408 M 552 408 L 588 372" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 570 390"
+        to="360 570 390"
+        dur="1.5s"
+        repeatCount="indefinite"/>
+    </g>
+    <circle id="fan1-status" cx="540" cy="365" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="570" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="fan1-speed">75%</text>
+
+    <!-- Condenser Fan 2 -->
+    <circle cx="650" cy="390" r="35" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <g id="fan2-blades">
+      <path d="M 650 365 L 650 415 M 625 390 L 675 390" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+      <path d="M 632 372 L 668 408 M 632 408 L 668 372" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 650 390"
+        to="360 650 390"
+        dur="1.5s"
+        repeatCount="indefinite"/>
+    </g>
+    <circle id="fan2-status" cx="620" cy="365" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="650" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="fan2-speed">72%</text>
+  </g>
+
+  <!-- Refrigerant Circuit -->
+  <g id="refrigerant-circuit">
+    <!-- High Pressure Line (Compressor to Condenser) -->
+    <path d="M 230 320 L 320 320 L 320 250 L 490 250" stroke="#ff0000" stroke-width="4" fill="none"/>
+    <text x="370" y="240" font-family="Arial" font-size="10" fill="#ff0000">HIGH PRESSURE</text>
+
+    <!-- Low Pressure Line (Evaporator to Compressor) -->
+    <path d="M 320 430 L 230 430" stroke="#4a9eff" stroke-width="4" fill="none"/>
+    <text x="255" y="450" font-family="Arial" font-size="10" fill="#4a9eff">LOW PRESSURE</text>
+
+    <!-- Return Line (Condenser to Evaporator) -->
+    <path d="M 610 350 L 610 460 L 460 460 L 460 430" stroke="#ff6b35" stroke-width="4" fill="none"/>
+
+    <!-- Expansion Valve -->
+    <rect x="455" y="440" width="10" height="30" fill="#ffaa00" stroke="#ffffff" stroke-width="1"/>
+    <text x="480" y="460" font-family="Arial" font-size="9" fill="#ffaa00">EXV</text>
+  </g>
+
+  <!-- Chilled Water Connections -->
+  <g id="chw-connections">
+    <!-- CHW Return -->
+    <rect x="315" y="300" width="10" height="30" fill="#ffaa00" stroke="#ffaa00" stroke-width="2"/>
+    <text x="270" y="318" font-family="Arial" font-size="11" fill="#ffaa00" text-anchor="end">CHW Return</text>
+    <text x="270" y="333" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="chwr-temp">58.2°F</text>
+
+    <!-- CHW Supply -->
+    <rect x="460" y="300" width="10" height="30" fill="#4a9eff" stroke="#4a9eff" stroke-width="2"/>
+    <text x="485" y="318" font-family="Arial" font-size="11" fill="#4a9eff">CHW Supply</text>
+    <text x="485" y="333" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" id="chws-temp">42.5°F</text>
+  </g>
+
+  <!-- Control Panel -->
+  <g id="control-panel">
+    <rect x="80" y="110" width="200" height="140" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="180" y="135" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CONTROL PANEL</text>
+
+    <!-- Setpoint -->
+    <text x="95" y="160" font-family="Arial" font-size="11" fill="#4a9eff">Setpoint:</text>
+    <text x="240" y="160" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="end" id="setpoint">42.0°F</text>
+
+    <!-- Current Load -->
+    <text x="95" y="180" font-family="Arial" font-size="11" fill="#4a9eff">Current Load:</text>
+    <text x="240" y="180" font-family="Arial" font-size="13" font-weight="bold" fill="#00ff00" text-anchor="end" id="current-load">85%</text>
+
+    <!-- Capacity -->
+    <text x="95" y="200" font-family="Arial" font-size="11" fill="#4a9eff">Capacity:</text>
+    <text x="240" y="200" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="end" id="capacity">350 Tons</text>
+
+    <!-- Power -->
+    <text x="95" y="220" font-family="Arial" font-size="11" fill="#4a9eff">Power:</text>
+    <text x="240" y="220" font-family="Arial" font-size="13" font-weight="bold" fill="#ffaa00" text-anchor="end" id="power">245 kW</text>
+
+    <!-- Status -->
+    <text x="95" y="240" font-family="Arial" font-size="11" fill="#4a9eff">Status:</text>
+    <text x="240" y="240" font-family="Arial" font-size="13" font-weight="bold" fill="#00ff00" text-anchor="end" id="status">RUNNING</text>
+  </g>
+
+  <!-- Outdoor Conditions -->
+  <g id="outdoor-conditions">
+    <rect x="490" y="480" width="240" height="40" fill="#0d1b2a" stroke="#ff6b35" stroke-width="2" rx="3"/>
+    <text x="520" y="500" font-family="Arial" font-size="11" fill="#ff6b35">Outdoor Air Temp:</text>
+    <text x="690" y="500" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="oat">85.7°F</text>
+    <text x="520" y="515" font-family="Arial" font-size="11" fill="#ff6b35">Condensing Temp:</text>
+    <text x="690" y="515" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="cond-temp">105.2°F</text>
+  </g>
+
+  <!-- Performance Metrics -->
+  <g id="performance">
+    <rect x="50" y="540" width="700" height="50" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+
+    <text x="100" y="562" font-family="Arial" font-size="11" fill="#4a9eff">Efficiency:</text>
+    <text x="200" y="562" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="efficiency">0.70 kW/Ton</text>
+
+    <text x="250" y="562" font-family="Arial" font-size="11" fill="#4a9eff">Flow Rate:</text>
+    <text x="360" y="562" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="flow-rate">840 GPM</text>
+
+    <text x="410" y="562" font-family="Arial" font-size="11" fill="#4a9eff">Delta T:</text>
+    <text x="500" y="562" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="delta-t">15.7°F</text>
+
+    <text x="550" y="562" font-family="Arial" font-size="11" fill="#4a9eff">Run Hours:</text>
+    <text x="680" y="562" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="run-hours">12,485</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var airCooledChiller = {
+      // Compressor
+      comp_status: true,
+      comp_load: 85,
+      comp_amps: 245,
+
+      // Fans
+      fan1_status: true,
+      fan1_speed: 75,
+      fan2_status: true,
+      fan2_speed: 72,
+
+      // Temperatures
+      chws_temp: 42.5,
+      chwr_temp: 58.2,
+      oat: 85.7,
+      cond_temp: 105.2,
+
+      // Control
+      setpoint: 42.0,
+      current_load: 85,
+      capacity: 350,
+      power: 245,
+      status: "RUNNING",
+
+      // Performance
+      efficiency: 0.70,
+      flow_rate: 840,
+      delta_t: 15.7,
+      run_hours: 12485
+    };
+
+    function updateDisplay() {
+      // Update Compressor
+      document.getElementById('comp-status').setAttribute('fill', airCooledChiller.comp_status ? '#00ff00' : '#ff0000');
+      document.getElementById('comp-load').textContent = 'Load: ' + airCooledChiller.comp_load + '%';
+      document.getElementById('comp-amps').textContent = airCooledChiller.comp_amps + ' Amps';
+
+      // Update Fans
+      document.getElementById('fan1-status').setAttribute('fill', airCooledChiller.fan1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('fan1-speed').textContent = airCooledChiller.fan1_status ? airCooledChiller.fan1_speed + '%' : 'OFF';
+
+      document.getElementById('fan2-status').setAttribute('fill', airCooledChiller.fan2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('fan2-speed').textContent = airCooledChiller.fan2_status ? airCooledChiller.fan2_speed + '%' : 'OFF';
+
+      // Update Temperatures
+      document.getElementById('chws-temp').textContent = airCooledChiller.chws_temp.toFixed(1) + '°F';
+      document.getElementById('chwr-temp').textContent = airCooledChiller.chwr_temp.toFixed(1) + '°F';
+      document.getElementById('oat').textContent = airCooledChiller.oat.toFixed(1) + '°F';
+      document.getElementById('cond-temp').textContent = airCooledChiller.cond_temp.toFixed(1) + '°F';
+
+      // Update Control Panel
+      document.getElementById('setpoint').textContent = airCooledChiller.setpoint.toFixed(1) + '°F';
+      document.getElementById('current-load').textContent = airCooledChiller.current_load + '%';
+      document.getElementById('capacity').textContent = airCooledChiller.capacity + ' Tons';
+      document.getElementById('power').textContent = airCooledChiller.power + ' kW';
+      document.getElementById('status').textContent = airCooledChiller.status;
+
+      var statusColor = airCooledChiller.status === 'RUNNING' ? '#00ff00' :
+                       airCooledChiller.status === 'ALARM' ? '#ff0000' : '#ffaa00';
+      document.getElementById('status').setAttribute('fill', statusColor);
+
+      // Update Performance
+      document.getElementById('efficiency').textContent = airCooledChiller.efficiency.toFixed(2) + ' kW/Ton';
+      document.getElementById('flow-rate').textContent = airCooledChiller.flow_rate + ' GPM';
+      document.getElementById('delta-t').textContent = airCooledChiller.delta_t.toFixed(1) + '°F';
+      document.getElementById('run-hours').textContent = airCooledChiller.run_hours.toLocaleString();
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

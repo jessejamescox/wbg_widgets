@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 300" width="350" height="300">
+  <defs>
+    <style>
+      .exh-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .exh-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .exh-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .exh-fan { fill: none; stroke: #e74c3c; stroke-width: 2; }
+      .exh-fan-blade { fill: #e74c3c; }
+      .exh-fan-active { animation: spin 1s linear infinite; }
+      .exh-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .exh-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .exh-value { fill: #e74c3c; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
+      .exh-arrow { fill: none; stroke: #e74c3c; stroke-width: 2; }
+      .exh-flow { fill: #e74c3c; opacity: 0.3; }
+      .exh-flow-active { animation: flow 2s linear infinite; }
+      .status-ok { fill: #27ae60; }
+      .status-running { fill: #e74c3c; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes flow {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="exh-text" x="175" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Exhaust Fan
+  </text>
+
+  <!-- Inlet Duct -->
+  <rect class="exh-duct" x="20" y="80" width="100" height="60"/>
+  <text class="exh-label" x="70" y="75" text-anchor="middle">ROOM AIR</text>
+
+  <!-- Airflow Arrows -->
+  <g id="flowArrows">
+    <path class="exh-arrow" d="M 40 100 L 60 100 M 55 95 L 60 100 L 55 105"/>
+    <path class="exh-arrow" d="M 50 120 L 70 120 M 65 115 L 70 120 L 65 125"/>
+    <circle class="exh-flow exh-flow-active" cx="50" cy="100" r="4"/>
+    <circle class="exh-flow exh-flow-active" cx="60" cy="120" r="4" style="animation-delay: 0.5s"/>
+  </g>
+
+  <!-- Damper -->
+  <rect class="exh-box" x="120" y="75" width="40" height="70" rx="3"/>
+  <g id="damper" transform="translate(140, 110)">
+    <rect class="exh-damper" x="-15" y="-3" width="30" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="4"/>
+  </g>
+  <text class="exh-label" x="140" y="158" text-anchor="middle" font-size="9">DAMPER</text>
+
+  <!-- Fan Housing -->
+  <rect class="exh-box" x="160" y="60" width="100" height="100" rx="5"/>
+
+  <!-- Fan -->
+  <g id="fan" transform="translate(210, 110)">
+    <circle class="exh-fan" cx="0" cy="0" r="35"/>
+    <g class="exh-fan-blade">
+      <path d="M 0 -25 L 8 -8 L -8 -8 Z"/>
+      <path d="M 25 0 L 8 8 L 8 -8 Z"/>
+      <path d="M 0 25 L -8 8 L 8 8 Z"/>
+      <path d="M -25 0 L -8 -8 L -8 8 Z"/>
+    </g>
+  </g>
+  <text class="exh-label" x="210" y="170" text-anchor="middle" font-size="9">EXHAUST FAN</text>
+
+  <!-- Outlet Duct -->
+  <rect class="exh-duct" x="260" y="80" width="70" height="60"/>
+  <text class="exh-label" x="295" y="75" text-anchor="middle">OUTSIDE</text>
+
+  <!-- Motor -->
+  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="195" y="165" width="30" height="20" rx="2"/>
+  <text class="exh-label" x="210" y="178" text-anchor="middle" font-size="8">M</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="185" width="310" height="95" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="exh-label" x="40" y="210">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="80" cy="212" r="6"/>
+    <text id="statusText" class="exh-value" x="92" y="218">Off</text>
+  </g>
+
+  <text class="exh-label" x="200" y="210">Speed:</text>
+  <text id="speed" class="exh-value" x="200" y="230">0%</text>
+
+  <!-- Row 2 -->
+  <text class="exh-label" x="40" y="245">Airflow:</text>
+  <text id="airflow" class="exh-value" x="40" y="265">0 CFM</text>
+
+  <text class="exh-label" x="200" y="245">Damper:</text>
+  <text id="damperPos" class="exh-value" x="200" y="265">0%</text>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var fanStatus = false; // On/Off
+    var fanSpeed = 0; // 0-100%
+    var airflow = 0; // CFM
+    var damperPosition = 0; // 0-100%
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Update status indicator
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else if (fanStatus) {
+        statusLight.setAttribute('class', 'status-running');
+        statusText.textContent = 'Running';
+        statusText.style.fill = '#27ae60';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Off';
+        statusText.style.fill = '#7f8c8d';
+      }
+
+      // Update speed
+      document.getElementById('speed').textContent = fanSpeed.toFixed(0) + '%';
+
+      // Update airflow (proportional to speed)
+      if (fanStatus) {
+        airflow = (fanSpeed / 100) * 2000; // Max 2000 CFM
+      } else {
+        airflow = 0;
+      }
+      document.getElementById('airflow').textContent = airflow.toFixed(0) + ' CFM';
+
+      // Update damper position
+      document.getElementById('damperPos').textContent = damperPosition.toFixed(0) + '%';
+
+      // Rotate damper visual
+      var damperAngle = (damperPosition / 100) * 90;
+      document.getElementById('damper').setAttribute('transform',
+        'translate(140, 110) rotate(' + damperAngle + ')');
+
+      // Fan animation
+      var fanBlade = document.getElementById('fan').querySelector('.exh-fan-blade');
+      if (fanStatus && fanSpeed > 0) {
+        fanBlade.classList.add('exh-fan-active');
+        var animSpeed = 2.0 / (fanSpeed / 100); // Faster for higher speeds
+        fanBlade.style.animationDuration = Math.max(0.3, animSpeed) + 's';
+      } else {
+        fanBlade.classList.remove('exh-fan-active');
+      }
+
+      // Show/hide flow arrows
+      var flowArrows = document.getElementById('flowArrows');
+      if (fanStatus && airflow > 100) {
+        flowArrows.style.display = 'block';
+      } else {
+        flowArrows.style.display = 'none';
+      }
+
+      // Auto control damper with fan
+      if (fanStatus) {
+        damperPosition = Math.max(damperPosition, 50); // Open damper when fan is on
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

@@ -1,0 +1,346 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" id="buffer-tank-widget">
+  <defs>
+    <!-- Stratification gradients -->
+    <linearGradient id="hotLayer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff5252;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ff8a80;stop-opacity:0.8" />
+    </linearGradient>
+    <linearGradient id="warmLayer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffa726;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#ffb74d;stop-opacity:0.7" />
+    </linearGradient>
+    <linearGradient id="coolLayer" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#42a5f5;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#64b5f6;stop-opacity:0.7" />
+    </linearGradient>
+    <linearGradient id="tankInsulation" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8d6e63;stop-opacity:0.9" />
+      <stop offset="50%" style="stop-color:#a1887f;stop-opacity:0.95" />
+      <stop offset="100%" style="stop-color:#8d6e63;stop-opacity:0.9" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="300" height="400" fill="#f5f5f5"/>
+
+  <!-- Title -->
+  <text x="150" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#333">
+    Buffer Tank (Thermal Storage)
+  </text>
+
+  <!-- Tank Container with Insulation -->
+  <g id="tank-container">
+    <!-- Insulation layer -->
+    <rect x="70" y="55" width="160" height="220" fill="url(#tankInsulation)" stroke="#5d4037" stroke-width="3" rx="8"/>
+
+    <!-- Inner tank -->
+    <rect x="78" y="63" width="144" height="204" fill="#e0e0e0" stroke="#757575" stroke-width="2" rx="5"/>
+
+    <!-- Thermal stratification layers (animated) -->
+    <g id="stratification">
+      <!-- Hot layer (top) -->
+      <rect id="hot-layer" x="80" y="65" width="140" height="60" fill="url(#hotLayer)" opacity="0.9"/>
+
+      <!-- Warm layer (middle) -->
+      <rect id="warm-layer" x="80" y="125" width="140" height="70" fill="url(#warmLayer)" opacity="0.85"/>
+
+      <!-- Cool layer (bottom) -->
+      <rect id="cool-layer" x="80" y="195" width="140" height="70" fill="url(#coolLayer)" opacity="0.85"/>
+    </g>
+
+    <!-- Supply connection (top - hot) -->
+    <g id="supply-connection">
+      <rect x="225" y="75" width="40" height="8" fill="#ff5252" stroke="#333" stroke-width="1.5"/>
+      <path d="M 265 79 L 275 79 L 270 74 M 265 79 L 275 79 L 270 84" stroke="#333" stroke-width="1.5" fill="none"/>
+      <text x="268" y="70" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">SUP</text>
+    </g>
+
+    <!-- Return connection (bottom - cool) -->
+    <g id="return-connection">
+      <rect x="35" y="250" width="40" height="8" fill="#42a5f5" stroke="#333" stroke-width="1.5"/>
+      <path d="M 35 254 L 25 254 L 30 249 M 35 254 L 25 254 L 30 259" stroke="#333" stroke-width="1.5" fill="none"/>
+      <text x="32" y="245" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">RET</text>
+    </g>
+
+    <!-- Charge level indicator -->
+    <g id="charge-indicator">
+      <rect x="240" y="63" width="35" height="204" fill="#ffffff" stroke="#333" stroke-width="2" rx="5"/>
+      <rect id="charge-fill" x="242" y="163" width="31" height="102" fill="#4caf50" rx="3"/>
+
+      <!-- Charge scale -->
+      <line x1="240" y1="88" x2="245" y2="88" stroke="#333" stroke-width="1"/>
+      <line x1="240" y1="127" x2="245" y2="127" stroke="#333" stroke-width="1"/>
+      <line x1="240" y1="166" x2="245" y2="166" stroke="#333" stroke-width="1"/>
+      <line x1="240" y1="205" x2="245" y2="205" stroke="#333" stroke-width="1"/>
+
+      <text x="257" y="70" font-family="Arial" font-size="10" text-anchor="middle" fill="#333">CHG</text>
+    </g>
+
+    <!-- Temperature scale -->
+    <g id="temp-scale">
+      <text x="60" y="75" font-family="Arial" font-size="10" text-anchor="end" fill="#ff5252" font-weight="bold">HOT</text>
+      <text x="60" y="160" font-family="Arial" font-size="10" text-anchor="end" fill="#ffa726">WARM</text>
+      <text x="60" y="255" font-family="Arial" font-size="10" text-anchor="end" fill="#42a5f5" font-weight="bold">COOL</text>
+    </g>
+  </g>
+
+  <!-- Temperature displays -->
+  <g id="temp-displays">
+    <!-- Supply temperature -->
+    <rect x="20" y="285" width="85" height="40" fill="#ffffff" stroke="#ff5252" stroke-width="2" rx="5"/>
+    <text x="62.5" y="300" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Supply</text>
+    <text x="62.5" y="318" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#ff5252">
+      <tspan id="supply-temp">180</tspan>°F
+    </text>
+
+    <!-- Return temperature -->
+    <rect x="115" y="285" width="85" height="40" fill="#ffffff" stroke="#42a5f5" stroke-width="2" rx="5"/>
+    <text x="157.5" y="300" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">Return</text>
+    <text x="157.5" y="318" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#42a5f5">
+      <tspan id="return-temp">120</tspan>°F
+    </text>
+
+    <!-- Delta T -->
+    <rect x="210" y="285" width="70" height="40" fill="#ffffff" stroke="#333" stroke-width="2" rx="5"/>
+    <text x="245" y="300" font-family="Arial" font-size="10" text-anchor="middle" fill="#666">ΔT</text>
+    <text x="245" y="318" font-family="Arial" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">
+      <tspan id="delta-temp">60</tspan>°F
+    </text>
+  </g>
+
+  <!-- Info Panel -->
+  <g id="info-panel">
+    <rect x="20" y="335" width="260" height="55" fill="#ffffff" stroke="#333" stroke-width="2" rx="5"/>
+
+    <!-- Charge Level -->
+    <text x="30" y="353" font-family="Arial" font-size="13" fill="#555">
+      Charge: <tspan id="charge-percent" font-weight="bold">75</tspan>%
+    </text>
+
+    <!-- Capacity -->
+    <text x="30" y="370" font-family="Arial" font-size="12" fill="#555">
+      Capacity: <tspan id="tank-capacity">500</tspan> gal
+    </text>
+
+    <!-- Status -->
+    <text x="150" y="385" font-family="Arial" font-size="12" text-anchor="middle" fill="#666">
+      Status: <tspan id="tank-status" fill="#4caf50">CHARGING</tspan>
+    </text>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      // FUXA Interface
+      var gaugeStatus = { id: 'buffer-tank', type: 'svg-ext' };
+
+      // Default values
+      var settings = {
+        supplyTemp: 180,     // Supply temperature (°F)
+        returnTemp: 120,     // Return temperature (°F)
+        chargeLevel: 75,     // Charge level percentage (0-100)
+        capacity: 500,       // Tank capacity in gallons
+        hotThreshold: 160,   // Temperature considered hot
+        warmThreshold: 130,  // Temperature considered warm
+        coolThreshold: 100   // Temperature considered cool
+      };
+
+      // Initialize
+      if (window.svgData) {
+        gaugeStatus.onaction = function (data) {
+          // No actions for this widget
+        };
+
+        gaugeStatus.onsignal = function (signal) {
+          // Update based on FUXA signals
+          if (signal.id === 'supplyTemp' && signal.value !== undefined) {
+            settings.supplyTemp = parseFloat(signal.value);
+          }
+          if (signal.id === 'returnTemp' && signal.value !== undefined) {
+            settings.returnTemp = parseFloat(signal.value);
+          }
+          if (signal.id === 'chargeLevel' && signal.value !== undefined) {
+            settings.chargeLevel = parseFloat(signal.value);
+          }
+          if (signal.id === 'capacity' && signal.value !== undefined) {
+            settings.capacity = parseFloat(signal.value);
+          }
+          updateTank();
+        };
+
+        gaugeStatus.oninit = function (data) {
+          if (data) {
+            if (data.supplyTemp !== undefined) settings.supplyTemp = data.supplyTemp;
+            if (data.returnTemp !== undefined) settings.returnTemp = data.returnTemp;
+            if (data.chargeLevel !== undefined) settings.chargeLevel = data.chargeLevel;
+            if (data.capacity !== undefined) settings.capacity = data.capacity;
+          }
+          updateTank();
+        };
+
+        window.svgData.init(gaugeStatus);
+      }
+
+      function updateTank() {
+        // Constrain charge level
+        var chargeLevel = Math.max(0, Math.min(100, settings.chargeLevel));
+
+        // Update temperature displays
+        var supplyTempEl = document.getElementById('supply-temp');
+        var returnTempEl = document.getElementById('return-temp');
+        var deltaTempEl = document.getElementById('delta-temp');
+
+        if (supplyTempEl) {
+          supplyTempEl.textContent = settings.supplyTemp.toFixed(0);
+        }
+        if (returnTempEl) {
+          returnTempEl.textContent = settings.returnTemp.toFixed(0);
+        }
+
+        var deltaT = settings.supplyTemp - settings.returnTemp;
+        if (deltaTempEl) {
+          deltaTempEl.textContent = deltaT.toFixed(0);
+        }
+
+        // Update stratification visualization
+        var avgTemp = (settings.supplyTemp + settings.returnTemp) / 2;
+        var tempRange = settings.supplyTemp - settings.returnTemp;
+
+        // Calculate layer heights based on charge level and temperatures
+        var tankHeight = 204;
+        var tankTop = 63;
+
+        // Hot layer (top) - size based on supply temp and charge
+        var hotHeight = Math.max(0, (chargeLevel / 100) * tankHeight * 0.3);
+        var warmHeight = Math.max(0, (chargeLevel / 100) * tankHeight * 0.4);
+        var coolHeight = tankHeight - hotHeight - warmHeight;
+
+        var hotLayer = document.getElementById('hot-layer');
+        var warmLayer = document.getElementById('warm-layer');
+        var coolLayer = document.getElementById('cool-layer');
+
+        if (hotLayer) {
+          hotLayer.setAttribute('y', tankTop);
+          hotLayer.setAttribute('height', hotHeight);
+        }
+
+        if (warmLayer) {
+          warmLayer.setAttribute('y', tankTop + hotHeight);
+          warmLayer.setAttribute('height', warmHeight);
+        }
+
+        if (coolLayer) {
+          coolLayer.setAttribute('y', tankTop + hotHeight + warmHeight);
+          coolLayer.setAttribute('height', coolHeight);
+        }
+
+        // Update charge indicator
+        var chargeFill = document.getElementById('charge-fill');
+        if (chargeFill) {
+          var chargeHeight = (chargeLevel / 100) * 200;
+          var chargeY = 265 - chargeHeight;
+          chargeFill.setAttribute('y', chargeY);
+          chargeFill.setAttribute('height', chargeHeight);
+
+          // Color based on charge level
+          if (chargeLevel >= 75) {
+            chargeFill.setAttribute('fill', '#4caf50');
+          } else if (chargeLevel >= 40) {
+            chargeFill.setAttribute('fill', '#ffa726');
+          } else {
+            chargeFill.setAttribute('fill', '#ff5252');
+          }
+        }
+
+        // Update charge percentage display
+        var chargePercentEl = document.getElementById('charge-percent');
+        if (chargePercentEl) {
+          chargePercentEl.textContent = chargeLevel.toFixed(0);
+        }
+
+        // Update capacity display
+        var capacityEl = document.getElementById('tank-capacity');
+        if (capacityEl) {
+          capacityEl.textContent = settings.capacity.toFixed(0);
+        }
+
+        // Determine status
+        var tankStatus = document.getElementById('tank-status');
+        var status = 'IDLE';
+        var statusColor = '#757575';
+
+        if (deltaT > 10) {
+          status = 'CHARGING';
+          statusColor = '#4caf50';
+        } else if (deltaT < -10) {
+          status = 'DISCHARGING';
+          statusColor = '#ff9800';
+        } else if (chargeLevel < 20) {
+          status = 'LOW CHARGE';
+          statusColor = '#ff5252';
+        } else {
+          status = 'STANDBY';
+          statusColor = '#2196f3';
+        }
+
+        if (tankStatus) {
+          tankStatus.textContent = status;
+          tankStatus.setAttribute('fill', statusColor);
+        }
+
+        // Animate supply/return connections based on delta T
+        var supplyConnection = document.getElementById('supply-connection');
+        var returnConnection = document.getElementById('return-connection');
+
+        if (deltaT > 5 && supplyConnection) {
+          supplyConnection.setAttribute('opacity', '1');
+        } else if (supplyConnection) {
+          supplyConnection.setAttribute('opacity', '0.5');
+        }
+
+        if (deltaT > 5 && returnConnection) {
+          returnConnection.setAttribute('opacity', '1');
+        } else if (returnConnection) {
+          returnConnection.setAttribute('opacity', '0.5');
+        }
+      }
+
+      // Initial update
+      updateTank();
+
+      // Animation for thermal movement
+      var animOffset = 0;
+      setInterval(function() {
+        animOffset += 0.02;
+        var deltaT = settings.supplyTemp - settings.returnTemp;
+
+        if (deltaT > 5) {
+          // Animate layers slightly to show thermal movement
+          var hotLayer = document.getElementById('hot-layer');
+          var warmLayer = document.getElementById('warm-layer');
+          var coolLayer = document.getElementById('cool-layer');
+
+          var wave = Math.sin(animOffset) * 0.5;
+
+          if (hotLayer) {
+            hotLayer.setAttribute('opacity', 0.9 + wave * 0.05);
+          }
+          if (warmLayer) {
+            warmLayer.setAttribute('opacity', 0.85 + wave * 0.05);
+          }
+          if (coolLayer) {
+            coolLayer.setAttribute('opacity', 0.85 - wave * 0.05);
+          }
+        }
+      }, 50);
+    })();
+    ]]>
+  </script>
+</svg>

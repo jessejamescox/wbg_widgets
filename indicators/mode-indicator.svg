@@ -1,0 +1,220 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 250 150" id="mode-indicator">
+  <defs>
+    <style>
+      .mode-bg { fill: #1a1a1a; }
+      .mode-container { stroke: #555; stroke-width: 3; rx: 10; }
+      .mode-auto { fill: #4caf50; }
+      .mode-manual { fill: #2196f3; }
+      .mode-off { fill: #757575; }
+      .mode-error { fill: #f44336; }
+      .mode-maintenance { fill: #ff9800; }
+      .mode-standby { fill: #9c27b0; }
+      .mode-text { fill: #fff; font-family: Arial, sans-serif; text-anchor: middle; }
+      .mode-title { font-size: 18px; font-weight: bold; }
+      .mode-subtitle { font-size: 12px; fill: #ccc; }
+      .mode-icon { fill: #fff; }
+      .mode-status-dot { stroke: #fff; stroke-width: 2; }
+    </style>
+
+    <!-- Glow effect -->
+    <filter id="modeGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Pulse animation -->
+    <animate id="pulseAnim" attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+  </defs>
+
+  <!-- Background -->
+  <rect width="250" height="150" class="mode-bg"/>
+
+  <!-- Main container -->
+  <rect id="modeContainer" x="10" y="10" width="230" height="130" class="mode-container mode-auto" filter="url(#modeGlow)"/>
+
+  <!-- Mode icon area -->
+  <g id="modeIcon" transform="translate(125, 50)">
+    <!-- Default: gear icon for auto mode -->
+    <circle cx="0" cy="0" r="25" fill="#2e7d32" opacity="0.3"/>
+    <path id="iconPath" class="mode-icon"
+          d="M 0,-20 L 5,-18 L 7,-23 L 12,-21 L 10,-16 L 15,-14 L 13,-9 L 18,-7 L 16,-2 L 20,0 L 16,2 L 18,7 L 13,9 L 15,14 L 10,16 L 12,21 L 7,23 L 5,18 L 0,20 L -5,18 L -7,23 L -12,21 L -10,16 L -15,14 L -13,9 L -18,7 L -16,2 L -20,0 L -16,-2 L -18,-7 L -13,-9 L -15,-14 L -10,-16 L -12,-21 L -7,-23 L -5,-18 Z M 0,-12 A 12,12 0 1,1 0,12 A 12,12 0 1,1 0,-12"/>
+  </g>
+
+  <!-- Mode text -->
+  <text id="modeText" x="125" y="105" class="mode-text mode-title">AUTO</text>
+  <text id="modeSubtext" x="125" y="125" class="mode-text mode-subtitle">Automatic Operation</text>
+
+  <!-- Status indicator dots -->
+  <g id="statusDots" transform="translate(20, 25)">
+    <circle cx="0" cy="0" r="5" id="dot1" class="mode-status-dot" fill="#4caf50">
+      <animate attributeName="opacity" values="1;0.5;1" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="15" cy="0" r="5" id="dot2" class="mode-status-dot" fill="#4caf50" opacity="0.5">
+      <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="30" cy="0" r="5" id="dot3" class="mode-status-dot" fill="#4caf50" opacity="0.3">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="2s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      var svg = document.getElementById('mode-indicator');
+      var modeContainer = document.getElementById('modeContainer');
+      var modeText = document.getElementById('modeText');
+      var modeSubtext = document.getElementById('modeSubtext');
+      var iconPath = document.getElementById('iconPath');
+      var statusDots = document.getElementById('statusDots');
+      var dot1 = document.getElementById('dot1');
+      var dot2 = document.getElementById('dot2');
+      var dot3 = document.getElementById('dot3');
+
+      // Configuration
+      var config = {
+        mode: 0, // 0=auto, 1=manual, 2=off, 3=error, 4=maintenance, 5=standby
+        showStatus: true
+      };
+
+      // Mode definitions
+      var modes = {
+        0: {
+          name: 'AUTO',
+          subtext: 'Automatic Operation',
+          class: 'mode-auto',
+          color: '#4caf50',
+          icon: 'M 0,-20 L 5,-18 L 7,-23 L 12,-21 L 10,-16 L 15,-14 L 13,-9 L 18,-7 L 16,-2 L 20,0 L 16,2 L 18,7 L 13,9 L 15,14 L 10,16 L 12,21 L 7,23 L 5,18 L 0,20 L -5,18 L -7,23 L -12,21 L -10,16 L -15,14 L -13,9 L -18,7 L -16,2 L -20,0 L -16,-2 L -18,-7 L -13,-9 L -15,-14 L -10,-16 L -12,-21 L -7,-23 L -5,-18 Z M 0,-12 A 12,12 0 1,1 0,12 A 12,12 0 1,1 0,-12',
+          animate: true
+        },
+        1: {
+          name: 'MANUAL',
+          subtext: 'Manual Control',
+          class: 'mode-manual',
+          color: '#2196f3',
+          icon: 'M -8,-15 L -8,0 L -15,0 L 0,15 L 15,0 L 8,0 L 8,-15 Z M -10,-20 L -10,-17 L 10,-17 L 10,-20 Z',
+          animate: false
+        },
+        2: {
+          name: 'OFF',
+          subtext: 'System Disabled',
+          class: 'mode-off',
+          color: '#757575',
+          icon: 'M -15,-15 L 15,15 M 15,-15 L -15,15 M 0,-20 A 20,20 0 1,1 0,20 A 20,20 0 1,1 0,-20',
+          animate: false
+        },
+        3: {
+          name: 'ERROR',
+          subtext: 'Fault Condition',
+          class: 'mode-error',
+          color: '#f44336',
+          icon: 'M -3,-20 L 3,-20 L 3,-5 L -3,-5 Z M 0,0 A 4,4 0 1,1 0,8 A 4,4 0 1,1 0,0 M 0,-15 L -15,18 L 15,18 Z',
+          animate: true
+        },
+        4: {
+          name: 'MAINT',
+          subtext: 'Maintenance Mode',
+          class: 'mode-maintenance',
+          color: '#ff9800',
+          icon: 'M -5,-15 L -5,-5 L -15,-5 L -15,5 L -5,5 L -5,15 L 5,15 L 5,5 L 15,5 L 15,-5 L 5,-5 L 5,-15 Z M -18,-8 L -18,-2 L -12,-2 L -12,-8 Z',
+          animate: false
+        },
+        5: {
+          name: 'STANDBY',
+          subtext: 'Ready to Start',
+          class: 'mode-standby',
+          color: '#9c27b0',
+          icon: 'M 0,-20 A 20,20 0 1,1 0,20 A 20,20 0 1,1 0,-20 M 0,-15 A 15,15 0 1,1 0,15 A 15,15 0 1,1 0,-15 M -2,-20 L -2,20 M 2,-20 L 2,20',
+          animate: true
+        }
+      };
+
+      // FUXA interface
+      svg.setValue = function(value) {
+        if (value === null || value === undefined) return;
+
+        // Handle string mode names or numeric values
+        if (typeof value === 'string') {
+          value = value.toUpperCase();
+          for (var key in modes) {
+            if (modes[key].name === value) {
+              config.mode = parseInt(key);
+              break;
+            }
+          }
+        } else {
+          config.mode = parseInt(value);
+        }
+
+        if (config.mode < 0) config.mode = 0;
+        if (config.mode > 5) config.mode = 5;
+        updateMode();
+      };
+
+      svg.setOptions = function(options) {
+        if (options.showStatus !== undefined) {
+          config.showStatus = options.showStatus;
+          statusDots.setAttribute('opacity', config.showStatus ? '1' : '0');
+        }
+        updateMode();
+      };
+
+      function updateMode() {
+        var mode = modes[config.mode];
+
+        // Update container color
+        modeContainer.setAttribute('class', 'mode-container ' + mode.class);
+
+        // Update text
+        modeText.textContent = mode.name;
+        modeSubtext.textContent = mode.subtext;
+
+        // Update icon
+        iconPath.setAttribute('d', mode.icon);
+
+        // Update status dots
+        if (config.showStatus) {
+          dot1.setAttribute('fill', mode.color);
+          dot2.setAttribute('fill', mode.color);
+          dot3.setAttribute('fill', mode.color);
+
+          // Enable/disable animation based on mode
+          if (mode.animate) {
+            enableDotAnimation();
+          } else {
+            disableDotAnimation();
+          }
+        }
+      }
+
+      function enableDotAnimation() {
+        var animations = statusDots.querySelectorAll('animate');
+        for (var i = 0; i < animations.length; i++) {
+          animations[i].beginElement();
+        }
+      }
+
+      function disableDotAnimation() {
+        dot1.setAttribute('opacity', '1');
+        dot2.setAttribute('opacity', '1');
+        dot3.setAttribute('opacity', '1');
+      }
+
+      // Initialize
+      updateMode();
+
+      // Expose getValue for FUXA
+      svg.getValue = function() {
+        return config.mode;
+      };
+
+      // Expose mode name
+      svg.getModeName = function() {
+        return modes[config.mode].name;
+      };
+    })();
+    ]]>
+  </script>
+</svg>

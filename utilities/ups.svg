@@ -1,0 +1,351 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" id="ups">
+  <defs>
+    <style>
+      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #00d4ff; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .status-ok { fill: #00ff00; }
+      .status-warning { fill: #ffaa00; }
+      .status-alarm { fill: #ff0000; }
+      .status-off { fill: #666666; }
+      .ups-body { fill: #2a2a3e; stroke: #404060; stroke-width: 2; }
+      .battery-fill { fill: #00ff00; }
+      .battery-outline { fill: none; stroke: #606080; stroke-width: 3; }
+      .input-color { fill: #4444ff; }
+      .output-color { fill: #00ff00; }
+      .bypass-color { fill: #ffaa00; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="meter-bg" x="10" y="10" width="380" height="530" rx="10"/>
+
+  <!-- Title -->
+  <text class="title-text" x="200" y="35" text-anchor="middle">UPS SYSTEM</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" class="status-ok" cx="370" cy="25" r="8"/>
+
+  <!-- UPS Visual -->
+  <g id="upsVisual" transform="translate(200, 120)">
+    <!-- UPS Body -->
+    <rect class="ups-body" x="-70" y="-50" width="140" height="100" rx="5"/>
+
+    <!-- Power Flow Diagram -->
+    <g id="powerFlow">
+      <!-- Input -->
+      <circle class="input-color" cx="-90" cy="0" r="5"/>
+      <line stroke="#4444ff" stroke-width="2" x1="-85" y1="0" x2="-70" y2="0"/>
+      <text class="label-text" x="-90" y="-10" text-anchor="middle">IN</text>
+
+      <!-- Battery -->
+      <rect class="battery-outline" x="-30" y="-20" width="60" height="40" rx="3"/>
+      <rect id="batteryFill" class="battery-fill" x="-28" y="18" width="56" height="0" rx="2"/>
+      <rect class="battery-outline" x="30" y="-5" width="8" height="10"/>
+
+      <!-- Output -->
+      <line stroke="#00ff00" stroke-width="2" x1="70" y1="0" x2="85" y2="0"/>
+      <circle class="output-color" cx="90" cy="0" r="5"/>
+      <text class="label-text" x="90" y="-10" text-anchor="middle">OUT</text>
+
+      <!-- Bypass Indicator -->
+      <line id="bypassLine" stroke="#ffaa00" stroke-width="2" stroke-dasharray="5,5"
+            x1="-70" y1="30" x2="70" y2="30" opacity="0"/>
+      <text id="bypassText" class="label-text" x="0" y="45" text-anchor="middle" opacity="0">BYPASS</text>
+    </g>
+  </g>
+
+  <!-- Operating Mode Display -->
+  <g id="modeDisplay">
+    <rect class="meter-bg" x="25" y="195" width="350" height="50" rx="5"/>
+    <text class="label-text" x="200" y="215" text-anchor="middle">OPERATING MODE</text>
+    <text id="modeText" class="value-text" x="200" y="237" text-anchor="middle">ONLINE</text>
+  </g>
+
+  <!-- Battery Status -->
+  <g id="batteryDisplay">
+    <rect class="meter-bg" x="25" y="260" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="280" text-anchor="middle">BATTERY LEVEL</text>
+    <text id="batteryValue" class="value-text" x="107.5" y="310" text-anchor="middle">100</text>
+    <text class="unit-text" x="107.5" y="330" text-anchor="middle">%</text>
+  </g>
+
+  <!-- Runtime Remaining -->
+  <g id="runtimeDisplay">
+    <rect class="meter-bg" x="210" y="260" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="280" text-anchor="middle">RUNTIME LEFT</text>
+    <text id="runtimeValue" class="value-text" x="292.5" y="310" text-anchor="middle" font-size="18">--:--</text>
+    <text class="unit-text" x="292.5" y="330" text-anchor="middle">MM:SS</text>
+  </g>
+
+  <!-- Input Voltage -->
+  <g id="inputVoltageDisplay">
+    <rect class="meter-bg" x="25" y="355" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="375" text-anchor="middle">INPUT VOLTAGE</text>
+    <circle class="input-color" cx="70" cy="370" r="4"/>
+    <text id="inputVoltage" class="value-text" x="107.5" y="405" text-anchor="middle">0</text>
+    <text class="unit-text" x="107.5" y="425" text-anchor="middle">V</text>
+  </g>
+
+  <!-- Output Voltage -->
+  <g id="outputVoltageDisplay">
+    <rect class="meter-bg" x="210" y="355" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="375" text-anchor="middle">OUTPUT VOLTAGE</text>
+    <circle class="output-color" cx="255" cy="370" r="4"/>
+    <text id="outputVoltage" class="value-text" x="292.5" y="405" text-anchor="middle">0</text>
+    <text class="unit-text" x="292.5" y="425" text-anchor="middle">V</text>
+  </g>
+
+  <!-- Load Display -->
+  <g id="loadDisplay">
+    <rect class="meter-bg" x="25" y="450" width="350" height="70" rx="5"/>
+    <text class="label-text" x="200" y="470" text-anchor="middle">LOAD</text>
+    <text id="loadValue" class="value-text" x="200" y="500" text-anchor="middle">0</text>
+    <text class="unit-text" x="240" y="500">%</text>
+
+    <!-- Load Bar -->
+    <rect x="30" y="510" width="340" height="5" rx="2" fill="#333"/>
+    <rect id="loadBar" class="battery-fill" x="30" y="510" width="0" height="5" rx="2"/>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Variable Mappings
+    var variables = {
+      batteryLevel: 'ups_battery_level',      // %
+      runtimeRemaining: 'ups_runtime',        // minutes
+      inputVoltage: 'ups_input_voltage',      // V
+      outputVoltage: 'ups_output_voltage',    // V
+      load: 'ups_load',                       // %
+      mode: 'ups_mode',                       // string: "online", "battery", "bypass"
+      bypassActive: 'ups_bypass',             // boolean
+      alarm: 'ups_alarm'                      // boolean
+    };
+
+    // Configuration
+    var config = {
+      nominalVoltage: 120,       // V
+      criticalBattery: 20,       // %
+      lowBattery: 40,            // %
+      highLoad: 90,              // %
+      warnLoad: 75               // %
+    };
+
+    var currentMode = 'online';
+
+    // Update function called by FUXA
+    function updateValues(tag, value) {
+      try {
+        switch(tag) {
+          case variables.batteryLevel:
+            updateBatteryLevel(value);
+            break;
+          case variables.runtimeRemaining:
+            updateRuntime(value);
+            break;
+          case variables.inputVoltage:
+            updateInputVoltage(value);
+            break;
+          case variables.outputVoltage:
+            updateOutputVoltage(value);
+            break;
+          case variables.load:
+            updateLoad(value);
+            break;
+          case variables.mode:
+            updateMode(value);
+            break;
+          case variables.bypassActive:
+            updateBypass(value);
+            break;
+          case variables.alarm:
+            updateAlarmStatus(value);
+            break;
+        }
+      } catch(e) {
+        console.error('Error updating UPS:', e);
+      }
+    }
+
+    function updateBatteryLevel(value) {
+      var battery = parseFloat(value) || 0;
+      document.getElementById('batteryValue').textContent = battery.toFixed(0);
+
+      // Update battery fill (inverted - fills from bottom)
+      var barHeight = (battery / 100) * 38;
+      var batteryFill = document.getElementById('batteryFill');
+      batteryFill.setAttribute('height', barHeight);
+      batteryFill.setAttribute('y', 18 - barHeight);
+
+      // Change color based on battery level
+      var valueText = document.getElementById('batteryValue');
+      if (battery <= config.criticalBattery) {
+        batteryFill.setAttribute('fill', '#ff0000');
+        valueText.setAttribute('fill', '#ff0000');
+      } else if (battery <= config.lowBattery) {
+        batteryFill.setAttribute('fill', '#ffaa00');
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        batteryFill.setAttribute('fill', '#00ff00');
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateRuntime(value) {
+      var minutes = parseInt(value) || 0;
+
+      if (currentMode === 'battery' && minutes >= 0) {
+        var hours = Math.floor(minutes / 60);
+        var mins = minutes % 60;
+
+        var timeStr = '';
+        if (hours > 0) {
+          timeStr = hours + 'h ' + pad(mins) + 'm';
+        } else {
+          timeStr = mins + ' min';
+        }
+
+        document.getElementById('runtimeValue').textContent = timeStr;
+
+        var valueText = document.getElementById('runtimeValue');
+        if (minutes < 5) {
+          valueText.setAttribute('fill', '#ff0000');
+        } else if (minutes < 15) {
+          valueText.setAttribute('fill', '#ffaa00');
+        } else {
+          valueText.setAttribute('fill', '#ffffff');
+        }
+      } else {
+        document.getElementById('runtimeValue').textContent = '--:--';
+        document.getElementById('runtimeValue').setAttribute('fill', '#a0a0a0');
+      }
+    }
+
+    function updateInputVoltage(value) {
+      var voltage = parseFloat(value) || 0;
+      document.getElementById('inputVoltage').textContent = voltage.toFixed(0);
+
+      var valueText = document.getElementById('inputVoltage');
+      var deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+
+      if (voltage === 0 || deviation > 0.2) {
+        valueText.setAttribute('fill', '#ff0000');
+      } else if (deviation > 0.1) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateOutputVoltage(value) {
+      var voltage = parseFloat(value) || 0;
+      document.getElementById('outputVoltage').textContent = voltage.toFixed(0);
+
+      var valueText = document.getElementById('outputVoltage');
+      var deviation = Math.abs(voltage - config.nominalVoltage) / config.nominalVoltage;
+
+      if (deviation > 0.05) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateLoad(value) {
+      var load = parseFloat(value) || 0;
+      document.getElementById('loadValue').textContent = load.toFixed(0);
+
+      // Update load bar
+      var barWidth = (load / 100) * 340;
+      var loadBar = document.getElementById('loadBar');
+      loadBar.setAttribute('width', Math.min(barWidth, 340));
+
+      // Change color based on load
+      var valueText = document.getElementById('loadValue');
+      if (load >= config.highLoad) {
+        loadBar.setAttribute('fill', '#ff0000');
+        valueText.setAttribute('fill', '#ff0000');
+      } else if (load >= config.warnLoad) {
+        loadBar.setAttribute('fill', '#ffaa00');
+        valueText.setAttribute('fill', '#ffaa00');
+      } else {
+        loadBar.setAttribute('fill', '#00ff00');
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateMode(value) {
+      currentMode = String(value).toLowerCase() || 'online';
+      var modeText = document.getElementById('modeText');
+
+      switch(currentMode) {
+        case 'online':
+        case 'normal':
+          modeText.textContent = 'ONLINE';
+          modeText.setAttribute('fill', '#00ff00');
+          break;
+        case 'battery':
+        case 'on_battery':
+          modeText.textContent = 'ON BATTERY';
+          modeText.setAttribute('fill', '#ffaa00');
+          break;
+        case 'bypass':
+          modeText.textContent = 'BYPASS';
+          modeText.setAttribute('fill', '#ffaa00');
+          break;
+        case 'charging':
+          modeText.textContent = 'CHARGING';
+          modeText.setAttribute('fill', '#00d4ff');
+          break;
+        case 'fault':
+          modeText.textContent = 'FAULT';
+          modeText.setAttribute('fill', '#ff0000');
+          break;
+        default:
+          modeText.textContent = 'UNKNOWN';
+          modeText.setAttribute('fill', '#666666');
+      }
+    }
+
+    function updateBypass(value) {
+      var bypass = Boolean(value);
+      var bypassLine = document.getElementById('bypassLine');
+      var bypassText = document.getElementById('bypassText');
+
+      if (bypass) {
+        bypassLine.setAttribute('opacity', '1');
+        bypassText.setAttribute('opacity', '1');
+      } else {
+        bypassLine.setAttribute('opacity', '0');
+        bypassText.setAttribute('opacity', '0');
+      }
+    }
+
+    function updateAlarmStatus(value) {
+      var alarm = Boolean(value);
+      var indicator = document.getElementById('statusIndicator');
+
+      if (alarm) {
+        indicator.setAttribute('class', 'status-alarm');
+
+        // Add pulse animation
+        indicator.innerHTML = '<animate attributeName="opacity" values="1;0.3;1" dur="1s" repeatCount="indefinite"/>';
+      } else {
+        indicator.setAttribute('class', 'status-ok');
+        indicator.innerHTML = '';
+      }
+    }
+
+    function pad(num) {
+      return num < 10 ? '0' + num : num;
+    }
+
+    // Initialize
+    if (typeof window !== 'undefined') {
+      window.updateValues = updateValues;
+    }
+  ]]>
+  </script>
+</svg>

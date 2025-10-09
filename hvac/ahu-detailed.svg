@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="700" height="450">
+  <defs>
+    <style>
+      .ahud-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .ahud-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .ahud-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .ahud-fan { fill: none; stroke: #3498db; stroke-width: 2; }
+      .ahud-fan-blade { fill: #3498db; }
+      .ahud-fan-active { animation: spin 1s linear infinite; }
+      .ahud-coil-cooling { stroke: #3498db; fill: none; stroke-width: 2; }
+      .ahud-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
+      .ahud-coil-active { filter: drop-shadow(0 0 3px currentColor); }
+      .ahud-filter { fill: #bdc3c7; stroke: #7f8c8d; stroke-width: 1; }
+      .ahud-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 12px; }
+      .ahud-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 10px; }
+      .ahud-value { fill: #3498db; font-family: Arial, monospace; font-size: 11px; font-weight: bold; }
+      .status-ok { fill: #27ae60; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="ahud-text" x="350" y="20" text-anchor="middle" font-size="16" font-weight="bold">
+    Air Handling Unit - Detailed
+  </text>
+
+  <!-- Outside Air Duct -->
+  <rect class="ahud-duct" x="20" y="60" width="80" height="40"/>
+  <text class="ahud-label" x="60" y="55" text-anchor="middle">OA</text>
+  <text id="oaTemp" class="ahud-value" x="60" y="83" text-anchor="middle">45°F</text>
+
+  <!-- OA Damper -->
+  <rect class="ahud-box" x="100" y="55" width="40" height="50" rx="3"/>
+  <g id="oaDamper" transform="translate(120, 80)">
+    <rect class="ahud-damper" x="-15" y="-2" width="30" height="4" rx="1"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="3"/>
+  </g>
+  <text class="ahud-label" x="120" y="115" text-anchor="middle" font-size="8">OAD</text>
+
+  <!-- Return Air Duct -->
+  <rect class="ahud-duct" x="20" y="150" width="80" height="40"/>
+  <text class="ahud-label" x="60" y="145" text-anchor="middle">RA</text>
+  <text id="raTemp" class="ahud-value" x="60" y="173" text-anchor="middle">72°F</text>
+
+  <!-- RA Damper -->
+  <rect class="ahud-box" x="100" y="145" width="40" height="50" rx="3"/>
+  <g id="raDamper" transform="translate(120, 170)">
+    <rect class="ahud-damper" x="-15" y="-2" width="30" height="4" rx="1"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="3"/>
+  </g>
+  <text class="ahud-label" x="120" y="205" text-anchor="middle" font-size="8">RAD</text>
+
+  <!-- Mixed Air Section -->
+  <rect class="ahud-box" x="140" y="55" width="60" height="140" rx="3"/>
+  <text class="ahud-label" x="170" y="130" text-anchor="middle">MIXED</text>
+  <text id="maTemp" class="ahud-value" x="170" y="145" text-anchor="middle">62°F</text>
+
+  <!-- Return Fan -->
+  <rect class="ahud-box" x="200" y="100" width="50" height="50" rx="3"/>
+  <g id="returnFan" transform="translate(225, 125)">
+    <circle class="ahud-fan" cx="0" cy="0" r="18"/>
+    <g class="ahud-fan-blade">
+      <path d="M 0 -13 L 4 -4 L -4 -4 Z"/>
+      <path d="M 13 0 L 4 4 L 4 -4 Z"/>
+      <path d="M 0 13 L -4 4 L 4 4 Z"/>
+      <path d="M -13 0 L -4 -4 L -4 4 Z"/>
+    </g>
+  </g>
+  <text class="ahud-label" x="225" y="160" text-anchor="middle" font-size="8">RF</text>
+
+  <!-- Exhaust Air Path -->
+  <rect class="ahud-duct" x="20" y="230" width="50" height="30"/>
+  <text class="ahud-label" x="45" y="225" text-anchor="middle">EA</text>
+
+  <!-- EA Damper -->
+  <rect class="ahud-box" x="70" y="225" width="35" height="40" rx="3"/>
+  <g id="eaDamper" transform="translate(87, 245)">
+    <rect class="ahud-damper" x="-12" y="-2" width="24" height="4" rx="1"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="3"/>
+  </g>
+  <text class="ahud-label" x="87" y="272" text-anchor="middle" font-size="8">EAD</text>
+
+  <!-- Connection from Mixed to EA damper -->
+  <line x1="170" y1="195" x2="170" y2="245" stroke="#7f8c8d" stroke-width="2"/>
+  <line x1="170" y1="245" x2="105" y2="245" stroke="#7f8c8d" stroke-width="2"/>
+
+  <!-- Filter Section -->
+  <rect class="ahud-box" x="250" y="90" width="45" height="70" rx="3"/>
+  <g id="filter">
+    <rect class="ahud-filter" x="258" y="100" width="29" height="50"/>
+    <line x1="262" y1="100" x2="262" y2="150" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="267" y1="100" x2="267" y2="150" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="272" y1="100" x2="272" y2="150" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="277" y1="100" x2="277" y2="150" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="282" y1="100" x2="282" y2="150" stroke="#95a5a6" stroke-width="1"/>
+  </g>
+  <text class="ahud-label" x="272" y="170" text-anchor="middle" font-size="8">FILTER</text>
+
+  <!-- Preheat Coil -->
+  <rect class="ahud-box" x="295" y="90" width="45" height="70" rx="3"/>
+  <g id="preheatCoil">
+    <path class="ahud-coil-heating" d="M 305 105 Q 308 105 308 108 Q 308 111 311 111 Q 314 111 314 108 Q 314 105 317 105 Q 320 105 320 108 Q 320 111 323 111 Q 326 111 326 108 Q 326 105 330 105"/>
+    <path class="ahud-coil-heating" d="M 305 120 Q 308 120 308 123 Q 308 126 311 126 Q 314 126 314 123 Q 314 120 317 120 Q 320 120 320 123 Q 320 126 323 126 Q 326 126 326 123 Q 326 120 330 120"/>
+    <path class="ahud-coil-heating" d="M 305 135 Q 308 135 308 138 Q 308 141 311 141 Q 314 141 314 138 Q 314 135 317 135 Q 320 135 320 138 Q 320 141 323 141 Q 326 141 326 138 Q 326 135 330 135"/>
+    <path class="ahud-coil-heating" d="M 305 150 Q 308 150 308 153 Q 308 156 311 156"/>
+  </g>
+  <text class="ahud-label" x="317" y="170" text-anchor="middle" font-size="8">PHC</text>
+
+  <!-- Cooling Coil -->
+  <rect class="ahud-box" x="340" y="90" width="50" height="70" rx="3"/>
+  <g id="coolingCoil">
+    <path class="ahud-coil-cooling" d="M 350 105 L 380 105 M 350 115 L 380 115 M 350 125 L 380 125 M 350 135 L 380 135 M 350 145 L 380 145 M 350 155 L 380 155"/>
+    <circle cx="350" cy="105" r="2" fill="#3498db"/>
+    <circle cx="350" cy="115" r="2" fill="#3498db"/>
+    <circle cx="350" cy="125" r="2" fill="#3498db"/>
+    <circle cx="350" cy="135" r="2" fill="#3498db"/>
+    <circle cx="350" cy="145" r="2" fill="#3498db"/>
+    <circle cx="350" cy="155" r="2" fill="#3498db"/>
+  </g>
+  <text class="ahud-label" x="365" y="170" text-anchor="middle" font-size="8">CC</text>
+
+  <!-- Reheat Coil -->
+  <rect class="ahud-box" x="390" y="90" width="45" height="70" rx="3"/>
+  <g id="reheatCoil">
+    <path class="ahud-coil-heating" d="M 400 105 Q 403 105 403 108 Q 403 111 406 111 Q 409 111 409 108 Q 409 105 412 105 Q 415 105 415 108 Q 415 111 418 111 Q 421 111 421 108 Q 421 105 425 105"/>
+    <path class="ahud-coil-heating" d="M 400 120 Q 403 120 403 123 Q 403 126 406 126 Q 409 126 409 123 Q 409 120 412 120 Q 415 120 415 123 Q 415 126 418 126 Q 421 126 421 123 Q 421 120 425 120"/>
+    <path class="ahud-coil-heating" d="M 400 135 Q 403 135 403 138 Q 403 141 406 141 Q 409 141 409 138 Q 409 135 412 135 Q 415 135 415 138 Q 415 141 418 141 Q 421 141 421 138 Q 421 135 425 135"/>
+    <path class="ahud-coil-heating" d="M 400 150 Q 403 150 403 153 Q 403 156 406 156"/>
+  </g>
+  <text class="ahud-label" x="412" y="170" text-anchor="middle" font-size="8">RHC</text>
+
+  <!-- Supply Fan -->
+  <rect class="ahud-box" x="435" y="85" width="60" height="80" rx="3"/>
+  <g id="supplyFan" transform="translate(465, 125)">
+    <circle class="ahud-fan" cx="0" cy="0" r="25"/>
+    <g class="ahud-fan-blade">
+      <path d="M 0 -18 L 6 -6 L -6 -6 Z"/>
+      <path d="M 18 0 L 6 6 L 6 -6 Z"/>
+      <path d="M 0 18 L -6 6 L 6 6 Z"/>
+      <path d="M -18 0 L -6 -6 L -6 6 Z"/>
+    </g>
+  </g>
+  <text class="ahud-label" x="465" y="175" text-anchor="middle" font-size="8">SF</text>
+
+  <!-- Supply Air Duct -->
+  <rect class="ahud-duct" x="495" y="100" width="185" height="50"/>
+  <text class="ahud-label" x="587" y="95" text-anchor="middle">SUPPLY AIR</text>
+  <text id="saTemp" class="ahud-value" x="587" y="128" text-anchor="middle">58°F</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="290" width="660" height="145" rx="5"/>
+
+  <!-- Column 1 -->
+  <text class="ahud-label" x="35" y="310">Dampers</text>
+  <text class="ahud-label" x="35" y="328">OA Damper:</text>
+  <text id="oaDamperPos" class="ahud-value" x="35" y="345">25%</text>
+  <text class="ahud-label" x="35" y="363">RA Damper:</text>
+  <text id="raDamperPos" class="ahud-value" x="35" y="380">75%</text>
+  <text class="ahud-label" x="35" y="398">EA Damper:</text>
+  <text id="eaDamperPos" class="ahud-value" x="35" y="415">20%</text>
+
+  <!-- Column 2 -->
+  <text class="ahud-label" x="150" y="310">Fans</text>
+  <text class="ahud-label" x="150" y="328">Supply Fan:</text>
+  <text id="sfStatus" class="ahud-value" x="150" y="345">ON - 65%</text>
+  <text class="ahud-label" x="150" y="363">Return Fan:</text>
+  <text id="rfStatus" class="ahud-value" x="150" y="380">ON - 60%</text>
+  <text class="ahud-label" x="150" y="398">SF Static:</text>
+  <text id="sfStatic" class="ahud-value" x="150" y="415">2.5"wc</text>
+
+  <!-- Column 3 -->
+  <text class="ahud-label" x="280" y="310">Coils</text>
+  <text class="ahud-label" x="280" y="328">Preheat:</text>
+  <text id="phcValve" class="ahud-value" x="280" y="345">0%</text>
+  <text class="ahud-label" x="280" y="363">Cooling:</text>
+  <text id="ccValve" class="ahud-value" x="280" y="380">0%</text>
+  <text class="ahud-label" x="280" y="398">Reheat:</text>
+  <text id="rhcValve" class="ahud-value" x="280" y="415">30%</text>
+
+  <!-- Column 4 -->
+  <text class="ahud-label" x="400" y="310">Temperatures</text>
+  <text class="ahud-label" x="400" y="328">Outside Air:</text>
+  <text id="oaTempData" class="ahud-value" x="400" y="345">45°F</text>
+  <text class="ahud-label" x="400" y="363">Return Air:</text>
+  <text id="raTempData" class="ahud-value" x="400" y="380">72°F</text>
+  <text class="ahud-label" x="400" y="398">Mixed Air:</text>
+  <text id="maTempData" class="ahud-value" x="400" y="415">62°F</text>
+
+  <!-- Column 5 -->
+  <text class="ahud-label" x="530" y="310">Status</text>
+  <text class="ahud-label" x="530" y="328">Filter:</text>
+  <g id="filterStatus">
+    <circle id="filterLight" class="status-ok" cx="570" cy="340" r="4"/>
+    <text id="filterText" class="ahud-value" x="580" y="345">Clean</text>
+  </g>
+  <text class="ahud-label" x="530" y="363">Mode:</text>
+  <text id="modeText" class="ahud-value" x="530" y="380">Heating</text>
+  <text class="ahud-label" x="530" y="398">System:</text>
+  <g id="systemStatus">
+    <circle id="statusLight" class="status-ok" cx="570" cy="410" r="4"/>
+    <text id="statusText" class="ahud-value" x="580" y="415">Normal</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var oaDamperPos = 25; // 0-100%
+    var raDamperPos = 75; // 0-100%
+    var eaDamperPos = 20; // 0-100%
+    var supplyFanSpeed = 65; // 0-100%
+    var returnFanSpeed = 60; // 0-100%
+    var supplyFanStatus = true;
+    var returnFanStatus = true;
+    var preheatValve = 0; // 0-100%
+    var coolingValve = 0; // 0-100%
+    var reheatValve = 30; // 0-100%
+    var oaTemp = 45; // degrees F
+    var raTemp = 72; // degrees F
+    var maTemp = 62; // degrees F
+    var saTemp = 58; // degrees F
+    var staticPressure = 2.5; // inches wc
+    var filterDirty = false;
+    var alarmActive = false;
+    var mode = 'Heating'; // Heating, Cooling, Economizer, Off
+
+    function updateDisplay() {
+      // Update temperatures
+      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
+
+      // Calculate mixed air temp
+      maTemp = (oaTemp * oaDamperPos / 100) + (raTemp * raDamperPos / 100);
+      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
+
+      // Update damper positions
+      document.getElementById('oaDamperPos').textContent = oaDamperPos.toFixed(0) + '%';
+      document.getElementById('raDamperPos').textContent = raDamperPos.toFixed(0) + '%';
+      document.getElementById('eaDamperPos').textContent = eaDamperPos.toFixed(0) + '%';
+
+      // Rotate dampers
+      var oaAngle = (oaDamperPos / 100) * 90;
+      var raAngle = (raDamperPos / 100) * 90;
+      var eaAngle = (eaDamperPos / 100) * 90;
+      document.getElementById('oaDamper').setAttribute('transform', 'translate(120, 80) rotate(' + oaAngle + ')');
+      document.getElementById('raDamper').setAttribute('transform', 'translate(120, 170) rotate(' + raAngle + ')');
+      document.getElementById('eaDamper').setAttribute('transform', 'translate(87, 245) rotate(' + eaAngle + ')');
+
+      // Update fans
+      var sfText = document.getElementById('sfStatus');
+      if (supplyFanStatus) {
+        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
+        sfText.style.fill = '#27ae60';
+        document.getElementById('supplyFan').querySelector('.ahud-fan-blade').classList.add('ahud-fan-active');
+      } else {
+        sfText.textContent = 'OFF';
+        sfText.style.fill = '#7f8c8d';
+        document.getElementById('supplyFan').querySelector('.ahud-fan-blade').classList.remove('ahud-fan-active');
+      }
+
+      var rfText = document.getElementById('rfStatus');
+      if (returnFanStatus) {
+        rfText.textContent = 'ON - ' + returnFanSpeed.toFixed(0) + '%';
+        rfText.style.fill = '#27ae60';
+        document.getElementById('returnFan').querySelector('.ahud-fan-blade').classList.add('ahud-fan-active');
+      } else {
+        rfText.textContent = 'OFF';
+        rfText.style.fill = '#7f8c8d';
+        document.getElementById('returnFan').querySelector('.ahud-fan-blade').classList.remove('ahud-fan-active');
+      }
+
+      document.getElementById('sfStatic').textContent = staticPressure.toFixed(1) + '"wc';
+
+      // Update coil valves
+      document.getElementById('phcValve').textContent = preheatValve.toFixed(0) + '%';
+      document.getElementById('ccValve').textContent = coolingValve.toFixed(0) + '%';
+      document.getElementById('rhcValve').textContent = reheatValve.toFixed(0) + '%';
+
+      // Update coil appearance
+      if (preheatValve > 5) {
+        document.getElementById('preheatCoil').classList.add('ahud-coil-active');
+      } else {
+        document.getElementById('preheatCoil').classList.remove('ahud-coil-active');
+      }
+
+      if (coolingValve > 5) {
+        document.getElementById('coolingCoil').classList.add('ahud-coil-active');
+      } else {
+        document.getElementById('coolingCoil').classList.remove('ahud-coil-active');
+      }
+
+      if (reheatValve > 5) {
+        document.getElementById('reheatCoil').classList.add('ahud-coil-active');
+      } else {
+        document.getElementById('reheatCoil').classList.remove('ahud-coil-active');
+      }
+
+      // Update filter status
+      var filterLight = document.getElementById('filterLight');
+      var filterText = document.getElementById('filterText');
+      if (filterDirty) {
+        filterLight.setAttribute('class', 'status-alarm');
+        filterText.textContent = 'Dirty';
+        filterText.style.fill = '#e74c3c';
+      } else {
+        filterLight.setAttribute('class', 'status-ok');
+        filterText.textContent = 'Clean';
+        filterText.style.fill = '#27ae60';
+      }
+
+      // Update mode
+      document.getElementById('modeText').textContent = mode;
+
+      // Update system status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

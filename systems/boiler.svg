@@ -1,0 +1,334 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 700" width="800" height="700">
+  <defs>
+    <linearGradient id="boilerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#8d4a2c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#5a2f1a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="burnerGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#ff6b35;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ffaa00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff6b35;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="flameGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffff00;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#ff6b35;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff0000;stop-opacity:0.5" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="flameGlow">
+      <feGaussianBlur stdDeviation="5" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="700" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="400" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">BOILER SYSTEM</text>
+
+  <!-- Main Boiler Body -->
+  <g id="boiler-body">
+    <rect x="200" y="150" width="350" height="380" fill="url(#boilerGrad)" stroke="#ff6b35" stroke-width="3" rx="8"/>
+    <text x="375" y="180" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">BOILER</text>
+
+    <!-- Pressure Vessel Outline -->
+    <ellipse cx="375" cy="340" rx="160" ry="170" fill="none" stroke="#ff8855" stroke-width="2" opacity="0.4"/>
+
+    <!-- Status Indicator -->
+    <circle id="boiler-status" cx="520" cy="170" r="12" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Water Level Indicator -->
+    <rect x="220" y="200" width="30" height="280" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="235" y="195" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle">LEVEL</text>
+
+    <!-- Water Level -->
+    <rect x="224" y="280" width="22" height="160" fill="#4a9eff" stroke="none" id="water-level"/>
+    <line x1="220" y1="340" x2="250" y2="340" stroke="#00ff00" stroke-width="2"/>
+    <text x="255" y="344" font-family="Arial" font-size="9" fill="#00ff00">SET</text>
+
+    <!-- Pressure Gauge -->
+    <circle cx="280" cy="230" r="30" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="280" y="220" font-family="Arial" font-size="9" fill="#4a9eff" text-anchor="middle">PSI</text>
+    <text x="280" y="240" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="middle" id="pressure">45</text>
+
+    <!-- Temperature Gauge -->
+    <circle cx="470" cy="230" r="30" fill="#0d1b2a" stroke="#ff6b35" stroke-width="2"/>
+    <text x="470" y="220" font-family="Arial" font-size="9" fill="#ff6b35" text-anchor="middle">TEMP</text>
+    <text x="470" y="240" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="middle" id="boiler-temp">180°F</text>
+  </g>
+
+  <!-- Burner Assembly -->
+  <g id="burner">
+    <rect x="120" y="320" width="80" height="90" fill="#2c2c2c" stroke="#ff6b35" stroke-width="2" rx="3"/>
+    <text x="160" y="345" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">BURNER</text>
+
+    <!-- Burner Status -->
+    <circle id="burner-status" cx="180" cy="330" r="7" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <!-- Flame -->
+    <g id="flame">
+      <ellipse cx="200" cy="365" rx="20" ry="30" fill="url(#flameGrad)" filter="url(#flameGlow)">
+        <animate attributeName="ry" values="30;35;30" dur="0.5s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="1;0.8;1" dur="0.5s" repeatCount="indefinite"/>
+      </ellipse>
+      <ellipse cx="200" cy="370" rx="15" ry="25" fill="#ffff00" opacity="0.8">
+        <animate attributeName="ry" values="25;28;25" dur="0.4s" repeatCount="indefinite"/>
+      </ellipse>
+    </g>
+
+    <!-- Gas Line -->
+    <rect x="50" y="360" width="70" height="15" fill="#ffaa00" stroke="#ffaa00" stroke-width="2" rx="2"/>
+    <text x="85" y="372" font-family="Arial" font-size="10" fill="#000000" text-anchor="middle">GAS</text>
+
+    <!-- Burner Load -->
+    <text x="160" y="395" font-family="Arial" font-size="11" fill="#ff6b35" text-anchor="middle" id="burner-load">Fire: 75%</text>
+  </g>
+
+  <!-- Flue/Stack -->
+  <g id="flue">
+    <rect x="340" y="50" width="70" height="100" fill="#5a5a5a" stroke="#888888" stroke-width="2" rx="3"/>
+    <text x="375" y="95" font-family="Arial" font-size="11" font-weight="bold" fill="#ffffff" text-anchor="middle">FLUE</text>
+
+    <!-- Flue Gas -->
+    <g opacity="0.6">
+      <circle cx="360" cy="70" r="3" fill="#888888">
+        <animate attributeName="cy" from="100" to="50" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.6" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="375" cy="85" r="3" fill="#888888">
+        <animate attributeName="cy" from="115" to="50" dur="2.2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.6" to="0" dur="2.2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="390" cy="75" r="3" fill="#888888">
+        <animate attributeName="cy" from="105" to="50" dur="1.8s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.6" to="0" dur="1.8s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+
+    <!-- Stack Temp -->
+    <text x="375" y="120" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle" id="stack-temp">325°F</text>
+  </g>
+
+  <!-- Hot Water Supply -->
+  <g id="hw-supply">
+    <rect x="550" y="200" width="180" height="60" fill="#1a3a5a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+    <text x="640" y="225" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">HOT WATER SUPPLY</text>
+
+    <text x="570" y="245" font-family="Arial" font-size="12" fill="#ff6b35">Temp:</text>
+    <text x="690" y="245" font-family="Arial" font-size="16" font-weight="bold" fill="#ff6b35" text-anchor="end" id="supply-temp">180°F</text>
+
+    <text x="570" y="262" font-family="Arial" font-size="12" fill="#4a9eff">Flow:</text>
+    <text x="690" y="262" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="supply-flow">250 GPM</text>
+
+    <!-- Supply Pipe -->
+    <rect x="550" y="220" width="50" height="20" fill="#ff6b35" stroke="#ff6b35" stroke-width="2" rx="2"/>
+    <path d="M 545 230 L 555 220 L 555 240 Z" fill="#ff6b35"/>
+  </g>
+
+  <!-- Return Water -->
+  <g id="hw-return">
+    <rect x="550" y="400" width="180" height="60" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="640" y="425" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">HOT WATER RETURN</text>
+
+    <text x="570" y="445" font-family="Arial" font-size="12" fill="#4a9eff">Temp:</text>
+    <text x="690" y="445" font-family="Arial" font-size="16" font-weight="bold" fill="#4a9eff" text-anchor="end" id="return-temp">160°F</text>
+
+    <text x="570" y="462" font-family="Arial" font-size="12" fill="#4a9eff">Flow:</text>
+    <text x="690" y="462" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="return-flow">250 GPM</text>
+
+    <!-- Return Pipe -->
+    <rect x="500" y="420" width="50" height="20" fill="#4a9eff" stroke="#4a9eff" stroke-width="2" rx="2"/>
+    <path d="M 555 430 L 545 420 L 545 440 Z" fill="#4a9eff"/>
+  </g>
+
+  <!-- Circulation Pump -->
+  <g id="pump">
+    <circle cx="640" cy="330" r="35" fill="url(#boilerGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 640 305 L 655 330 L 640 355 Z" fill="#4a9eff"/>
+    <text x="640" y="337" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">PUMP</text>
+
+    <circle id="pump-status" cx="675" cy="305" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="640" y="380" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="pump-speed">85%</text>
+
+    <!-- Pump connections -->
+    <line x1="640" y1="260" x2="640" y2="295" stroke="#ff6b35" stroke-width="6"/>
+    <line x1="640" y1="365" x2="640" y2="400" stroke="#4a9eff" stroke-width="6"/>
+  </g>
+
+  <!-- Safety Relief Valve -->
+  <g id="relief-valve">
+    <rect x="500" y="180" width="30" height="40" fill="#ffaa00" stroke="#ff6b35" stroke-width="2" rx="2"/>
+    <text x="515" y="205" font-family="Arial" font-size="10" fill="#000000" text-anchor="middle">PRV</text>
+    <circle id="relief-status" cx="525" cy="175" r="5" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+  </g>
+
+  <!-- Control Panel -->
+  <g id="control-panel">
+    <rect x="50" y="480" width="320" height="180" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="210" y="510" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">BOILER CONTROL</text>
+
+    <!-- Setpoint -->
+    <text x="70" y="540" font-family="Arial" font-size="12" fill="#4a9eff">Setpoint:</text>
+    <text x="330" y="540" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="setpoint">180°F</text>
+
+    <!-- Firing Rate -->
+    <text x="70" y="565" font-family="Arial" font-size="12" fill="#4a9eff">Firing Rate:</text>
+    <text x="330" y="565" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="firing-rate">75%</text>
+
+    <!-- Efficiency -->
+    <text x="70" y="590" font-family="Arial" font-size="12" fill="#4a9eff">Efficiency:</text>
+    <text x="330" y="590" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="efficiency">85.2%</text>
+
+    <!-- Capacity -->
+    <text x="70" y="615" font-family="Arial" font-size="12" fill="#4a9eff">Capacity:</text>
+    <text x="330" y="615" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="capacity">5.0 MMBtu/h</text>
+
+    <!-- Status -->
+    <text x="70" y="640" font-family="Arial" font-size="12" fill="#4a9eff">Status:</text>
+    <text x="330" y="640" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="status">FIRING</text>
+  </g>
+
+  <!-- Performance Metrics -->
+  <g id="performance">
+    <rect x="420" y="480" width="330" height="180" fill="#0d1b2a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+    <text x="585" y="510" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">PERFORMANCE</text>
+
+    <!-- Delta T -->
+    <text x="440" y="540" font-family="Arial" font-size="12" fill="#ffffff">Delta T:</text>
+    <text x="710" y="540" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="delta-t">20°F</text>
+
+    <!-- Output -->
+    <text x="440" y="565" font-family="Arial" font-size="12" fill="#ff6b35">Output:</text>
+    <text x="710" y="565" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="output">3.75 MMBtu/h</text>
+
+    <!-- Gas Flow -->
+    <text x="440" y="590" font-family="Arial" font-size="12" fill="#ffaa00">Gas Flow:</text>
+    <text x="710" y="590" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="gas-flow">45 CFH</text>
+
+    <!-- O2 Level -->
+    <text x="440" y="615" font-family="Arial" font-size="12" fill="#4a9eff">O2 Level:</text>
+    <text x="710" y="615" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="o2-level">4.5%</text>
+
+    <!-- Run Hours -->
+    <text x="440" y="640" font-family="Arial" font-size="12" fill="#ffffff">Run Hours:</text>
+    <text x="710" y="640" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="run-hours">15,248</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var boiler = {
+      // Boiler Status
+      boiler_status: true,
+      burner_status: true,
+      pump_status: true,
+      relief_status: true,
+
+      // Temperatures
+      supply_temp: 180,
+      return_temp: 160,
+      boiler_temp: 180,
+      stack_temp: 325,
+      setpoint: 180,
+
+      // Pressure
+      pressure: 45,
+
+      // Flow
+      supply_flow: 250,
+      return_flow: 250,
+      pump_speed: 85,
+
+      // Burner
+      firing_rate: 75,
+      burner_load: 75,
+
+      // Performance
+      efficiency: 85.2,
+      capacity: 5.0,
+      output: 3.75,
+      gas_flow: 45,
+      o2_level: 4.5,
+      delta_t: 20,
+
+      // Status
+      status: "FIRING",
+      run_hours: 15248,
+      water_level: 65
+    };
+
+    function updateDisplay() {
+      // Update Status Indicators
+      document.getElementById('boiler-status').setAttribute('fill',
+        boiler.boiler_status ? '#00ff00' : '#ff0000');
+      document.getElementById('burner-status').setAttribute('fill',
+        boiler.burner_status ? '#00ff00' : '#ff0000');
+      document.getElementById('pump-status').setAttribute('fill',
+        boiler.pump_status ? '#00ff00' : '#ff0000');
+      document.getElementById('relief-status').setAttribute('fill',
+        boiler.relief_status ? '#00ff00' : '#ffaa00');
+
+      // Update Temperatures
+      document.getElementById('supply-temp').textContent = boiler.supply_temp + '°F';
+      document.getElementById('return-temp').textContent = boiler.return_temp + '°F';
+      document.getElementById('boiler-temp').textContent = boiler.boiler_temp + '°F';
+      document.getElementById('stack-temp').textContent = boiler.stack_temp + '°F';
+
+      // Update Pressure
+      document.getElementById('pressure').textContent = boiler.pressure;
+
+      // Update Flow
+      document.getElementById('supply-flow').textContent = boiler.supply_flow + ' GPM';
+      document.getElementById('return-flow').textContent = boiler.return_flow + ' GPM';
+      document.getElementById('pump-speed').textContent = boiler.pump_speed + '%';
+
+      // Update Control Panel
+      document.getElementById('setpoint').textContent = boiler.setpoint + '°F';
+      document.getElementById('firing-rate').textContent = boiler.firing_rate + '%';
+      document.getElementById('efficiency').textContent = boiler.efficiency.toFixed(1) + '%';
+      document.getElementById('capacity').textContent = boiler.capacity.toFixed(1) + ' MMBtu/h';
+      document.getElementById('status').textContent = boiler.status;
+
+      var statusColor = boiler.status === 'FIRING' ? '#00ff00' :
+                       boiler.status === 'STANDBY' ? '#ffaa00' :
+                       boiler.status === 'ALARM' ? '#ff0000' : '#666666';
+      document.getElementById('status').setAttribute('fill', statusColor);
+
+      // Update Burner
+      document.getElementById('burner-load').textContent = 'Fire: ' + boiler.burner_load + '%';
+
+      // Update Performance
+      document.getElementById('delta-t').textContent = boiler.delta_t + '°F';
+      document.getElementById('output').textContent = boiler.output.toFixed(2) + ' MMBtu/h';
+      document.getElementById('gas-flow').textContent = boiler.gas_flow + ' CFH';
+      document.getElementById('o2-level').textContent = boiler.o2_level.toFixed(1) + '%';
+      document.getElementById('run-hours').textContent = boiler.run_hours.toLocaleString();
+
+      // Update Water Level (visual)
+      var levelHeight = (boiler.water_level / 100) * 200;
+      var levelY = 440 - levelHeight;
+      document.getElementById('water-level').setAttribute('y', levelY);
+      document.getElementById('water-level').setAttribute('height', levelHeight);
+
+      // Calculate delta T
+      boiler.delta_t = boiler.supply_temp - boiler.return_temp;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

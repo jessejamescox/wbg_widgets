@@ -1,0 +1,370 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" width="1000" height="700">
+  <defs>
+    <linearGradient id="pumpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pipingGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a9eff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#1a5a9a;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4a9eff" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="700" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="500" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">PRIMARY-SECONDARY PUMPING SYSTEM</text>
+
+  <!-- Production (Primary Side) Label -->
+  <text x="250" y="80" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ff6b35" text-anchor="middle">PRIMARY LOOP (PRODUCTION)</text>
+
+  <!-- Distribution (Secondary Side) Label -->
+  <text x="750" y="80" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#4a9eff" text-anchor="middle">SECONDARY LOOP (DISTRIBUTION)</text>
+
+  <!-- Chiller/Producer -->
+  <g id="chiller">
+    <rect x="80" y="200" width="150" height="180" fill="#2c5f8d" stroke="#ff6b35" stroke-width="3" rx="5"/>
+    <text x="155" y="230" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">CHILLER</text>
+
+    <circle id="chiller-status" cx="210" cy="220" r="10" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Evaporator representation -->
+    <rect x="100" y="250" width="110" height="70" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="155" y="272" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">EVAPORATOR</text>
+
+    <line x1="110" y1="285" x2="200" y2="285" stroke="#4a9eff" stroke-width="1"/>
+    <line x1="110" y1="295" x2="200" y2="295" stroke="#4a9eff" stroke-width="1"/>
+    <line x1="110" y1="305" x2="200" y2="305" stroke="#4a9eff" stroke-width="1"/>
+
+    <text x="155" y="350" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="chiller-load">Load: 85%</text>
+    <text x="155" y="368" font-family="Arial" font-size="11" fill="#00ff00" text-anchor="middle" id="chiller-tons">500 Tons</text>
+  </g>
+
+  <!-- Primary Pumps -->
+  <g id="primary-pumps">
+    <text x="155" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35">PRIMARY PUMPS</text>
+
+    <!-- Primary Pump 1 -->
+    <circle id="pri-pump1" cx="130" cy="155" r="28" fill="url(#pumpGrad)" stroke="#ff6b35" stroke-width="2"/>
+    <path d="M 130 135 L 142 155 L 130 175 Z" fill="#ff6b35"/>
+    <text x="130" y="162" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">PP1</text>
+    <circle id="pp1-status" cx="158" cy="140" r="7" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="130" y="195" font-family="Arial" font-size="10" fill="#ff6b35" text-anchor="middle" id="pp1-speed">90%</text>
+
+    <!-- Primary Pump 2 -->
+    <circle id="pri-pump2" cx="210" cy="155" r="28" fill="url(#pumpGrad)" stroke="#ff6b35" stroke-width="2"/>
+    <path d="M 210 135 L 222 155 L 210 175 Z" fill="#ff6b35"/>
+    <text x="210" y="162" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">PP2</text>
+    <circle id="pp2-status" cx="238" cy="140" r="7" fill="#666666" stroke="#ffffff" stroke-width="1"/>
+    <text x="210" y="195" font-family="Arial" font-size="10" fill="#666666" text-anchor="middle" id="pp2-speed">OFF</text>
+  </g>
+
+  <!-- Primary Loop Piping -->
+  <g id="primary-loop">
+    <!-- Supply -->
+    <rect x="250" y="250" width="100" height="30" fill="#1a5a9a" stroke="#4a9eff" stroke-width="3" rx="2"/>
+    <text x="300" y="270" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">PRIMARY</text>
+    <text x="300" y="283" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">SUPPLY</text>
+
+    <!-- Return -->
+    <rect x="250" y="320" width="100" height="30" fill="#1a5a9a" stroke="#ffaa00" stroke-width="3" rx="2"/>
+    <text x="300" y="340" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">PRIMARY</text>
+    <text x="300" y="353" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">RETURN</text>
+
+    <!-- Flow arrows -->
+    <path d="M 235 265 L 250 265" stroke="#4a9eff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+    <path d="M 235 335 L 250 335" stroke="#ffaa00" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+    <!-- Vertical connections -->
+    <line x1="155" y1="183" x2="155" y2="200" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="155" y1="380" x2="155" y2="410" stroke="#ffaa00" stroke-width="6"/>
+
+    <!-- Horizontal to decoupler -->
+    <line x1="230" y1="265" x2="350" y2="265" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="230" y1="335" x2="350" y2="335" stroke="#ffaa00" stroke-width="6"/>
+
+    <!-- Primary Flow -->
+    <text x="280" y="245" font-family="Arial" font-size="10" fill="#4a9eff" id="pri-flow">450 GPM</text>
+  </g>
+
+  <!-- Decoupler/Common Pipe -->
+  <g id="decoupler">
+    <rect x="350" y="260" width="60" height="80" fill="#2a4a6a" stroke="#ffaa00" stroke-width="4" rx="3"/>
+    <text x="380" y="285" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">DEC</text>
+    <text x="380" y="300" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">OUP</text>
+    <text x="380" y="315" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">LER</text>
+
+    <!-- Flow indicator -->
+    <text x="380" y="335" font-family="Arial" font-size="9" fill="#ffaa00" text-anchor="middle" id="decoupler-flow">↑ 25 GPM</text>
+
+    <!-- Decoupler line -->
+    <line x1="380" y1="265" x2="380" y2="335" stroke="#ffaa00" stroke-width="3" opacity="0.6"/>
+  </g>
+
+  <!-- Secondary Loop Piping -->
+  <g id="secondary-loop">
+    <!-- Supply -->
+    <rect x="430" y="250" width="100" height="30" fill="#1a5a9a" stroke="#4a9eff" stroke-width="3" rx="2"/>
+    <text x="480" y="270" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">SECONDARY</text>
+    <text x="480" y="283" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">SUPPLY</text>
+
+    <!-- Return -->
+    <rect x="430" y="320" width="100" height="30" fill="#1a5a9a" stroke="#ffaa00" stroke-width="3" rx="2"/>
+    <text x="480" y="340" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">SECONDARY</text>
+    <text x="480" y="353" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">RETURN</text>
+
+    <!-- Flow arrows -->
+    <path d="M 415 265 L 430 265" stroke="#4a9eff" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+    <path d="M 415 335 L 430 335" stroke="#ffaa00" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+
+    <!-- Horizontal from decoupler -->
+    <line x1="410" y1="265" x2="650" y2="265" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="410" y1="335" x2="650" y2="335" stroke="#ffaa00" stroke-width="6"/>
+
+    <!-- Secondary Flow -->
+    <text x="560" y="245" font-family="Arial" font-size="10" fill="#4a9eff" id="sec-flow">425 GPM</text>
+  </g>
+
+  <!-- Secondary Pumps -->
+  <g id="secondary-pumps">
+    <text x="480" y="130" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff">SECONDARY PUMPS</text>
+
+    <!-- Secondary Pump 1 -->
+    <circle id="sec-pump1" cx="455" cy="155" r="28" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 455 135 L 467 155 L 455 175 Z" fill="#4a9eff"/>
+    <text x="455" y="162" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">SP1</text>
+    <circle id="sp1-status" cx="483" cy="140" r="7" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="455" y="195" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="sp1-speed">85%</text>
+
+    <!-- Secondary Pump 2 -->
+    <circle id="sec-pump2" cx="535" cy="155" r="28" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 535 135 L 547 155 L 535 175 Z" fill="#4a9eff"/>
+    <text x="535" y="162" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">SP2</text>
+    <circle id="sp2-status" cx="563" cy="140" r="7" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="535" y="195" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="sp2-speed">82%</text>
+
+    <!-- Vertical connections to pumps -->
+    <line x1="480" y1="183" x2="480" y2="265" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="480" y1="335" x2="480" y2="410" stroke="#ffaa00" stroke-width="6"/>
+  </g>
+
+  <!-- Load (AHUs, FCUs, etc) -->
+  <g id="load">
+    <rect x="700" y="200" width="220" height="180" fill="#2c5f8d" stroke="#4a9eff" stroke-width="3" rx="5"/>
+    <text x="810" y="230" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">BUILDING LOAD</text>
+
+    <!-- AHU representation -->
+    <rect x="730" y="250" width="160" height="50" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="810" y="268" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">AHU / FCU / LOADS</text>
+
+    <!-- Coils -->
+    <g opacity="0.5">
+      <line x1="740" y1="280" x2="880" y2="280" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="740" y1="288" x2="880" y2="288" stroke="#4a9eff" stroke-width="1"/>
+    </g>
+
+    <!-- Load values -->
+    <text x="810" y="330" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle">Supply Temp:</text>
+    <text x="810" y="348" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="middle" id="sec-supply-temp">42.5°F</text>
+
+    <text x="810" y="368" font-family="Arial" font-size="11" fill="#ffaa00" text-anchor="middle">Return Temp:</text>
+    <text x="810" y="386" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="middle" id="sec-return-temp">56.8°F</text>
+
+    <!-- Connections -->
+    <line x1="650" y1="265" x2="700" y2="265" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="650" y1="335" x2="700" y2="335" stroke="#ffaa00" stroke-width="6"/>
+  </g>
+
+  <!-- Temperature Sensors -->
+  <g id="temp-sensors">
+    <!-- Primary Supply -->
+    <circle cx="280" cy="265" r="12" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="280" y="270" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle">T</text>
+    <text x="280" y="230" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="pri-supply-temp">42.0°F</text>
+
+    <!-- Primary Return -->
+    <circle cx="280" cy="335" r="12" fill="#0d1b2a" stroke="#ffaa00" stroke-width="2"/>
+    <text x="280" y="340" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle">T</text>
+    <text x="280" y="370" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle" id="pri-return-temp">56.2°F</text>
+
+    <!-- Secondary Supply -->
+    <circle cx="560" cy="265" r="12" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="560" y="270" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle">T</text>
+
+    <!-- Secondary Return -->
+    <circle cx="560" cy="335" r="12" fill="#0d1b2a" stroke="#ffaa00" stroke-width="2"/>
+    <text x="560" y="340" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle">T</text>
+  </g>
+
+  <!-- System Information Panel -->
+  <g id="system-info">
+    <rect x="80" y="450" width="840" height="220" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="500" y="480" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">SYSTEM INFORMATION</text>
+
+    <!-- Primary Loop Info -->
+    <rect x="100" y="495" width="380" height="160" fill="#1a3a5a" stroke="#ff6b35" stroke-width="2" rx="3"/>
+    <text x="290" y="520" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="middle">PRIMARY LOOP</text>
+
+    <text x="120" y="545" font-family="Arial" font-size="12" fill="#4a9eff">Supply Temp:</text>
+    <text x="440" y="545" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="pri-supply-info">42.0°F</text>
+
+    <text x="120" y="570" font-family="Arial" font-size="12" fill="#ffaa00">Return Temp:</text>
+    <text x="440" y="570" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="pri-return-info">56.2°F</text>
+
+    <text x="120" y="595" font-family="Arial" font-size="12" fill="#ffffff">Delta T:</text>
+    <text x="440" y="595" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="pri-delta-t">14.2°F</text>
+
+    <text x="120" y="620" font-family="Arial" font-size="12" fill="#4a9eff">Flow Rate:</text>
+    <text x="440" y="620" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="pri-flow-info">450 GPM</text>
+
+    <text x="120" y="645" font-family="Arial" font-size="12" fill="#00ff00">Active Pumps:</text>
+    <text x="440" y="645" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="pri-pumps">1 of 2</text>
+
+    <!-- Secondary Loop Info -->
+    <rect x="520" y="495" width="380" height="160" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="710" y="520" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="middle">SECONDARY LOOP</text>
+
+    <text x="540" y="545" font-family="Arial" font-size="12" fill="#4a9eff">Supply Temp:</text>
+    <text x="860" y="545" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="sec-supply-info">42.5°F</text>
+
+    <text x="540" y="570" font-family="Arial" font-size="12" fill="#ffaa00">Return Temp:</text>
+    <text x="860" y="570" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="sec-return-info">56.8°F</text>
+
+    <text x="540" y="595" font-family="Arial" font-size="12" fill="#ffffff">Delta T:</text>
+    <text x="860" y="595" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="sec-delta-t">14.3°F</text>
+
+    <text x="540" y="620" font-family="Arial" font-size="12" fill="#4a9eff">Flow Rate:</text>
+    <text x="860" y="620" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="sec-flow-info">425 GPM</text>
+
+    <text x="540" y="645" font-family="Arial" font-size="12" fill="#00ff00">Active Pumps:</text>
+    <text x="860" y="645" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="sec-pumps">2 of 2</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var primarySecondary = {
+      // Chiller
+      chiller_status: true,
+      chiller_load: 85,
+      chiller_tons: 500,
+
+      // Primary Pumps
+      pp1_status: true,
+      pp1_speed: 90,
+      pp2_status: false,
+      pp2_speed: 0,
+
+      // Secondary Pumps
+      sp1_status: true,
+      sp1_speed: 85,
+      sp2_status: true,
+      sp2_speed: 82,
+
+      // Primary Loop
+      pri_supply_temp: 42.0,
+      pri_return_temp: 56.2,
+      pri_delta_t: 14.2,
+      pri_flow: 450,
+
+      // Secondary Loop
+      sec_supply_temp: 42.5,
+      sec_return_temp: 56.8,
+      sec_delta_t: 14.3,
+      sec_flow: 425,
+
+      // Decoupler
+      decoupler_flow: 25,  // Positive = flow from primary to secondary
+      decoupler_direction: "UP"
+    };
+
+    function updateDisplay() {
+      // Update Chiller
+      document.getElementById('chiller-status').setAttribute('fill',
+        primarySecondary.chiller_status ? '#00ff00' : '#ff0000');
+      document.getElementById('chiller-load').textContent = 'Load: ' + primarySecondary.chiller_load + '%';
+      document.getElementById('chiller-tons').textContent = primarySecondary.chiller_tons + ' Tons';
+
+      // Update Primary Pumps
+      document.getElementById('pp1-status').setAttribute('fill',
+        primarySecondary.pp1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('pp1-speed').textContent =
+        primarySecondary.pp1_status ? primarySecondary.pp1_speed + '%' : 'OFF';
+
+      document.getElementById('pp2-status').setAttribute('fill',
+        primarySecondary.pp2_status ? '#00ff00' : '#666666');
+      document.getElementById('pp2-speed').textContent =
+        primarySecondary.pp2_status ? primarySecondary.pp2_speed + '%' : 'OFF';
+
+      // Update Secondary Pumps
+      document.getElementById('sp1-status').setAttribute('fill',
+        primarySecondary.sp1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('sp1-speed').textContent =
+        primarySecondary.sp1_status ? primarySecondary.sp1_speed + '%' : 'OFF';
+
+      document.getElementById('sp2-status').setAttribute('fill',
+        primarySecondary.sp2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('sp2-speed').textContent =
+        primarySecondary.sp2_status ? primarySecondary.sp2_speed + '%' : 'OFF';
+
+      // Update Temperatures
+      document.getElementById('pri-supply-temp').textContent = primarySecondary.pri_supply_temp.toFixed(1) + '°F';
+      document.getElementById('pri-return-temp').textContent = primarySecondary.pri_return_temp.toFixed(1) + '°F';
+      document.getElementById('sec-supply-temp').textContent = primarySecondary.sec_supply_temp.toFixed(1) + '°F';
+      document.getElementById('sec-return-temp').textContent = primarySecondary.sec_return_temp.toFixed(1) + '°F';
+
+      // Update Flow Rates
+      document.getElementById('pri-flow').textContent = primarySecondary.pri_flow + ' GPM';
+      document.getElementById('sec-flow').textContent = primarySecondary.sec_flow + ' GPM';
+
+      // Update Decoupler
+      var decouplerText = primarySecondary.decoupler_flow >= 0 ?
+        '↑ ' + Math.abs(primarySecondary.decoupler_flow) + ' GPM' :
+        '↓ ' + Math.abs(primarySecondary.decoupler_flow) + ' GPM';
+      document.getElementById('decoupler-flow').textContent = decouplerText;
+
+      // Update System Info Panel - Primary
+      document.getElementById('pri-supply-info').textContent = primarySecondary.pri_supply_temp.toFixed(1) + '°F';
+      document.getElementById('pri-return-info').textContent = primarySecondary.pri_return_temp.toFixed(1) + '°F';
+      document.getElementById('pri-delta-t').textContent = primarySecondary.pri_delta_t.toFixed(1) + '°F';
+      document.getElementById('pri-flow-info').textContent = primarySecondary.pri_flow + ' GPM';
+
+      var priActivePumps = (primarySecondary.pp1_status ? 1 : 0) + (primarySecondary.pp2_status ? 1 : 0);
+      document.getElementById('pri-pumps').textContent = priActivePumps + ' of 2';
+
+      // Update System Info Panel - Secondary
+      document.getElementById('sec-supply-info').textContent = primarySecondary.sec_supply_temp.toFixed(1) + '°F';
+      document.getElementById('sec-return-info').textContent = primarySecondary.sec_return_temp.toFixed(1) + '°F';
+      document.getElementById('sec-delta-t').textContent = primarySecondary.sec_delta_t.toFixed(1) + '°F';
+      document.getElementById('sec-flow-info').textContent = primarySecondary.sec_flow + ' GPM';
+
+      var secActivePumps = (primarySecondary.sp1_status ? 1 : 0) + (primarySecondary.sp2_status ? 1 : 0);
+      document.getElementById('sec-pumps').textContent = secActivePumps + ' of 2';
+
+      // Calculate delta T
+      primarySecondary.pri_delta_t = primarySecondary.pri_return_temp - primarySecondary.pri_supply_temp;
+      primarySecondary.sec_delta_t = primarySecondary.sec_return_temp - primarySecondary.sec_supply_temp;
+
+      // Calculate decoupler flow
+      primarySecondary.decoupler_flow = primarySecondary.pri_flow - primarySecondary.sec_flow;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

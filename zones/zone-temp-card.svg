@@ -1,0 +1,201 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 280">
+  <defs>
+    <style>
+      .zone-card-bg { fill: #1a1a2e; }
+      .zone-card-header { fill: #16213e; }
+      .zone-text-primary { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; font-weight: 600; }
+      .zone-text-secondary { fill: #a0aec0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 13px; }
+      .zone-text-large { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 48px; font-weight: 700; }
+      .zone-text-medium { fill: #ffffff; font-family: 'Segoe UI', Arial, sans-serif; font-size: 24px; font-weight: 600; }
+      .zone-text-small { fill: #cbd5e0; font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; }
+      .zone-temp-icon { fill: none; stroke: #4299e1; stroke-width: 2; stroke-linecap: round; }
+      .zone-status-occupied { fill: #48bb78; }
+      .zone-status-unoccupied { fill: #718096; }
+      .zone-setpoint-bar { fill: #2d3748; }
+      .zone-setpoint-fill { fill: #4299e1; }
+      .zone-border { fill: none; stroke: #2d3748; stroke-width: 2; }
+    </style>
+
+    <linearGradient id="tempGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f56565;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#48bb78;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4299e1;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Main Card Background -->
+  <rect class="zone-card-bg" x="0" y="0" width="400" height="280" rx="12"/>
+  <rect class="zone-border" x="0" y="0" width="400" height="280" rx="12"/>
+
+  <!-- Header -->
+  <rect class="zone-card-header" x="0" y="0" width="400" height="50" rx="12"/>
+  <rect class="zone-card-header" x="0" y="25" width="400" height="25"/>
+
+  <!-- Zone Name -->
+  <text class="zone-text-primary" x="20" y="32" id="zoneName">Conference Room A</text>
+
+  <!-- Occupancy Status Indicator -->
+  <circle id="statusIndicator" class="zone-status-unoccupied" cx="370" cy="25" r="8"/>
+  <text class="zone-text-small" x="320" y="30" id="statusText">Unoccupied</text>
+
+  <!-- Current Temperature Display -->
+  <g transform="translate(50, 100)">
+    <text class="zone-text-large" x="0" y="0" id="currentTemp">72</text>
+    <text class="zone-text-medium" x="90" y="-20">°F</text>
+    <text class="zone-text-secondary" x="0" y="25">Current Temperature</text>
+  </g>
+
+  <!-- Temperature Icon -->
+  <g transform="translate(280, 105)" class="zone-temp-icon">
+    <rect x="0" y="0" width="30" height="60" rx="15"/>
+    <circle cx="15" cy="70" r="20"/>
+    <rect x="10" y="15" width="10" height="40" fill="#4299e1"/>
+    <circle cx="15" cy="70" r="12" fill="#f56565"/>
+  </g>
+
+  <!-- Setpoint Section -->
+  <g transform="translate(20, 180)">
+    <text class="zone-text-secondary" x="0" y="0">Setpoint</text>
+    <text class="zone-text-medium" x="0" y="30" id="setpointTemp">70</text>
+    <text class="zone-text-small" x="50" y="30">°F</text>
+
+    <!-- Setpoint Adjustment Buttons -->
+    <g id="decreaseBtn" style="cursor: pointer;">
+      <rect x="100" y="10" width="30" height="30" rx="4" fill="#2d3748" stroke="#4299e1" stroke-width="1"/>
+      <line x1="110" y1="25" x2="120" y2="25" stroke="#4299e1" stroke-width="2"/>
+    </g>
+
+    <g id="increaseBtn" style="cursor: pointer;">
+      <rect x="140" y="10" width="30" height="30" rx="4" fill="#2d3748" stroke="#4299e1" stroke-width="1"/>
+      <line x1="150" y1="25" x2="160" y2="25" stroke="#4299e1" stroke-width="2"/>
+      <line x1="155" y1="20" x2="155" y2="30" stroke="#4299e1" stroke-width="2"/>
+    </g>
+  </g>
+
+  <!-- Mode Display -->
+  <g transform="translate(220, 180)">
+    <text class="zone-text-secondary" x="0" y="0">Mode</text>
+    <rect x="0" y="10" width="140" height="30" rx="4" fill="#2d3748" stroke="#4299e1" stroke-width="1"/>
+    <text class="zone-text-primary" x="70" y="32" text-anchor="middle" id="modeText">Cooling</text>
+  </g>
+
+  <!-- Temperature Bar Indicator -->
+  <g transform="translate(20, 240)">
+    <rect class="zone-setpoint-bar" x="0" y="0" width="360" height="8" rx="4"/>
+    <rect class="zone-setpoint-fill" x="0" y="0" width="200" height="8" rx="4" id="tempBar"/>
+    <circle fill="#ffffff" cx="200" cy="4" r="6" id="tempMarker"/>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      // FUXA Variable Bindings
+      var variables = {
+        zoneName: 'zone1_name',
+        currentTemp: 'zone1_temp',
+        setpoint: 'zone1_setpoint',
+        occupied: 'zone1_occupied',
+        mode: 'zone1_mode'
+      };
+
+      // Temperature range for bar indicator
+      var tempRange = { min: 60, max: 85 };
+
+      // Update function called by FUXA
+      function updateWidget(data) {
+        try {
+          // Update zone name
+          if (data[variables.zoneName] !== undefined) {
+            document.getElementById('zoneName').textContent = data[variables.zoneName];
+          }
+
+          // Update current temperature
+          if (data[variables.currentTemp] !== undefined) {
+            var temp = parseFloat(data[variables.currentTemp]);
+            document.getElementById('currentTemp').textContent = Math.round(temp);
+
+            // Update temperature bar
+            var percentage = ((temp - tempRange.min) / (tempRange.max - tempRange.min)) * 360;
+            percentage = Math.max(0, Math.min(360, percentage));
+            document.getElementById('tempBar').setAttribute('width', percentage);
+            document.getElementById('tempMarker').setAttribute('cx', percentage);
+
+            // Color code the temperature marker based on comfort
+            var marker = document.getElementById('tempMarker');
+            if (temp < 68 || temp > 76) {
+              marker.setAttribute('fill', '#f56565'); // Red for uncomfortable
+            } else if (temp < 70 || temp > 74) {
+              marker.setAttribute('fill', '#ed8936'); // Orange for marginal
+            } else {
+              marker.setAttribute('fill', '#48bb78'); // Green for comfortable
+            }
+          }
+
+          // Update setpoint
+          if (data[variables.setpoint] !== undefined) {
+            var setpoint = parseFloat(data[variables.setpoint]);
+            document.getElementById('setpointTemp').textContent = Math.round(setpoint);
+          }
+
+          // Update occupancy status
+          if (data[variables.occupied] !== undefined) {
+            var occupied = data[variables.occupied];
+            var indicator = document.getElementById('statusIndicator');
+            var statusText = document.getElementById('statusText');
+
+            if (occupied) {
+              indicator.setAttribute('class', 'zone-status-occupied');
+              statusText.textContent = 'Occupied';
+            } else {
+              indicator.setAttribute('class', 'zone-status-unoccupied');
+              statusText.textContent = 'Unoccupied';
+            }
+          }
+
+          // Update mode
+          if (data[variables.mode] !== undefined) {
+            var mode = data[variables.mode];
+            var modeNames = {
+              0: 'Off',
+              1: 'Heating',
+              2: 'Cooling',
+              3: 'Auto',
+              4: 'Fan Only'
+            };
+            document.getElementById('modeText').textContent = modeNames[mode] || mode;
+          }
+        } catch (error) {
+          console.error('Zone Temp Card update error:', error);
+        }
+      }
+
+      // Button handlers for setpoint adjustment
+      document.getElementById('decreaseBtn').addEventListener('click', function() {
+        if (window.fuxa && window.fuxa.setVariable) {
+          var currentSetpoint = parseFloat(document.getElementById('setpointTemp').textContent);
+          window.fuxa.setVariable(variables.setpoint, currentSetpoint - 1);
+        }
+      });
+
+      document.getElementById('increaseBtn').addEventListener('click', function() {
+        if (window.fuxa && window.fuxa.setVariable) {
+          var currentSetpoint = parseFloat(document.getElementById('setpointTemp').textContent);
+          window.fuxa.setVariable(variables.setpoint, currentSetpoint + 1);
+        }
+      });
+
+      // Register with FUXA
+      if (window.fuxa) {
+        window.fuxa.registerWidget({
+          id: 'zone-temp-card',
+          variables: Object.values(variables),
+          update: updateWidget
+        });
+      }
+
+      // Make update function globally accessible
+      window.updateZoneTempCard = updateWidget;
+    })();
+    ]]>
+  </script>
+</svg>

@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="500" height="350">
+  <defs>
+    <style>
+      .ahu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .ahu-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .ahu-fan { fill: none; stroke: #3498db; stroke-width: 2; }
+      .ahu-fan-blade { fill: #3498db; }
+      .ahu-fan-active { animation: spin 1s linear infinite; }
+      .ahu-coil-cooling { stroke: #3498db; fill: none; stroke-width: 2; }
+      .ahu-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
+      .ahu-coil-active { filter: drop-shadow(0 0 3px currentColor); }
+      .ahu-filter { fill: #bdc3c7; stroke: #7f8c8d; stroke-width: 1; }
+      .ahu-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .ahu-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .ahu-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .status-ok { fill: #27ae60; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="ahu-text" x="250" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Air Handling Unit - Compact
+  </text>
+
+  <!-- Return Air Duct -->
+  <rect class="ahu-duct" x="20" y="140" width="60" height="50"/>
+  <text class="ahu-label" x="50" y="135" text-anchor="middle">RA</text>
+  <text id="returnTemp" class="ahu-value" x="50" y="168" text-anchor="middle" font-size="10">72°F</text>
+
+  <!-- Return Fan -->
+  <rect class="ahu-box" x="80" y="130" width="60" height="70" rx="3"/>
+  <g id="returnFan" transform="translate(110, 165)">
+    <circle class="ahu-fan" cx="0" cy="0" r="20"/>
+    <g class="ahu-fan-blade">
+      <path d="M 0 -15 L 5 -5 L -5 -5 Z"/>
+      <path d="M 15 0 L 5 5 L 5 -5 Z"/>
+      <path d="M 0 15 L -5 5 L 5 5 Z"/>
+      <path d="M -15 0 L -5 -5 L -5 5 Z"/>
+    </g>
+  </g>
+  <text class="ahu-label" x="110" y="210" text-anchor="middle" font-size="9">RF</text>
+
+  <!-- Filter Section -->
+  <rect class="ahu-box" x="140" y="130" width="50" height="70" rx="3"/>
+  <g id="filter">
+    <rect class="ahu-filter" x="150" y="140" width="30" height="50"/>
+    <line x1="155" y1="140" x2="155" y2="190" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="160" y1="140" x2="160" y2="190" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="165" y1="140" x2="165" y2="190" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="170" y1="140" x2="170" y2="190" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="175" y1="140" x2="175" y2="190" stroke="#95a5a6" stroke-width="1"/>
+  </g>
+  <text class="ahu-label" x="165" y="210" text-anchor="middle" font-size="9">FILTER</text>
+
+  <!-- Cooling Coil -->
+  <rect class="ahu-box" x="190" y="130" width="50" height="70" rx="3"/>
+  <g id="coolingCoil">
+    <path class="ahu-coil-cooling" d="M 200 145 L 230 145 M 200 155 L 230 155 M 200 165 L 230 165 M 200 175 L 230 175 M 200 185 L 230 185"/>
+    <circle cx="200" cy="145" r="2" fill="#3498db"/>
+    <circle cx="200" cy="155" r="2" fill="#3498db"/>
+    <circle cx="200" cy="165" r="2" fill="#3498db"/>
+    <circle cx="200" cy="175" r="2" fill="#3498db"/>
+    <circle cx="200" cy="185" r="2" fill="#3498db"/>
+  </g>
+  <text class="ahu-label" x="215" y="210" text-anchor="middle" font-size="9">CC</text>
+
+  <!-- Heating Coil -->
+  <rect class="ahu-box" x="240" y="130" width="50" height="70" rx="3"/>
+  <g id="heatingCoil">
+    <path class="ahu-coil-heating" d="M 250 145 Q 255 145 255 150 Q 255 155 260 155 Q 265 155 265 150 Q 265 145 270 145 Q 275 145 275 150 Q 275 155 280 155"/>
+    <path class="ahu-coil-heating" d="M 250 165 Q 255 165 255 170 Q 255 175 260 175 Q 265 175 265 170 Q 265 165 270 165 Q 275 165 275 170 Q 275 175 280 175"/>
+    <path class="ahu-coil-heating" d="M 250 185 Q 255 185 255 190 Q 255 195 260 195 Q 265 195 265 190 Q 265 185 270 185"/>
+  </g>
+  <text class="ahu-label" x="265" y="210" text-anchor="middle" font-size="9">HC</text>
+
+  <!-- Supply Fan -->
+  <rect class="ahu-box" x="290" y="130" width="70" height="70" rx="3"/>
+  <g id="supplyFan" transform="translate(325, 165)">
+    <circle class="ahu-fan" cx="0" cy="0" r="25"/>
+    <g class="ahu-fan-blade">
+      <path d="M 0 -18 L 6 -6 L -6 -6 Z"/>
+      <path d="M 18 0 L 6 6 L 6 -6 Z"/>
+      <path d="M 0 18 L -6 6 L 6 6 Z"/>
+      <path d="M -18 0 L -6 -6 L -6 6 Z"/>
+    </g>
+  </g>
+  <text class="ahu-label" x="325" y="210" text-anchor="middle" font-size="9">SF</text>
+
+  <!-- Supply Air Duct -->
+  <rect class="ahu-duct" x="360" y="140" width="120" height="50"/>
+  <text class="ahu-label" x="420" y="135" text-anchor="middle">SA</text>
+  <text id="supplyTemp" class="ahu-value" x="420" y="168" text-anchor="middle" font-size="10">58°F</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="230" width="460" height="100" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="ahu-label" x="40" y="255">Supply Fan:</text>
+  <text id="supplyFanStatus" class="ahu-value" x="40" y="275">ON - 65%</text>
+
+  <text class="ahu-label" x="180" y="255">Return Fan:</text>
+  <text id="returnFanStatus" class="ahu-value" x="180" y="275">ON - 60%</text>
+
+  <text class="ahu-label" x="320" y="255">Filter Status:</text>
+  <g id="filterStatus">
+    <circle id="filterLight" class="status-ok" cx="395" cy="267" r="5"/>
+    <text id="filterText" class="ahu-value" x="405" y="275">Clean</text>
+  </g>
+
+  <!-- Row 2 -->
+  <text class="ahu-label" x="40" y="295">Cooling Valve:</text>
+  <text id="coolingValve" class="ahu-value" x="40" y="315">0%</text>
+
+  <text class="ahu-label" x="180" y="295">Heating Valve:</text>
+  <text id="heatingValve" class="ahu-value" x="180" y="315">25%</text>
+
+  <text class="ahu-label" x="320" y="295">System Status:</text>
+  <g id="systemStatus">
+    <circle id="statusLight" class="status-ok" cx="395" cy="307" r="5"/>
+    <text id="statusText" class="ahu-value" x="405" y="315">Normal</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var supplyFanSpeed = 65; // 0-100%
+    var returnFanSpeed = 60; // 0-100%
+    var supplyFanStatus = true;
+    var returnFanStatus = true;
+    var coolingValve = 0; // 0-100%
+    var heatingValve = 25; // 0-100%
+    var returnTemp = 72; // degrees F
+    var supplyTemp = 58; // degrees F
+    var filterDirty = false;
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Update temperatures
+      document.getElementById('returnTemp').textContent = returnTemp.toFixed(0) + '°F';
+      document.getElementById('supplyTemp').textContent = supplyTemp.toFixed(0) + '°F';
+
+      // Update supply fan
+      var sfText = document.getElementById('supplyFanStatus');
+      if (supplyFanStatus) {
+        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
+        sfText.style.fill = '#27ae60';
+        document.getElementById('supplyFan').querySelector('.ahu-fan-blade').classList.add('ahu-fan-active');
+      } else {
+        sfText.textContent = 'OFF';
+        sfText.style.fill = '#7f8c8d';
+        document.getElementById('supplyFan').querySelector('.ahu-fan-blade').classList.remove('ahu-fan-active');
+      }
+
+      // Update return fan
+      var rfText = document.getElementById('returnFanStatus');
+      if (returnFanStatus) {
+        rfText.textContent = 'ON - ' + returnFanSpeed.toFixed(0) + '%';
+        rfText.style.fill = '#27ae60';
+        document.getElementById('returnFan').querySelector('.ahu-fan-blade').classList.add('ahu-fan-active');
+      } else {
+        rfText.textContent = 'OFF';
+        rfText.style.fill = '#7f8c8d';
+        document.getElementById('returnFan').querySelector('.ahu-fan-blade').classList.remove('ahu-fan-active');
+      }
+
+      // Update cooling coil
+      document.getElementById('coolingValve').textContent = coolingValve.toFixed(0) + '%';
+      var ccCoil = document.getElementById('coolingCoil');
+      if (coolingValve > 5) {
+        ccCoil.classList.add('ahu-coil-active');
+      } else {
+        ccCoil.classList.remove('ahu-coil-active');
+      }
+
+      // Update heating coil
+      document.getElementById('heatingValve').textContent = heatingValve.toFixed(0) + '%';
+      var hcCoil = document.getElementById('heatingCoil');
+      if (heatingValve > 5) {
+        hcCoil.classList.add('ahu-coil-active');
+      } else {
+        hcCoil.classList.remove('ahu-coil-active');
+      }
+
+      // Update filter status
+      var filterLight = document.getElementById('filterLight');
+      var filterText = document.getElementById('filterText');
+      if (filterDirty) {
+        filterLight.setAttribute('class', 'status-alarm');
+        filterText.textContent = 'Dirty';
+        filterText.style.fill = '#e74c3c';
+      } else {
+        filterLight.setAttribute('class', 'status-ok');
+        filterText.textContent = 'Clean';
+        filterText.style.fill = '#27ae60';
+      }
+
+      // Update system status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

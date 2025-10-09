@@ -1,0 +1,368 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <defs>
+    <style>
+      .panel-body { fill: #d32f2f; stroke: #b71c1c; stroke-width: 3; }
+      .panel-display { fill: #1a1a1a; stroke: #666; stroke-width: 2; }
+      .zone-indicator { fill: #2e7d32; stroke: #1b5e20; stroke-width: 1; }
+      .zone-alarm { fill: #f44336; animation: zonePulse 0.5s infinite; }
+      .zone-trouble { fill: #FF9800; animation: zonePulse 1s infinite; }
+      .zone-disabled { fill: #757575; }
+      .button { stroke: #333; stroke-width: 2; cursor: pointer; }
+      .button-silence { fill: #FFC107; }
+      .button-silence:hover { fill: #FFA000; }
+      .button-reset { fill: #2196F3; }
+      .button-reset:hover { fill: #1976D2; }
+      .button-disabled { fill: #bdbdbd; cursor: not-allowed; }
+      .button-text { fill: #333; font-family: Arial, sans-serif; font-size: 14px; font-weight: bold; text-anchor: middle; pointer-events: none; }
+      .status-led { }
+      .led-normal { fill: #4CAF50; }
+      .led-alarm { fill: #f44336; animation: ledPulse 0.3s infinite; }
+      .led-trouble { fill: #FF9800; animation: ledPulse 1s infinite; }
+      .led-silenced { fill: #FFC107; }
+      .label-text { fill: #fff; font-family: Arial, sans-serif; font-size: 12px; text-anchor: middle; }
+      .zone-text { fill: #fff; font-family: Arial, sans-serif; font-size: 10px; text-anchor: middle; }
+      .title-text { fill: #fff; font-family: Arial, sans-serif; font-size: 20px; font-weight: bold; text-anchor: middle; }
+      .status-text { fill: #4CAF50; font-family: Arial, sans-serif; font-size: 16px; font-weight: bold; text-anchor: middle; }
+      .status-alarm { fill: #f44336; animation: textPulse 0.5s infinite; }
+      .status-trouble { fill: #FF9800; }
+
+      @keyframes zonePulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+
+      @keyframes ledPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+      }
+
+      @keyframes textPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+    </style>
+  </defs>
+
+  <!-- Panel Body -->
+  <rect x="20" y="20" width="360" height="460" rx="10" class="panel-body"/>
+
+  <!-- Title -->
+  <text x="200" y="50" class="title-text">FIRE ALARM CONTROL PANEL</text>
+
+  <!-- Main Display Screen -->
+  <rect x="40" y="70" width="320" height="80" rx="5" class="panel-display"/>
+  <text x="200" y="100" class="label-text">SYSTEM STATUS</text>
+  <text x="200" y="130" id="main-status-text" class="status-text">NORMAL</text>
+
+  <!-- System Status LEDs -->
+  <g id="system-leds">
+    <circle cx="80" cy="180" r="12" id="power-led" class="status-led led-normal"/>
+    <text x="80" y="205" class="label-text">POWER</text>
+
+    <circle cx="150" cy="180" r="12" id="alarm-led" class="status-led"/>
+    <text x="150" y="205" class="label-text">ALARM</text>
+
+    <circle cx="220" cy="180" r="12" id="trouble-led" class="status-led"/>
+    <text x="220" y="205" class="label-text">TROUBLE</text>
+
+    <circle cx="290" cy="180" r="12" id="silenced-led" class="status-led"/>
+    <text x="290" y="205" class="label-text">SILENCED</text>
+  </g>
+
+  <!-- Zone Indicators -->
+  <g id="zone-indicators">
+    <text x="200" y="240" class="label-text">ZONE INDICATORS</text>
+
+    <!-- Zone 1 -->
+    <rect x="50" y="250" width="70" height="40" rx="3" id="zone1" class="zone-indicator"/>
+    <text x="85" y="267" class="zone-text">ZONE 1</text>
+    <text x="85" y="282" class="zone-text" id="zone1-label">Lobby</text>
+
+    <!-- Zone 2 -->
+    <rect x="130" y="250" width="70" height="40" rx="3" id="zone2" class="zone-indicator"/>
+    <text x="165" y="267" class="zone-text">ZONE 2</text>
+    <text x="165" y="282" class="zone-text" id="zone2-label">Office</text>
+
+    <!-- Zone 3 -->
+    <rect x="210" y="250" width="70" height="40" rx="3" id="zone3" class="zone-indicator"/>
+    <text x="245" y="267" class="zone-text">ZONE 3</text>
+    <text x="245" y="282" class="zone-text" id="zone3-label">Warehouse</text>
+
+    <!-- Zone 4 -->
+    <rect x="290" y="250" width="70" height="40" rx="3" id="zone4" class="zone-indicator"/>
+    <text x="325" y="267" class="zone-text">ZONE 4</text>
+    <text x="325" y="282" class="zone-text" id="zone4-label">Basement</text>
+
+    <!-- Zone 5 -->
+    <rect x="50" y="300" width="70" height="40" rx="3" id="zone5" class="zone-indicator"/>
+    <text x="85" y="317" class="zone-text">ZONE 5</text>
+    <text x="85" y="332" class="zone-text" id="zone5-label">Floor 2</text>
+
+    <!-- Zone 6 -->
+    <rect x="130" y="300" width="70" height="40" rx="3" id="zone6" class="zone-indicator"/>
+    <text x="165" y="317" class="zone-text">ZONE 6</text>
+    <text x="165" y="332" class="zone-text" id="zone6-label">Floor 3</text>
+
+    <!-- Zone 7 -->
+    <rect x="210" y="300" width="70" height="40" rx="3" id="zone7" class="zone-indicator"/>
+    <text x="245" y="317" class="zone-text">ZONE 7</text>
+    <text x="245" y="332" class="zone-text" id="zone7-label">Roof</text>
+
+    <!-- Zone 8 -->
+    <rect x="290" y="300" width="70" height="40" rx="3" id="zone8" class="zone-indicator"/>
+    <text x="325" y="317" class="zone-text">ZONE 8</text>
+    <text x="325" y="332" class="zone-text" id="zone8-label">Parking</text>
+  </g>
+
+  <!-- Trouble Alerts Display -->
+  <rect x="40" y="360" width="320" height="60" rx="5" class="panel-display"/>
+  <text x="200" y="378" class="label-text">TROUBLE ALERTS</text>
+  <text x="200" y="398" id="trouble-text" class="label-text">None</text>
+  <text x="200" y="413" id="trouble-detail" class="zone-text"></text>
+
+  <!-- Control Buttons -->
+  <g id="control-buttons">
+    <!-- Silence Button -->
+    <rect x="60" y="440" width="120" height="40" rx="5" id="silence-button" class="button button-silence"/>
+    <text x="120" y="465" class="button-text">SILENCE</text>
+
+    <!-- Reset Button -->
+    <rect x="220" y="440" width="120" height="40" rx="5" id="reset-button" class="button button-reset"/>
+    <text x="280" y="465" class="button-text">RESET</text>
+  </g>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      var svg = document.currentScript.closest('svg');
+
+      // State variables
+      var state = {
+        systemStatus: 0,    // 0=normal, 1=alarm, 2=trouble, 3=silenced
+        zones: [
+          { status: 0, label: 'Lobby' },       // 0=normal, 1=alarm, 2=trouble, 3=disabled
+          { status: 0, label: 'Office' },
+          { status: 0, label: 'Warehouse' },
+          { status: 0, label: 'Basement' },
+          { status: 0, label: 'Floor 2' },
+          { status: 0, label: 'Floor 3' },
+          { status: 0, label: 'Roof' },
+          { status: 0, label: 'Parking' }
+        ],
+        silenced: false,
+        troubleMessages: [],
+        alarmActive: false
+      };
+
+      // Element references
+      var mainStatusText = svg.getElementById('main-status-text');
+      var alarmLed = svg.getElementById('alarm-led');
+      var troubleLed = svg.getElementById('trouble-led');
+      var silencedLed = svg.getElementById('silenced-led');
+      var troubleText = svg.getElementById('trouble-text');
+      var troubleDetail = svg.getElementById('trouble-detail');
+      var silenceButton = svg.getElementById('silence-button');
+      var resetButton = svg.getElementById('reset-button');
+
+      // Update display based on state
+      function updateDisplay() {
+        // Determine system status based on zones
+        var hasAlarm = false;
+        var hasTrouble = false;
+        state.troubleMessages = [];
+
+        state.zones.forEach(function(zone, index) {
+          var zoneElement = svg.getElementById('zone' + (index + 1));
+
+          // Update zone indicator
+          zoneElement.classList.remove('zone-indicator', 'zone-alarm', 'zone-trouble', 'zone-disabled');
+
+          switch(zone.status) {
+            case 0: // Normal
+              zoneElement.classList.add('zone-indicator');
+              break;
+            case 1: // Alarm
+              zoneElement.classList.add('zone-alarm');
+              hasAlarm = true;
+              state.troubleMessages.push('ALARM: Zone ' + (index + 1) + ' - ' + zone.label);
+              break;
+            case 2: // Trouble
+              zoneElement.classList.add('zone-trouble');
+              hasTrouble = true;
+              state.troubleMessages.push('TROUBLE: Zone ' + (index + 1) + ' - ' + zone.label);
+              break;
+            case 3: // Disabled
+              zoneElement.classList.add('zone-disabled');
+              break;
+          }
+        });
+
+        // Update system status
+        state.alarmActive = hasAlarm;
+
+        if (hasAlarm && !state.silenced) {
+          state.systemStatus = 1;
+          mainStatusText.textContent = 'ALARM ACTIVE';
+          mainStatusText.classList.remove('status-text', 'status-trouble');
+          mainStatusText.classList.add('status-alarm');
+        } else if (hasAlarm && state.silenced) {
+          state.systemStatus = 3;
+          mainStatusText.textContent = 'ALARM SILENCED';
+          mainStatusText.classList.remove('status-text', 'status-alarm', 'status-trouble');
+          mainStatusText.style.fill = '#FFC107';
+        } else if (hasTrouble) {
+          state.systemStatus = 2;
+          mainStatusText.textContent = 'TROUBLE';
+          mainStatusText.classList.remove('status-text', 'status-alarm');
+          mainStatusText.classList.add('status-trouble');
+        } else {
+          state.systemStatus = 0;
+          mainStatusText.textContent = 'NORMAL';
+          mainStatusText.classList.remove('status-alarm', 'status-trouble');
+          mainStatusText.classList.add('status-text');
+        }
+
+        // Update LEDs
+        alarmLed.classList.remove('led-normal', 'led-alarm');
+        if (hasAlarm) {
+          alarmLed.classList.add('led-alarm');
+        }
+
+        troubleLed.classList.remove('led-normal', 'led-trouble');
+        if (hasTrouble) {
+          troubleLed.classList.add('led-trouble');
+        }
+
+        silencedLed.classList.remove('led-normal', 'led-silenced');
+        if (state.silenced) {
+          silencedLed.classList.add('led-silenced');
+        }
+
+        // Update trouble display
+        if (state.troubleMessages.length > 0) {
+          troubleText.textContent = state.troubleMessages[0];
+          if (state.troubleMessages.length > 1) {
+            troubleDetail.textContent = '+ ' + (state.troubleMessages.length - 1) + ' more alert(s)';
+          } else {
+            troubleDetail.textContent = '';
+          }
+        } else {
+          troubleText.textContent = 'None';
+          troubleDetail.textContent = '';
+        }
+
+        // Update button states
+        if (hasAlarm && !state.silenced) {
+          silenceButton.classList.remove('button-disabled');
+        } else {
+          silenceButton.classList.add('button-disabled');
+        }
+
+        if (hasAlarm || hasTrouble) {
+          resetButton.classList.remove('button-disabled');
+        } else {
+          resetButton.classList.add('button-disabled');
+        }
+      }
+
+      // Silence button handler
+      silenceButton.addEventListener('click', function() {
+        if (state.alarmActive && !state.silenced) {
+          state.silenced = true;
+          updateDisplay();
+
+          // Trigger event for FUXA
+          if (typeof(svg.setValue) === 'function') {
+            svg.setValue('silenced', true);
+          }
+        }
+      });
+
+      // Reset button handler
+      resetButton.addEventListener('click', function() {
+        if (state.alarmActive || state.troubleMessages.length > 0) {
+          // Reset all zones to normal
+          state.zones.forEach(function(zone) {
+            if (zone.status !== 3) { // Don't reset disabled zones
+              zone.status = 0;
+            }
+          });
+          state.silenced = false;
+          state.alarmActive = false;
+          updateDisplay();
+
+          // Trigger event for FUXA
+          if (typeof(svg.setValue) === 'function') {
+            svg.setValue('reset', true);
+          }
+        }
+      });
+
+      // FUXA Integration
+      svg.getValue = function(property) {
+        if (property === 'systemStatus') return state.systemStatus;
+        if (property === 'silenced') return state.silenced;
+        if (property === 'alarmActive') return state.alarmActive;
+        if (property === 'troubleCount') return state.troubleMessages.length;
+
+        // Zone status queries
+        var match = property.match(/^zone(\d+)$/);
+        if (match) {
+          var zoneIndex = parseInt(match[1]) - 1;
+          if (zoneIndex >= 0 && zoneIndex < state.zones.length) {
+            return state.zones[zoneIndex].status;
+          }
+        }
+
+        return null;
+      };
+
+      svg.setValue = function(property, value) {
+        // Zone status updates
+        var match = property.match(/^zone(\d+)$/);
+        if (match) {
+          var zoneIndex = parseInt(match[1]) - 1;
+          if (zoneIndex >= 0 && zoneIndex < state.zones.length) {
+            state.zones[zoneIndex].status = Math.max(0, Math.min(3, parseInt(value) || 0));
+            updateDisplay();
+            return;
+          }
+        }
+
+        // Zone label updates
+        match = property.match(/^zone(\d+)Label$/);
+        if (match) {
+          var zoneIndex = parseInt(match[1]) - 1;
+          if (zoneIndex >= 0 && zoneIndex < state.zones.length) {
+            state.zones[zoneIndex].label = String(value);
+            var labelElement = svg.getElementById('zone' + (zoneIndex + 1) + '-label');
+            if (labelElement) {
+              labelElement.textContent = String(value);
+            }
+            return;
+          }
+        }
+
+        switch(property) {
+          case 'silenced':
+            state.silenced = !!value;
+            break;
+          case 'reset':
+            if (value) {
+              state.zones.forEach(function(zone) {
+                if (zone.status !== 3) zone.status = 0;
+              });
+              state.silenced = false;
+              state.alarmActive = false;
+            }
+            break;
+          default:
+            return;
+        }
+        updateDisplay();
+      };
+
+      // Initialize display
+      updateDisplay();
+    })();
+  ]]></script>
+</svg>

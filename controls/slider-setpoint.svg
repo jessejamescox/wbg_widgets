@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="300" height="100" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .label-text {
+        fill: #555;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+      }
+      .value-text {
+        fill: #2196F3;
+        font-family: Arial, sans-serif;
+        font-size: 20px;
+        font-weight: bold;
+        text-anchor: middle;
+      }
+      .unit-text {
+        fill: #777;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+      }
+      .slider-track {
+        fill: #e0e0e0;
+        stroke: #999;
+        stroke-width: 1;
+      }
+      .slider-fill {
+        fill: #2196F3;
+        transition: width 0.1s;
+      }
+      .slider-thumb {
+        fill: #1976D2;
+        stroke: white;
+        stroke-width: 2;
+        cursor: grab;
+        transition: all 0.1s;
+      }
+      .slider-thumb:hover {
+        fill: #1565C0;
+        r: 12;
+      }
+      .slider-thumb:active {
+        cursor: grabbing;
+        fill: #0D47A1;
+      }
+      .range-text {
+        fill: #999;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+        text-anchor: middle;
+      }
+    </style>
+  </defs>
+
+  <!-- Header -->
+  <text class="label-text" x="10" y="18">SETPOINT</text>
+
+  <!-- Value Display -->
+  <text class="value-text" id="valueText" x="150" y="48">50.0</text>
+  <text class="unit-text" id="unitText" x="185" y="48">%</text>
+
+  <!-- Slider Track -->
+  <rect class="slider-track" x="20" y="65" width="260" height="8" rx="4"/>
+
+  <!-- Slider Fill -->
+  <rect class="slider-fill" id="sliderFill" x="20" y="65" width="130" height="8" rx="4"/>
+
+  <!-- Slider Thumb -->
+  <circle class="slider-thumb" id="sliderThumb" cx="150" cy="69" r="10"/>
+
+  <!-- Range Labels -->
+  <text class="range-text" id="minText" x="20" y="90">0</text>
+  <text class="range-text" id="maxText" x="280" y="90">100</text>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      // Configuration
+      var minValue = 0;
+      var maxValue = 100;
+      var currentValue = 50;
+      var units = '%';
+      var decimals = 1;
+
+      // FUXA Integration Variables
+      var tagId = ''; // Set by FUXA: variable binding for setpoint value
+      var isDragging = false;
+
+      // Slider dimensions
+      var sliderX = 20;
+      var sliderWidth = 260;
+      var sliderY = 69;
+
+      // DOM Elements
+      var sliderThumb = document.getElementById('sliderThumb');
+      var sliderFill = document.getElementById('sliderFill');
+      var valueText = document.getElementById('valueText');
+      var unitText = document.getElementById('unitText');
+      var minText = document.getElementById('minText');
+      var maxText = document.getElementById('maxText');
+
+      // Update visuals based on current value
+      function updateVisuals() {
+        var percentage = (currentValue - minValue) / (maxValue - minValue);
+        var thumbX = sliderX + (percentage * sliderWidth);
+        var fillWidth = percentage * sliderWidth;
+
+        sliderThumb.setAttribute('cx', thumbX);
+        sliderFill.setAttribute('width', fillWidth);
+        valueText.textContent = currentValue.toFixed(decimals);
+        minText.textContent = minValue.toFixed(decimals);
+        maxText.textContent = maxValue.toFixed(decimals);
+        unitText.textContent = units;
+      }
+
+      // Convert mouse position to value
+      function positionToValue(x) {
+        var percentage = Math.max(0, Math.min(1, (x - sliderX) / sliderWidth));
+        return minValue + (percentage * (maxValue - minValue));
+      }
+
+      // Get mouse position relative to SVG
+      function getMousePosition(evt) {
+        var CTM = evt.target.ownerSVGElement.getScreenCTM();
+        return {
+          x: (evt.clientX - CTM.e) / CTM.a,
+          y: (evt.clientY - CTM.f) / CTM.d
+        };
+      }
+
+      // Mouse/touch handlers
+      function startDrag(evt) {
+        evt.preventDefault();
+        isDragging = true;
+        updateValue(evt);
+      }
+
+      function drag(evt) {
+        if (isDragging) {
+          evt.preventDefault();
+          updateValue(evt);
+        }
+      }
+
+      function endDrag(evt) {
+        if (isDragging) {
+          evt.preventDefault();
+          isDragging = false;
+
+          // Write final value to FUXA
+          if (typeof GAuxy !== 'undefined' && tagId) {
+            GAuxy.setVariable(tagId, currentValue);
+          }
+        }
+      }
+
+      function updateValue(evt) {
+        var pos = getMousePosition(evt);
+        currentValue = positionToValue(pos.x);
+        updateVisuals();
+      }
+
+      // Event listeners
+      sliderThumb.addEventListener('mousedown', startDrag);
+      document.addEventListener('mousemove', drag);
+      document.addEventListener('mouseup', endDrag);
+
+      // Touch support
+      sliderThumb.addEventListener('touchstart', function(evt) {
+        var touch = evt.touches[0];
+        var mouseEvent = new MouseEvent('mousedown', {
+          clientX: touch.clientX,
+          clientY: touch.clientY
+        });
+        startDrag(mouseEvent);
+      });
+
+      document.addEventListener('touchmove', function(evt) {
+        if (isDragging) {
+          var touch = evt.touches[0];
+          var mouseEvent = new MouseEvent('mousemove', {
+            clientX: touch.clientX,
+            clientY: touch.clientY
+          });
+          drag(mouseEvent);
+        }
+      });
+
+      document.addEventListener('touchend', endDrag);
+
+      // Click on track to jump
+      var sliderTrack = document.querySelector('.slider-track');
+      sliderTrack.addEventListener('click', function(evt) {
+        var pos = getMousePosition(evt);
+        currentValue = positionToValue(pos.x);
+        updateVisuals();
+
+        if (typeof GAuxy !== 'undefined' && tagId) {
+          GAuxy.setVariable(tagId, currentValue);
+        }
+      });
+
+      // FUXA Integration Functions
+      window.svgSetValue = function(sigid, value) {
+        if (sigid === tagId && !isDragging) {
+          currentValue = parseFloat(value);
+          updateVisuals();
+        }
+      };
+
+      window.svgGetProperty = function(name) {
+        if (name === 'variableId') return tagId;
+        if (name === 'min') return minValue;
+        if (name === 'max') return maxValue;
+        if (name === 'units') return units;
+        if (name === 'decimals') return decimals;
+        return null;
+      };
+
+      window.svgSetProperty = function(name, value) {
+        if (name === 'variableId') {
+          tagId = value;
+        } else if (name === 'min') {
+          minValue = parseFloat(value);
+          updateVisuals();
+        } else if (name === 'max') {
+          maxValue = parseFloat(value);
+          updateVisuals();
+        } else if (name === 'units') {
+          units = value;
+          updateVisuals();
+        } else if (name === 'decimals') {
+          decimals = parseInt(value);
+          updateVisuals();
+        }
+      };
+
+      // Initialize
+      updateVisuals();
+    })();
+  ]]></script>
+</svg>

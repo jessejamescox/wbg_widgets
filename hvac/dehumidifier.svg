@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380" width="400" height="380">
+  <defs>
+    <style>
+      .dehum-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .dehum-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .dehum-coil { stroke: #3498db; fill: none; stroke-width: 2; }
+      .dehum-coil-active { filter: drop-shadow(0 0 3px #3498db); }
+      .dehum-water { fill: #3498db; opacity: 0.6; }
+      .dehum-drop { fill: #3498db; opacity: 0.7; }
+      .dehum-drop-active { animation: drip 2s ease-in infinite; }
+      .dehum-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .dehum-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .dehum-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .dehum-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .status-ok { fill: #27ae60; }
+      .status-active { fill: #3498db; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes drip {
+        0% { transform: translateY(0); opacity: 0.7; }
+        100% { transform: translateY(40px); opacity: 0; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="dehum-text" x="200" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Dehumidification System
+  </text>
+
+  <!-- Air Inlet Duct -->
+  <rect class="dehum-duct" x="20" y="95" width="80" height="50"/>
+  <text class="dehum-label" x="60" y="90" text-anchor="middle">HUMID AIR</text>
+  <text id="inletRH" class="dehum-value" x="60" y="123" text-anchor="middle" font-size="10">65% RH</text>
+
+  <!-- Airflow Arrow In -->
+  <path class="dehum-arrow" d="M 40 115 L 60 115 M 55 110 L 60 115 L 55 120"/>
+
+  <!-- Dehumidifier Chamber -->
+  <rect class="dehum-box" x="100" y="70" width="200" height="120" rx="5"/>
+
+  <!-- Cooling Coil -->
+  <g id="coolingCoil" transform="translate(140, 90)">
+    <path class="dehum-coil" d="M 0 0 L 120 0 M 0 10 L 120 10 M 0 20 L 120 20 M 0 30 L 120 30 M 0 40 L 120 40 M 0 50 L 120 50 M 0 60 L 120 60"/>
+    <circle cx="0" cy="0" r="2" fill="#3498db"/>
+    <circle cx="0" cy="10" r="2" fill="#3498db"/>
+    <circle cx="0" cy="20" r="2" fill="#3498db"/>
+    <circle cx="0" cy="30" r="2" fill="#3498db"/>
+    <circle cx="0" cy="40" r="2" fill="#3498db"/>
+    <circle cx="0" cy="50" r="2" fill="#3498db"/>
+    <circle cx="0" cy="60" r="2" fill="#3498db"/>
+  </g>
+  <text class="dehum-label" x="200" y="110" text-anchor="middle" font-size="9">COOLING COIL</text>
+
+  <!-- Condensate Drops -->
+  <g id="condensate">
+    <circle class="dehum-drop dehum-drop-active" cx="150" cy="155" r="3"/>
+    <circle class="dehum-drop dehum-drop-active" cx="180" cy="155" r="3" style="animation-delay: 0.4s"/>
+    <circle class="dehum-drop dehum-drop-active" cx="210" cy="155" r="3" style="animation-delay: 0.8s"/>
+    <circle class="dehum-drop dehum-drop-active" cx="240" cy="155" r="3" style="animation-delay: 1.2s"/>
+    <circle class="dehum-drop dehum-drop-active" cx="165" cy="160" r="2" style="animation-delay: 0.2s"/>
+    <circle class="dehum-drop dehum-drop-active" cx="195" cy="160" r="2" style="animation-delay: 0.6s"/>
+    <circle class="dehum-drop dehum-drop-active" cx="225" cy="160" r="2" style="animation-delay: 1.0s"/>
+  </g>
+
+  <!-- Condensate Pan -->
+  <rect class="dehum-water" x="110" y="170" width="180" height="15" rx="3"/>
+  <text class="dehum-label" x="200" y="182" text-anchor="middle" font-size="8" fill="#ecf0f1">CONDENSATE</text>
+
+  <!-- Drain -->
+  <rect fill="#3498db" stroke="#2980b9" stroke-width="1" x="197" y="185" width="6" height="25" rx="1"/>
+  <path fill="#3498db" stroke="#2980b9" stroke-width="1" d="M 197 210 L 200 215 L 203 210 Z"/>
+
+  <!-- Air Outlet Duct -->
+  <rect class="dehum-duct" x="300" y="95" width="80" height="50"/>
+  <text class="dehum-label" x="340" y="90" text-anchor="middle">DRY AIR</text>
+  <text id="outletRH" class="dehum-value" x="340" y="123" text-anchor="middle" font-size="10">40% RH</text>
+
+  <!-- Airflow Arrow Out -->
+  <path class="dehum-arrow" d="M 310 125 L 330 125 M 325 120 L 330 125 L 325 130"/>
+
+  <!-- Refrigeration System Indicator -->
+  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="110" y="45" width="180" height="20" rx="3"/>
+  <text class="dehum-label" x="200" y="59" text-anchor="middle" font-size="9">REFRIGERATION SYSTEM</text>
+
+  <!-- Compressor Icon -->
+  <circle fill="#34495e" stroke="#2c3e50" stroke-width="2" cx="130" cy="55" r="8"/>
+  <text class="dehum-label" x="130" y="58" text-anchor="middle" font-size="7">C</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="230" width="360" height="140" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="dehum-label" x="40" y="255">Inlet RH:</text>
+  <text id="inletRHData" class="dehum-value" x="40" y="275">65%</text>
+
+  <text class="dehum-label" x="140" y="255">Outlet RH:</text>
+  <text id="outletRHData" class="dehum-value" x="140" y="275">40%</text>
+
+  <text class="dehum-label" x="240" y="255">Setpoint:</text>
+  <text id="setpoint" class="dehum-value" x="240" y="275">40%</text>
+
+  <!-- Row 2 -->
+  <text class="dehum-label" x="40" y="295">Inlet Temp:</text>
+  <text id="inletTemp" class="dehum-value" x="40" y="315">75°F</text>
+
+  <text class="dehum-label" x="140" y="295">Outlet Temp:</text>
+  <text id="outletTemp" class="dehum-value" x="140" y="315">68°F</text>
+
+  <text class="dehum-label" x="240" y="295">Coil Temp:</text>
+  <text id="coilTemp" class="dehum-value" x="240" y="315">45°F</text>
+
+  <!-- Row 3 -->
+  <text class="dehum-label" x="40" y="335">Capacity:</text>
+  <text id="capacity" class="dehum-value" x="40" y="355">75%</text>
+
+  <text class="dehum-label" x="140" y="335">Condensate:</text>
+  <text id="condensateRate" class="dehum-value" x="140" y="355">1.8 GPH</text>
+
+  <text class="dehum-label" x="240" y="335">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="283" cy="347" r="5"/>
+    <text id="statusText" class="dehum-value" x="293" y="355">Off</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var inletRH = 65; // percent
+    var outletRH = 40; // percent (calculated)
+    var setpointRH = 40; // percent
+    var inletTemp = 75; // degrees F
+    var outletTemp = 68; // degrees F (calculated)
+    var coilTemp = 45; // degrees F
+    var capacity = 75; // 0-100% compressor capacity
+    var condensateRate = 1.8; // GPH - gallons per hour
+    var enabled = false;
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Calculate outlet RH and temp based on capacity
+      if (enabled && capacity > 0) {
+        // Calculate moisture removal
+        var rhReduction = (capacity / 100) * 30; // Max 30% RH reduction
+        outletRH = Math.max(inletRH - rhReduction, 20);
+
+        // Cooling effect
+        var tempDrop = (capacity / 100) * 10; // Max 10°F drop
+        outletTemp = inletTemp - tempDrop;
+
+        // Condensate rate proportional to moisture removed and airflow
+        var moistureRemoved = (inletRH - outletRH) / 100 * (capacity / 100);
+        condensateRate = moistureRemoved * 50; // Rough calculation
+      } else {
+        outletRH = inletRH;
+        outletTemp = inletTemp;
+        condensateRate = 0;
+      }
+
+      // Update displays
+      document.getElementById('inletRH').textContent = inletRH.toFixed(0) + '% RH';
+      document.getElementById('outletRH').textContent = outletRH.toFixed(0) + '% RH';
+      document.getElementById('inletRHData').textContent = inletRH.toFixed(0) + '%';
+      document.getElementById('outletRHData').textContent = outletRH.toFixed(0) + '%';
+      document.getElementById('setpoint').textContent = setpointRH.toFixed(0) + '%';
+      document.getElementById('inletTemp').textContent = inletTemp.toFixed(0) + '°F';
+      document.getElementById('outletTemp').textContent = outletTemp.toFixed(0) + '°F';
+      document.getElementById('coilTemp').textContent = coilTemp.toFixed(0) + '°F';
+      document.getElementById('capacity').textContent = capacity.toFixed(0) + '%';
+      document.getElementById('condensateRate').textContent = condensateRate.toFixed(1) + ' GPH';
+
+      // Update coil appearance
+      var coil = document.getElementById('coolingCoil');
+      if (enabled && capacity > 5) {
+        coil.classList.add('dehum-coil-active');
+      } else {
+        coil.classList.remove('dehum-coil-active');
+      }
+
+      // Show/hide condensate drops
+      var condensate = document.getElementById('condensate');
+      if (enabled && capacity > 10) {
+        condensate.style.display = 'block';
+      } else {
+        condensate.style.display = 'none';
+      }
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else if (enabled && capacity > 5) {
+        statusLight.setAttribute('class', 'status-active');
+        statusText.textContent = 'Active';
+        statusText.style.fill = '#27ae60';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Off';
+        statusText.style.fill = '#7f8c8d';
+      }
+
+      // Auto control based on setpoint
+      if (enabled) {
+        var error = inletRH - setpointRH;
+        if (error > 0) {
+          capacity = Math.min((error / 25) * 100, 100); // Proportional control
+        } else {
+          capacity = 0;
+        }
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="120" height="90">
+  <defs>
+    <style>
+      .pump-body { fill: #3498db; stroke: #2c3e50; stroke-width: 2; }
+      .motor { fill: #34495e; stroke: #2c3e50; stroke-width: 1.5; }
+      .pipe { fill: none; stroke: #7f8c8d; stroke-width: 4; }
+      .impeller { fill: #2980b9; }
+      .vfd-box { fill: #2c3e50; stroke: #34495e; stroke-width: 1.5; }
+      .speed-bar-bg { fill: #ecf0f1; }
+      .speed-bar-fill { fill: #27ae60; }
+      .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #7f8c8d; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Inlet Pipe -->
+  <line x1="5" y1="35" x2="25" y2="35" class="pipe"/>
+
+  <!-- Pump Body -->
+  <ellipse cx="45" cy="35" rx="18" ry="16" class="pump-body"/>
+
+  <!-- Impeller -->
+  <g id="impeller" transform-origin="45 35">
+    <path class="impeller" d="M 45 35 L 50 26 L 55 35 L 50 44 Z"/>
+    <path class="impeller" d="M 45 35 L 36 30 L 45 26 L 54 30 Z"/>
+    <path class="impeller" d="M 45 35 L 36 40 L 45 44 L 54 40 Z"/>
+  </g>
+  <circle cx="45" cy="35" r="5" fill="#2c3e50"/>
+
+  <!-- Discharge Pipe -->
+  <line x1="63" y1="35" x2="83" y2="35" class="pipe"/>
+
+  <!-- Motor -->
+  <rect x="40" y="48" width="10" height="12" class="motor" rx="1"/>
+  <line x1="45" y1="48" x2="45" y2="43" stroke="#2c3e50" stroke-width="2"/>
+
+  <!-- VFD Control Panel -->
+  <rect x="88" y="10" width="28" height="70" class="vfd-box" rx="2"/>
+
+  <!-- VFD Display -->
+  <rect x="92" y="15" width="20" height="14" fill="#1a1a1a" rx="1"/>
+  <text id="speedDisplay" x="102" y="25" class="value-text" font-size="10">0%</text>
+
+  <!-- Speed Bar Graph -->
+  <rect x="95" y="35" width="14" height="40" class="speed-bar-bg" rx="1"/>
+  <rect id="speedBar" x="95" y="75" width="14" height="0" class="speed-bar-fill"/>
+  <rect x="95" y="35" width="14" height="40" fill="none" stroke="#95a5a6" stroke-width="1" rx="1"/>
+
+  <!-- Scale -->
+  <text x="112" y="38" class="label-text">100</text>
+  <text x="112" y="56" class="label-text">50</text>
+  <text x="112" y="77" class="label-text">0</text>
+
+  <!-- Labels -->
+  <text x="102" y="85" class="label-text">SPEED</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var speed = 0;         // 0-100 (%)
+    var status = 0;        // 0=off, 1=on
+    var frequency = 0;     // Hz (0-60)
+
+    var rotation = 0;
+    var animationId = null;
+
+    function updateWidget() {
+      var impeller = document.getElementById('impeller');
+      var speedBar = document.getElementById('speedBar');
+      var speedDisplay = document.getElementById('speedDisplay');
+
+      var displaySpeed = Math.max(0, Math.min(100, speed));
+
+      // Update speed display
+      speedDisplay.textContent = Math.round(displaySpeed) + '%';
+
+      // Update speed bar (fills from bottom)
+      var barHeight = (displaySpeed / 100) * 40;
+      speedBar.setAttribute('y', 75 - barHeight);
+      speedBar.setAttribute('height', barHeight);
+
+      // Animation
+      if (animationId) clearInterval(animationId);
+
+      if (status === 1 && displaySpeed > 0) {
+        var rotSpeed = displaySpeed / 5;
+        animationId = setInterval(function() {
+          rotation += rotSpeed;
+          impeller.setAttribute('transform', 'rotate(' + rotation + ' 45 35)');
+        }, 50);
+
+        // Color based on speed
+        if (displaySpeed < 30) {
+          speedBar.setAttribute('fill', '#e74c3c');
+        } else if (displaySpeed < 70) {
+          speedBar.setAttribute('fill', '#f39c12');
+        } else {
+          speedBar.setAttribute('fill', '#27ae60');
+        }
+      }
+    }
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

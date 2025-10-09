@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="120" height="80" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .btn-container { cursor: pointer; }
+      .btn-rect {
+        fill: #e0e0e0;
+        stroke: #999;
+        stroke-width: 2;
+        transition: all 0.2s;
+      }
+      .btn-rect.active { fill: #4CAF50; stroke: #388E3C; }
+      .btn-rect:hover { filter: brightness(1.1); }
+      .btn-rect:active { filter: brightness(0.9); }
+      .btn-text {
+        fill: #333;
+        font-family: Arial, sans-serif;
+        font-size: 16px;
+        font-weight: bold;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      .btn-text.active { fill: white; }
+      .status-indicator {
+        transition: all 0.3s;
+      }
+    </style>
+  </defs>
+
+  <!-- Button Container -->
+  <g class="btn-container" id="btnGroup">
+    <!-- Button Background -->
+    <rect class="btn-rect" id="btnRect" x="10" y="20" width="100" height="50" rx="5"/>
+
+    <!-- Button Text -->
+    <text class="btn-text" id="btnText" x="60" y="50">OFF</text>
+
+    <!-- Status Indicator -->
+    <circle class="status-indicator" id="statusLED" cx="95" cy="15" r="5" fill="#999"/>
+  </g>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      // FUXA Integration Variables
+      var currentState = false;
+      var tagId = ''; // Set by FUXA: variable binding for state
+      var cmdTagId = ''; // Set by FUXA: variable binding for command
+
+      // DOM Elements
+      var btnRect = document.getElementById('btnRect');
+      var btnText = document.getElementById('btnText');
+      var statusLED = document.getElementById('statusLED');
+      var btnGroup = document.getElementById('btnGroup');
+
+      // Update visual state
+      function updateVisuals() {
+        if (currentState) {
+          btnRect.classList.add('active');
+          btnText.classList.add('active');
+          btnText.textContent = 'ON';
+          statusLED.setAttribute('fill', '#4CAF50');
+        } else {
+          btnRect.classList.remove('active');
+          btnText.classList.remove('active');
+          btnText.textContent = 'OFF';
+          statusLED.setAttribute('fill', '#999');
+        }
+      }
+
+      // Click handler
+      btnGroup.addEventListener('click', function(evt) {
+        evt.preventDefault();
+        currentState = !currentState;
+        updateVisuals();
+
+        // FUXA callback - write command to PLC
+        if (typeof GAuxy !== 'undefined' && cmdTagId) {
+          GAuxy.setVariable(cmdTagId, currentState ? 1 : 0);
+        }
+      });
+
+      // FUXA Integration Functions
+      window.svgSetValue = function(sigid, value) {
+        if (sigid === tagId) {
+          currentState = (value > 0);
+          updateVisuals();
+        }
+      };
+
+      window.svgGetProperty = function(name) {
+        if (name === 'variableId') return tagId;
+        if (name === 'cmdVariableId') return cmdTagId;
+        return null;
+      };
+
+      window.svgSetProperty = function(name, value) {
+        if (name === 'variableId') {
+          tagId = value;
+        } else if (name === 'cmdVariableId') {
+          cmdTagId = value;
+        }
+      };
+
+      // Initialize
+      updateVisuals();
+    })();
+  ]]></script>
+</svg>

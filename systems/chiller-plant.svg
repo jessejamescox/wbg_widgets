@@ -1,0 +1,381 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" width="1200" height="800">
+  <defs>
+    <linearGradient id="chillerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c5f8d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1a3a5a;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pumpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="towerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a6f98;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waterFlow" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a9eff;stop-opacity:0.3" />
+      <stop offset="50%" style="stop-color:#4a9eff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#4a9eff;stop-opacity:0.3" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="800" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="600" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">CHILLED WATER PLANT</text>
+
+  <!-- Chiller 1 -->
+  <g id="chiller1">
+    <rect x="100" y="150" width="140" height="180" fill="url(#chillerGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="170" y="175" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CHILLER 1</text>
+
+    <!-- Compressor -->
+    <circle cx="140" cy="210" r="20" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+    <text x="140" y="215" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">COMP</text>
+
+    <!-- Evaporator -->
+    <rect x="115" y="250" width="50" height="30" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="140" y="268" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">EVAP</text>
+
+    <!-- Condenser -->
+    <rect x="175" y="250" width="50" height="30" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="200" y="268" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">COND</text>
+
+    <!-- Status Indicator -->
+    <circle id="ch1-status" cx="220" cy="170" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <!-- Values -->
+    <text x="170" y="300" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="ch1-load">Load: 85%</text>
+    <text x="170" y="315" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="ch1-tons">500 Tons</text>
+  </g>
+
+  <!-- Chiller 2 -->
+  <g id="chiller2">
+    <rect x="280" y="150" width="140" height="180" fill="url(#chillerGrad)" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="350" y="175" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CHILLER 2</text>
+
+    <circle cx="320" cy="210" r="20" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+    <text x="320" y="215" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">COMP</text>
+
+    <rect x="295" y="250" width="50" height="30" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="320" y="268" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">EVAP</text>
+
+    <rect x="355" y="250" width="50" height="30" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="380" y="268" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">COND</text>
+
+    <circle id="ch2-status" cx="400" cy="170" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+
+    <text x="350" y="300" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="ch2-load">Load: 72%</text>
+    <text x="350" y="315" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="ch2-tons">450 Tons</text>
+  </g>
+
+  <!-- Chiller 3 -->
+  <g id="chiller3">
+    <rect x="460" y="150" width="140" height="180" fill="url(#chillerGrad)" stroke="#666666" stroke-width="2" rx="5"/>
+    <text x="530" y="175" font-family="Arial" font-size="14" font-weight="bold" fill="#999999" text-anchor="middle">CHILLER 3</text>
+
+    <circle cx="500" cy="210" r="20" fill="#2c5f8d" stroke="#666666" stroke-width="2"/>
+    <text x="500" y="215" font-family="Arial" font-size="10" fill="#999999" text-anchor="middle">COMP</text>
+
+    <rect x="475" y="250" width="50" height="30" fill="#1a3a5a" stroke="#666666" stroke-width="1" rx="2"/>
+    <text x="500" y="268" font-family="Arial" font-size="9" fill="#999999" text-anchor="middle">EVAP</text>
+
+    <rect x="535" y="250" width="50" height="30" fill="#1a3a5a" stroke="#666666" stroke-width="1" rx="2"/>
+    <text x="560" y="268" font-family="Arial" font-size="9" fill="#999999" text-anchor="middle">COND</text>
+
+    <circle id="ch3-status" cx="580" cy="170" r="8" fill="#666666" stroke="#ffffff" stroke-width="1"/>
+
+    <text x="530" y="300" font-family="Arial" font-size="11" fill="#666666" text-anchor="middle" id="ch3-load">Load: 0%</text>
+    <text x="530" y="315" font-family="Arial" font-size="11" fill="#666666" text-anchor="middle" id="ch3-tons">OFF</text>
+  </g>
+
+  <!-- Evaporator Pumps -->
+  <g id="evap-pumps">
+    <text x="150" y="375" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">CHILLED WATER PUMPS</text>
+
+    <!-- Primary Pump 1 -->
+    <circle id="chwp1" cx="150" cy="410" r="25" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 150 395 L 160 410 L 150 425 Z" fill="#4a9eff"/>
+    <circle id="chwp1-status" cx="175" cy="395" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="150" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="chwp1-speed">85%</text>
+
+    <!-- Primary Pump 2 -->
+    <circle id="chwp2" cx="240" cy="410" r="25" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 240 395 L 250 410 L 240 425 Z" fill="#4a9eff"/>
+    <circle id="chwp2-status" cx="265" cy="395" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="240" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="chwp2-speed">72%</text>
+
+    <!-- Primary Pump 3 -->
+    <circle id="chwp3" cx="330" cy="410" r="25" fill="url(#pumpGrad)" stroke="#666666" stroke-width="2"/>
+    <path d="M 330 395 L 340 410 L 330 425 Z" fill="#666666"/>
+    <circle id="chwp3-status" cx="355" cy="395" r="6" fill="#666666" stroke="#ffffff" stroke-width="1"/>
+    <text x="330" y="445" font-family="Arial" font-size="10" fill="#666666" text-anchor="middle" id="chwp3-speed">OFF</text>
+  </g>
+
+  <!-- Condenser Pumps -->
+  <g id="cond-pumps">
+    <text x="800" y="375" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">CONDENSER WATER PUMPS</text>
+
+    <circle id="cwp1" cx="760" cy="410" r="25" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 760 395 L 770 410 L 760 425 Z" fill="#4a9eff"/>
+    <circle id="cwp1-status" cx="785" cy="395" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="760" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="cwp1-speed">90%</text>
+
+    <circle id="cwp2" cx="850" cy="410" r="25" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 850 395 L 860 410 L 850 425 Z" fill="#4a9eff"/>
+    <circle id="cwp2-status" cx="875" cy="395" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="850" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="cwp2-speed">90%</text>
+  </g>
+
+  <!-- Cooling Towers -->
+  <g id="cooling-towers">
+    <text x="850" y="100" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff">COOLING TOWERS</text>
+
+    <!-- Tower 1 -->
+    <rect x="750" y="120" width="80" height="100" fill="url(#towerGrad)" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <path d="M 750 120 L 790 100 L 830 120 Z" fill="#3a6f98" stroke="#4a9eff" stroke-width="2"/>
+    <circle cx="790" cy="110" r="8" fill="#2c5f8d" stroke="#4a9eff" stroke-width="1"/>
+    <circle id="ct1-status" cx="820" cy="130" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="790" y="180" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="ct1-speed">75%</text>
+    <rect x="755" y="195" width="70" height="20" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="790" y="208" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">BASIN</text>
+
+    <!-- Tower 2 -->
+    <rect x="870" y="120" width="80" height="100" fill="url(#towerGrad)" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <path d="M 870 120 L 910 100 L 950 120 Z" fill="#3a6f98" stroke="#4a9eff" stroke-width="2"/>
+    <circle cx="910" cy="110" r="8" fill="#2c5f8d" stroke="#4a9eff" stroke-width="1"/>
+    <circle id="ct2-status" cx="940" cy="130" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="910" y="180" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="ct2-speed">68%</text>
+    <rect x="875" y="195" width="70" height="20" fill="#1a3a5a" stroke="#4a9eff" stroke-width="1" rx="2"/>
+    <text x="910" y="208" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">BASIN</text>
+
+    <!-- Tower 3 -->
+    <rect x="990" y="120" width="80" height="100" fill="url(#towerGrad)" stroke="#666666" stroke-width="2" rx="3"/>
+    <path d="M 990 120 L 1030 100 L 1070 120 Z" fill="#3a6f98" stroke="#666666" stroke-width="2"/>
+    <circle cx="1030" cy="110" r="8" fill="#2c5f8d" stroke="#666666" stroke-width="1"/>
+    <circle id="ct3-status" cx="1060" cy="130" r="6" fill="#666666" stroke="#ffffff" stroke-width="1"/>
+    <text x="1030" y="180" font-family="Arial" font-size="10" fill="#666666" text-anchor="middle" id="ct3-speed">OFF</text>
+    <rect x="995" y="195" width="70" height="20" fill="#1a3a5a" stroke="#666666" stroke-width="1" rx="2"/>
+    <text x="1030" y="208" font-family="Arial" font-size="9" fill="#999999" text-anchor="middle">BASIN</text>
+  </g>
+
+  <!-- Chilled Water Header -->
+  <g id="chw-header">
+    <rect x="100" y="500" width="400" height="120" fill="#1a3a5a" stroke="#4a9eff" stroke-width="3" rx="5"/>
+    <text x="300" y="525" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CHILLED WATER SUPPLY HEADER</text>
+
+    <!-- Supply Temp -->
+    <text x="150" y="555" font-family="Arial" font-size="12" fill="#4a9eff">Supply Temp:</text>
+    <text x="150" y="575" font-family="Arial" font-size="20" font-weight="bold" fill="#00ff00" id="chws-temp">42.5°F</text>
+
+    <!-- Return Temp -->
+    <text x="300" y="555" font-family="Arial" font-size="12" fill="#4a9eff">Return Temp:</text>
+    <text x="300" y="575" font-family="Arial" font-size="20" font-weight="bold" fill="#ffaa00" id="chwr-temp">56.2°F</text>
+
+    <!-- Delta T -->
+    <text x="450" y="555" font-family="Arial" font-size="12" fill="#4a9eff">Delta T:</text>
+    <text x="450" y="575" font-family="Arial" font-size="20" font-weight="bold" fill="#ffffff" id="chw-delta">13.7°F</text>
+
+    <!-- Flow Rate -->
+    <text x="150" y="600" font-family="Arial" font-size="12" fill="#4a9eff">Flow Rate:</text>
+    <text x="240" y="600" font-family="Arial" font-size="16" font-weight="bold" fill="#4a9eff" id="chw-flow">2,850 GPM</text>
+  </g>
+
+  <!-- Condenser Water Header -->
+  <g id="cw-header">
+    <rect x="650" y="500" width="400" height="120" fill="#1a3a5a" stroke="#ff6b35" stroke-width="3" rx="5"/>
+    <text x="850" y="525" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">CONDENSER WATER HEADER</text>
+
+    <!-- Supply Temp -->
+    <text x="700" y="555" font-family="Arial" font-size="12" fill="#ff6b35">Supply Temp:</text>
+    <text x="700" y="575" font-family="Arial" font-size="20" font-weight="bold" fill="#4a9eff" id="cws-temp">75.8°F</text>
+
+    <!-- Return Temp -->
+    <text x="850" y="555" font-family="Arial" font-size="12" fill="#ff6b35">Return Temp:</text>
+    <text x="850" y="575" font-family="Arial" font-size="20" font-weight="bold" fill="#ff6b35" id="cwr-temp">85.3°F</text>
+
+    <!-- Flow Rate -->
+    <text x="700" y="600" font-family="Arial" font-size="12" fill="#ff6b35">Flow Rate:</text>
+    <text x="790" y="600" font-family="Arial" font-size="16" font-weight="bold" fill="#ff6b35" id="cw-flow">3,200 GPM</text>
+  </g>
+
+  <!-- Plant Summary -->
+  <g id="plant-summary">
+    <rect x="100" y="650" width="950" height="120" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="575" y="675" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">PLANT SUMMARY</text>
+
+    <!-- Total Load -->
+    <text x="150" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Total Load:</text>
+    <text x="150" y="730" font-family="Arial" font-size="22" font-weight="bold" fill="#00ff00" id="total-load">950 Tons</text>
+
+    <!-- Efficiency -->
+    <text x="320" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Plant Efficiency:</text>
+    <text x="320" y="730" font-family="Arial" font-size="22" font-weight="bold" fill="#00ff00" id="plant-eff">0.58 kW/Ton</text>
+
+    <!-- Power -->
+    <text x="520" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Total Power:</text>
+    <text x="520" y="730" font-family="Arial" font-size="22" font-weight="bold" fill="#ffaa00" id="total-power">551 kW</text>
+
+    <!-- Status -->
+    <text x="720" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Plant Status:</text>
+    <text x="720" y="730" font-family="Arial" font-size="18" font-weight="bold" fill="#00ff00" id="plant-status">NORMAL</text>
+
+    <!-- Lead Chiller -->
+    <text x="900" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Lead Chiller:</text>
+    <text x="900" y="730" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" id="lead-chiller">CH-1</text>
+  </g>
+
+  <!-- Piping Connections -->
+  <!-- CHW Supply -->
+  <line x1="140" y1="280" x2="140" y2="385" stroke="#4a9eff" stroke-width="6"/>
+  <line x1="320" y1="280" x2="320" y2="385" stroke="#4a9eff" stroke-width="6"/>
+  <line x1="150" y1="435" x2="300" y2="500" stroke="#4a9eff" stroke-width="6"/>
+  <line x1="240" y1="435" x2="300" y2="500" stroke="#4a9eff" stroke-width="6"/>
+
+  <!-- CW Connections -->
+  <line x1="200" y1="250" x2="760" y2="385" stroke="#ff6b35" stroke-width="5"/>
+  <line x1="380" y1="250" x2="850" y2="385" stroke="#ff6b35" stroke-width="5"/>
+  <line x1="760" y1="435" x2="790" y2="215" stroke="#ff6b35" stroke-width="5"/>
+  <line x1="850" y1="435" x2="910" y2="215" stroke="#ff6b35" stroke-width="5"/>
+
+  <!-- Flow Animations -->
+  <animateTransform
+    attributeName="transform"
+    attributeType="XML"
+    type="translate"
+    from="0 0"
+    to="20 0"
+    dur="2s"
+    repeatCount="indefinite"/>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var chillerPlant = {
+      // Chiller 1
+      ch1_status: true,
+      ch1_load: 85,
+      ch1_tons: 500,
+
+      // Chiller 2
+      ch2_status: true,
+      ch2_load: 72,
+      ch2_tons: 450,
+
+      // Chiller 3
+      ch3_status: false,
+      ch3_load: 0,
+      ch3_tons: 0,
+
+      // CHW Pumps
+      chwp1_status: true,
+      chwp1_speed: 85,
+      chwp2_status: true,
+      chwp2_speed: 72,
+      chwp3_status: false,
+      chwp3_speed: 0,
+
+      // CW Pumps
+      cwp1_status: true,
+      cwp1_speed: 90,
+      cwp2_status: true,
+      cwp2_speed: 90,
+
+      // Cooling Towers
+      ct1_status: true,
+      ct1_speed: 75,
+      ct2_status: true,
+      ct2_speed: 68,
+      ct3_status: false,
+      ct3_speed: 0,
+
+      // CHW Temps
+      chws_temp: 42.5,
+      chwr_temp: 56.2,
+      chw_delta: 13.7,
+      chw_flow: 2850,
+
+      // CW Temps
+      cws_temp: 75.8,
+      cwr_temp: 85.3,
+      cw_flow: 3200,
+
+      // Plant Summary
+      total_load: 950,
+      plant_eff: 0.58,
+      total_power: 551,
+      plant_status: "NORMAL",
+      lead_chiller: "CH-1"
+    };
+
+    function updateDisplay() {
+      // Update Chiller 1
+      document.getElementById('ch1-status').setAttribute('fill', chillerPlant.ch1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('ch1-load').textContent = 'Load: ' + chillerPlant.ch1_load + '%';
+      document.getElementById('ch1-tons').textContent = chillerPlant.ch1_tons + ' Tons';
+
+      // Update Chiller 2
+      document.getElementById('ch2-status').setAttribute('fill', chillerPlant.ch2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('ch2-load').textContent = 'Load: ' + chillerPlant.ch2_load + '%';
+      document.getElementById('ch2-tons').textContent = chillerPlant.ch2_tons + ' Tons';
+
+      // Update Chiller 3
+      document.getElementById('ch3-status').setAttribute('fill', chillerPlant.ch3_status ? '#00ff00' : '#666666');
+      document.getElementById('ch3-load').textContent = 'Load: ' + chillerPlant.ch3_load + '%';
+      document.getElementById('ch3-tons').textContent = chillerPlant.ch3_status ? chillerPlant.ch3_tons + ' Tons' : 'OFF';
+
+      // Update CHW Pumps
+      document.getElementById('chwp1-status').setAttribute('fill', chillerPlant.chwp1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('chwp1-speed').textContent = chillerPlant.chwp1_status ? chillerPlant.chwp1_speed + '%' : 'OFF';
+
+      document.getElementById('chwp2-status').setAttribute('fill', chillerPlant.chwp2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('chwp2-speed').textContent = chillerPlant.chwp2_status ? chillerPlant.chwp2_speed + '%' : 'OFF';
+
+      document.getElementById('chwp3-status').setAttribute('fill', chillerPlant.chwp3_status ? '#00ff00' : '#666666');
+      document.getElementById('chwp3-speed').textContent = chillerPlant.chwp3_status ? chillerPlant.chwp3_speed + '%' : 'OFF';
+
+      // Update CW Pumps
+      document.getElementById('cwp1-status').setAttribute('fill', chillerPlant.cwp1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('cwp1-speed').textContent = chillerPlant.cwp1_status ? chillerPlant.cwp1_speed + '%' : 'OFF';
+
+      document.getElementById('cwp2-status').setAttribute('fill', chillerPlant.cwp2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('cwp2-speed').textContent = chillerPlant.cwp2_status ? chillerPlant.cwp2_speed + '%' : 'OFF';
+
+      // Update Cooling Towers
+      document.getElementById('ct1-status').setAttribute('fill', chillerPlant.ct1_status ? '#00ff00' : '#ff0000');
+      document.getElementById('ct1-speed').textContent = chillerPlant.ct1_status ? chillerPlant.ct1_speed + '%' : 'OFF';
+
+      document.getElementById('ct2-status').setAttribute('fill', chillerPlant.ct2_status ? '#00ff00' : '#ff0000');
+      document.getElementById('ct2-speed').textContent = chillerPlant.ct2_status ? chillerPlant.ct2_speed + '%' : 'OFF';
+
+      document.getElementById('ct3-status').setAttribute('fill', chillerPlant.ct3_status ? '#00ff00' : '#666666');
+      document.getElementById('ct3-speed').textContent = chillerPlant.ct3_status ? chillerPlant.ct3_speed + '%' : 'OFF';
+
+      // Update CHW Temps
+      document.getElementById('chws-temp').textContent = chillerPlant.chws_temp.toFixed(1) + '°F';
+      document.getElementById('chwr-temp').textContent = chillerPlant.chwr_temp.toFixed(1) + '°F';
+      document.getElementById('chw-delta').textContent = chillerPlant.chw_delta.toFixed(1) + '°F';
+      document.getElementById('chw-flow').textContent = chillerPlant.chw_flow.toLocaleString() + ' GPM';
+
+      // Update CW Temps
+      document.getElementById('cws-temp').textContent = chillerPlant.cws_temp.toFixed(1) + '°F';
+      document.getElementById('cwr-temp').textContent = chillerPlant.cwr_temp.toFixed(1) + '°F';
+      document.getElementById('cw-flow').textContent = chillerPlant.cw_flow.toLocaleString() + ' GPM';
+
+      // Update Plant Summary
+      document.getElementById('total-load').textContent = chillerPlant.total_load + ' Tons';
+      document.getElementById('plant-eff').textContent = chillerPlant.plant_eff.toFixed(2) + ' kW/Ton';
+      document.getElementById('total-power').textContent = chillerPlant.total_power + ' kW';
+      document.getElementById('plant-status').textContent = chillerPlant.plant_status;
+      document.getElementById('lead-chiller').textContent = chillerPlant.lead_chiller;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

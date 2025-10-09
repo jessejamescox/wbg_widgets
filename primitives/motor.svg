@@ -1,0 +1,99 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+  <defs>
+    <style>
+      .motor-body { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .motor-endbell { fill: #2c3e50; stroke: #1a1a1a; stroke-width: 1.5; }
+      .motor-shaft { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 1.5; }
+      .motor-fan { fill: #95a5a6; }
+      .status-on { fill: #27ae60; }
+      .status-off { fill: #95a5a6; }
+      .status-alarm { fill: #e74c3c; }
+      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Motor Body (cylinder) -->
+  <rect x="25" y="30" width="50" height="25" class="motor-body" rx="3"/>
+  <ellipse cx="25" cy="42.5" rx="5" ry="12.5" class="motor-endbell"/>
+  <ellipse cx="75" cy="42.5" rx="5" ry="12.5" class="motor-endbell"/>
+
+  <!-- Cooling Fan (front) -->
+  <g id="fan" transform-origin="22 42.5">
+    <circle cx="22" cy="42.5" r="10" fill="none" stroke="#7f8c8d" stroke-width="1"/>
+    <path class="motor-fan" d="M 22 42.5 L 22 34 L 26 40 Z"/>
+    <path class="motor-fan" d="M 22 42.5 L 30 42.5 L 24 46 Z"/>
+    <path class="motor-fan" d="M 22 42.5 L 22 51 L 18 45 Z"/>
+    <path class="motor-fan" d="M 22 42.5 L 14 42.5 L 20 39 Z"/>
+    <circle cx="22" cy="42.5" r="3" fill="#2c3e50"/>
+  </g>
+
+  <!-- Motor Shaft -->
+  <rect x="78" y="40" width="17" height="5" class="motor-shaft" rx="1"/>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" cx="50" cy="15" r="6" class="status-off"/>
+  <text id="statusText" x="50" y="10" class="label-text">OFF</text>
+
+  <!-- Info Display -->
+  <rect x="20" y="63" width="60" height="12" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
+  <text id="infoText" x="50" y="72" class="value-text">0 RPM</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var status = 0;            // 0=off, 1=on
+    var speed = 0;             // RPM
+    var current = 0;           // Amps
+    var alarmState = 0;        // 0=normal, 1=alarm
+
+    var rotation = 0;
+    var animationId = null;
+
+    function updateWidget() {
+      var fan = document.getElementById('fan');
+      var indicator = document.getElementById('statusIndicator');
+      var statusText = document.getElementById('statusText');
+      var infoText = document.getElementById('infoText');
+
+      if (status === 1) {
+        // Running
+        indicator.setAttribute('class', 'status-on');
+        statusText.textContent = 'RUN';
+
+        if (speed > 0) {
+          infoText.textContent = Math.round(speed) + ' RPM';
+        } else {
+          infoText.textContent = 'RUNNING';
+        }
+
+        // Animate fan
+        if (!animationId) {
+          var rotSpeed = speed > 0 ? Math.max(5, speed / 200) : 10;
+          animationId = setInterval(function() {
+            rotation += rotSpeed;
+            fan.setAttribute('transform', 'rotate(' + rotation + ' 22 42.5)');
+          }, 50);
+        }
+      } else {
+        // Stopped
+        if (animationId) {
+          clearInterval(animationId);
+          animationId = null;
+        }
+        indicator.setAttribute('class', 'status-off');
+        statusText.textContent = 'OFF';
+        infoText.textContent = '0 RPM';
+      }
+
+      // Alarm state
+      if (alarmState === 1) {
+        indicator.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'ALARM';
+        infoText.textContent = 'FAULT';
+      }
+    }
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

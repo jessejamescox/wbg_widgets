@@ -1,0 +1,348 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 400" width="300" height="400">
+  <defs>
+    <style>
+      .light-body { fill: #ffffff; stroke: #333; stroke-width: 2; }
+      .light-on { fill: #4CAF50; filter: url(#glow); }
+      .light-off { fill: #9E9E9E; }
+      .light-test { fill: #FFC107; filter: url(#glow); }
+      .light-fault { fill: #f44336; animation: faultBlink 0.5s infinite; }
+      .battery-housing { fill: #424242; stroke: #212121; stroke-width: 2; }
+      .battery-level-bg { fill: #e0e0e0; stroke: #666; stroke-width: 1; }
+      .battery-level { fill: #4CAF50; transition: width 0.3s; }
+      .battery-charging { fill: #2196F3; }
+      .battery-low { fill: #f44336; }
+      .status-indicator { stroke: #666; stroke-width: 2; }
+      .status-normal { fill: #4CAF50; }
+      .status-mains { fill: #2196F3; }
+      .status-battery { fill: #FF9800; }
+      .status-fault { fill: #f44336; animation: faultBlink 1s infinite; }
+      .button { fill: #2196F3; stroke: #1976D2; stroke-width: 2; cursor: pointer; }
+      .button:hover { fill: #1976D2; }
+      .button-text { fill: white; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; pointer-events: none; }
+      .label-text { fill: #333; font-family: Arial, sans-serif; font-size: 13px; text-anchor: start; }
+      .value-text { fill: #333; font-family: Arial, sans-serif; font-size: 13px; font-weight: bold; text-anchor: end; }
+      .title-text { fill: #333; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; }
+      .small-text { fill: #666; font-family: Arial, sans-serif; font-size: 10px; text-anchor: middle; }
+
+      @keyframes faultBlink {
+        0%, 49% { opacity: 1; }
+        50%, 100% { opacity: 0.2; }
+      }
+    </style>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <radialGradient id="lightGradient" cx="50%" cy="30%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="150" y="25" class="title-text">EMERGENCY LIGHT</text>
+
+  <!-- Light Unit -->
+  <g id="light-unit">
+    <!-- Main housing -->
+    <rect x="75" y="50" width="150" height="80" rx="5" class="light-body" fill="url(#lightGradient)"/>
+
+    <!-- Left light head -->
+    <g id="left-light">
+      <rect x="85" y="80" width="40" height="30" rx="3" id="left-lamp" class="light-off"/>
+      <line x1="95" y1="110" x2="95" y2="125" stroke="#333" stroke-width="2"/>
+      <circle cx="95" cy="125" r="3" fill="#333"/>
+      <!-- Light rays when on -->
+      <g id="left-rays" opacity="0">
+        <line x1="85" y1="85" x2="70" y2="70" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+        <line x1="90" y1="80" x2="80" y2="60" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+        <line x1="100" y1="80" x2="95" y2="55" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+      </g>
+    </g>
+
+    <!-- Right light head -->
+    <g id="right-light">
+      <rect x="175" y="80" width="40" height="30" rx="3" id="right-lamp" class="light-off"/>
+      <line x1="205" y1="110" x2="205" y2="125" stroke="#333" stroke-width="2"/>
+      <circle cx="205" cy="125" r="3" fill="#333"/>
+      <!-- Light rays when on -->
+      <g id="right-rays" opacity="0">
+        <line x1="215" y1="85" x2="230" y2="70" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+        <line x1="210" y1="80" x2="220" y2="60" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+        <line x1="200" y1="80" x2="205" y2="55" stroke="#FFD54F" stroke-width="2" opacity="0.6"/>
+      </g>
+    </g>
+
+    <!-- Status LED on housing -->
+    <circle cx="150" cy="65" r="6" id="unit-led" class="status-indicator status-normal"/>
+    <text x="150" y="48" class="small-text">STATUS</text>
+  </g>
+
+  <!-- Battery Backup Unit -->
+  <g id="battery-unit">
+    <rect x="50" y="160" width="200" height="100" rx="5" class="battery-housing"/>
+
+    <!-- Battery level display -->
+    <text x="150" y="180" class="label-text" fill="#fff" text-anchor="middle">BATTERY BACKUP</text>
+
+    <!-- Battery icon -->
+    <rect x="80" y="190" width="140" height="50" rx="3" class="battery-level-bg"/>
+    <rect x="220" y="203" width="12" height="24" rx="2" class="battery-level-bg"/>
+    <rect x="82" y="192" id="battery-bar" width="136" height="46" rx="2" class="battery-level"/>
+
+    <!-- Battery percentage -->
+    <text x="150" y="222" id="battery-percent" class="value-text" fill="#333" text-anchor="middle">100%</text>
+  </g>
+
+  <!-- Status Information Panel -->
+  <g id="status-panel">
+    <rect x="30" y="280" width="240" height="80" rx="5" fill="#f5f5f5" stroke="#666" stroke-width="2"/>
+
+    <!-- Power Source -->
+    <text x="40" y="300" class="label-text">Power Source:</text>
+    <text x="260" y="300" id="power-source-text" class="value-text">MAINS</text>
+
+    <!-- Operating Mode -->
+    <text x="40" y="320" class="label-text">Mode:</text>
+    <text x="260" y="320" id="mode-text" class="value-text">STANDBY</text>
+
+    <!-- Charge Status -->
+    <text x="40" y="340" class="label-text">Charge Status:</text>
+    <text x="260" y="340" id="charge-text" class="value-text">CHARGED</text>
+
+    <!-- Last Test -->
+    <text x="40" y="355" class="small-text">Last Test: <tspan id="last-test-text">Never</tspan></text>
+  </g>
+
+  <!-- Test Button -->
+  <rect x="100" y="370" width="100" height="25" rx="5" id="test-button" class="button"/>
+  <text x="150" y="387" class="button-text">TEST</text>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      var svg = document.currentScript.closest('svg');
+
+      // State variables
+      var state = {
+        powerSource: 0,     // 0=mains, 1=battery
+        lightStatus: 0,     // 0=off, 1=on, 2=test mode, 3=fault
+        batteryLevel: 100,  // 0-100
+        charging: false,
+        testMode: false,
+        lastTestDate: null,
+        mainsFailure: false
+      };
+
+      // Element references
+      var leftLamp = svg.getElementById('left-lamp');
+      var rightLamp = svg.getElementById('right-lamp');
+      var leftRays = svg.getElementById('left-rays');
+      var rightRays = svg.getElementById('right-rays');
+      var unitLed = svg.getElementById('unit-led');
+      var batteryBar = svg.getElementById('battery-bar');
+      var batteryPercent = svg.getElementById('battery-percent');
+      var powerSourceText = svg.getElementById('power-source-text');
+      var modeText = svg.getElementById('mode-text');
+      var chargeText = svg.getElementById('charge-text');
+      var lastTestText = svg.getElementById('last-test-text');
+      var testButton = svg.getElementById('test-button');
+
+      // Update display based on state
+      function updateDisplay() {
+        // Update lamps
+        leftLamp.classList.remove('light-off', 'light-on', 'light-test', 'light-fault');
+        rightLamp.classList.remove('light-off', 'light-on', 'light-test', 'light-fault');
+
+        switch(state.lightStatus) {
+          case 0: // Off
+            leftLamp.classList.add('light-off');
+            rightLamp.classList.add('light-off');
+            leftRays.setAttribute('opacity', '0');
+            rightRays.setAttribute('opacity', '0');
+            modeText.textContent = 'STANDBY';
+            break;
+          case 1: // On (emergency mode)
+            leftLamp.classList.add('light-on');
+            rightLamp.classList.add('light-on');
+            leftRays.setAttribute('opacity', '1');
+            rightRays.setAttribute('opacity', '1');
+            modeText.textContent = 'EMERGENCY';
+            break;
+          case 2: // Test mode
+            leftLamp.classList.add('light-test');
+            rightLamp.classList.add('light-test');
+            leftRays.setAttribute('opacity', '0.7');
+            rightRays.setAttribute('opacity', '0.7');
+            modeText.textContent = 'TEST';
+            break;
+          case 3: // Fault
+            leftLamp.classList.add('light-fault');
+            rightLamp.classList.add('light-fault');
+            leftRays.setAttribute('opacity', '0');
+            rightRays.setAttribute('opacity', '0');
+            modeText.textContent = 'FAULT';
+            break;
+        }
+
+        // Update unit LED based on power source and status
+        unitLed.classList.remove('status-normal', 'status-mains', 'status-battery', 'status-fault');
+
+        if (state.lightStatus === 3) {
+          unitLed.classList.add('status-fault');
+        } else if (state.powerSource === 0) {
+          unitLed.classList.add('status-mains');
+        } else if (state.powerSource === 1) {
+          unitLed.classList.add('status-battery');
+        } else {
+          unitLed.classList.add('status-normal');
+        }
+
+        // Update power source text
+        powerSourceText.textContent = state.powerSource === 0 ? 'MAINS' : 'BATTERY';
+
+        // Update battery level
+        var batteryWidth = (state.batteryLevel / 100) * 136;
+        batteryBar.setAttribute('width', batteryWidth);
+        batteryPercent.textContent = state.batteryLevel + '%';
+
+        // Update battery color
+        batteryBar.classList.remove('battery-level', 'battery-charging', 'battery-low');
+        if (state.charging) {
+          batteryBar.classList.add('battery-charging');
+          chargeText.textContent = 'CHARGING';
+        } else if (state.batteryLevel < 20) {
+          batteryBar.classList.add('battery-low');
+          chargeText.textContent = 'LOW';
+          if (state.lightStatus !== 3) {
+            state.lightStatus = 3; // Set to fault if battery too low
+          }
+        } else if (state.batteryLevel >= 95) {
+          batteryBar.classList.add('battery-level');
+          chargeText.textContent = 'CHARGED';
+        } else {
+          batteryBar.classList.add('battery-level');
+          chargeText.textContent = state.batteryLevel + '%';
+        }
+
+        // Auto-activate emergency light on mains failure
+        if (state.mainsFailure || state.powerSource === 1) {
+          if (state.lightStatus === 0 && state.batteryLevel > 10) {
+            state.lightStatus = 1;
+          }
+        }
+
+        // Update last test display
+        if (state.lastTestDate) {
+          lastTestText.textContent = state.lastTestDate.toLocaleString();
+        } else {
+          lastTestText.textContent = 'Never';
+        }
+      }
+
+      // Test button handler
+      testButton.addEventListener('click', function() {
+        if (!state.testMode && state.batteryLevel > 10) {
+          state.testMode = true;
+          state.lightStatus = 2;
+          var originalPowerSource = state.powerSource;
+          state.powerSource = 1; // Switch to battery for test
+          updateDisplay();
+
+          // Run test for 10 seconds
+          var testDuration = 10000;
+          var testStart = Date.now();
+
+          var testInterval = setInterval(function() {
+            var elapsed = Date.now() - testStart;
+            if (elapsed >= testDuration) {
+              clearInterval(testInterval);
+              state.testMode = false;
+              state.powerSource = originalPowerSource;
+              state.lightStatus = 0;
+              state.lastTestDate = new Date();
+              updateDisplay();
+
+              // Trigger test complete event for FUXA
+              if (typeof(svg.setValue) === 'function') {
+                svg.setValue('testComplete', true);
+              }
+            } else {
+              // Simulate battery drain during test (approx 1% per second)
+              state.batteryLevel = Math.max(0, state.batteryLevel - 0.1);
+              updateDisplay();
+            }
+          }, 100);
+        }
+      });
+
+      // Battery charging simulation
+      setInterval(function() {
+        if (state.powerSource === 0 && state.batteryLevel < 100 && !state.testMode) {
+          state.charging = true;
+          state.batteryLevel = Math.min(100, state.batteryLevel + 0.1);
+          updateDisplay();
+        } else if (state.powerSource === 1 && state.lightStatus === 1 && !state.testMode) {
+          // Drain battery when running on battery power
+          state.charging = false;
+          state.batteryLevel = Math.max(0, state.batteryLevel - 0.05);
+          updateDisplay();
+
+          // Turn off if battery depleted
+          if (state.batteryLevel <= 0) {
+            state.lightStatus = 3; // Fault
+          }
+        } else {
+          state.charging = false;
+        }
+      }, 1000);
+
+      // FUXA Integration
+      svg.getValue = function(property) {
+        switch(property) {
+          case 'powerSource': return state.powerSource;
+          case 'lightStatus': return state.lightStatus;
+          case 'batteryLevel': return state.batteryLevel;
+          case 'charging': return state.charging;
+          case 'testMode': return state.testMode;
+          case 'isOn': return state.lightStatus === 1 || state.lightStatus === 2;
+          case 'mainsFailure': return state.mainsFailure;
+          default: return null;
+        }
+      };
+
+      svg.setValue = function(property, value) {
+        switch(property) {
+          case 'powerSource':
+            state.powerSource = parseInt(value) || 0;
+            state.mainsFailure = (state.powerSource === 1);
+            break;
+          case 'lightStatus':
+            state.lightStatus = Math.max(0, Math.min(3, parseInt(value) || 0));
+            break;
+          case 'batteryLevel':
+            state.batteryLevel = Math.max(0, Math.min(100, parseInt(value) || 0));
+            break;
+          case 'mainsFailure':
+            state.mainsFailure = !!value;
+            if (state.mainsFailure) {
+              state.powerSource = 1;
+            } else {
+              state.powerSource = 0;
+            }
+            break;
+          default:
+            return;
+        }
+        updateDisplay();
+      };
+
+      // Initialize display
+      updateDisplay();
+    })();
+  ]]></script>
+</svg>

@@ -1,0 +1,204 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 350" width="300" height="350">
+  <defs>
+    <style>
+      .smoke-detector-base { fill: #f0f0f0; stroke: #333; stroke-width: 2; }
+      .smoke-detector-cover { fill: #ffffff; stroke: #666; stroke-width: 1.5; }
+      .smoke-detector-vent { fill: #444; }
+      .status-normal { fill: #4CAF50; }
+      .status-smoke { fill: #f44336; }
+      .status-fault { fill: #FF9800; }
+      .battery-bg { fill: #e0e0e0; stroke: #666; stroke-width: 1; }
+      .battery-level { fill: #4CAF50; transition: all 0.3s; }
+      .battery-low { fill: #f44336; }
+      .alarm-indicator { fill: #f44336; opacity: 0; }
+      .alarm-active { animation: alarmPulse 0.5s infinite; }
+      .button { fill: #2196F3; stroke: #1976D2; stroke-width: 2; cursor: pointer; }
+      .button:hover { fill: #1976D2; }
+      .button-text { fill: white; font-family: Arial, sans-serif; font-size: 12px; text-anchor: middle; pointer-events: none; }
+      .label-text { fill: #333; font-family: Arial, sans-serif; font-size: 14px; text-anchor: middle; }
+      .value-text { fill: #333; font-family: Arial, sans-serif; font-size: 12px; font-weight: bold; text-anchor: middle; }
+      .title-text { fill: #333; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; text-anchor: middle; }
+
+      @keyframes alarmPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+    </style>
+
+    <radialGradient id="detectorGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e0e0e0;stop-opacity:1" />
+    </radialGradient>
+  </defs>
+
+  <!-- Title -->
+  <text x="150" y="25" class="title-text">SMOKE DETECTOR</text>
+
+  <!-- Main Detector Body -->
+  <g id="detector-body">
+    <!-- Base -->
+    <circle cx="150" cy="130" r="80" class="smoke-detector-base" fill="url(#detectorGradient)"/>
+
+    <!-- Ventilation slots -->
+    <g class="smoke-detector-vent">
+      <circle cx="150" cy="90" r="3"/>
+      <circle cx="165" cy="95" r="3"/>
+      <circle cx="175" cy="105" r="3"/>
+      <circle cx="180" cy="120" r="3"/>
+      <circle cx="180" cy="140" r="3"/>
+      <circle cx="175" cy="155" r="3"/>
+      <circle cx="165" cy="165" r="3"/>
+      <circle cx="150" cy="170" r="3"/>
+      <circle cx="135" cy="165" r="3"/>
+      <circle cx="125" cy="155" r="3"/>
+      <circle cx="120" cy="140" r="3"/>
+      <circle cx="120" cy="120" r="3"/>
+      <circle cx="125" cy="105" r="3"/>
+      <circle cx="135" cy="95" r="3"/>
+    </g>
+
+    <!-- Center LED -->
+    <circle cx="150" cy="130" r="12" id="status-led" class="status-normal"/>
+    <circle cx="150" cy="130" r="8" fill="#ffffff" opacity="0.3"/>
+
+    <!-- Alarm indicator ring -->
+    <circle cx="150" cy="130" r="70" id="alarm-ring" class="alarm-indicator"
+            stroke="#f44336" stroke-width="4" fill="none"/>
+  </g>
+
+  <!-- Status Display -->
+  <rect x="60" y="230" width="180" height="40" rx="5" fill="#ffffff" stroke="#666" stroke-width="2"/>
+  <text x="150" y="245" class="label-text">Status:</text>
+  <text x="150" y="262" id="status-text" class="value-text">NORMAL</text>
+
+  <!-- Battery Level Indicator -->
+  <g id="battery-indicator">
+    <text x="80" y="295" class="label-text">Battery:</text>
+    <rect x="40" y="300" width="80" height="30" rx="3" class="battery-bg"/>
+    <rect x="120" y="307" width="8" height="16" rx="2" class="battery-bg"/>
+    <rect x="42" y="302" id="battery-fill" width="76" height="26" rx="2" class="battery-level"/>
+    <text x="80" y="320" id="battery-text" class="value-text">100%</text>
+  </g>
+
+  <!-- Test Button -->
+  <rect x="160" y="300" width="100" height="30" rx="5" id="test-button" class="button"/>
+  <text x="210" y="320" class="button-text">TEST</text>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      var svg = document.currentScript.closest('svg');
+
+      // State variables
+      var state = {
+        status: 0,        // 0=normal, 1=smoke, 2=fault
+        batteryLevel: 100, // 0-100
+        alarmActive: false,
+        testing: false
+      };
+
+      // Element references
+      var statusLed = svg.getElementById('status-led');
+      var alarmRing = svg.getElementById('alarm-ring');
+      var statusText = svg.getElementById('status-text');
+      var batteryFill = svg.getElementById('battery-fill');
+      var batteryText = svg.getElementById('battery-text');
+      var testButton = svg.getElementById('test-button');
+
+      // Update display based on state
+      function updateDisplay() {
+        // Update status LED and text
+        statusLed.classList.remove('status-normal', 'status-smoke', 'status-fault');
+
+        switch(state.status) {
+          case 0: // Normal
+            statusLed.classList.add('status-normal');
+            statusText.textContent = 'NORMAL';
+            state.alarmActive = false;
+            break;
+          case 1: // Smoke detected
+            statusLed.classList.add('status-smoke');
+            statusText.textContent = 'SMOKE DETECTED';
+            state.alarmActive = true;
+            break;
+          case 2: // Fault
+            statusLed.classList.add('status-fault');
+            statusText.textContent = 'FAULT';
+            state.alarmActive = false;
+            break;
+        }
+
+        // Update alarm ring
+        if (state.alarmActive || state.testing) {
+          alarmRing.classList.add('alarm-active');
+          alarmRing.style.opacity = '1';
+        } else {
+          alarmRing.classList.remove('alarm-active');
+          alarmRing.style.opacity = '0';
+        }
+
+        // Update battery level
+        var batteryWidth = (state.batteryLevel / 100) * 76;
+        batteryFill.setAttribute('width', batteryWidth);
+        batteryText.textContent = state.batteryLevel + '%';
+
+        if (state.batteryLevel < 20) {
+          batteryFill.classList.remove('battery-level');
+          batteryFill.classList.add('battery-low');
+        } else {
+          batteryFill.classList.remove('battery-low');
+          batteryFill.classList.add('battery-level');
+        }
+      }
+
+      // Test button handler
+      testButton.addEventListener('click', function() {
+        if (!state.testing) {
+          state.testing = true;
+          updateDisplay();
+
+          // Test for 3 seconds
+          setTimeout(function() {
+            state.testing = false;
+            updateDisplay();
+
+            // Trigger test event for FUXA
+            if (typeof(svg.setValue) === 'function') {
+              svg.setValue('test', true);
+            }
+          }, 3000);
+        }
+      });
+
+      // FUXA Integration
+      svg.getValue = function(property) {
+        switch(property) {
+          case 'status': return state.status;
+          case 'batteryLevel': return state.batteryLevel;
+          case 'alarmActive': return state.alarmActive;
+          case 'testing': return state.testing;
+          default: return null;
+        }
+      };
+
+      svg.setValue = function(property, value) {
+        switch(property) {
+          case 'status':
+            state.status = parseInt(value) || 0;
+            break;
+          case 'batteryLevel':
+            state.batteryLevel = Math.max(0, Math.min(100, parseInt(value) || 0));
+            break;
+          case 'alarmActive':
+            state.alarmActive = !!value;
+            break;
+          default:
+            return;
+        }
+        updateDisplay();
+      };
+
+      // Initialize display
+      updateDisplay();
+    })();
+  ]]></script>
+</svg>

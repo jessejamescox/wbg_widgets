@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 400" width="550" height="400">
+  <defs>
+    <style>
+      .rtu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .rtu-roof { fill: #2c3e50; stroke: #1a252f; stroke-width: 2; }
+      .rtu-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .rtu-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .rtu-fan { fill: none; stroke: #3498db; stroke-width: 2; }
+      .rtu-fan-blade { fill: #3498db; }
+      .rtu-fan-active { animation: spin 1s linear infinite; }
+      .rtu-compressor { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .rtu-compressor-active { fill: #3498db; animation: pulse 1s ease-in-out infinite; }
+      .rtu-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
+      .rtu-coil-active { filter: drop-shadow(0 0 3px currentColor); }
+      .rtu-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .rtu-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .rtu-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .status-ok { fill: #27ae60; }
+      .status-running { fill: #3498db; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes spin {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="rtu-text" x="275" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Rooftop Unit (RTU)
+  </text>
+
+  <!-- RTU Housing with Roof -->
+  <polygon class="rtu-roof" points="100,50 450,50 475,70 75,70"/>
+  <rect class="rtu-box" x="75" y="70" width="400" height="150" rx="5"/>
+
+  <!-- Outside Air Intake -->
+  <rect class="rtu-duct" x="20" y="100" width="55" height="40"/>
+  <text class="rtu-label" x="47" y="95" text-anchor="middle">OA</text>
+  <text id="oaTemp" class="rtu-value" x="47" y="123" text-anchor="middle" font-size="10">45°F</text>
+
+  <!-- OA Damper (Economizer) -->
+  <rect class="rtu-box" x="75" y="95" width="35" height="50" rx="3"/>
+  <g id="oaDamper" transform="translate(92, 120)">
+    <rect class="rtu-damper" x="-12" y="-2" width="24" height="4" rx="1"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="3"/>
+  </g>
+  <text class="rtu-label" x="92" y="155" text-anchor="middle" font-size="8">ECON</text>
+
+  <!-- Return Air -->
+  <rect class="rtu-duct" x="20" y="170" width="55" height="40"/>
+  <text class="rtu-label" x="47" y="165" text-anchor="middle">RA</text>
+  <text id="raTemp" class="rtu-value" x="47" y="193" text-anchor="middle" font-size="10">72°F</text>
+
+  <!-- Compressor Section -->
+  <rect class="rtu-box" x="120" y="85" width="70" height="70" rx="3"/>
+  <text class="rtu-label" x="155" y="105" text-anchor="middle" font-size="9">COMPRESSOR</text>
+  <g id="compressor1" transform="translate(135, 130)">
+    <circle class="rtu-compressor" cx="0" cy="0" r="15"/>
+    <text class="rtu-label" x="0" y="4" text-anchor="middle" font-size="8">1</text>
+  </g>
+  <g id="compressor2" transform="translate(175, 130)">
+    <circle class="rtu-compressor" cx="0" cy="0" r="15"/>
+    <text class="rtu-label" x="0" y="4" text-anchor="middle" font-size="8">2</text>
+  </g>
+
+  <!-- DX Cooling Coil -->
+  <rect class="rtu-box" x="120" y="160" width="70" height="50" rx="3"/>
+  <text class="rtu-label" x="155" y="175" text-anchor="middle" font-size="9">DX COIL</text>
+  <g id="dxCoil">
+    <path stroke="#3498db" fill="none" stroke-width="2" d="M 130 183 L 180 183 M 130 190 L 180 190 M 130 197 L 180 197 M 130 204 L 180 204"/>
+    <circle cx="130" cy="183" r="2" fill="#3498db"/>
+    <circle cx="130" cy="190" r="2" fill="#3498db"/>
+    <circle cx="130" cy="197" r="2" fill="#3498db"/>
+    <circle cx="130" cy="204" r="2" fill="#3498db"/>
+  </g>
+
+  <!-- Heating Section -->
+  <rect class="rtu-box" x="200" y="85" width="70" height="125" rx="3"/>
+  <text class="rtu-label" x="235" y="100" text-anchor="middle" font-size="9">HEATING</text>
+  <g id="heatingCoil">
+    <path class="rtu-coil-heating" d="M 210 115 Q 213 115 213 118 Q 213 121 216 121 Q 219 121 219 118 Q 219 115 222 115 Q 225 115 225 118 Q 225 121 228 121 Q 231 121 231 118 Q 231 115 234 115 Q 237 115 237 118 Q 237 121 240 121 Q 243 121 243 118 Q 243 115 246 115 Q 249 115 249 118 Q 249 121 252 121 Q 255 121 255 118 Q 255 115 260 115"/>
+    <path class="rtu-coil-heating" d="M 210 130 Q 213 130 213 133 Q 213 136 216 136 Q 219 136 219 133 Q 219 130 222 130 Q 225 130 225 133 Q 225 136 228 136 Q 231 136 231 133 Q 231 130 234 130 Q 237 130 237 133 Q 237 136 240 136 Q 243 136 243 133 Q 243 130 246 130 Q 249 130 249 133 Q 249 136 252 136 Q 255 136 255 133 Q 255 130 260 130"/>
+    <path class="rtu-coil-heating" d="M 210 145 Q 213 145 213 148 Q 213 151 216 151 Q 219 151 219 148 Q 219 145 222 145 Q 225 145 225 148 Q 225 151 228 151 Q 231 151 231 148 Q 231 145 234 145 Q 237 145 237 148 Q 237 151 240 151 Q 243 151 243 148 Q 243 145 246 145 Q 249 145 249 148 Q 249 151 252 151 Q 255 151 255 148 Q 255 145 260 145"/>
+    <path class="rtu-coil-heating" d="M 210 160 Q 213 160 213 163 Q 213 166 216 166 Q 219 166 219 163 Q 219 160 222 160 Q 225 160 225 163 Q 225 166 228 166 Q 231 166 231 163 Q 231 160 234 160 Q 237 160 237 163 Q 237 166 240 166 Q 243 166 243 163 Q 243 160 246 160 Q 249 160 249 163 Q 249 166 252 166 Q 255 166 255 163 Q 255 160 260 160"/>
+    <path class="rtu-coil-heating" d="M 210 175 Q 213 175 213 178 Q 213 181 216 181 Q 219 181 219 178 Q 219 175 222 175 Q 225 175 225 178 Q 225 181 228 181 Q 231 181 231 178 Q 231 175 234 175 Q 237 175 237 178 Q 237 181 240 181 Q 243 181 243 178 Q 243 175 246 175 Q 249 175 249 178 Q 249 181 252 181 Q 255 181 255 178 Q 255 175 260 175"/>
+    <path class="rtu-coil-heating" d="M 210 190 Q 213 190 213 193 Q 213 196 216 196 Q 219 196 219 193 Q 219 190 222 190 Q 225 190 225 193 Q 225 196 228 196 Q 231 196 231 193 Q 231 190 234 190"/>
+  </g>
+  <text class="rtu-label" x="235" y="205" text-anchor="middle" font-size="8">GAS/ELEC</text>
+
+  <!-- Filter -->
+  <rect class="rtu-box" x="280" y="85" width="50" height="125" rx="3"/>
+  <text class="rtu-label" x="305" y="100" text-anchor="middle" font-size="8">FILTER</text>
+  <g id="filter">
+    <rect fill="#bdc3c7" stroke="#7f8c8d" stroke-width="1" x="290" y="108" width="30" height="95"/>
+    <line x1="293" y1="108" x2="293" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="297" y1="108" x2="297" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="301" y1="108" x2="301" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="305" y1="108" x2="305" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="309" y1="108" x2="309" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="313" y1="108" x2="313" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="317" y1="108" x2="317" y2="203" stroke="#95a5a6" stroke-width="1"/>
+  </g>
+
+  <!-- Supply Fan -->
+  <rect class="rtu-box" x="340" y="85" width="70" height="125" rx="3"/>
+  <text class="rtu-label" x="375" y="105" text-anchor="middle" font-size="9">SUPPLY FAN</text>
+  <g id="supplyFan" transform="translate(375, 152)">
+    <circle class="rtu-fan" cx="0" cy="0" r="30"/>
+    <g class="rtu-fan-blade">
+      <path d="M 0 -22 L 7 -7 L -7 -7 Z"/>
+      <path d="M 22 0 L 7 7 L 7 -7 Z"/>
+      <path d="M 0 22 L -7 7 L 7 7 Z"/>
+      <path d="M -22 0 L -7 -7 L -7 7 Z"/>
+    </g>
+  </g>
+
+  <!-- Supply Air Duct -->
+  <rect class="rtu-duct" x="475" y="120" width="55" height="40"/>
+  <text class="rtu-label" x="502" y="115" text-anchor="middle">SA</text>
+  <text id="saTemp" class="rtu-value" x="502" y="143" text-anchor="middle" font-size="10">58°F</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="240" width="510" height="145" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="rtu-label" x="35" y="260">Supply Fan:</text>
+  <text id="sfStatus" class="rtu-value" x="35" y="278">ON - 75%</text>
+
+  <text class="rtu-label" x="160" y="260">Economizer:</text>
+  <text id="econStatus" class="rtu-value" x="160" y="278">25%</text>
+
+  <text class="rtu-label" x="280" y="260">Stage:</text>
+  <text id="stageStatus" class="rtu-value" x="280" y="278">Cool 1</text>
+
+  <text class="rtu-label" x="400" y="260">System:</text>
+  <g id="systemStatus">
+    <circle id="statusLight" class="status-ok" cx="453" cy="270" r="5"/>
+    <text id="statusText" class="rtu-value" x="463" y="278">Normal</text>
+  </g>
+
+  <!-- Row 2 -->
+  <text class="rtu-label" x="35" y="298">Compressor 1:</text>
+  <g id="comp1Status">
+    <circle id="comp1Light" class="status-ok" cx="115" cy="308" r="5"/>
+    <text id="comp1Text" class="rtu-value" x="125" y="315">Off</text>
+  </g>
+
+  <text class="rtu-label" x="160" y="298">Compressor 2:</text>
+  <g id="comp2Status">
+    <circle id="comp2Light" class="status-ok" cx="240" cy="308" r="5"/>
+    <text id="comp2Text" class="rtu-value" x="250" y="315">Off</text>
+  </g>
+
+  <text class="rtu-label" x="280" y="298">Heating:</text>
+  <g id="heatStatus">
+    <circle id="heatLight" class="status-ok" cx="335" cy="308" r="5"/>
+    <text id="heatText" class="rtu-value" x="345" y="315">Off</text>
+  </g>
+
+  <text class="rtu-label" x="400" y="298">Filter:</text>
+  <g id="filterStatus">
+    <circle id="filterLight" class="status-ok" cx="440" cy="308" r="5"/>
+    <text id="filterText" class="rtu-value" x="450" y="315">Clean</text>
+  </g>
+
+  <!-- Row 3 -->
+  <text class="rtu-label" x="35" y="338">OA Temp:</text>
+  <text id="oaTempData" class="rtu-value" x="35" y="356">45°F</text>
+
+  <text class="rtu-label" x="160" y="338">RA Temp:</text>
+  <text id="raTempData" class="rtu-value" x="160" y="356">72°F</text>
+
+  <text class="rtu-label" x="280" y="338">SA Temp:</text>
+  <text id="saTempData" class="rtu-value" x="280" y="356">58°F</text>
+
+  <text class="rtu-label" x="400" y="338">Capacity:</text>
+  <text id="capacityText" class="rtu-value" x="400" y="356">50%</text>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var supplyFanSpeed = 75; // 0-100%
+    var supplyFanStatus = true;
+    var economizerPosition = 25; // 0-100%
+    var compressor1 = false;
+    var compressor2 = false;
+    var heatingActive = false;
+    var heatingOutput = 0; // 0-100%
+    var oaTemp = 45; // degrees F
+    var raTemp = 72; // degrees F
+    var saTemp = 58; // degrees F
+    var filterDirty = false;
+    var alarmActive = false;
+    var coolingStage = 0; // 0=Off, 1=Stage1, 2=Stage2
+    var heatingStage = 0; // 0=Off, 1=Stage1, 2=Stage2
+
+    function updateDisplay() {
+      // Update temperatures
+      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('saTemp').textContent = saTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('saTempData').textContent = saTemp.toFixed(0) + '°F';
+
+      // Update supply fan
+      var sfText = document.getElementById('sfStatus');
+      if (supplyFanStatus) {
+        sfText.textContent = 'ON - ' + supplyFanSpeed.toFixed(0) + '%';
+        sfText.style.fill = '#27ae60';
+        document.getElementById('supplyFan').querySelector('.rtu-fan-blade').classList.add('rtu-fan-active');
+      } else {
+        sfText.textContent = 'OFF';
+        sfText.style.fill = '#7f8c8d';
+        document.getElementById('supplyFan').querySelector('.rtu-fan-blade').classList.remove('rtu-fan-active');
+      }
+
+      // Update economizer
+      document.getElementById('econStatus').textContent = economizerPosition.toFixed(0) + '%';
+      var econAngle = (economizerPosition / 100) * 90;
+      document.getElementById('oaDamper').setAttribute('transform', 'translate(92, 120) rotate(' + econAngle + ')');
+
+      // Update compressors
+      var comp1Circle = document.getElementById('compressor1').querySelector('circle');
+      var comp1Light = document.getElementById('comp1Light');
+      var comp1Text = document.getElementById('comp1Text');
+      if (compressor1) {
+        comp1Circle.classList.add('rtu-compressor-active');
+        comp1Light.setAttribute('class', 'status-running');
+        comp1Text.textContent = 'Running';
+        comp1Text.style.fill = '#3498db';
+      } else {
+        comp1Circle.classList.remove('rtu-compressor-active');
+        comp1Light.setAttribute('class', 'status-ok');
+        comp1Text.textContent = 'Off';
+        comp1Text.style.fill = '#7f8c8d';
+      }
+
+      var comp2Circle = document.getElementById('compressor2').querySelector('circle');
+      var comp2Light = document.getElementById('comp2Light');
+      var comp2Text = document.getElementById('comp2Text');
+      if (compressor2) {
+        comp2Circle.classList.add('rtu-compressor-active');
+        comp2Light.setAttribute('class', 'status-running');
+        comp2Text.textContent = 'Running';
+        comp2Text.style.fill = '#3498db';
+      } else {
+        comp2Circle.classList.remove('rtu-compressor-active');
+        comp2Light.setAttribute('class', 'status-ok');
+        comp2Text.textContent = 'Off';
+        comp2Text.style.fill = '#7f8c8d';
+      }
+
+      // Update DX coil appearance
+      var dxCoil = document.getElementById('dxCoil');
+      if (compressor1 || compressor2) {
+        dxCoil.style.filter = 'drop-shadow(0 0 3px #3498db)';
+      } else {
+        dxCoil.style.filter = 'none';
+      }
+
+      // Update heating
+      var heatCoil = document.getElementById('heatingCoil');
+      var heatLight = document.getElementById('heatLight');
+      var heatText = document.getElementById('heatText');
+      if (heatingActive && heatingOutput > 5) {
+        heatCoil.classList.add('rtu-coil-active');
+        heatLight.setAttribute('class', 'status-running');
+        heatText.textContent = heatingOutput.toFixed(0) + '%';
+        heatText.style.fill = '#e74c3c';
+      } else {
+        heatCoil.classList.remove('rtu-coil-active');
+        heatLight.setAttribute('class', 'status-ok');
+        heatText.textContent = 'Off';
+        heatText.style.fill = '#7f8c8d';
+      }
+
+      // Update stage display
+      var stageText = '';
+      if (coolingStage > 0) {
+        stageText = 'Cool ' + coolingStage;
+      } else if (heatingStage > 0) {
+        stageText = 'Heat ' + heatingStage;
+      } else {
+        stageText = 'Off';
+      }
+      document.getElementById('stageStatus').textContent = stageText;
+
+      // Update capacity
+      var capacity = 0;
+      if (compressor1 && compressor2) capacity = 100;
+      else if (compressor1 || compressor2) capacity = 50;
+      else if (heatingActive) capacity = heatingOutput;
+      document.getElementById('capacityText').textContent = capacity.toFixed(0) + '%';
+
+      // Update filter status
+      var filterLight = document.getElementById('filterLight');
+      var filterText = document.getElementById('filterText');
+      if (filterDirty) {
+        filterLight.setAttribute('class', 'status-alarm');
+        filterText.textContent = 'Dirty';
+        filterText.style.fill = '#e74c3c';
+      } else {
+        filterLight.setAttribute('class', 'status-ok');
+        filterText.textContent = 'Clean';
+        filterText.style.fill = '#27ae60';
+      }
+
+      // Update system status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      }
+
+      // Auto control logic for cooling stages
+      compressor1 = coolingStage >= 1;
+      compressor2 = coolingStage >= 2;
+      heatingActive = heatingStage > 0;
+      if (heatingStage === 1) heatingOutput = 50;
+      else if (heatingStage === 2) heatingOutput = 100;
+      else heatingOutput = 0;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

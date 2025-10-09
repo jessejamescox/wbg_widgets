@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="320" height="200" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .card-bg {
+        fill: white;
+        stroke: #ccc;
+        stroke-width: 2;
+      }
+      .header-bg {
+        fill: #2196F3;
+      }
+      .header-text {
+        fill: white;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .label-text {
+        fill: #666;
+        font-family: Arial, sans-serif;
+        font-size: 11px;
+      }
+      .value-text {
+        fill: #333;
+        font-family: 'Courier New', monospace;
+        font-size: 18px;
+        font-weight: bold;
+      }
+      .value-text.pv { fill: #2196F3; }
+      .value-text.sp { fill: #FF9800; }
+      .value-text.out { fill: #4CAF50; }
+      .term-text {
+        fill: #555;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+      }
+      .term-value {
+        fill: #333;
+        font-family: 'Courier New', monospace;
+        font-size: 11px;
+      }
+      .mode-btn {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .mode-btn-rect {
+        fill: #e0e0e0;
+        stroke: #999;
+        stroke-width: 1;
+      }
+      .mode-btn-rect.active {
+        fill: #4CAF50;
+        stroke: #388E3C;
+      }
+      .mode-btn-text {
+        fill: #333;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        font-weight: bold;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      .mode-btn-text.active {
+        fill: white;
+      }
+      .mode-btn:hover .mode-btn-rect {
+        filter: brightness(1.1);
+      }
+      .divider {
+        stroke: #ddd;
+        stroke-width: 1;
+      }
+      .unit-text {
+        fill: #999;
+        font-family: Arial, sans-serif;
+        font-size: 9px;
+      }
+    </style>
+  </defs>
+
+  <!-- Card Background -->
+  <rect class="card-bg" x="0" y="0" width="320" height="200" rx="5"/>
+
+  <!-- Header -->
+  <rect class="header-bg" x="0" y="0" width="320" height="30" rx="5"/>
+  <text class="header-text" x="10" y="20">PID CONTROLLER</text>
+
+  <!-- Main Values Section -->
+  <g id="mainValues">
+    <!-- Process Variable (PV) -->
+    <text class="label-text" x="15" y="50">PV</text>
+    <text class="value-text pv" id="pvValue" x="15" y="72">75.5</text>
+    <text class="unit-text" id="pvUnit" x="70" y="72">°F</text>
+
+    <!-- Setpoint (SP) -->
+    <text class="label-text" x="115" y="50">SP</text>
+    <text class="value-text sp" id="spValue" x="115" y="72">72.0</text>
+    <text class="unit-text" id="spUnit" x="170" y="72">°F</text>
+
+    <!-- Output -->
+    <text class="label-text" x="215" y="50">OUTPUT</text>
+    <text class="value-text out" id="outValue" x="215" y="72">45.2</text>
+    <text class="unit-text" x="270" y="72">%</text>
+  </g>
+
+  <!-- Divider -->
+  <line class="divider" x1="10" y1="85" x2="310" y2="85"/>
+
+  <!-- PID Terms Section -->
+  <g id="pidTerms">
+    <text class="label-text" x="15" y="105">PID TERMS</text>
+
+    <!-- P Term -->
+    <text class="term-text" x="15" y="120">P:</text>
+    <text class="term-value" id="pValue" x="35" y="120">12.3</text>
+
+    <!-- I Term -->
+    <text class="term-text" x="85" y="120">I:</text>
+    <text class="term-value" id="iValue" x="100" y="120">8.5</text>
+
+    <!-- D Term -->
+    <text class="term-text" x="150" y="120">D:</text>
+    <text class="term-value" id="dValue" x="165" y="120">-2.1</text>
+
+    <!-- Error -->
+    <text class="term-text" x="215" y="120">ERR:</text>
+    <text class="term-value" id="errValue" x="240" y="120">3.5</text>
+  </g>
+
+  <!-- Divider -->
+  <line class="divider" x1="10" y1="135" x2="310" y2="135"/>
+
+  <!-- Mode Control -->
+  <text class="label-text" x="15" y="155">MODE</text>
+
+  <!-- Auto Button -->
+  <g class="mode-btn" id="autoBtn">
+    <rect class="mode-btn-rect" id="autoBtnRect" x="15" y="165" width="60" height="25" rx="3"/>
+    <text class="mode-btn-text" id="autoBtnText" x="45" y="182">AUTO</text>
+  </g>
+
+  <!-- Manual Button -->
+  <g class="mode-btn" id="manualBtn">
+    <rect class="mode-btn-rect" id="manualBtnRect" x="85" y="165" width="60" height="25" rx="3"/>
+    <text class="mode-btn-text" id="manualBtnText" x="115" y="182">MANUAL</text>
+  </g>
+
+  <!-- Status Text -->
+  <text class="term-text" id="statusText" x="160" y="182">Auto Mode Active</text>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      // FUXA Integration Variables
+      var pvTagId = '';      // Process Variable
+      var spTagId = '';      // Setpoint
+      var outTagId = '';     // Output
+      var pTagId = '';       // P Term
+      var iTagId = '';       // I Term
+      var dTagId = '';       // D Term
+      var errTagId = '';     // Error
+      var modeTagId = '';    // Mode (0=Manual, 1=Auto)
+      var modeCmdTagId = ''; // Mode Command
+
+      // Current values
+      var pv = 75.5;
+      var sp = 72.0;
+      var output = 45.2;
+      var pTerm = 12.3;
+      var iTerm = 8.5;
+      var dTerm = -2.1;
+      var error = 3.5;
+      var isAuto = true;
+      var units = '°F';
+      var decimals = 1;
+
+      // DOM Elements
+      var pvValue = document.getElementById('pvValue');
+      var spValue = document.getElementById('spValue');
+      var outValue = document.getElementById('outValue');
+      var pValue = document.getElementById('pValue');
+      var iValue = document.getElementById('iValue');
+      var dValue = document.getElementById('dValue');
+      var errValue = document.getElementById('errValue');
+      var statusText = document.getElementById('statusText');
+      var autoBtnRect = document.getElementById('autoBtnRect');
+      var autoBtnText = document.getElementById('autoBtnText');
+      var manualBtnRect = document.getElementById('manualBtnRect');
+      var manualBtnText = document.getElementById('manualBtnText');
+      var autoBtn = document.getElementById('autoBtn');
+      var manualBtn = document.getElementById('manualBtn');
+      var pvUnit = document.getElementById('pvUnit');
+      var spUnit = document.getElementById('spUnit');
+
+      // Update all visuals
+      function updateVisuals() {
+        pvValue.textContent = pv.toFixed(decimals);
+        spValue.textContent = sp.toFixed(decimals);
+        outValue.textContent = output.toFixed(decimals);
+        pValue.textContent = pTerm.toFixed(decimals);
+        iValue.textContent = iTerm.toFixed(decimals);
+        dValue.textContent = dTerm.toFixed(decimals);
+        errValue.textContent = error.toFixed(decimals);
+        pvUnit.textContent = units;
+        spUnit.textContent = units;
+
+        if (isAuto) {
+          autoBtnRect.classList.add('active');
+          autoBtnText.classList.add('active');
+          manualBtnRect.classList.remove('active');
+          manualBtnText.classList.remove('active');
+          statusText.textContent = 'Auto Mode Active';
+        } else {
+          autoBtnRect.classList.remove('active');
+          autoBtnText.classList.remove('active');
+          manualBtnRect.classList.add('active');
+          manualBtnText.classList.add('active');
+          statusText.textContent = 'Manual Mode Active';
+        }
+      }
+
+      // Mode button handlers
+      autoBtn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+        if (!isAuto) {
+          isAuto = true;
+          updateVisuals();
+
+          if (typeof GAuxy !== 'undefined' && modeCmdTagId) {
+            GAuxy.setVariable(modeCmdTagId, 1);
+          }
+        }
+      });
+
+      manualBtn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+        if (isAuto) {
+          isAuto = false;
+          updateVisuals();
+
+          if (typeof GAuxy !== 'undefined' && modeCmdTagId) {
+            GAuxy.setVariable(modeCmdTagId, 0);
+          }
+        }
+      });
+
+      // FUXA Integration Functions
+      window.svgSetValue = function(sigid, value) {
+        var numValue = parseFloat(value);
+
+        if (sigid === pvTagId) {
+          pv = numValue;
+        } else if (sigid === spTagId) {
+          sp = numValue;
+        } else if (sigid === outTagId) {
+          output = numValue;
+        } else if (sigid === pTagId) {
+          pTerm = numValue;
+        } else if (sigid === iTagId) {
+          iTerm = numValue;
+        } else if (sigid === dTagId) {
+          dTerm = numValue;
+        } else if (sigid === errTagId) {
+          error = numValue;
+        } else if (sigid === modeTagId) {
+          isAuto = (numValue > 0);
+        }
+
+        updateVisuals();
+      };
+
+      window.svgGetProperty = function(name) {
+        if (name === 'pvVariableId') return pvTagId;
+        if (name === 'spVariableId') return spTagId;
+        if (name === 'outVariableId') return outTagId;
+        if (name === 'pVariableId') return pTagId;
+        if (name === 'iVariableId') return iTagId;
+        if (name === 'dVariableId') return dTagId;
+        if (name === 'errVariableId') return errTagId;
+        if (name === 'modeVariableId') return modeTagId;
+        if (name === 'modeCmdVariableId') return modeCmdTagId;
+        if (name === 'units') return units;
+        if (name === 'decimals') return decimals;
+        return null;
+      };
+
+      window.svgSetProperty = function(name, value) {
+        if (name === 'pvVariableId') {
+          pvTagId = value;
+        } else if (name === 'spVariableId') {
+          spTagId = value;
+        } else if (name === 'outVariableId') {
+          outTagId = value;
+        } else if (name === 'pVariableId') {
+          pTagId = value;
+        } else if (name === 'iVariableId') {
+          iTagId = value;
+        } else if (name === 'dVariableId') {
+          dTagId = value;
+        } else if (name === 'errVariableId') {
+          errTagId = value;
+        } else if (name === 'modeVariableId') {
+          modeTagId = value;
+        } else if (name === 'modeCmdVariableId') {
+          modeCmdTagId = value;
+        } else if (name === 'units') {
+          units = value;
+          updateVisuals();
+        } else if (name === 'decimals') {
+          decimals = parseInt(value);
+          updateVisuals();
+        }
+      };
+
+      // Initialize
+      updateVisuals();
+    })();
+  ]]></script>
+</svg>

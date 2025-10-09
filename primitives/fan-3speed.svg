@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="120" height="100">
+  <defs>
+    <style>
+      .speed-btn { fill: #ecf0f1; stroke: #34495e; stroke-width: 1.5; cursor: pointer; }
+      .speed-btn-active { fill: #3498db; }
+      .speed-label { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; text-anchor: middle; }
+      .fan-blade { fill: #4a90e2; }
+    </style>
+  </defs>
+
+  <!-- Fan Visual -->
+  <circle cx="30" cy="50" r="25" fill="none" stroke="#34495e" stroke-width="2"/>
+  <g id="fanBlades" transform-origin="30 50">
+    <path class="fan-blade" d="M 30 50 L 30 27 A 23 23 0 0 1 42 34 Z"/>
+    <path class="fan-blade" d="M 30 50 L 53 50 A 23 23 0 0 1 46 62 Z"/>
+    <path class="fan-blade" d="M 30 50 L 30 73 A 23 23 0 0 1 18 66 Z"/>
+    <path class="fan-blade" d="M 30 50 L 7 50 A 23 23 0 0 1 14 38 Z"/>
+  </g>
+  <circle cx="30" cy="50" r="6" fill="#2c3e50"/>
+
+  <!-- Speed Buttons -->
+  <rect id="btn0" class="speed-btn speed-btn-active" x="65" y="10" width="20" height="20" rx="3"/>
+  <text x="75" y="23" class="speed-label">0</text>
+
+  <rect id="btn1" class="speed-btn" x="65" y="35" width="20" height="20" rx="3"/>
+  <text x="75" y="48" class="speed-label">1</text>
+
+  <rect id="btn2" class="speed-btn" x="65" y="60" width="20" height="20" rx="3"/>
+  <text x="75" y="73" class="speed-label">2</text>
+
+  <rect id="btn3" class="speed-btn" x="65" y="85" width="20" height="20" rx="3"/>
+  <text x="75" y="98" class="speed-label">3</text>
+
+  <!-- Labels -->
+  <text x="100" y="23" class="speed-label">OFF</text>
+  <text x="100" y="48" class="speed-label">LOW</text>
+  <text x="100" y="73" class="speed-label">MED</text>
+  <text x="100" y="98" class="speed-label">HIGH</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var speed = 0;  // 0=off, 1=low, 2=med, 3=high
+    var rotation = 0;
+    var animationId = null;
+
+    function updateWidget() {
+      var blades = document.getElementById('fanBlades');
+
+      // Update button states
+      for (var i = 0; i <= 3; i++) {
+        var btn = document.getElementById('btn' + i);
+        if (i === speed) {
+          btn.setAttribute('class', 'speed-btn speed-btn-active');
+        } else {
+          btn.setAttribute('class', 'speed-btn');
+        }
+      }
+
+      // Animate based on speed
+      if (animationId) clearInterval(animationId);
+
+      if (speed > 0) {
+        var rotSpeed = speed * 3;
+        animationId = setInterval(function() {
+          rotation += rotSpeed;
+          blades.setAttribute('transform', 'rotate(' + rotation + ' 30 50)');
+        }, 50);
+      }
+    }
+
+    // Button click handlers
+    function setSpeed(s) {
+      speed = s;
+      updateWidget();
+    }
+
+    document.getElementById('btn0').onclick = function() { setSpeed(0); };
+    document.getElementById('btn1').onclick = function() { setSpeed(1); };
+    document.getElementById('btn2').onclick = function() { setSpeed(2); };
+    document.getElementById('btn3').onclick = function() { setSpeed(3); };
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

@@ -1,0 +1,323 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 350" width="280" height="350">
+  <defs>
+    <linearGradient id="doorBg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#2c3e50;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#34495e;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="doorPanel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#8b4513;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#a0522d;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#8b4513;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="frameGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#555555;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#777777;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#555555;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="shadow">
+      <feDropShadow dx="2" dy="2" stdDeviation="2" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="280" height="350" fill="url(#doorBg)" rx="10"/>
+
+  <!-- Title -->
+  <text x="140" y="25" font-family="Arial, sans-serif" font-size="18" font-weight="bold" fill="#ecf0f1" text-anchor="middle">DOOR CONTACT</text>
+
+  <!-- Door Frame -->
+  <rect x="40" y="55" width="200" height="180" fill="url(#frameGradient)" stroke="#333" stroke-width="3" rx="5" filter="url(#shadow)"/>
+
+  <!-- Door (main panel) -->
+  <g id="doorGroup">
+    <rect id="doorPanel" x="50" y="65" width="180" height="160" fill="url(#doorPanel)" stroke="#654321" stroke-width="2" rx="3"/>
+
+    <!-- Door Details -->
+    <rect x="60" y="75" width="50" height="60" fill="none" stroke="#654321" stroke-width="1.5" opacity="0.5" rx="2"/>
+    <rect x="60" y="145" width="50" height="60" fill="none" stroke="#654321" stroke-width="1.5" opacity="0.5" rx="2"/>
+    <rect x="170" y="75" width="50" height="60" fill="none" stroke="#654321" stroke-width="1.5" opacity="0.5" rx="2"/>
+    <rect x="170" y="145" width="50" height="60" fill="none" stroke="#654321" stroke-width="1.5" opacity="0.5" rx="2"/>
+
+    <!-- Door Knob -->
+    <circle id="doorKnob" cx="210" cy="155" r="8" fill="#d4af37" stroke="#b8860b" stroke-width="1.5"/>
+    <circle cx="210" cy="155" r="3" fill="#b8860b"/>
+
+    <!-- Lock Mechanism -->
+    <rect id="lockPlate" x="200" y="145" width="12" height="20" fill="#333" rx="2"/>
+    <rect id="lockBolt" x="212" y="152" width="8" height="6" fill="#666" rx="1"/>
+  </g>
+
+  <!-- Contact Sensor (on frame) -->
+  <g id="contactSensor">
+    <rect x="232" y="140" width="20" height="30" fill="#2c3e50" stroke="#7f8c8d" stroke-width="1.5" rx="2"/>
+    <circle id="contactLED" cx="242" cy="155" r="5" fill="#27ae60" filter="url(#glow)"/>
+  </g>
+
+  <!-- Magnetic Contact Lines (when closed) -->
+  <g id="magneticField" opacity="0.5">
+    <path id="fieldLine1" d="M 220 150 Q 230 150 232 150" stroke="#3498db" stroke-width="1.5" fill="none" stroke-dasharray="2,2"/>
+    <path id="fieldLine2" d="M 220 155 Q 230 155 232 155" stroke="#3498db" stroke-width="1.5" fill="none" stroke-dasharray="2,2"/>
+    <path id="fieldLine3" d="M 220 160 Q 230 160 232 160" stroke="#3498db" stroke-width="1.5" fill="none" stroke-dasharray="2,2"/>
+  </g>
+
+  <!-- Status Display Panel -->
+  <rect x="20" y="250" width="240" height="80" fill="#1a1a1a" stroke="#7f8c8d" stroke-width="2" rx="5"/>
+
+  <!-- Status Text -->
+  <text x="140" y="270" font-family="Arial" font-size="12" fill="#95a5a6" text-anchor="middle">STATUS</text>
+  <text id="doorStatusText" x="140" y="295" font-family="Arial" font-size="24" font-weight="bold" fill="#27ae60" text-anchor="middle" filter="url(#glow)">CLOSED</text>
+
+  <!-- Status Indicators Row -->
+  <g id="indicators">
+    <!-- Lock Status -->
+    <g id="lockIndicator">
+      <rect x="25" y="305" width="70" height="20" fill="#34495e" stroke="#7f8c8d" stroke-width="1" rx="3"/>
+      <circle id="lockLight" cx="37" cy="315" r="5" fill="#27ae60" filter="url(#glow)"/>
+      <text x="60" y="319" font-family="Arial" font-size="11" fill="#ecf0f1" text-anchor="middle">LOCKED</text>
+    </g>
+
+    <!-- Forced Entry Alarm -->
+    <g id="alarmIndicator">
+      <rect x="105" y="305" width="70" height="20" fill="#34495e" stroke="#7f8c8d" stroke-width="1" rx="3"/>
+      <circle id="alarmLight" cx="117" cy="315" r="5" fill="#95a5a6" opacity="0.3"/>
+      <text x="140" y="319" font-family="Arial" font-size="11" fill="#ecf0f1" text-anchor="middle">ALARM</text>
+    </g>
+
+    <!-- Tamper Detection -->
+    <g id="tamperIndicator">
+      <rect x="185" y="305" width="70" height="20" fill="#34495e" stroke="#7f8c8d" stroke-width="1" rx="3"/>
+      <circle id="tamperLight" cx="197" cy="315" r="5" fill="#95a5a6" opacity="0.3"/>
+      <text x="220" y="319" font-family="Arial" font-size="11" fill="#ecf0f1" text-anchor="middle">TAMPER</text>
+    </g>
+  </g>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      // FUXA Variable Bindings
+      var bindings = {
+        doorOpen: 'door.isOpen',              // 0=closed, 1=open
+        lockStatus: 'door.lockStatus',        // 0=unlocked, 1=locked
+        forcedEntry: 'door.forcedEntry',      // 0=normal, 1=forced
+        tamperDetect: 'door.tamperDetect',    // 0=normal, 1=tamper
+        contactGap: 'door.contactGap',        // Gap distance in mm (0-50)
+        doorAngle: 'door.doorAngle'           // Opening angle 0-90 degrees
+      };
+
+      var currentAngle = 0;
+      var targetAngle = 0;
+      var animating = false;
+
+      function updateDoorPosition(angle) {
+        var doorGroup = document.getElementById('doorGroup');
+        var doorPanel = document.getElementById('doorPanel');
+        var magneticField = document.getElementById('magneticField');
+
+        if (!doorGroup || !doorPanel || !magneticField) return;
+
+        currentAngle = angle;
+
+        // Rotate door from left edge
+        doorGroup.setAttribute('transform', 'rotate(' + angle + ' 50 145)');
+
+        // Update magnetic field visibility
+        if (angle > 5) {
+          magneticField.setAttribute('opacity', '0');
+        } else {
+          magneticField.setAttribute('opacity', '0.5');
+        }
+      }
+
+      function animateDoorToAngle(targetAngle) {
+        if (animating) return;
+        animating = true;
+
+        function animate() {
+          var diff = targetAngle - currentAngle;
+          if (Math.abs(diff) < 0.5) {
+            currentAngle = targetAngle;
+            animating = false;
+            updateDoorPosition(currentAngle);
+            return;
+          }
+
+          currentAngle += diff * 0.1;
+          updateDoorPosition(currentAngle);
+          requestAnimationFrame(animate);
+        }
+
+        animate();
+      }
+
+      function updateDoorStatus(isOpen) {
+        var statusText = document.getElementById('doorStatusText');
+        var contactLED = document.getElementById('contactLED');
+
+        if (!statusText || !contactLED) return;
+
+        if (isOpen) {
+          statusText.textContent = 'OPEN';
+          statusText.setAttribute('fill', '#e74c3c');
+          contactLED.setAttribute('fill', '#e74c3c');
+          targetAngle = 75; // Open to 75 degrees
+        } else {
+          statusText.textContent = 'CLOSED';
+          statusText.setAttribute('fill', '#27ae60');
+          contactLED.setAttribute('fill', '#27ae60');
+          targetAngle = 0; // Closed
+        }
+
+        animateDoorToAngle(targetAngle);
+      }
+
+      function updateLockStatus(isLocked) {
+        var lockBolt = document.getElementById('lockBolt');
+        var lockLight = document.getElementById('lockLight');
+        var lockText = document.querySelector('#lockIndicator text');
+
+        if (!lockBolt || !lockLight || !lockText) return;
+
+        if (isLocked) {
+          lockBolt.setAttribute('x', '212');
+          lockBolt.setAttribute('fill', '#e74c3c');
+          lockLight.setAttribute('fill', '#27ae60');
+          lockLight.setAttribute('opacity', '1');
+          lockText.textContent = 'LOCKED';
+        } else {
+          lockBolt.setAttribute('x', '206');
+          lockBolt.setAttribute('fill', '#27ae60');
+          lockLight.setAttribute('fill', '#95a5a6');
+          lockLight.setAttribute('opacity', '0.3');
+          lockText.textContent = 'UNLOCKED';
+        }
+      }
+
+      function updateAlarmStatus(isActive) {
+        var alarmLight = document.getElementById('alarmLight');
+        var alarmText = document.querySelector('#alarmIndicator text');
+
+        if (!alarmLight || !alarmText) return;
+
+        if (isActive) {
+          alarmLight.setAttribute('fill', '#e74c3c');
+          alarmLight.setAttribute('opacity', '1');
+          alarmLight.setAttribute('filter', 'url(#glow)');
+          alarmText.setAttribute('fill', '#e74c3c');
+
+          // Blink effect
+          var blinkCount = 0;
+          var blinkInterval = setInterval(function() {
+            blinkCount++;
+            var opacity = (blinkCount % 2 === 0) ? '1' : '0.3';
+            alarmLight.setAttribute('opacity', opacity);
+            if (blinkCount > 10) clearInterval(blinkInterval);
+          }, 300);
+        } else {
+          alarmLight.setAttribute('fill', '#95a5a6');
+          alarmLight.setAttribute('opacity', '0.3');
+          alarmLight.removeAttribute('filter');
+          alarmText.setAttribute('fill', '#ecf0f1');
+        }
+      }
+
+      function updateTamperStatus(isActive) {
+        var tamperLight = document.getElementById('tamperLight');
+        var tamperText = document.querySelector('#tamperIndicator text');
+
+        if (!tamperLight || !tamperText) return;
+
+        if (isActive) {
+          tamperLight.setAttribute('fill', '#f39c12');
+          tamperLight.setAttribute('opacity', '1');
+          tamperLight.setAttribute('filter', 'url(#glow)');
+          tamperText.setAttribute('fill', '#f39c12');
+        } else {
+          tamperLight.setAttribute('fill', '#95a5a6');
+          tamperLight.setAttribute('opacity', '0.3');
+          tamperLight.removeAttribute('filter');
+          tamperText.setAttribute('fill', '#ecf0f1');
+        }
+      }
+
+      function updateContactGap(gap) {
+        // Update visual representation based on gap
+        var contactSensor = document.getElementById('contactSensor');
+        if (!contactSensor) return;
+
+        // Move sensor slightly based on gap (visual feedback)
+        var offset = Math.min(gap * 0.3, 15);
+        contactSensor.setAttribute('transform', 'translate(' + offset + ', 0)');
+      }
+
+      function updateDoorAngle(angle) {
+        // Direct angle control (overrides open/close status)
+        var clampedAngle = Math.max(0, Math.min(90, angle));
+        animateDoorToAngle(clampedAngle);
+
+        // Update status text based on angle
+        var statusText = document.getElementById('doorStatusText');
+        var contactLED = document.getElementById('contactLED');
+
+        if (!statusText || !contactLED) return;
+
+        if (clampedAngle < 5) {
+          statusText.textContent = 'CLOSED';
+          statusText.setAttribute('fill', '#27ae60');
+          contactLED.setAttribute('fill', '#27ae60');
+        } else if (clampedAngle > 85) {
+          statusText.textContent = 'OPEN';
+          statusText.setAttribute('fill', '#e74c3c');
+          contactLED.setAttribute('fill', '#e74c3c');
+        } else {
+          statusText.textContent = 'AJAR ' + clampedAngle.toFixed(0) + '°';
+          statusText.setAttribute('fill', '#f39c12');
+          contactLED.setAttribute('fill', '#f39c12');
+        }
+      }
+
+      // Main update function called by FUXA
+      window.updateDoorContact = function(values) {
+        if (values.doorOpen !== undefined) {
+          updateDoorStatus(values.doorOpen === 1);
+        }
+
+        if (values.doorAngle !== undefined) {
+          updateDoorAngle(values.doorAngle);
+        }
+
+        if (values.lockStatus !== undefined) {
+          updateLockStatus(values.lockStatus === 1);
+        }
+
+        if (values.forcedEntry !== undefined) {
+          updateAlarmStatus(values.forcedEntry === 1);
+        }
+
+        if (values.tamperDetect !== undefined) {
+          updateTamperStatus(values.tamperDetect === 1);
+        }
+
+        if (values.contactGap !== undefined) {
+          updateContactGap(values.contactGap);
+        }
+      };
+
+      // Initialize
+      updateDoorPosition(0);
+      updateLockStatus(1); // Start locked
+      updateAlarmStatus(0);
+      updateTamperStatus(0);
+
+      // Expose bindings for FUXA
+      window.doorContactBindings = bindings;
+    })();
+    ]]>
+  </script>
+</svg>

@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="280" height="220" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs>
+    <style>
+      .card-bg {
+        fill: white;
+        stroke: #ccc;
+        stroke-width: 2;
+      }
+      .header-bg {
+        fill: #FF9800;
+      }
+      .header-text {
+        fill: white;
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        font-weight: bold;
+      }
+      .section-label {
+        fill: #666;
+        font-family: Arial, sans-serif;
+        font-size: 10px;
+        text-transform: uppercase;
+      }
+      .value-text {
+        fill: #333;
+        font-family: Arial, sans-serif;
+        font-size: 13px;
+      }
+      .time-text {
+        fill: #FF9800;
+        font-family: 'Courier New', monospace;
+        font-size: 24px;
+        font-weight: bold;
+      }
+      .reason-text {
+        fill: #555;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-style: italic;
+      }
+      .btn {
+        cursor: pointer;
+        transition: all 0.2s;
+      }
+      .btn-rect {
+        fill: #4CAF50;
+        stroke: #388E3C;
+        stroke-width: 2;
+        transition: all 0.2s;
+      }
+      .btn:hover .btn-rect {
+        filter: brightness(1.1);
+      }
+      .btn:active .btn-rect {
+        filter: brightness(0.9);
+      }
+      .btn-text {
+        fill: white;
+        font-family: Arial, sans-serif;
+        font-size: 12px;
+        font-weight: bold;
+        text-anchor: middle;
+        pointer-events: none;
+      }
+      .divider {
+        stroke: #e0e0e0;
+        stroke-width: 1;
+      }
+      .status-inactive {
+        opacity: 0.5;
+      }
+      .warning-icon {
+        fill: #FF9800;
+      }
+      @keyframes countdown {
+        0% { opacity: 1; }
+        50% { opacity: 0.6; }
+        100% { opacity: 1; }
+      }
+      .time-text.active {
+        animation: countdown 2s infinite;
+      }
+    </style>
+  </defs>
+
+  <!-- Card Background -->
+  <rect class="card-bg" x="0" y="0" width="280" height="220" rx="5"/>
+
+  <!-- Header -->
+  <rect class="header-bg" x="0" y="0" width="280" height="30" rx="5"/>
+  <text class="header-text" x="10" y="20">SCHEDULE OVERRIDE</text>
+
+  <!-- Warning Icon -->
+  <circle class="warning-icon" id="warningIcon" cx="245" cy="15" r="10"/>
+  <text x="245" y="21" text-anchor="middle" fill="white" font-size="16px" font-weight="bold">!</text>
+
+  <!-- Status Section -->
+  <text class="section-label" x="15" y="50">STATUS</text>
+  <text class="value-text" id="statusText" x="15" y="68">Override Active</text>
+
+  <!-- Divider -->
+  <line class="divider" x1="15" y1="80" x2="265" y2="80"/>
+
+  <!-- Time Remaining Section -->
+  <text class="section-label" x="15" y="100">TIME REMAINING</text>
+  <text class="time-text" id="timeRemaining" x="15" y="130">02:45</text>
+  <text class="value-text" x="110" y="125">hours:minutes</text>
+
+  <!-- Divider -->
+  <line class="divider" x1="15" y1="145" x2="265" y2="145"/>
+
+  <!-- Reason Section -->
+  <text class="section-label" x="15" y="165">REASON</text>
+  <text class="reason-text" id="reasonText" x="15" y="183">"Maintenance work in progress"</text>
+
+  <!-- Restore Button -->
+  <g class="btn" id="restoreBtn">
+    <rect class="btn-rect" x="70" y="195" width="140" height="18" rx="4"/>
+    <text class="btn-text" x="140" y="208">RESTORE SCHEDULE</text>
+  </g>
+
+  <script type="text/javascript"><![CDATA[
+    (function() {
+      // FUXA Integration Variables
+      var activeTagId = '';           // Override active status (0/1)
+      var durationTagId = '';         // Total override duration in minutes
+      var remainingTagId = '';        // Remaining time in minutes
+      var reasonTagId = '';           // Override reason text
+      var restoreCmdTagId = '';       // Command to restore schedule
+
+      // Current values
+      var isActive = true;
+      var totalDuration = 180;        // minutes
+      var remainingMinutes = 165;     // minutes
+      var reason = 'Maintenance work in progress';
+
+      // DOM Elements
+      var statusText = document.getElementById('statusText');
+      var timeRemaining = document.getElementById('timeRemaining');
+      var reasonText = document.getElementById('reasonText');
+      var restoreBtn = document.getElementById('restoreBtn');
+      var warningIcon = document.getElementById('warningIcon');
+      var timeText = document.getElementById('timeRemaining');
+
+      // Format minutes to HH:MM
+      function formatTime(minutes) {
+        var hours = Math.floor(minutes / 60);
+        var mins = minutes % 60;
+        return String(hours).padStart(2, '0') + ':' + String(mins).padStart(2, '0');
+      }
+
+      // Update all visuals
+      function updateVisuals() {
+        if (isActive) {
+          statusText.textContent = 'Override Active';
+          timeRemaining.textContent = formatTime(remainingMinutes);
+          timeText.classList.add('active');
+          warningIcon.style.opacity = '1';
+          document.querySelector('.card-bg').classList.remove('status-inactive');
+        } else {
+          statusText.textContent = 'Schedule Normal';
+          timeRemaining.textContent = '--:--';
+          timeText.classList.remove('active');
+          warningIcon.style.opacity = '0.3';
+          document.querySelector('.card-bg').classList.add('status-inactive');
+        }
+
+        reasonText.textContent = '"' + reason + '"';
+      }
+
+      // Restore button handler
+      restoreBtn.addEventListener('click', function(evt) {
+        evt.preventDefault();
+
+        // Send restore command to FUXA
+        if (typeof GAuxy !== 'undefined' && restoreCmdTagId) {
+          GAuxy.setVariable(restoreCmdTagId, 1);
+
+          // Reset command after 200ms
+          setTimeout(function() {
+            if (typeof GAuxy !== 'undefined' && restoreCmdTagId) {
+              GAuxy.setVariable(restoreCmdTagId, 0);
+            }
+          }, 200);
+        }
+
+        // Update local state
+        isActive = false;
+        updateVisuals();
+      });
+
+      // Auto-decrement timer (if not receiving updates from FUXA)
+      var timerInterval = setInterval(function() {
+        if (isActive && remainingMinutes > 0 && !remainingTagId) {
+          remainingMinutes--;
+          if (remainingMinutes <= 0) {
+            isActive = false;
+          }
+          updateVisuals();
+        }
+      }, 60000); // Update every minute
+
+      // FUXA Integration Functions
+      window.svgSetValue = function(sigid, value) {
+        if (sigid === activeTagId) {
+          isActive = (parseFloat(value) > 0);
+        } else if (sigid === durationTagId) {
+          totalDuration = parseFloat(value);
+        } else if (sigid === remainingTagId) {
+          remainingMinutes = parseFloat(value);
+        } else if (sigid === reasonTagId) {
+          reason = String(value);
+        }
+
+        updateVisuals();
+      };
+
+      window.svgGetProperty = function(name) {
+        if (name === 'activeVariableId') return activeTagId;
+        if (name === 'durationVariableId') return durationTagId;
+        if (name === 'remainingVariableId') return remainingTagId;
+        if (name === 'reasonVariableId') return reasonTagId;
+        if (name === 'restoreCmdVariableId') return restoreCmdTagId;
+        return null;
+      };
+
+      window.svgSetProperty = function(name, value) {
+        if (name === 'activeVariableId') {
+          activeTagId = value;
+        } else if (name === 'durationVariableId') {
+          durationTagId = value;
+        } else if (name === 'remainingVariableId') {
+          remainingTagId = value;
+        } else if (name === 'reasonVariableId') {
+          reasonTagId = value;
+        } else if (name === 'restoreCmdVariableId') {
+          restoreCmdTagId = value;
+        }
+      };
+
+      // Initialize
+      updateVisuals();
+
+      // Cleanup on unload
+      window.addEventListener('unload', function() {
+        clearInterval(timerInterval);
+      });
+    })();
+  ]]></script>
+</svg>

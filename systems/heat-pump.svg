@@ -1,0 +1,380 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 700" width="900" height="700">
+  <defs>
+    <linearGradient id="unitGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="compGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="fanGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#6a9fc8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="700" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="450" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">HEAT PUMP SYSTEM</text>
+
+  <!-- Outdoor Unit -->
+  <g id="outdoor-unit">
+    <rect x="50" y="100" width="350" height="280" fill="url(#unitGrad)" stroke="#4a9eff" stroke-width="3" rx="8"/>
+    <text x="225" y="130" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">OUTDOOR UNIT</text>
+
+    <!-- Status -->
+    <circle id="outdoor-status" cx="370" cy="120" r="12" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Compressor -->
+    <g id="compressor">
+      <rect x="80" y="160" width="120" height="120" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+      <text x="140" y="185" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">COMPRESSOR</text>
+
+      <circle cx="140" cy="230" r="35" fill="url(#compGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <circle cx="140" cy="230" r="25" fill="none" stroke="#4a9eff" stroke-width="2"/>
+
+      <!-- Rotation -->
+      <g id="comp-rotation">
+        <line x1="140" y1="205" x2="140" y2="230" stroke="#00ff00" stroke-width="3" stroke-linecap="round"/>
+        <line x1="140" y1="230" x2="165" y2="230" stroke="#00ff00" stroke-width="3" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 140 230"
+          to="360 140 230"
+          dur="2s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="comp-status" cx="180" cy="170" r="7" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    </g>
+
+    <!-- Outdoor Coil -->
+    <g id="outdoor-coil">
+      <rect x="230" y="160" width="140" height="180" fill="#1a3a5a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+      <text x="300" y="185" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">OUTDOOR COIL</text>
+
+      <!-- Coil representation -->
+      <g opacity="0.5">
+        <line x1="240" y1="200" x2="360" y2="200" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="215" x2="360" y2="215" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="230" x2="360" y2="230" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="245" x2="360" y2="245" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="260" x2="360" y2="260" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="275" x2="360" y2="275" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="290" x2="360" y2="290" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="305" x2="360" y2="305" stroke="#ff6b35" stroke-width="1"/>
+        <line x1="240" y1="320" x2="360" y2="320" stroke="#ff6b35" stroke-width="1"/>
+      </g>
+
+      <!-- Fan -->
+      <circle cx="300" cy="260" r="30" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <g id="outdoor-fan">
+        <path d="M 300 240 L 300 280 M 280 260 L 320 260" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 300 260"
+          to="360 300 260"
+          dur="1.5s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="fan-status" cx="340" cy="195" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="300" y="355" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="outdoor-fan-speed">Fan: 75%</text>
+    </g>
+
+    <!-- Outdoor Temp -->
+    <text x="225" y="365" font-family="Arial" font-size="12" fill="#ffffff">Outdoor Temp:</text>
+    <text x="225" y="385" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle" id="outdoor-temp">45.2°F</text>
+  </g>
+
+  <!-- Indoor Unit -->
+  <g id="indoor-unit">
+    <rect x="500" y="100" width="350" height="280" fill="url(#unitGrad)" stroke="#4a9eff" stroke-width="3" rx="8"/>
+    <text x="675" y="130" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">INDOOR UNIT</text>
+
+    <!-- Status -->
+    <circle id="indoor-status" cx="820" cy="120" r="12" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Indoor Coil -->
+    <g id="indoor-coil">
+      <rect x="530" y="160" width="140" height="180" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+      <text x="600" y="185" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">INDOOR COIL</text>
+
+      <!-- Coil representation -->
+      <g opacity="0.5">
+        <line x1="540" y1="200" x2="660" y2="200" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="215" x2="660" y2="215" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="230" x2="660" y2="230" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="245" x2="660" y2="245" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="260" x2="660" y2="260" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="275" x2="660" y2="275" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="290" x2="660" y2="290" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="305" x2="660" y2="305" stroke="#4a9eff" stroke-width="1"/>
+        <line x1="540" y1="320" x2="660" y2="320" stroke="#4a9eff" stroke-width="1"/>
+      </g>
+
+      <!-- Blower -->
+      <circle cx="600" cy="260" r="30" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <g id="blower-fan">
+        <path d="M 600 240 L 600 280 M 580 260 L 620 260" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+        <path d="M 588 248 L 612 272 M 588 272 L 612 248" stroke="#4a9eff" stroke-width="3" stroke-linecap="round"/>
+        <animateTransform
+          attributeName="transform"
+          attributeType="XML"
+          type="rotate"
+          from="0 600 260"
+          to="360 600 260"
+          dur="1.2s"
+          repeatCount="indefinite"/>
+      </g>
+
+      <circle id="blower-status" cx="640" cy="195" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="600" y="355" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="blower-speed">Blower: 82%</text>
+    </g>
+
+    <!-- Air Filter -->
+    <rect x="700" y="200" width="120" height="100" fill="#2a4a6a" stroke="#ffffff" stroke-width="2" rx="3"/>
+    <text x="760" y="225" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle">AIR FILTER</text>
+    <g opacity="0.4">
+      <line x1="710" y1="240" x2="810" y2="240" stroke="#ffffff" stroke-width="1"/>
+      <line x1="710" y1="250" x2="810" y2="250" stroke="#ffffff" stroke-width="1"/>
+      <line x1="710" y1="260" x2="810" y2="260" stroke="#ffffff" stroke-width="1"/>
+      <line x1="710" y1="270" x2="810" y2="270" stroke="#ffffff" stroke-width="1"/>
+      <line x1="710" y1="280" x2="810" y2="280" stroke="#ffffff" stroke-width="1"/>
+    </g>
+    <text x="760" y="270" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="filter-status">CLEAN</text>
+
+    <!-- Indoor Temp -->
+    <text x="675" y="365" font-family="Arial" font-size="12" fill="#ffffff">Indoor Temp:</text>
+    <text x="675" y="385" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle" id="indoor-temp">72.5°F</text>
+  </g>
+
+  <!-- Reversing Valve -->
+  <g id="reversing-valve">
+    <rect x="400" y="220" width="80" height="80" fill="#2a4a6a" stroke="#ffaa00" stroke-width="3" rx="5"/>
+    <text x="440" y="245" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">REV</text>
+    <text x="440" y="260" font-family="Arial" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle">VALVE</text>
+
+    <!-- Valve position indicator -->
+    <circle id="valve-status" cx="460" cy="230" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="2"/>
+
+    <text x="440" y="285" font-family="Arial" font-size="11" font-weight="bold" fill="#ffaa00" text-anchor="middle" id="mode">HEATING</text>
+  </g>
+
+  <!-- Refrigerant Lines -->
+  <g id="refrigerant-lines">
+    <!-- High Pressure (Hot Gas) -->
+    <path d="M 200 220 L 400 240" stroke="#ff0000" stroke-width="5" fill="none"/>
+    <path d="M 480 240 L 530 240" stroke="#ff0000" stroke-width="5" fill="none"/>
+
+    <!-- Low Pressure (Cold Gas) -->
+    <path d="M 370 280 L 200 300" stroke="#4a9eff" stroke-width="5" fill="none"/>
+    <path d="M 530 280 L 480 280" stroke="#4a9eff" stroke-width="5" fill="none"/>
+
+    <!-- Labels -->
+    <text x="280" y="215" font-family="Arial" font-size="10" fill="#ff0000">HOT GAS</text>
+    <text x="280" y="315" font-family="Arial" font-size="10" fill="#4a9eff">COOL GAS</text>
+  </g>
+
+  <!-- Control Panel -->
+  <g id="control-panel">
+    <rect x="50" y="420" width="380" height="240" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="240" y="450" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">CONTROL PANEL</text>
+
+    <!-- Operating Mode -->
+    <rect x="70" y="465" width="340" height="40" fill="#1a3a5a" stroke="#ffaa00" stroke-width="2" rx="3"/>
+    <text x="90" y="490" font-family="Arial" font-size="14" fill="#ffaa00">Mode:</text>
+    <text x="380" y="490" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="operating-mode">HEATING</text>
+
+    <!-- Setpoint -->
+    <text x="70" y="530" font-family="Arial" font-size="12" fill="#4a9eff">Setpoint:</text>
+    <text x="390" y="530" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="setpoint">72.0°F</text>
+
+    <!-- Current Temp -->
+    <text x="70" y="555" font-family="Arial" font-size="12" fill="#4a9eff">Current Temp:</text>
+    <text x="390" y="555" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="current-temp">72.5°F</text>
+
+    <!-- Capacity -->
+    <text x="70" y="580" font-family="Arial" font-size="12" fill="#4a9eff">Capacity:</text>
+    <text x="390" y="580" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="capacity">4.5 Tons</text>
+
+    <!-- Load -->
+    <text x="70" y="605" font-family="Arial" font-size="12" fill="#4a9eff">Current Load:</text>
+    <text x="390" y="605" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="load">85%</text>
+
+    <!-- Power -->
+    <text x="70" y="630" font-family="Arial" font-size="12" fill="#4a9eff">Power Draw:</text>
+    <text x="390" y="630" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="power">3.2 kW</text>
+
+    <!-- COP -->
+    <text x="70" y="655" font-family="Arial" font-size="12" fill="#4a9eff">COP:</text>
+    <text x="390" y="655" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="cop">3.8</text>
+  </g>
+
+  <!-- Performance Metrics -->
+  <g id="performance">
+    <rect x="470" y="420" width="380" height="240" fill="#0d1b2a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+    <text x="660" y="450" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">PERFORMANCE</text>
+
+    <!-- Suction Pressure -->
+    <text x="490" y="480" font-family="Arial" font-size="12" fill="#4a9eff">Suction Pressure:</text>
+    <text x="810" y="480" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="suction-pressure">125 PSI</text>
+
+    <!-- Discharge Pressure -->
+    <text x="490" y="505" font-family="Arial" font-size="12" fill="#ff6b35">Discharge Pressure:</text>
+    <text x="810" y="505" font-family="Arial" font-size="14" font-weight="bold" fill="#ff6b35" text-anchor="end" id="discharge-pressure">385 PSI</text>
+
+    <!-- Superheat -->
+    <text x="490" y="530" font-family="Arial" font-size="12" fill="#ffffff">Superheat:</text>
+    <text x="810" y="530" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="superheat">12°F</text>
+
+    <!-- Subcooling -->
+    <text x="490" y="555" font-family="Arial" font-size="12" fill="#ffffff">Subcooling:</text>
+    <text x="810" y="555" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="subcooling">8°F</text>
+
+    <!-- Defrost Status -->
+    <text x="490" y="580" font-family="Arial" font-size="12" fill="#4a9eff">Defrost:</text>
+    <text x="810" y="580" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="defrost">NORMAL</text>
+
+    <!-- Runtime Today -->
+    <text x="490" y="605" font-family="Arial" font-size="12" fill="#4a9eff">Runtime Today:</text>
+    <text x="810" y="605" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="runtime-today">8.5 hrs</text>
+
+    <!-- Total Runtime -->
+    <text x="490" y="630" font-family="Arial" font-size="12" fill="#4a9eff">Total Runtime:</text>
+    <text x="810" y="630" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="total-runtime">12,485 hrs</text>
+
+    <!-- Reversals -->
+    <text x="490" y="655" font-family="Arial" font-size="12" fill="#ffaa00">Reversals:</text>
+    <text x="810" y="655" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="reversals">2,345</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var heatPump = {
+      // Status
+      outdoor_status: true,
+      indoor_status: true,
+      comp_status: true,
+      fan_status: true,
+      blower_status: true,
+
+      // Mode
+      mode: "HEATING",  // HEATING or COOLING
+      operating_mode: "HEATING",
+
+      // Temperatures
+      outdoor_temp: 45.2,
+      indoor_temp: 72.5,
+      setpoint: 72.0,
+      current_temp: 72.5,
+
+      // Speeds
+      outdoor_fan_speed: 75,
+      blower_speed: 82,
+
+      // Performance
+      capacity: 4.5,
+      load: 85,
+      power: 3.2,
+      cop: 3.8,
+
+      // Pressures
+      suction_pressure: 125,
+      discharge_pressure: 385,
+
+      // Refrigerant
+      superheat: 12,
+      subcooling: 8,
+
+      // Status
+      defrost: "NORMAL",
+      filter_status: "CLEAN",
+
+      // Runtime
+      runtime_today: 8.5,
+      total_runtime: 12485,
+      reversals: 2345
+    };
+
+    function updateDisplay() {
+      // Update Status Indicators
+      document.getElementById('outdoor-status').setAttribute('fill',
+        heatPump.outdoor_status ? '#00ff00' : '#ff0000');
+      document.getElementById('indoor-status').setAttribute('fill',
+        heatPump.indoor_status ? '#00ff00' : '#ff0000');
+      document.getElementById('comp-status').setAttribute('fill',
+        heatPump.comp_status ? '#00ff00' : '#ff0000');
+      document.getElementById('fan-status').setAttribute('fill',
+        heatPump.fan_status ? '#00ff00' : '#ff0000');
+      document.getElementById('blower-status').setAttribute('fill',
+        heatPump.blower_status ? '#00ff00' : '#ff0000');
+      document.getElementById('valve-status').setAttribute('fill',
+        heatPump.mode === 'HEATING' ? '#ff6b35' : '#4a9eff');
+
+      // Update Temperatures
+      document.getElementById('outdoor-temp').textContent = heatPump.outdoor_temp.toFixed(1) + '°F';
+      document.getElementById('indoor-temp').textContent = heatPump.indoor_temp.toFixed(1) + '°F';
+      document.getElementById('setpoint').textContent = heatPump.setpoint.toFixed(1) + '°F';
+      document.getElementById('current-temp').textContent = heatPump.current_temp.toFixed(1) + '°F';
+
+      // Update Speeds
+      document.getElementById('outdoor-fan-speed').textContent =
+        heatPump.fan_status ? 'Fan: ' + heatPump.outdoor_fan_speed + '%' : 'Fan: OFF';
+      document.getElementById('blower-speed').textContent =
+        heatPump.blower_status ? 'Blower: ' + heatPump.blower_speed + '%' : 'Blower: OFF';
+
+      // Update Mode
+      document.getElementById('mode').textContent = heatPump.mode;
+      document.getElementById('operating-mode').textContent = heatPump.operating_mode;
+
+      var modeColor = heatPump.mode === 'HEATING' ? '#ff6b35' : '#4a9eff';
+      document.getElementById('mode').setAttribute('fill', modeColor);
+      document.getElementById('operating-mode').setAttribute('fill', modeColor);
+
+      // Update Control Panel
+      document.getElementById('capacity').textContent = heatPump.capacity.toFixed(1) + ' Tons';
+      document.getElementById('load').textContent = heatPump.load + '%';
+      document.getElementById('power').textContent = heatPump.power.toFixed(1) + ' kW';
+      document.getElementById('cop').textContent = heatPump.cop.toFixed(1);
+
+      // Update Performance
+      document.getElementById('suction-pressure').textContent = heatPump.suction_pressure + ' PSI';
+      document.getElementById('discharge-pressure').textContent = heatPump.discharge_pressure + ' PSI';
+      document.getElementById('superheat').textContent = heatPump.superheat + '°F';
+      document.getElementById('subcooling').textContent = heatPump.subcooling + '°F';
+      document.getElementById('defrost').textContent = heatPump.defrost;
+
+      var defrostColor = heatPump.defrost === 'NORMAL' ? '#00ff00' :
+                        heatPump.defrost === 'DEFROSTING' ? '#ffaa00' : '#ff0000';
+      document.getElementById('defrost').setAttribute('fill', defrostColor);
+
+      document.getElementById('filter-status').textContent = heatPump.filter_status;
+      document.getElementById('runtime-today').textContent = heatPump.runtime_today.toFixed(1) + ' hrs';
+      document.getElementById('total-runtime').textContent = heatPump.total_runtime.toLocaleString() + ' hrs';
+      document.getElementById('reversals').textContent = heatPump.reversals.toLocaleString();
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

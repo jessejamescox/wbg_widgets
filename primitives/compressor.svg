@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <style>
+      .comp-body { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .comp-head { fill: #2c3e50; stroke: #1a1a1a; stroke-width: 2; }
+      .pipe-suction { fill: none; stroke: #3498db; stroke-width: 4; }
+      .pipe-discharge { fill: none; stroke: #e74c3c; stroke-width: 4; }
+      .motor { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 1.5; }
+      .status-on { fill: #27ae60; }
+      .status-off { fill: #95a5a6; }
+      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+    </style>
+  </defs>
+
+  <!-- Suction Line -->
+  <line x1="5" y1="60" x2="30" y2="60" class="pipe-suction"/>
+  <text x="17" y="73" class="label-text" font-size="7" fill="#3498db">SUCTION</text>
+
+  <!-- Compressor Body -->
+  <ellipse cx="50" cy="55" rx="20" ry="25" class="comp-body"/>
+
+  <!-- Compressor Head/Cylinder -->
+  <rect x="40" y="35" width="20" height="15" class="comp-head" rx="2"/>
+
+  <!-- Piston (animated) -->
+  <g id="piston">
+    <rect x="47" y="42" width="6" height="12" fill="#95a5a6" stroke="#7f8c8d" stroke-width="1"/>
+  </g>
+
+  <!-- Motor -->
+  <rect x="43" y="75" width="14" height="10" class="motor" rx="2"/>
+  <line x1="50" y1="75" x2="50" y2="68" stroke="#2c3e50" stroke-width="2"/>
+
+  <!-- Discharge Line -->
+  <line x1="70" y1="45" x2="95" y2="45" class="pipe-discharge"/>
+  <text x="82" y="38" class="label-text" font-size="7" fill="#e74c3c">DISCHARGE</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" cx="50" cy="15" r="6" class="status-off"/>
+  <text id="statusText" x="50" y="10" class="label-text">OFF</text>
+
+  <!-- Runtime/Status Display -->
+  <rect x="25" y="90" width="50" height="9" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
+  <text id="infoText" x="50" y="97" class="label-text" font-size="8">STANDBY</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var status = 0;            // 0=off, 1=on
+    var alarmState = 0;        // 0=normal, 1=alarm
+    var loadPercent = 0;       // 0-100 (%)
+    var runtime = 0;           // hours
+
+    var pistonY = 42;
+    var pistonDir = 1;
+    var animationId = null;
+
+    function updateWidget() {
+      var piston = document.getElementById('piston');
+      var indicator = document.getElementById('statusIndicator');
+      var statusText = document.getElementById('statusText');
+      var infoText = document.getElementById('infoText');
+
+      if (status === 1) {
+        // Running
+        indicator.setAttribute('class', 'status-on');
+        statusText.textContent = 'RUN';
+
+        if (runtime > 0) {
+          infoText.textContent = Math.round(runtime) + ' hrs';
+        } else {
+          infoText.textContent = 'RUNNING';
+        }
+
+        // Animate piston
+        if (!animationId) {
+          animationId = setInterval(function() {
+            pistonY += pistonDir * 0.5;
+            if (pistonY > 46 || pistonY < 38) {
+              pistonDir *= -1;
+            }
+            piston.querySelector('rect').setAttribute('y', pistonY);
+          }, 50);
+        }
+      } else {
+        // Stopped
+        if (animationId) {
+          clearInterval(animationId);
+          animationId = null;
+        }
+        indicator.setAttribute('class', 'status-off');
+        statusText.textContent = 'OFF';
+        infoText.textContent = 'STANDBY';
+        piston.querySelector('rect').setAttribute('y', '42');
+      }
+
+      // Alarm state
+      if (alarmState === 1) {
+        indicator.setAttribute('fill', '#e74c3c');
+        statusText.textContent = 'ALARM';
+        infoText.textContent = 'FAULT';
+      }
+    }
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

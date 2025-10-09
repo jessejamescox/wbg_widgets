@@ -1,0 +1,323 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 800" width="700" height="800">
+  <defs>
+    <linearGradient id="towerGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a6f98;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="waterGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a9eff;stop-opacity:0.8" />
+      <stop offset="100%" style="stop-color:#1a5a9a;stop-opacity:1" />
+    </linearGradient>
+    <radialGradient id="fanGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#6a9fc8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="waterDrop">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.5"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="700" height="800" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="350" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">COOLING TOWER</text>
+
+  <!-- Tower Structure -->
+  <g id="tower-structure">
+    <!-- Tower Body -->
+    <rect x="150" y="150" width="400" height="450" fill="url(#towerGrad)" stroke="#4a9eff" stroke-width="3" rx="5"/>
+
+    <!-- Tower Top/Plenum -->
+    <path d="M 150 150 L 350 100 L 550 150 Z" fill="#3a6f98" stroke="#4a9eff" stroke-width="3"/>
+
+    <!-- Air Intake Louvers (sides) -->
+    <g id="louvers-left">
+      <line x1="150" y1="200" x2="120" y2="210" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="150" y1="240" x2="120" y2="250" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="150" y1="280" x2="120" y2="290" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="150" y1="320" x2="120" y2="330" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="150" y1="360" x2="120" y2="370" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="150" y1="400" x2="120" y2="410" stroke="#4a9eff" stroke-width="3"/>
+    </g>
+
+    <g id="louvers-right">
+      <line x1="550" y1="200" x2="580" y2="210" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="550" y1="240" x2="580" y2="250" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="550" y1="280" x2="580" y2="290" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="550" y1="320" x2="580" y2="330" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="550" y1="360" x2="580" y2="370" stroke="#4a9eff" stroke-width="3"/>
+      <line x1="550" y1="400" x2="580" y2="410" stroke="#4a9eff" stroke-width="3"/>
+    </g>
+
+    <!-- Air Flow Arrows -->
+    <g id="air-flow" opacity="0.5">
+      <path d="M 100 250 L 140 250 M 130 245 L 140 250 L 130 255" stroke="#ffffff" stroke-width="2" fill="none"/>
+      <path d="M 100 350 L 140 350 M 130 345 L 140 350 L 130 355" stroke="#ffffff" stroke-width="2" fill="none"/>
+      <path d="M 600 250 L 560 250 M 570 245 L 560 250 L 570 255" stroke="#ffffff" stroke-width="2" fill="none"/>
+      <path d="M 600 350 L 560 350 M 570 345 L 560 350 L 570 355" stroke="#ffffff" stroke-width="2" fill="none"/>
+
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="translate"
+        from="0 0"
+        to="20 0"
+        dur="2s"
+        repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- Fan Assembly -->
+  <g id="fan-assembly">
+    <text x="350" y="125" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">FAN</text>
+
+    <!-- Fan Motor -->
+    <rect x="320" y="105" width="60" height="30" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2" rx="3"/>
+
+    <!-- Fan Housing -->
+    <circle cx="350" cy="120" r="45" fill="none" stroke="#4a9eff" stroke-width="2"/>
+
+    <!-- Fan Blades -->
+    <g id="fan-blades">
+      <circle cx="350" cy="120" r="35" fill="url(#fanGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <path d="M 350 90 L 350 150 M 320 120 L 380 120" stroke="#4a9eff" stroke-width="4" stroke-linecap="round"/>
+      <path d="M 328 98 L 372 142 M 328 142 L 372 98" stroke="#4a9eff" stroke-width="4" stroke-linecap="round"/>
+
+      <animateTransform
+        attributeName="transform"
+        attributeType="XML"
+        type="rotate"
+        from="0 350 120"
+        to="360 350 120"
+        dur="1.2s"
+        repeatCount="indefinite"/>
+    </g>
+
+    <!-- Fan Status -->
+    <circle id="fan-status" cx="410" cy="100" r="10" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+  </g>
+
+  <!-- Water Distribution System -->
+  <g id="water-distribution">
+    <rect x="200" y="170" width="300" height="30" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="350" y="190" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">WATER DISTRIBUTION</text>
+
+    <!-- Distribution Nozzles -->
+    <circle cx="230" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="270" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="310" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="350" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="390" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="430" cy="200" r="4" fill="#4a9eff"/>
+    <circle cx="470" cy="200" r="4" fill="#4a9eff"/>
+
+    <!-- Water Spray Animation -->
+    <g id="water-spray">
+      <circle cx="230" cy="220" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="220" to="340" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="270" cy="240" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="240" to="360" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="310" cy="260" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="260" to="380" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="350" cy="220" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="220" to="340" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="390" cy="250" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="250" to="370" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="430" cy="230" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="230" to="350" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="470" cy="240" r="2" fill="#4a9eff" opacity="0.8" filter="url(#waterDrop)">
+        <animate attributeName="cy" from="240" to="360" dur="2s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.8" to="0" dur="2s" repeatCount="indefinite"/>
+      </circle>
+    </g>
+  </g>
+
+  <!-- Fill Media -->
+  <g id="fill-media">
+    <rect x="180" y="350" width="340" height="120" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="350" y="390" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">FILL MEDIA</text>
+
+    <!-- Fill pattern -->
+    <g opacity="0.4">
+      <line x1="190" y1="370" x2="510" y2="370" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="385" x2="510" y2="385" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="400" x2="510" y2="400" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="415" x2="510" y2="415" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="430" x2="510" y2="430" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="445" x2="510" y2="445" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="190" y1="460" x2="510" y2="460" stroke="#4a9eff" stroke-width="1"/>
+
+      <line x1="200" y1="350" x2="200" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="240" y1="350" x2="240" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="280" y1="350" x2="280" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="320" y1="350" x2="320" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="360" y1="350" x2="360" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="400" y1="350" x2="400" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="440" y1="350" x2="440" y2="470" stroke="#4a9eff" stroke-width="1"/>
+      <line x1="480" y1="350" x2="480" y2="470" stroke="#4a9eff" stroke-width="1"/>
+    </g>
+  </g>
+
+  <!-- Collection Basin -->
+  <g id="basin">
+    <rect x="150" y="500" width="400" height="100" fill="url(#waterGrad)" stroke="#4a9eff" stroke-width="3" rx="5"/>
+    <text x="350" y="540" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">COLD WATER BASIN</text>
+
+    <!-- Water Level -->
+    <rect x="170" y="555" width="360" height="30" fill="#1a5a9a" stroke="#4a9eff" stroke-width="2" rx="2"/>
+    <text x="350" y="575" font-family="Arial" font-size="12" fill="#ffffff" text-anchor="middle" id="basin-level">Level: 85%</text>
+  </g>
+
+  <!-- Piping -->
+  <g id="piping">
+    <!-- Hot Water Supply -->
+    <rect x="80" y="170" width="60" height="20" fill="#ff6b35" stroke="#ff6b35" stroke-width="2" rx="2"/>
+    <text x="110" y="185" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">HW IN</text>
+    <line x1="140" y1="180" x2="200" y2="180" stroke="#ff6b35" stroke-width="6"/>
+
+    <!-- Cold Water Return -->
+    <rect x="560" y="540" width="60" height="20" fill="#4a9eff" stroke="#4a9eff" stroke-width="2" rx="2"/>
+    <text x="590" y="555" font-family="Arial" font-size="10" fill="#ffffff" text-anchor="middle">CW OUT</text>
+    <line x1="550" y1="550" x2="560" y2="550" stroke="#4a9eff" stroke-width="6"/>
+
+    <!-- Makeup Water -->
+    <rect x="320" y="70" width="60" height="20" fill="#4a9eff" stroke="#4a9eff" stroke-width="2" rx="2"/>
+    <text x="350" y="85" font-family="Arial" font-size="9" fill="#ffffff" text-anchor="middle">MAKEUP</text>
+    <line x1="350" y1="90" x2="350" y2="105" stroke="#4a9eff" stroke-width="4"/>
+  </g>
+
+  <!-- Control Panel -->
+  <g id="control-panel">
+    <rect x="50" y="630" width="280" height="140" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="190" y="655" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">TOWER CONTROL</text>
+
+    <!-- Fan Speed -->
+    <text x="70" y="680" font-family="Arial" font-size="12" fill="#4a9eff">Fan Speed:</text>
+    <text x="290" y="680" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="fan-speed">85%</text>
+
+    <!-- Water Flow -->
+    <text x="70" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Water Flow:</text>
+    <text x="290" y="705" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="water-flow">1,200 GPM</text>
+
+    <!-- Status -->
+    <text x="70" y="730" font-family="Arial" font-size="12" fill="#4a9eff">Status:</text>
+    <text x="290" y="730" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="tower-status">RUNNING</text>
+
+    <!-- Run Hours -->
+    <text x="70" y="755" font-family="Arial" font-size="12" fill="#4a9eff">Run Hours:</text>
+    <text x="290" y="755" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="run-hours">8,542</text>
+  </g>
+
+  <!-- Temperature Display -->
+  <g id="temp-display">
+    <rect x="370" y="630" width="280" height="140" fill="#0d1b2a" stroke="#ff6b35" stroke-width="2" rx="5"/>
+    <text x="510" y="655" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="middle">TEMPERATURES</text>
+
+    <!-- Entering Water Temp -->
+    <text x="390" y="680" font-family="Arial" font-size="12" fill="#ff6b35">Entering Water:</text>
+    <text x="610" y="680" font-family="Arial" font-size="16" font-weight="bold" fill="#ff6b35" text-anchor="end" id="ewt">95.3°F</text>
+
+    <!-- Leaving Water Temp -->
+    <text x="390" y="705" font-family="Arial" font-size="12" fill="#4a9eff">Leaving Water:</text>
+    <text x="610" y="705" font-family="Arial" font-size="16" font-weight="bold" fill="#4a9eff" text-anchor="end" id="lwt">85.0°F</text>
+
+    <!-- Wet Bulb Temp -->
+    <text x="390" y="730" font-family="Arial" font-size="12" fill="#ffffff">Wet Bulb:</text>
+    <text x="610" y="730" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="end" id="wbt">78.5°F</text>
+
+    <!-- Approach Temp -->
+    <text x="390" y="755" font-family="Arial" font-size="12" fill="#00ff00">Approach:</text>
+    <text x="610" y="755" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="approach">6.5°F</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var coolingTower = {
+      // Fan Control
+      fan_status: true,
+      fan_speed: 85,
+
+      // Water Flow
+      water_flow: 1200,
+      basin_level: 85,
+
+      // Temperatures
+      ewt: 95.3,  // Entering Water Temperature
+      lwt: 85.0,  // Leaving Water Temperature
+      wbt: 78.5,  // Wet Bulb Temperature
+      approach: 6.5,  // Approach Temperature
+
+      // Status
+      tower_status: "RUNNING",
+      run_hours: 8542
+    };
+
+    function updateDisplay() {
+      // Update Fan Status
+      document.getElementById('fan-status').setAttribute('fill',
+        coolingTower.fan_status ? '#00ff00' : '#ff0000');
+      document.getElementById('fan-speed').textContent = coolingTower.fan_speed + '%';
+
+      // Update Water Flow
+      document.getElementById('water-flow').textContent = coolingTower.water_flow.toLocaleString() + ' GPM';
+      document.getElementById('basin-level').textContent = 'Level: ' + coolingTower.basin_level + '%';
+
+      // Update Temperatures
+      document.getElementById('ewt').textContent = coolingTower.ewt.toFixed(1) + '°F';
+      document.getElementById('lwt').textContent = coolingTower.lwt.toFixed(1) + '°F';
+      document.getElementById('wbt').textContent = coolingTower.wbt.toFixed(1) + '°F';
+      document.getElementById('approach').textContent = coolingTower.approach.toFixed(1) + '°F';
+
+      // Update Status
+      document.getElementById('tower-status').textContent = coolingTower.tower_status;
+      var statusColor = coolingTower.tower_status === 'RUNNING' ? '#00ff00' :
+                       coolingTower.tower_status === 'ALARM' ? '#ff0000' : '#ffaa00';
+      document.getElementById('tower-status').setAttribute('fill', statusColor);
+
+      // Update Run Hours
+      document.getElementById('run-hours').textContent = coolingTower.run_hours.toLocaleString();
+
+      // Calculate Range
+      var range = coolingTower.ewt - coolingTower.lwt;
+
+      // Approach is calculated from wet bulb
+      coolingTower.approach = coolingTower.lwt - coolingTower.wbt;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

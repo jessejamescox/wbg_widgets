@@ -1,0 +1,409 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 800" width="1000" height="800">
+  <defs>
+    <linearGradient id="hxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="valveGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#5a8fb8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3a6f98;stop-opacity:1" />
+    </linearGradient>
+    <linearGradient id="pumpGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4a7ba7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#2c5f8d;stop-opacity:1" />
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+      <polygon points="0 0, 10 3, 0 6" fill="#4a9eff" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1000" height="800" fill="#1a1a1a"/>
+
+  <!-- Title -->
+  <text x="500" y="30" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">WATERSIDE ECONOMIZER SYSTEM</text>
+
+  <!-- Mode Indicator -->
+  <rect x="350" y="50" width="300" height="50" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+  <text x="370" y="75" font-family="Arial" font-size="14" fill="#4a9eff">Operating Mode:</text>
+  <text x="610" y="75" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="operating-mode">FREE COOLING</text>
+  <text x="370" y="95" font-family="Arial" font-size="12" fill="#ffffff">Economizer Enabled:</text>
+  <text x="610" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="econ-enabled">YES</text>
+
+  <!-- Cooling Tower -->
+  <g id="cooling-tower">
+    <rect x="100" y="150" width="180" height="200" fill="#3a6f98" stroke="#4a9eff" stroke-width="3" rx="5"/>
+    <text x="190" y="180" font-family="Arial" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">COOLING TOWER</text>
+
+    <!-- Tower top -->
+    <path d="M 100 150 L 190 125 L 280 150 Z" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+
+    <!-- Fan -->
+    <circle cx="190" cy="137" r="10" fill="#2c5f8d" stroke="#4a9eff" stroke-width="2"/>
+    <circle id="ct-status" cx="260" cy="170" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Basin -->
+    <rect x="110" y="310" width="160" height="30" fill="#1a5a9a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+    <text x="190" y="330" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">BASIN</text>
+
+    <!-- CT Values -->
+    <text x="130" y="210" font-family="Arial" font-size="11" fill="#ffffff">CT Supply:</text>
+    <text x="240" y="210" font-family="Arial" font-size="13" font-weight="bold" fill="#4a9eff" text-anchor="end" id="ct-supply-temp">55.2°F</text>
+
+    <text x="130" y="235" font-family="Arial" font-size="11" fill="#ffffff">CT Return:</text>
+    <text x="240" y="235" font-family="Arial" font-size="13" font-weight="bold" fill="#ff6b35" text-anchor="end" id="ct-return-temp">65.8°F</text>
+
+    <text x="130" y="260" font-family="Arial" font-size="11" fill="#ffffff">Fan Speed:</text>
+    <text x="240" y="260" font-family="Arial" font-size="13" font-weight="bold" fill="#4a9eff" text-anchor="end" id="ct-fan-speed">85%</text>
+
+    <text x="130" y="285" font-family="Arial" font-size="11" fill="#ffffff">OA Temp:</text>
+    <text x="240" y="285" font-family="Arial" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="end" id="oa-temp">52.5°F</text>
+  </g>
+
+  <!-- Condenser Water Pump -->
+  <g id="cw-pump">
+    <circle cx="190" cy="400" r="30" fill="url(#pumpGrad)" stroke="#4a9eff" stroke-width="2"/>
+    <path d="M 190 378 L 204 400 L 190 422 Z" fill="#4a9eff"/>
+    <text x="190" y="407" font-family="Arial" font-size="11" fill="#ffffff" text-anchor="middle">CWP</text>
+
+    <circle id="cwp-status" cx="220" cy="380" r="8" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+    <text x="190" y="445" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="cwp-speed">90%</text>
+  </g>
+
+  <!-- Plate & Frame Heat Exchanger -->
+  <g id="heat-exchanger">
+    <rect x="400" y="200" width="200" height="250" fill="url(#hxGrad)" stroke="#ffaa00" stroke-width="3" rx="8"/>
+    <text x="500" y="230" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">PLATE & FRAME</text>
+    <text x="500" y="250" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">HEAT EXCHANGER</text>
+
+    <!-- Status -->
+    <circle id="hx-status" cx="570" cy="220" r="10" fill="#00ff00" stroke="#ffffff" stroke-width="2" filter="url(#glow)"/>
+
+    <!-- Plate representation -->
+    <g id="plates">
+      <rect x="420" y="270" width="160" height="140" fill="#1a3a5a" stroke="#4a9eff" stroke-width="2" rx="3"/>
+
+      <!-- Plates pattern -->
+      <g opacity="0.4">
+        <line x1="440" y1="280" x2="560" y2="280" stroke="#4a9eff" stroke-width="2"/>
+        <line x1="445" y1="295" x2="555" y2="295" stroke="#ff6b35" stroke-width="2"/>
+        <line x1="440" y1="310" x2="560" y2="310" stroke="#4a9eff" stroke-width="2"/>
+        <line x1="445" y1="325" x2="555" y2="325" stroke="#ff6b35" stroke-width="2"/>
+        <line x1="440" y1="340" x2="560" y2="340" stroke="#4a9eff" stroke-width="2"/>
+        <line x1="445" y1="355" x2="555" y2="355" stroke="#ff6b35" stroke-width="2"/>
+        <line x1="440" y1="370" x2="560" y2="370" stroke="#4a9eff" stroke-width="2"/>
+        <line x1="445" y1="385" x2="555" y2="385" stroke="#ff6b35" stroke-width="2"/>
+        <line x1="440" y1="400" x2="560" y2="400" stroke="#4a9eff" stroke-width="2"/>
+      </g>
+
+      <!-- Flow labels -->
+      <text x="425" y="275" font-family="Arial" font-size="9" fill="#4a9eff">CHW</text>
+      <text x="555" y="275" font-family="Arial" font-size="9" fill="#4a9eff">CHW</text>
+      <text x="425" y="405" font-family="Arial" font-size="9" fill="#ff6b35">CW</text>
+      <text x="555" y="405" font-family="Arial" font-size="9" fill="#ff6b35">CW</text>
+    </g>
+
+    <!-- HX Performance -->
+    <text x="500" y="435" font-family="Arial" font-size="11" fill="#00ff00" text-anchor="middle" id="hx-effectiveness">Effectiveness: 85%</text>
+  </g>
+
+  <!-- Chiller (Bypass Mode) -->
+  <g id="chiller">
+    <rect x="750" y="200" width="180" height="250" fill="#2c5f8d" stroke="#666666" stroke-width="3" rx="5"/>
+    <text x="840" y="230" font-family="Arial" font-size="16" font-weight="bold" fill="#999999" text-anchor="middle">CHILLER</text>
+    <text x="840" y="250" font-family="Arial" font-size="14" fill="#999999" text-anchor="middle">(BYPASSED)</text>
+
+    <circle id="chiller-status" cx="900" cy="220" r="10" fill="#666666" stroke="#ffffff" stroke-width="2"/>
+
+    <!-- Evaporator -->
+    <rect x="770" y="280" width="140" height="100" fill="#1a3a5a" stroke="#666666" stroke-width="2" rx="3"/>
+    <text x="840" y="305" font-family="Arial" font-size="12" fill="#999999" text-anchor="middle">EVAPORATOR</text>
+
+    <line x1="780" y1="325" x2="900" y2="325" stroke="#666666" stroke-width="1"/>
+    <line x1="780" y1="335" x2="900" y2="335" stroke="#666666" stroke-width="1"/>
+    <line x1="780" y1="345" x2="900" y2="345" stroke="#666666" stroke-width="1"/>
+    <line x1="780" y1="355" x2="900" y2="355" stroke="#666666" stroke-width="1"/>
+
+    <text x="840" y="410" font-family="Arial" font-size="11" fill="#666666" text-anchor="middle" id="chiller-load">Load: 0%</text>
+    <text x="840" y="430" font-family="Arial" font-size="11" fill="#666666" text-anchor="middle">OFF</text>
+  </g>
+
+  <!-- Piping and Valves -->
+  <g id="piping">
+    <!-- Condenser Water Loop -->
+    <!-- CT to HX -->
+    <line x1="190" y1="350" x2="190" y2="370" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="190" y1="430" x2="190" y2="500" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="190" y1="500" x2="400" y2="500" stroke="#4a9eff" stroke-width="6"/>
+    <line x1="400" y1="500" x2="400" y2="410" stroke="#4a9eff" stroke-width="6"/>
+
+    <!-- HX to CT return -->
+    <line x1="600" y1="410" x2="600" y2="170" stroke="#ff6b35" stroke-width="6"/>
+    <line x1="600" y1="170" x2="280" y2="170" stroke="#ff6b35" stroke-width="6"/>
+
+    <!-- Labels -->
+    <text x="210" y="490" font-family="Arial" font-size="11" fill="#4a9eff">CW SUPPLY</text>
+    <text x="450" y="165" font-family="Arial" font-size="11" fill="#ff6b35">CW RETURN</text>
+
+    <!-- Chilled Water Loop -->
+    <!-- Building Return to HX -->
+    <line x1="50" y1="270" x2="400" y2="270" stroke="#ffaa00" stroke-width="6"/>
+
+    <!-- HX to Building Supply -->
+    <line x1="600" y1="340" x2="950" y2="340" stroke="#4a9eff" stroke-width="6"/>
+
+    <!-- Bypass valve around HX -->
+    <line x1="400" y1="270" x2="400" y2="340" stroke="#ffaa00" stroke-width="4" opacity="0.3"/>
+    <line x1="600" y1="270" x2="600" y2="340" stroke="#4a9eff" stroke-width="4" opacity="0.3"/>
+
+    <!-- Three-way valve at HX inlet -->
+    <g id="valve-inlet">
+      <path d="M 380 270 L 400 250 L 420 270 Z" fill="url(#valveGrad)" stroke="#ffaa00" stroke-width="2"/>
+      <circle cx="400" cy="265" r="15" fill="none" stroke="#ffaa00" stroke-width="2"/>
+      <circle id="valve-inlet-status" cx="385" cy="250" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="400" y="230" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle" id="valve-inlet-pos">95%</text>
+    </g>
+
+    <!-- Three-way valve at HX outlet -->
+    <g id="valve-outlet">
+      <path d="M 580 340 L 600 320 L 620 340 Z" fill="url(#valveGrad)" stroke="#4a9eff" stroke-width="2"/>
+      <circle cx="600" cy="335" r="15" fill="none" stroke="#4a9eff" stroke-width="2"/>
+      <circle id="valve-outlet-status" cx="585" cy="320" r="6" fill="#00ff00" stroke="#ffffff" stroke-width="1"/>
+      <text x="600" y="370" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle" id="valve-outlet-pos">95%</text>
+    </g>
+
+    <!-- Isolation valves to chiller (closed) -->
+    <rect x="695" y="265" width="25" height="10" fill="#666666" stroke="#666666" stroke-width="2" rx="2"/>
+    <text x="707" y="258" font-family="Arial" font-size="9" fill="#666666" text-anchor="middle">CLOSED</text>
+
+    <rect x="695" y="335" width="25" height="10" fill="#666666" stroke="#666666" stroke-width="2" rx="2"/>
+    <text x="707" y="360" font-family="Arial" font-size="9" fill="#666666" text-anchor="middle">CLOSED</text>
+
+    <!-- CHW labels -->
+    <text x="70" y="260" font-family="Arial" font-size="11" fill="#ffaa00">CHW RETURN</text>
+    <text x="850" y="330" font-family="Arial" font-size="11" fill="#4a9eff">CHW SUPPLY</text>
+  </g>
+
+  <!-- Temperature Sensors -->
+  <g id="temp-sensors">
+    <!-- CHW Return -->
+    <circle cx="320" cy="270" r="12" fill="#0d1b2a" stroke="#ffaa00" stroke-width="2"/>
+    <text x="320" y="275" font-family="Arial" font-size="10" fill="#ffaa00" text-anchor="middle">T</text>
+    <text x="320" y="295" font-family="Arial" font-size="11" fill="#ffaa00" text-anchor="middle" id="chwr-temp">58.5°F</text>
+
+    <!-- CHW Supply -->
+    <circle cx="680" cy="340" r="12" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2"/>
+    <text x="680" y="345" font-family="Arial" font-size="10" fill="#4a9eff" text-anchor="middle">T</text>
+    <text x="680" y="365" font-family="Arial" font-size="11" fill="#4a9eff" text-anchor="middle" id="chws-temp">56.8°F</text>
+  </g>
+
+  <!-- System Control Panel -->
+  <g id="control-panel">
+    <rect x="50" y="550" width="440" height="220" fill="#0d1b2a" stroke="#4a9eff" stroke-width="2" rx="5"/>
+    <text x="270" y="580" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">ECONOMIZER CONTROL</text>
+
+    <!-- Economizer Mode -->
+    <text x="70" y="610" font-family="Arial" font-size="12" fill="#4a9eff">Economizer Mode:</text>
+    <text x="450" y="610" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="econ-mode">FULL COOLING</text>
+
+    <!-- Capacity -->
+    <text x="70" y="635" font-family="Arial" font-size="12" fill="#4a9eff">Economizer Capacity:</text>
+    <text x="450" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="econ-capacity">100%</text>
+
+    <!-- CHW Delta T -->
+    <text x="70" y="660" font-family="Arial" font-size="12" fill="#4a9eff">CHW Delta T:</text>
+    <text x="450" y="660" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="chw-delta">1.7°F</text>
+
+    <!-- CHW Flow -->
+    <text x="70" y="685" font-family="Arial" font-size="12" fill="#4a9eff">CHW Flow:</text>
+    <text x="450" y="685" font-family="Arial" font-size="14" font-weight="bold" fill="#4a9eff" text-anchor="end" id="chw-flow">850 GPM</text>
+
+    <!-- CW Delta T -->
+    <text x="70" y="710" font-family="Arial" font-size="12" fill="#ff6b35">CW Delta T:</text>
+    <text x="450" y="710" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="cw-delta">10.6°F</text>
+
+    <!-- Conditions Met -->
+    <text x="70" y="735" font-family="Arial" font-size="12" fill="#4a9eff">Free Cooling Available:</text>
+    <text x="450" y="735" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="free-cooling">YES</text>
+
+    <!-- Hours Today -->
+    <text x="70" y="760" font-family="Arial" font-size="12" fill="#4a9eff">Economizer Hours Today:</text>
+    <text x="450" y="760" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="hours-today">6.5 hrs</text>
+  </g>
+
+  <!-- Energy Savings Panel -->
+  <g id="energy-savings">
+    <rect x="530" y="550" width="440" height="220" fill="#0d1b2a" stroke="#00ff00" stroke-width="2" rx="5"/>
+    <text x="750" y="580" font-family="Arial" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">ENERGY SAVINGS</text>
+
+    <!-- Chiller Power Saved -->
+    <text x="550" y="610" font-family="Arial" font-size="12" fill="#00ff00">Chiller Power Saved:</text>
+    <text x="930" y="610" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="power-saved">125 kW</text>
+
+    <!-- CT/Pump Power -->
+    <text x="550" y="635" font-family="Arial" font-size="12" fill="#ffaa00">CT/Pump Power:</text>
+    <text x="930" y="635" font-family="Arial" font-size="14" font-weight="bold" fill="#ffaa00" text-anchor="end" id="aux-power">18 kW</text>
+
+    <!-- Net Savings -->
+    <text x="550" y="660" font-family="Arial" font-size="12" fill="#00ff00">Net Power Savings:</text>
+    <text x="930" y="660" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="net-savings">107 kW</text>
+
+    <!-- Savings Percent -->
+    <text x="550" y="685" font-family="Arial" font-size="12" fill="#4a9eff">Savings Percentage:</text>
+    <text x="930" y="685" font-family="Arial" font-size="16" font-weight="bold" fill="#00ff00" text-anchor="end" id="savings-percent">85.6%</text>
+
+    <!-- Energy Saved Today -->
+    <text x="550" y="710" font-family="Arial" font-size="12" fill="#4a9eff">Energy Saved Today:</text>
+    <text x="930" y="710" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="energy-today">695 kWh</text>
+
+    <!-- Total This Month -->
+    <text x="550" y="735" font-family="Arial" font-size="12" fill="#4a9eff">Total This Month:</text>
+    <text x="930" y="735" font-family="Arial" font-size="14" font-weight="bold" fill="#ffffff" text-anchor="end" id="energy-month">12,450 kWh</text>
+
+    <!-- Cost Savings -->
+    <text x="550" y="760" font-family="Arial" font-size="12" fill="#00ff00">Est. Cost Savings/Day:</text>
+    <text x="930" y="760" font-family="Arial" font-size="14" font-weight="bold" fill="#00ff00" text-anchor="end" id="cost-savings">$83.70</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Integration Variables
+    var watersideEcon = {
+      // Operating Mode
+      operating_mode: "FREE COOLING",
+      econ_enabled: true,
+      econ_mode: "FULL COOLING",
+      econ_capacity: 100,
+
+      // Cooling Tower
+      ct_status: true,
+      ct_supply_temp: 55.2,
+      ct_return_temp: 65.8,
+      ct_fan_speed: 85,
+      oa_temp: 52.5,
+
+      // Chiller
+      chiller_status: false,
+      chiller_load: 0,
+
+      // Heat Exchanger
+      hx_status: true,
+      hx_effectiveness: 85,
+
+      // Pumps
+      cwp_status: true,
+      cwp_speed: 90,
+
+      // Valves
+      valve_inlet_pos: 95,
+      valve_outlet_pos: 95,
+
+      // CHW Loop
+      chws_temp: 56.8,
+      chwr_temp: 58.5,
+      chw_delta: 1.7,
+      chw_flow: 850,
+
+      // CW Loop
+      cw_delta: 10.6,
+
+      // Control
+      free_cooling: true,
+      hours_today: 6.5,
+
+      // Energy Savings
+      power_saved: 125,
+      aux_power: 18,
+      net_savings: 107,
+      savings_percent: 85.6,
+      energy_today: 695,
+      energy_month: 12450,
+      cost_savings: 83.70
+    };
+
+    function updateDisplay() {
+      // Update Operating Mode
+      document.getElementById('operating-mode').textContent = watersideEcon.operating_mode;
+      document.getElementById('econ-enabled').textContent = watersideEcon.econ_enabled ? 'YES' : 'NO';
+
+      var modeColor = watersideEcon.econ_enabled ? '#00ff00' : '#ff0000';
+      document.getElementById('econ-enabled').setAttribute('fill', modeColor);
+
+      // Update Cooling Tower
+      document.getElementById('ct-status').setAttribute('fill',
+        watersideEcon.ct_status ? '#00ff00' : '#ff0000');
+      document.getElementById('ct-supply-temp').textContent = watersideEcon.ct_supply_temp.toFixed(1) + '°F';
+      document.getElementById('ct-return-temp').textContent = watersideEcon.ct_return_temp.toFixed(1) + '°F';
+      document.getElementById('ct-fan-speed').textContent = watersideEcon.ct_fan_speed + '%';
+      document.getElementById('oa-temp').textContent = watersideEcon.oa_temp.toFixed(1) + '°F';
+
+      // Update Chiller
+      document.getElementById('chiller-status').setAttribute('fill',
+        watersideEcon.chiller_status ? '#00ff00' : '#666666');
+      document.getElementById('chiller-load').textContent = 'Load: ' + watersideEcon.chiller_load + '%';
+
+      // Update Heat Exchanger
+      document.getElementById('hx-status').setAttribute('fill',
+        watersideEcon.hx_status ? '#00ff00' : '#ff0000');
+      document.getElementById('hx-effectiveness').textContent =
+        'Effectiveness: ' + watersideEcon.hx_effectiveness + '%';
+
+      // Update Pumps
+      document.getElementById('cwp-status').setAttribute('fill',
+        watersideEcon.cwp_status ? '#00ff00' : '#ff0000');
+      document.getElementById('cwp-speed').textContent = watersideEcon.cwp_speed + '%';
+
+      // Update Valves
+      document.getElementById('valve-inlet-status').setAttribute('fill', '#00ff00');
+      document.getElementById('valve-inlet-pos').textContent = watersideEcon.valve_inlet_pos + '%';
+
+      document.getElementById('valve-outlet-status').setAttribute('fill', '#00ff00');
+      document.getElementById('valve-outlet-pos').textContent = watersideEcon.valve_outlet_pos + '%';
+
+      // Update Temperatures
+      document.getElementById('chws-temp').textContent = watersideEcon.chws_temp.toFixed(1) + '°F';
+      document.getElementById('chwr-temp').textContent = watersideEcon.chwr_temp.toFixed(1) + '°F';
+
+      // Update Control Panel
+      document.getElementById('econ-mode').textContent = watersideEcon.econ_mode;
+      document.getElementById('econ-capacity').textContent = watersideEcon.econ_capacity + '%';
+      document.getElementById('chw-delta').textContent = watersideEcon.chw_delta.toFixed(1) + '°F';
+      document.getElementById('chw-flow').textContent = watersideEcon.chw_flow + ' GPM';
+      document.getElementById('cw-delta').textContent = watersideEcon.cw_delta.toFixed(1) + '°F';
+      document.getElementById('free-cooling').textContent = watersideEcon.free_cooling ? 'YES' : 'NO';
+
+      var freeColor = watersideEcon.free_cooling ? '#00ff00' : '#ff0000';
+      document.getElementById('free-cooling').setAttribute('fill', freeColor);
+
+      document.getElementById('hours-today').textContent = watersideEcon.hours_today.toFixed(1) + ' hrs';
+
+      // Update Energy Savings
+      document.getElementById('power-saved').textContent = watersideEcon.power_saved + ' kW';
+      document.getElementById('aux-power').textContent = watersideEcon.aux_power + ' kW';
+      document.getElementById('net-savings').textContent = watersideEcon.net_savings + ' kW';
+      document.getElementById('savings-percent').textContent = watersideEcon.savings_percent.toFixed(1) + '%';
+      document.getElementById('energy-today').textContent = watersideEcon.energy_today.toLocaleString() + ' kWh';
+      document.getElementById('energy-month').textContent = watersideEcon.energy_month.toLocaleString() + ' kWh';
+      document.getElementById('cost-savings').textContent = '$' + watersideEcon.cost_savings.toFixed(2);
+
+      // Calculate values
+      watersideEcon.chw_delta = watersideEcon.chwr_temp - watersideEcon.chws_temp;
+      watersideEcon.cw_delta = watersideEcon.ct_return_temp - watersideEcon.ct_supply_temp;
+      watersideEcon.net_savings = watersideEcon.power_saved - watersideEcon.aux_power;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update every second
+    setInterval(updateDisplay, 1000);
+  ]]>
+  </script>
+</svg>

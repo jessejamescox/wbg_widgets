@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100">
+  <defs>
+    <style>
+      .fan-blade { fill: #4a90e2; transition: fill 0.3s; }
+      .fan-center { fill: #2c3e50; }
+      .fan-status-off { fill: #95a5a6; }
+      .fan-status-on { fill: #27ae60; }
+      .fan-speed-text { font-family: Arial, sans-serif; font-size: 10px; fill: #2c3e50; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Fan Housing Circle -->
+  <circle cx="50" cy="50" r="40" fill="none" stroke="#34495e" stroke-width="2"/>
+
+  <!-- Fan Blades -->
+  <g id="fanBlades" transform-origin="50 50">
+    <path class="fan-blade" d="M 50 50 L 50 15 A 35 35 0 0 1 65 22 Z"/>
+    <path class="fan-blade" d="M 50 50 L 85 50 A 35 35 0 0 1 78 65 Z"/>
+    <path class="fan-blade" d="M 50 50 L 50 85 A 35 35 0 0 1 35 78 Z"/>
+    <path class="fan-blade" d="M 50 50 L 15 50 A 35 35 0 0 1 22 35 Z"/>
+  </g>
+
+  <!-- Center Hub -->
+  <circle cx="50" cy="50" r="8" class="fan-center"/>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" cx="85" cy="15" r="5" class="fan-status-off"/>
+
+  <!-- Speed Display -->
+  <text id="speedText" x="50" y="97" class="fan-speed-text">OFF</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    // Exported variables for FUXA binding
+    var status = 0;        // 0=off, 1=on
+    var speed = 0;         // 0-100
+    var alarmState = 0;    // 0=normal, 1=alarm
+
+    // Animation
+    var rotation = 0;
+    var animationId = null;
+
+    function updateWidget() {
+      var blades = document.getElementById('fanBlades');
+      var statusInd = document.getElementById('statusIndicator');
+      var speedText = document.getElementById('speedText');
+
+      if (status === 1 && speed > 0) {
+        // Running - animate blades
+        if (!animationId) {
+          animationId = setInterval(function() {
+            rotation += speed / 10;
+            blades.setAttribute('transform', 'rotate(' + rotation + ' 50 50)');
+          }, 50);
+        }
+        statusInd.setAttribute('class', 'fan-status-on');
+        speedText.textContent = speed + '%';
+      } else {
+        // Stopped
+        if (animationId) {
+          clearInterval(animationId);
+          animationId = null;
+        }
+        statusInd.setAttribute('class', 'fan-status-off');
+        speedText.textContent = 'OFF';
+      }
+
+      // Alarm state
+      if (alarmState === 1) {
+        statusInd.setAttribute('fill', '#e74c3c');
+      }
+    }
+
+    // Initialize
+    updateWidget();
+    ]]>
+  </script>
+</svg>

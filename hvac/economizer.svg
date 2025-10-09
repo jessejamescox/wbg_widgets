@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="500" height="400">
+  <defs>
+    <style>
+      .econ-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .econ-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .econ-duct-oa { fill: #7fb3d5; stroke: #5499c7; stroke-width: 2; }
+      .econ-duct-ra { fill: #ec7063; stroke: #cb4335; stroke-width: 2; }
+      .econ-duct-ea { fill: #bb8fce; stroke: #8e44ad; stroke-width: 2; }
+      .econ-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .econ-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .econ-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .econ-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .econ-arrow { fill: none; stroke-width: 2; }
+      .econ-arrow-oa { stroke: #5499c7; }
+      .econ-arrow-ra { stroke: #cb4335; }
+      .econ-arrow-ea { stroke: #8e44ad; }
+      .econ-flow { opacity: 0.4; }
+      .econ-flow-active { animation: flow 2s linear infinite; }
+      .status-ok { fill: #27ae60; }
+      .status-active { fill: #3498db; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes flow {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.6; }
+        100% { opacity: 0.1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="econ-text" x="250" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    Economizer Damper Assembly
+  </text>
+
+  <!-- Outside Air Inlet -->
+  <rect class="econ-duct-oa" x="20" y="80" width="80" height="50"/>
+  <text class="econ-label" x="60" y="75" text-anchor="middle">OUTSIDE AIR</text>
+  <text id="oaTemp" class="econ-value" x="60" y="108" text-anchor="middle" font-size="10">55°F</text>
+
+  <!-- OA Flow Arrow -->
+  <g id="oaFlow">
+    <path class="econ-arrow econ-arrow-oa" d="M 40 95 L 60 95 M 55 90 L 60 95 L 55 100"/>
+    <circle class="econ-flow econ-flow-active" fill="#5499c7" cx="50" cy="95" r="3"/>
+  </g>
+
+  <!-- Outside Air Damper -->
+  <rect class="econ-box" x="100" y="75" width="50" height="60" rx="3"/>
+  <g id="oaDamper" transform="translate(125, 105)">
+    <rect class="econ-damper" x="-20" y="-3" width="40" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="5"/>
+  </g>
+  <text class="econ-label" x="125" y="148" text-anchor="middle" font-size="9">OA DAMPER</text>
+
+  <!-- Return Air Inlet -->
+  <rect class="econ-duct-ra" x="20" y="200" width="80" height="50"/>
+  <text class="econ-label" x="60" y="195" text-anchor="middle">RETURN AIR</text>
+  <text id="raTemp" class="econ-value" x="60" y="228" text-anchor="middle" font-size="10">72°F</text>
+
+  <!-- RA Flow Arrow -->
+  <g id="raFlow">
+    <path class="econ-arrow econ-arrow-ra" d="M 40 215 L 60 215 M 55 210 L 60 215 L 55 220"/>
+    <circle class="econ-flow econ-flow-active" fill="#cb4335" cx="50" cy="215" r="3" style="animation-delay: 0.5s"/>
+  </g>
+
+  <!-- Return Air Damper -->
+  <rect class="econ-box" x="100" y="195" width="50" height="60" rx="3"/>
+  <g id="raDamper" transform="translate(125, 225)">
+    <rect class="econ-damper" x="-20" y="-3" width="40" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="5"/>
+  </g>
+  <text class="econ-label" x="125" y="268" text-anchor="middle" font-size="9">RA DAMPER</text>
+
+  <!-- Mixed Air Plenum -->
+  <path class="econ-box" d="M 150 75 L 250 100 L 250 230 L 150 255 Z"/>
+  <text class="econ-label" x="200" y="160" text-anchor="middle">MIXED AIR</text>
+  <text id="maTemp" class="econ-value" x="200" y="178" text-anchor="middle">62°F</text>
+
+  <!-- Exhaust Air Path -->
+  <path class="econ-duct-ea" d="M 150 255 L 150 290 L 100 290 L 100 330"/>
+  <text class="econ-label" x="125" y="305" text-anchor="middle">EXHAUST AIR</text>
+
+  <!-- EA Flow Arrow -->
+  <g id="eaFlow">
+    <path class="econ-arrow econ-arrow-ea" d="M 125 275 L 125 285 M 120 280 L 125 285 L 130 280"/>
+    <circle class="econ-flow econ-flow-active" fill="#8e44ad" cx="125" cy="280" r="3" style="animation-delay: 1s"/>
+  </g>
+
+  <!-- Exhaust Air Damper -->
+  <rect class="econ-box" x="75" y="290" width="50" height="40" rx="3"/>
+  <g id="eaDamper" transform="translate(100, 310)">
+    <rect class="econ-damper" x="-20" y="-3" width="40" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="5"/>
+  </g>
+  <text class="econ-label" x="100" y="343" text-anchor="middle" font-size="9">EA DAMPER</text>
+
+  <!-- Exhaust Air Outlet -->
+  <rect class="econ-duct-ea" x="20" y="350" width="80" height="30"/>
+  <text class="econ-label" x="60" y="370" text-anchor="middle" font-size="10">TO OUTSIDE</text>
+
+  <!-- Supply to AHU -->
+  <rect class="econ-duct" x="250" y="135" width="230" height="60"/>
+  <text class="econ-label" x="365" y="130" text-anchor="middle">TO AHU / BUILDING</text>
+  <text class="econ-label" x="365" y="168" text-anchor="middle" font-size="10">MIXED AIR</text>
+
+  <!-- Supply Flow Arrow -->
+  <g id="supplyFlow">
+    <path class="econ-arrow" stroke="#3498db" d="M 270 155 L 290 155 M 285 150 L 290 155 L 285 160"/>
+    <path class="econ-arrow" stroke="#3498db" d="M 310 175 L 330 175 M 325 170 L 330 175 L 325 180"/>
+    <circle class="econ-flow econ-flow-active" fill="#3498db" cx="280" cy="155" r="3"/>
+    <circle class="econ-flow econ-flow-active" fill="#3498db" cx="320" cy="175" r="3" style="animation-delay: 0.7s"/>
+  </g>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="300" y="215" width="180" height="165" rx="5"/>
+
+  <text class="econ-label" x="390" y="235" text-anchor="middle" font-weight="bold">DAMPER POSITIONS</text>
+
+  <!-- OA Damper Position -->
+  <text class="econ-label" x="315" y="255">OA Damper:</text>
+  <text id="oaDamperPos" class="econ-value" x="315" y="275">75%</text>
+
+  <!-- RA Damper Position -->
+  <text class="econ-label" x="315" y="295">RA Damper:</text>
+  <text id="raDamperPos" class="econ-value" x="315" y="315">25%</text>
+
+  <!-- EA Damper Position -->
+  <text class="econ-label" x="315" y="335">EA Damper:</text>
+  <text id="eaDamperPos" class="econ-value" x="315" y="355">70%</text>
+
+  <!-- Mode Display -->
+  <text class="econ-label" x="315" y="370">Mode:</text>
+  <text id="modeText" class="econ-value" x="390" y="370" text-anchor="middle">Economizer</text>
+
+  <!-- Data Panel 2 -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="215" width="270" height="165" rx="5"/>
+
+  <!-- Temperatures -->
+  <text class="econ-label" x="35" y="235">Outside Air:</text>
+  <text id="oaTempData" class="econ-value" x="35" y="255">55°F</text>
+
+  <text class="econ-label" x="150" y="235">Return Air:</text>
+  <text id="raTempData" class="econ-value" x="150" y="255">72°F</text>
+
+  <text class="econ-label" x="35" y="280">Mixed Air:</text>
+  <text id="maTempData" class="econ-value" x="35" y="300">62°F</text>
+
+  <text class="econ-label" x="150" y="280">Setpoint:</text>
+  <text id="setpoint" class="econ-value" x="150" y="300">60°F</text>
+
+  <!-- Airflows -->
+  <text class="econ-label" x="35" y="320">OA Flow:</text>
+  <text id="oaFlow" class="econ-value" x="35" y="340">3000 CFM</text>
+
+  <text class="econ-label" x="150" y="320">RA Flow:</text>
+  <text id="raFlow" class="econ-value" x="150" y="340">1000 CFM</text>
+
+  <!-- Status -->
+  <text class="econ-label" x="35" y="360">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="78" cy="367" r="5"/>
+    <text id="statusText" class="econ-value" x="88" y="375">Normal</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var oaDamperPos = 75; // 0-100%
+    var raDamperPos = 25; // 0-100%
+    var eaDamperPos = 70; // 0-100%
+    var oaTemp = 55; // degrees F
+    var raTemp = 72; // degrees F
+    var maTemp = 62; // degrees F (calculated)
+    var setpoint = 60; // degrees F
+    var totalAirflow = 4000; // CFM
+    var oaAirflow = 3000; // CFM (calculated)
+    var raAirflow = 1000; // CFM (calculated)
+    var mode = 'Economizer'; // 'Min OA', 'Economizer', 'Max Cool'
+    var enabled = true;
+    var alarmActive = false;
+
+    function updateDisplay() {
+      // Calculate airflows based on damper positions
+      oaAirflow = (oaDamperPos / 100) * totalAirflow;
+      raAirflow = (raDamperPos / 100) * totalAirflow;
+
+      // Calculate mixed air temperature
+      var oaFraction = oaAirflow / totalAirflow;
+      var raFraction = raAirflow / totalAirflow;
+      maTemp = (oaTemp * oaFraction) + (raTemp * raFraction);
+
+      // Update temperature displays
+      document.getElementById('oaTemp').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTemp').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('maTemp').textContent = maTemp.toFixed(0) + '°F';
+      document.getElementById('oaTempData').textContent = oaTemp.toFixed(0) + '°F';
+      document.getElementById('raTempData').textContent = raTemp.toFixed(0) + '°F';
+      document.getElementById('maTempData').textContent = maTemp.toFixed(0) + '°F';
+      document.getElementById('setpoint').textContent = setpoint.toFixed(0) + '°F';
+
+      // Update damper positions
+      document.getElementById('oaDamperPos').textContent = oaDamperPos.toFixed(0) + '%';
+      document.getElementById('raDamperPos').textContent = raDamperPos.toFixed(0) + '%';
+      document.getElementById('eaDamperPos').textContent = eaDamperPos.toFixed(0) + '%';
+
+      // Update airflows
+      document.getElementById('oaFlow').textContent = oaAirflow.toFixed(0) + ' CFM';
+      document.getElementById('raFlow').textContent = raAirflow.toFixed(0) + ' CFM';
+
+      // Rotate dampers
+      var oaAngle = (oaDamperPos / 100) * 90;
+      var raAngle = (raDamperPos / 100) * 90;
+      var eaAngle = (eaDamperPos / 100) * 90;
+      document.getElementById('oaDamper').setAttribute('transform', 'translate(125, 105) rotate(' + oaAngle + ')');
+      document.getElementById('raDamper').setAttribute('transform', 'translate(125, 225) rotate(' + raAngle + ')');
+      document.getElementById('eaDamper').setAttribute('transform', 'translate(100, 310) rotate(' + eaAngle + ')');
+
+      // Determine mode based on OA damper position
+      if (oaDamperPos < 20) {
+        mode = 'Min OA';
+      } else if (oaDamperPos > 90) {
+        mode = 'Max Cool';
+      } else {
+        mode = 'Economizer';
+      }
+      document.getElementById('modeText').textContent = mode;
+
+      // Auto control logic for economizer
+      if (enabled) {
+        // Check if economizer is beneficial
+        if (oaTemp < raTemp - 5 && oaTemp < setpoint + 5) {
+          // Economizer beneficial - increase OA damper
+          var error = setpoint - maTemp;
+          if (error > 0) {
+            // Need more cooling - open OA damper more
+            oaDamperPos = Math.min(oaDamperPos + 1, 100);
+            raDamperPos = Math.max(raDamperPos - 1, 0);
+          } else if (error < -2) {
+            // Too much cooling - reduce OA damper
+            oaDamperPos = Math.max(oaDamperPos - 1, 15);
+            raDamperPos = Math.min(raDamperPos + 1, 85);
+          }
+        } else {
+          // Economizer not beneficial - go to minimum OA
+          oaDamperPos = Math.max(oaDamperPos - 1, 15); // Min 15% OA
+          raDamperPos = Math.min(raDamperPos + 1, 85);
+        }
+
+        // EA damper tracks OA damper (relief)
+        eaDamperPos = oaDamperPos * 0.9; // Slightly less than OA
+      }
+
+      // Show/hide flow arrows based on damper positions
+      document.getElementById('oaFlow').style.opacity = oaDamperPos > 5 ? 1 : 0;
+      document.getElementById('raFlow').style.opacity = raDamperPos > 5 ? 1 : 0;
+      document.getElementById('eaFlow').style.opacity = eaDamperPos > 5 ? 1 : 0;
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else if (enabled && mode === 'Economizer') {
+        statusLight.setAttribute('class', 'status-active');
+        statusText.textContent = 'Economizing';
+        statusText.style.fill = '#27ae60';
+      } else if (enabled) {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Disabled';
+        statusText.style.fill = '#7f8c8d';
+      }
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

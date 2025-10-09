@@ -1,0 +1,236 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" id="btu-meter">
+  <defs>
+    <style>
+      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #ff6600; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .status-ok { fill: #00ff00; }
+      .status-warning { fill: #ffaa00; }
+      .status-alarm { fill: #ff0000; }
+      .supply-color { fill: #ff4444; }
+      .return-color { fill: #4444ff; }
+      .delta-color { fill: #ffaa00; }
+      .gauge-bg { fill: none; stroke: #333; stroke-width: 6; }
+      .gauge-fill { fill: none; stroke: #ff6600; stroke-width: 6; stroke-linecap: round; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect class="meter-bg" x="10" y="10" width="380" height="530" rx="10"/>
+
+  <!-- Title -->
+  <text class="title-text" x="200" y="35" text-anchor="middle">BTU ENERGY METER</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusIndicator" class="status-ok" cx="370" cy="25" r="8"/>
+
+  <!-- BTU Rate Display (Large) -->
+  <g id="btuRateDisplay">
+    <text class="label-text" x="200" y="65" text-anchor="middle">ENERGY RATE</text>
+    <text id="btuRateValue" class="value-text" x="200" y="95" text-anchor="middle" font-size="32">0</text>
+    <text class="unit-text" x="200" y="115" text-anchor="middle">MBTU/Hr</text>
+  </g>
+
+  <!-- Energy Gauge -->
+  <g id="energyGauge" transform="translate(200, 180)">
+    <circle class="gauge-bg" r="50" cx="0" cy="0"/>
+    <circle id="energyGaugeFill" class="gauge-fill" r="50" cx="0" cy="0"
+            stroke-dasharray="314" stroke-dashoffset="314"
+            transform="rotate(-90)"/>
+    <text id="energyPercent" class="value-text" x="0" y="5" text-anchor="middle" font-size="14">0%</text>
+  </g>
+
+  <!-- Temperature Displays -->
+  <g id="supplyTempDisplay">
+    <rect class="meter-bg" x="25" y="250" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="270" text-anchor="middle">SUPPLY TEMP</text>
+    <circle class="supply-color" cx="70" cy="265" r="4"/>
+    <text id="supplyTempValue" class="value-text" x="107.5" y="300" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="107.5" y="320" text-anchor="middle">°F</text>
+  </g>
+
+  <g id="returnTempDisplay">
+    <rect class="meter-bg" x="210" y="250" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="270" text-anchor="middle">RETURN TEMP</text>
+    <circle class="return-color" cx="255" cy="265" r="4"/>
+    <text id="returnTempValue" class="value-text" x="292.5" y="300" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="292.5" y="320" text-anchor="middle">°F</text>
+  </g>
+
+  <!-- Delta-T Display -->
+  <g id="deltaTDisplay">
+    <rect class="meter-bg" x="25" y="345" width="165" height="80" rx="5"/>
+    <text class="label-text" x="107.5" y="365" text-anchor="middle">DELTA-T</text>
+    <circle class="delta-color" cx="70" cy="360" r="4"/>
+    <text id="deltaTValue" class="value-text" x="107.5" y="395" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="107.5" y="415" text-anchor="middle">°F</text>
+  </g>
+
+  <!-- Flow Rate Display -->
+  <g id="flowRateDisplay">
+    <rect class="meter-bg" x="210" y="345" width="165" height="80" rx="5"/>
+    <text class="label-text" x="292.5" y="365" text-anchor="middle">FLOW RATE</text>
+    <text id="flowRateValue" class="value-text" x="292.5" y="395" text-anchor="middle">0.0</text>
+    <text class="unit-text" x="292.5" y="415" text-anchor="middle">GPM</text>
+  </g>
+
+  <!-- Total Energy Display -->
+  <g id="totalEnergyDisplay">
+    <rect class="meter-bg" x="25" y="440" width="350" height="70" rx="5"/>
+    <text class="label-text" x="200" y="460" text-anchor="middle">TOTAL ENERGY CONSUMED</text>
+    <text id="totalEnergyValue" class="value-text" x="200" y="490" text-anchor="middle">0.00</text>
+    <text class="unit-text" x="280" y="490">MMBTU</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // FUXA Variable Mappings
+    var variables = {
+      btuRate: 'btu_meter_rate',              // MBTU/Hr (thousand BTU per hour)
+      supplyTemp: 'btu_meter_supply_temp',    // °F
+      returnTemp: 'btu_meter_return_temp',    // °F
+      deltaT: 'btu_meter_delta_t',            // °F
+      flowRate: 'btu_meter_flow_rate',        // GPM
+      totalEnergy: 'btu_meter_total_energy',  // MMBTU (Million BTU)
+      alarm: 'btu_meter_alarm'                // boolean
+    };
+
+    // Configuration
+    var config = {
+      maxBTURate: 10000,     // MBTU/Hr
+      minDeltaT: 5,          // °F
+      maxDeltaT: 50,         // °F
+      maxFlowRate: 500       // GPM
+    };
+
+    // Update function called by FUXA
+    function updateValues(tag, value) {
+      try {
+        switch(tag) {
+          case variables.btuRate:
+            updateBTURate(value);
+            break;
+          case variables.supplyTemp:
+            updateSupplyTemp(value);
+            break;
+          case variables.returnTemp:
+            updateReturnTemp(value);
+            break;
+          case variables.deltaT:
+            updateDeltaT(value);
+            break;
+          case variables.flowRate:
+            updateFlowRate(value);
+            break;
+          case variables.totalEnergy:
+            updateTotalEnergy(value);
+            break;
+          case variables.alarm:
+            updateAlarmStatus(value);
+            break;
+        }
+      } catch(e) {
+        console.error('Error updating BTU meter:', e);
+      }
+    }
+
+    function updateBTURate(value) {
+      var rate = parseFloat(value) || 0;
+
+      // Display in MBTU/Hr (thousands)
+      var displayValue = rate / 1000;
+      document.getElementById('btuRateValue').textContent = displayValue.toFixed(0);
+
+      // Update gauge
+      var percent = Math.min((rate / config.maxBTURate) * 100, 100);
+      document.getElementById('energyPercent').textContent = percent.toFixed(0) + '%';
+
+      var circumference = 2 * Math.PI * 50;
+      var offset = circumference - (percent / 100) * circumference;
+      var gaugeFill = document.getElementById('energyGaugeFill');
+      gaugeFill.setAttribute('stroke-dashoffset', offset);
+
+      // Change color based on load
+      if (percent > 90) {
+        gaugeFill.setAttribute('stroke', '#ff0000');
+      } else if (percent > 75) {
+        gaugeFill.setAttribute('stroke', '#ffaa00');
+      } else {
+        gaugeFill.setAttribute('stroke', '#ff6600');
+      }
+    }
+
+    function updateSupplyTemp(value) {
+      var temp = parseFloat(value) || 0;
+      document.getElementById('supplyTempValue').textContent = temp.toFixed(1);
+    }
+
+    function updateReturnTemp(value) {
+      var temp = parseFloat(value) || 0;
+      document.getElementById('returnTempValue').textContent = temp.toFixed(1);
+    }
+
+    function updateDeltaT(value) {
+      var deltaT = parseFloat(value) || 0;
+      document.getElementById('deltaTValue').textContent = deltaT.toFixed(1);
+
+      var valueText = document.getElementById('deltaTValue');
+      if (deltaT < config.minDeltaT) {
+        valueText.setAttribute('fill', '#ffaa00');
+      } else if (deltaT > config.maxDeltaT) {
+        valueText.setAttribute('fill', '#ff0000');
+      } else {
+        valueText.setAttribute('fill', '#ffffff');
+      }
+    }
+
+    function updateFlowRate(value) {
+      var flow = parseFloat(value) || 0;
+      document.getElementById('flowRateValue').textContent = flow.toFixed(1);
+    }
+
+    function updateTotalEnergy(value) {
+      var total = parseFloat(value) || 0;
+      document.getElementById('totalEnergyValue').textContent = total.toFixed(2);
+    }
+
+    function updateAlarmStatus(value) {
+      var alarm = Boolean(value);
+      var indicator = document.getElementById('statusIndicator');
+
+      if (alarm) {
+        indicator.setAttribute('class', 'status-alarm');
+      } else {
+        indicator.setAttribute('class', 'status-ok');
+      }
+    }
+
+    // Initialize - calculate delta-T if both temps are available
+    var currentSupplyTemp = 0;
+    var currentReturnTemp = 0;
+
+    // Override individual temp updates to auto-calculate delta-T
+    var originalUpdateSupplyTemp = updateSupplyTemp;
+    var originalUpdateReturnTemp = updateReturnTemp;
+
+    updateSupplyTemp = function(value) {
+      currentSupplyTemp = parseFloat(value) || 0;
+      originalUpdateSupplyTemp(value);
+      updateDeltaT(Math.abs(currentSupplyTemp - currentReturnTemp));
+    };
+
+    updateReturnTemp = function(value) {
+      currentReturnTemp = parseFloat(value) || 0;
+      originalUpdateReturnTemp(value);
+      updateDeltaT(Math.abs(currentSupplyTemp - currentReturnTemp));
+    };
+
+    // Initialize
+    if (typeof window !== 'undefined') {
+      window.updateValues = updateValues;
+    }
+  ]]>
+  </script>
+</svg>

@@ -1,0 +1,142 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 120" id="gauge-horizontal">
+  <defs>
+    <style>
+      .hgauge-bg { fill: #1a1a1a; }
+      .hgauge-track { fill: #333; stroke: #555; stroke-width: 1; }
+      .hgauge-fill { fill: url(#fillGradient); }
+      .hgauge-tick { stroke: #999; stroke-width: 1; }
+      .hgauge-tick-major { stroke: #fff; stroke-width: 2; }
+      .hgauge-text { fill: #fff; font-family: Arial, sans-serif; }
+      .hgauge-value { font-size: 24px; font-weight: bold; }
+      .hgauge-label { font-size: 12px; }
+      .hgauge-pointer { fill: #ff9800; stroke: #fff; stroke-width: 2; }
+    </style>
+    <linearGradient id="fillGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#4caf50;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#ffc107;stop-opacity:1" />
+      <stop offset="80%" style="stop-color:#ff9800;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f44336;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="120" class="hgauge-bg"/>
+
+  <!-- Title -->
+  <text id="titleText" x="200" y="20" class="hgauge-text hgauge-label" text-anchor="middle">Horizontal Gauge</text>
+
+  <!-- Track background -->
+  <rect x="50" y="50" width="300" height="30" rx="5" class="hgauge-track"/>
+
+  <!-- Fill bar -->
+  <rect id="fillBar" x="50" y="50" width="0" height="30" rx="5" class="hgauge-fill"/>
+
+  <!-- Tick marks and labels -->
+  <g id="tickMarks">
+    <!-- Major ticks at 0, 25, 50, 75, 100 -->
+    <line x1="50" y1="45" x2="50" y2="85" class="hgauge-tick-major"/>
+    <line x1="125" y1="48" x2="125" y2="82" class="hgauge-tick-major"/>
+    <line x1="200" y1="48" x2="200" y2="82" class="hgauge-tick-major"/>
+    <line x1="275" y1="48" x2="275" y2="82" class="hgauge-tick-major"/>
+    <line x1="350" y1="45" x2="350" y2="85" class="hgauge-tick-major"/>
+
+    <!-- Minor ticks -->
+    <line x1="87.5" y1="50" x2="87.5" y2="80" class="hgauge-tick"/>
+    <line x1="162.5" y1="50" x2="162.5" y2="80" class="hgauge-tick"/>
+    <line x1="237.5" y1="50" x2="237.5" y2="80" class="hgauge-tick"/>
+    <line x1="312.5" y1="50" x2="312.5" y2="80" class="hgauge-tick"/>
+  </g>
+
+  <!-- Scale labels -->
+  <text x="50" y="100" class="hgauge-text hgauge-label" text-anchor="middle">0</text>
+  <text x="125" y="100" class="hgauge-text hgauge-label" text-anchor="middle">25</text>
+  <text x="200" y="100" class="hgauge-text hgauge-label" text-anchor="middle">50</text>
+  <text x="275" y="100" class="hgauge-text hgauge-label" text-anchor="middle">75</text>
+  <text x="350" y="100" class="hgauge-text hgauge-label" text-anchor="middle">100</text>
+
+  <!-- Pointer/marker -->
+  <g id="pointer" transform="translate(50, 0)">
+    <polygon points="0,40 5,35 5,45" class="hgauge-pointer"/>
+  </g>
+
+  <!-- Value display -->
+  <text id="valueText" x="200" y="38" class="hgauge-text hgauge-value" text-anchor="middle">0.0</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    (function() {
+      var svg = document.getElementById('gauge-horizontal');
+      var fillBar = document.getElementById('fillBar');
+      var pointer = document.getElementById('pointer');
+      var valueText = document.getElementById('valueText');
+      var titleText = document.getElementById('titleText');
+
+      // Configuration
+      var config = {
+        min: 0,
+        max: 100,
+        value: 0,
+        unit: '',
+        decimals: 1,
+        title: 'Horizontal Gauge'
+      };
+
+      // Constants
+      var trackWidth = 300;
+      var trackStart = 50;
+
+      // FUXA interface
+      svg.setValue = function(value) {
+        if (value === null || value === undefined) return;
+        config.value = parseFloat(value);
+        updateGauge();
+      };
+
+      svg.setOptions = function(options) {
+        if (options.min !== undefined) config.min = parseFloat(options.min);
+        if (options.max !== undefined) config.max = parseFloat(options.max);
+        if (options.unit !== undefined) config.unit = options.unit;
+        if (options.decimals !== undefined) config.decimals = parseInt(options.decimals);
+        if (options.title !== undefined) {
+          config.title = options.title;
+          titleText.textContent = config.title;
+        }
+        updateGauge();
+      };
+
+      function updateGauge() {
+        // Clamp value between min and max
+        var clampedValue = Math.max(config.min, Math.min(config.max, config.value));
+
+        // Calculate percentage
+        var percent = ((clampedValue - config.min) / (config.max - config.min)) * 100;
+
+        // Calculate fill width
+        var fillWidth = (percent / 100) * trackWidth;
+
+        // Update fill bar
+        fillBar.setAttribute('width', fillWidth);
+
+        // Update pointer position
+        var pointerX = trackStart + fillWidth;
+        pointer.setAttribute('transform', 'translate(' + pointerX + ', 0)');
+
+        // Update value text
+        var displayValue = clampedValue.toFixed(config.decimals);
+        if (config.unit) {
+          displayValue += ' ' + config.unit;
+        }
+        valueText.textContent = displayValue;
+      }
+
+      // Initialize
+      updateGauge();
+
+      // Expose getValue for FUXA
+      svg.getValue = function() {
+        return config.value;
+      };
+    })();
+    ]]>
+  </script>
+</svg>

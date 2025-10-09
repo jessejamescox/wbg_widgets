@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="450" height="350">
+  <defs>
+    <style>
+      .vavr-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
+      .vavr-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .vavr-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .vavr-coil { fill: none; stroke: #e74c3c; stroke-width: 2; }
+      .vavr-coil-active { stroke: #e74c3c; filter: drop-shadow(0 0 3px #e74c3c); }
+      .vavr-coil-inactive { stroke: #7f8c8d; }
+      .vavr-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
+      .vavr-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .vavr-value { fill: #3498db; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
+      .vavr-value-heat { fill: #e74c3c; }
+      .vavr-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .vavr-flow { fill: #3498db; opacity: 0.3; }
+      .vavr-flow-active { animation: flow 2s linear infinite; }
+      .status-ok { fill: #27ae60; }
+      .status-heating { fill: #e74c3c; }
+      .status-alarm { fill: #e74c3c; }
+      @keyframes flow {
+        0% { opacity: 0.1; }
+        50% { opacity: 0.5; }
+        100% { opacity: 0.1; }
+      }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text class="vavr-text" x="225" y="25" text-anchor="middle" font-size="16" font-weight="bold">
+    VAV Box with Reheat
+  </text>
+
+  <!-- Supply Duct -->
+  <rect class="vavr-duct" x="20" y="100" width="120" height="60"/>
+  <text class="vavr-label" x="80" y="95" text-anchor="middle">SUPPLY</text>
+
+  <!-- VAV Box Body -->
+  <rect class="vavr-box" x="140" y="80" width="140" height="100" rx="5"/>
+
+  <!-- Damper (rotatable) -->
+  <g id="damper" transform="translate(210, 130)">
+    <rect class="vavr-damper" x="-40" y="-3" width="80" height="6" rx="2"/>
+    <circle fill="#2c3e50" cx="0" cy="0" r="5"/>
+  </g>
+
+  <!-- Reheat Coil Section -->
+  <rect class="vavr-box" x="280" y="80" width="80" height="100" rx="5"/>
+  <text class="vavr-label" x="320" y="75" text-anchor="middle">REHEAT</text>
+
+  <!-- Reheat Coil (zigzag pattern) -->
+  <g id="reheatCoil">
+    <path class="vavr-coil" d="M 290 100 L 290 110 L 350 110 L 350 120 L 290 120 L 290 130 L 350 130 L 350 140 L 290 140 L 290 150 L 350 150 L 350 160 L 290 160 L 290 170"/>
+  </g>
+
+  <!-- Discharge Duct -->
+  <rect class="vavr-duct" x="360" y="100" width="70" height="60"/>
+  <text class="vavr-label" x="395" y="95" text-anchor="middle">ZONE</text>
+
+  <!-- Airflow Arrows -->
+  <g id="flowArrows">
+    <path class="vavr-arrow" d="M 50 120 L 70 120 M 65 115 L 70 120 L 65 125"/>
+    <path class="vavr-arrow" d="M 80 140 L 100 140 M 95 135 L 100 140 L 95 145"/>
+    <circle class="vavr-flow vavr-flow-active" cx="60" cy="120" r="4"/>
+    <circle class="vavr-flow vavr-flow-active" cx="90" cy="140" r="4" style="animation-delay: 0.5s"/>
+  </g>
+
+  <!-- Temperature Labels on Ducts -->
+  <text id="supplyTemp" class="vavr-value" x="80" y="125" text-anchor="middle" font-size="11">55°F</text>
+  <text id="dischargeTemp" class="vavr-value" x="395" y="125" text-anchor="middle" font-size="11">68°F</text>
+
+  <!-- Data Panel -->
+  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
+
+  <!-- Row 1 -->
+  <text class="vavr-label" x="40" y="235">Damper Position:</text>
+  <text id="damperPos" class="vavr-value" x="40" y="255">65%</text>
+
+  <text class="vavr-label" x="160" y="235">Airflow:</text>
+  <text id="airflow" class="vavr-value" x="160" y="255">450 CFM</text>
+
+  <text class="vavr-label" x="280" y="235">Zone Temp:</text>
+  <text id="zoneTemp" class="vavr-value" x="280" y="255">72.5°F</text>
+
+  <!-- Row 2 -->
+  <text class="vavr-label" x="40" y="275">Reheat Valve:</text>
+  <text id="reheatValve" class="vavr-value vavr-value-heat" x="40" y="295">35%</text>
+
+  <text class="vavr-label" x="160" y="275">Setpoint:</text>
+  <text id="setpoint" class="vavr-value" x="160" y="295">72.0°F</text>
+
+  <text class="vavr-label" x="280" y="275">Reheat Status:</text>
+  <g id="reheatStatus">
+    <circle id="reheatLight" class="status-ok" cx="365" cy="287" r="6"/>
+    <text id="reheatStatusText" class="vavr-value" x="375" y="295">Off</text>
+  </g>
+
+  <!-- Row 3 -->
+  <text class="vavr-label" x="40" y="310">Min/Max Flow:</text>
+  <text id="minMaxFlow" class="vavr-value" x="40" y="325">150/800 CFM</text>
+
+  <text class="vavr-label" x="280" y="310">Status:</text>
+  <g id="statusIndicator">
+    <circle id="statusLight" class="status-ok" cx="325" cy="317" r="6"/>
+    <text id="statusText" class="vavr-value" x="340" y="325">Normal</text>
+  </g>
+
+  <script type="text/javascript">
+  <![CDATA[
+    // Exported variables for FUXA
+    var damperPosition = 65; // 0-100%
+    var airflow = 450; // CFM
+    var zoneTemp = 72.5; // degrees F
+    var setpoint = 72.0; // degrees F
+    var supplyTemp = 55.0; // degrees F
+    var dischargeTemp = 68.0; // degrees F
+    var reheatValve = 35; // 0-100%
+    var minFlow = 150; // CFM
+    var maxFlow = 800; // CFM
+    var alarmActive = false;
+    var enabled = true;
+
+    function updateDisplay() {
+      // Update damper position text
+      document.getElementById('damperPos').textContent = damperPosition.toFixed(0) + '%';
+
+      // Rotate damper visual (0% = closed/horizontal, 100% = open/vertical)
+      var damperAngle = (damperPosition / 100) * 90;
+      document.getElementById('damper').setAttribute('transform',
+        'translate(210, 130) rotate(' + damperAngle + ')');
+
+      // Update airflow
+      document.getElementById('airflow').textContent = airflow.toFixed(0) + ' CFM';
+
+      // Update temperatures
+      document.getElementById('zoneTemp').textContent = zoneTemp.toFixed(1) + '°F';
+      document.getElementById('setpoint').textContent = setpoint.toFixed(1) + '°F';
+      document.getElementById('supplyTemp').textContent = supplyTemp.toFixed(0) + '°F';
+      document.getElementById('dischargeTemp').textContent = dischargeTemp.toFixed(0) + '°F';
+
+      // Update reheat valve
+      document.getElementById('reheatValve').textContent = reheatValve.toFixed(0) + '%';
+
+      // Update min/max
+      document.getElementById('minMaxFlow').textContent = minFlow + '/' + maxFlow + ' CFM';
+
+      // Update reheat coil appearance
+      var reheatCoil = document.getElementById('reheatCoil').querySelector('path');
+      var reheatLight = document.getElementById('reheatLight');
+      var reheatStatusText = document.getElementById('reheatStatusText');
+
+      if (reheatValve > 5) {
+        reheatCoil.setAttribute('class', 'vavr-coil vavr-coil-active');
+        reheatLight.setAttribute('class', 'status-heating');
+        reheatStatusText.textContent = 'Active';
+        reheatStatusText.style.fill = '#e74c3c';
+      } else {
+        reheatCoil.setAttribute('class', 'vavr-coil vavr-coil-inactive');
+        reheatLight.setAttribute('class', 'status-ok');
+        reheatStatusText.textContent = 'Off';
+        reheatStatusText.style.fill = '#7f8c8d';
+      }
+
+      // Calculate discharge temp based on reheat
+      var tempRise = (reheatValve / 100) * 20; // Max 20°F rise
+      dischargeTemp = supplyTemp + tempRise;
+      document.getElementById('dischargeTemp').textContent = dischargeTemp.toFixed(0) + '°F';
+
+      // Update status
+      var statusLight = document.getElementById('statusLight');
+      var statusText = document.getElementById('statusText');
+
+      if (!enabled) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Disabled';
+        statusText.style.fill = '#e74c3c';
+      } else if (alarmActive) {
+        statusLight.setAttribute('class', 'status-alarm');
+        statusText.textContent = 'Alarm';
+        statusText.style.fill = '#e74c3c';
+      } else {
+        statusLight.setAttribute('class', 'status-ok');
+        statusText.textContent = 'Normal';
+        statusText.style.fill = '#27ae60';
+      }
+
+      // Show/hide flow arrows based on airflow
+      var flowArrows = document.getElementById('flowArrows');
+      if (airflow > 50) {
+        flowArrows.style.display = 'block';
+      } else {
+        flowArrows.style.display = 'none';
+      }
+
+      // Check for alarm conditions
+      alarmActive = airflow < minFlow - 50 || airflow > maxFlow + 50 ||
+                    Math.abs(zoneTemp - setpoint) > 5;
+    }
+
+    // Initialize display
+    updateDisplay();
+
+    // Update display every 100ms
+    setInterval(updateDisplay, 100);
+  ]]>
+  </script>
+</svg>

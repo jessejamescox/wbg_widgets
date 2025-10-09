@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100" height="80">
+  <defs>
+    <style>
+      .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
+      .damper-blade { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; transition: transform 0.5s; }
+      .actuator { fill: #95a5a6; stroke: #2c3e50; stroke-width: 1.5; }
+      .position-text { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #7f8c8d; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Duct -->
+  <rect x="5" y="20" width="90" height="40" class="duct" rx="2"/>
+
+  <!-- Damper Blades (3 blades) -->
+  <g id="blade1" transform-origin="25 40">
+    <rect x="20" y="25" width="10" height="30" class="damper-blade" rx="1"/>
+  </g>
+  <g id="blade2" transform-origin="50 40">
+    <rect x="45" y="25" width="10" height="30" class="damper-blade" rx="1"/>
+  </g>
+  <g id="blade3" transform-origin="75 40">
+    <rect x="70" y="25" width="10" height="30" class="damper-blade" rx="1"/>
+  </g>
+
+  <!-- Actuator -->
+  <rect x="82" y="8" width="14" height="10" class="actuator" rx="2"/>
+  <line x1="89" y1="18" x2="89" y2="25" stroke="#2c3e50" stroke-width="1.5"/>
+  <circle cx="89" cy="25" r="2" fill="#2c3e50"/>
+
+  <!-- Position Display -->
+  <rect x="30" y="65" width="40" height="14" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
+  <text id="positionText" x="50" y="75" class="position-text">0%</text>
+
+  <!-- Open/Close Labels -->
+  <text x="10" y="15" class="label-text">CLOSED</text>
+  <text x="75" y="15" class="label-text">OPEN</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var position = 0;  // 0=closed, 100=open (%)
+    var command = 0;
+    var feedback = 0;
+
+    function updateWidget() {
+      var blade1 = document.getElementById('blade1');
+      var blade2 = document.getElementById('blade2');
+      var blade3 = document.getElementById('blade3');
+      var posText = document.getElementById('positionText');
+
+      var displayPos = feedback > 0 ? feedback : position;
+      displayPos = Math.max(0, Math.min(100, displayPos));
+
+      // Rotate blades (0° = closed/vertical, 90° = open/horizontal)
+      var angle = (displayPos / 100) * 90;
+      blade1.setAttribute('transform', 'rotate(' + angle + ' 25 40)');
+      blade2.setAttribute('transform', 'rotate(' + angle + ' 50 40)');
+      blade3.setAttribute('transform', 'rotate(' + angle + ' 75 40)');
+
+      // Update position text
+      posText.textContent = Math.round(displayPos) + '%';
+
+      // Color code position
+      if (displayPos < 5) {
+        posText.setAttribute('fill', '#e74c3c');
+      } else if (displayPos > 95) {
+        posText.setAttribute('fill', '#27ae60');
+      } else {
+        posText.setAttribute('fill', '#3498db');
+      }
+    }
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

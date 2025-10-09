@@ -1,0 +1,96 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="80" height="40">
+  <defs>
+    <style>
+      .chip-body { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1.5; }
+      .chip-alarm { fill: #e74c3c; stroke: #c0392b; stroke-width: 1.5; }
+      .icon { fill: #e74c3c; }
+      .icon-normal { fill: #95a5a6; }
+      .alarm-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; font-weight: bold; text-anchor: middle; }
+      .normal-text { font-family: Arial, sans-serif; font-size: 11px; fill: #27ae60; font-weight: bold; text-anchor: middle; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #95a5a6; text-anchor: middle; }
+    </style>
+  </defs>
+
+  <!-- Chip Body -->
+  <rect id="chipBody" x="2" y="2" width="76" height="36" class="chip-body" rx="4"/>
+
+  <!-- Bell Icon -->
+  <g id="bellIcon">
+    <path d="M 15 18 Q 15 13, 18 11 Q 21 13, 21 18 L 21 23 L 23 25 L 13 25 L 15 23 Z" class="icon-normal"/>
+    <path d="M 16 26 Q 16 27, 18 27 Q 20 27, 20 26" stroke="#95a5a6" fill="none" stroke-width="1"/>
+  </g>
+
+  <!-- Status Text -->
+  <text id="statusText" x="50" y="22" class="normal-text">NORMAL</text>
+
+  <!-- Label -->
+  <text id="labelText" x="40" y="34" class="label-text">ALARM STATUS</text>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var alarmActive = 0;       // 0=normal, 1=alarm
+    var alarmCount = 0;        // Number of active alarms
+    var acknowledged = 0;      // 0=unack, 1=ack
+
+    var blinkState = false;
+    var blinkInterval = null;
+
+    function updateWidget() {
+      var chipBody = document.getElementById('chipBody');
+      var bellIcon = document.getElementById('bellIcon');
+      var statusText = document.getElementById('statusText');
+      var bell = bellIcon.querySelector('path');
+
+      if (alarmActive === 1) {
+        // Alarm state
+        chipBody.setAttribute('class', 'chip-alarm');
+        bell.setAttribute('class', 'icon');
+        statusText.setAttribute('class', 'alarm-text');
+
+        if (alarmCount > 0) {
+          statusText.textContent = 'ALARM (' + alarmCount + ')';
+        } else {
+          statusText.textContent = 'ALARM';
+        }
+
+        // Blink if unacknowledged
+        if (acknowledged === 0) {
+          if (!blinkInterval) {
+            blinkInterval = setInterval(function() {
+              blinkState = !blinkState;
+              chipBody.style.opacity = blinkState ? '0.5' : '1';
+            }, 500);
+          }
+        } else {
+          if (blinkInterval) {
+            clearInterval(blinkInterval);
+            blinkInterval = null;
+          }
+          chipBody.style.opacity = '1';
+        }
+      } else {
+        // Normal state
+        if (blinkInterval) {
+          clearInterval(blinkInterval);
+          blinkInterval = null;
+        }
+        chipBody.setAttribute('class', 'chip-body');
+        chipBody.style.opacity = '1';
+        bell.setAttribute('class', 'icon-normal');
+        statusText.setAttribute('class', 'normal-text');
+        statusText.textContent = 'NORMAL';
+      }
+    }
+
+    // Allow click to acknowledge
+    document.getElementById('chipBody').onclick = function() {
+      if (alarmActive === 1) {
+        acknowledged = 1;
+        updateWidget();
+      }
+    };
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>

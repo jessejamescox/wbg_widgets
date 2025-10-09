@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="80" height="40">
+  <defs>
+    <style>
+      .chip-body { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1.5; }
+      .icon { fill: #9b59b6; stroke: #2c3e50; stroke-width: 1; }
+      .value-text { font-family: Arial, sans-serif; font-size: 14px; fill: #2c3e50; font-weight: bold; }
+      .unit-text { font-family: Arial, sans-serif; font-size: 9px; fill: #7f8c8d; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #95a5a6; }
+      .alarm-state { fill: #e74c3c; }
+      .normal-state { fill: #27ae60; }
+    </style>
+  </defs>
+
+  <!-- Chip Body -->
+  <rect x="2" y="2" width="76" height="36" class="chip-body" rx="4"/>
+
+  <!-- Pressure Gauge Icon -->
+  <circle cx="15" cy="20" r="8" class="icon" fill="none"/>
+  <path d="M 15 20 L 19 14" stroke="#2c3e50" stroke-width="1.5" stroke-linecap="round"/>
+  <circle cx="15" cy="20" r="2" fill="#2c3e50"/>
+
+  <!-- Value Display -->
+  <text id="valueText" x="42" y="22" class="value-text" text-anchor="middle">45.2</text>
+  <text x="64" y="22" class="unit-text">PSI</text>
+
+  <!-- Label -->
+  <text x="40" y="34" class="label-text" text-anchor="middle">PRESSURE</text>
+
+  <!-- Status Indicator -->
+  <circle id="statusDot" cx="73" cy="8" r="3" class="normal-state"/>
+
+  <script type="text/javascript">
+    <![CDATA[
+    var pressure = 45.2;       // Current pressure
+    var units = 'PSI';         // PSI, kPa, bar, etc.
+    var highAlarm = 60;        // High alarm setpoint
+    var lowAlarm = 20;         // Low alarm setpoint
+    var alarmState = 0;        // 0=normal, 1=alarm
+
+    function updateWidget() {
+      var valueText = document.getElementById('valueText');
+      var statusDot = document.getElementById('statusDot');
+
+      // Update value
+      valueText.textContent = pressure.toFixed(1);
+
+      // Check alarm conditions
+      if (pressure > highAlarm || pressure < lowAlarm || alarmState === 1) {
+        statusDot.setAttribute('class', 'alarm-state');
+        valueText.setAttribute('fill', '#e74c3c');
+      } else {
+        statusDot.setAttribute('class', 'normal-state');
+        valueText.setAttribute('fill', '#2c3e50');
+      }
+    }
+
+    updateWidget();
+    ]]>
+  </script>
+</svg>
