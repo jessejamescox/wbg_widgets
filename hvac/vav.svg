@@ -2,14 +2,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" width="100%" height="100%">
   <defs>
     <style>
-      .vav-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .vav-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .vav-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .vav-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .vav-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .vav-value { fill: #3498db; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
-      .vav-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
-      .vav-flow { fill: #3498db; opacity: 0.3; }
+      .vav-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .vav-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .vav-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .vav-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .vav-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .vav-value { fill: #1976d2; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
+      .vav-arrow { fill: none; stroke: #1976d2; stroke-width: 2; }
+      .vav-flow { fill: #1976d2; opacity: 0.3; }
       .vav-flow-active { animation: flow 2s linear infinite; }
       .status-ok { fill: #27ae60; }
       .status-alarm { fill: #e74c3c; }
@@ -52,7 +52,7 @@
   </g>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="200" width="360" height="80" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="200" width="360" height="80" rx="5"/>
 
   <!-- Damper Position -->
   <text class="vav-label" x="40" y="225">Damper Position:</text>

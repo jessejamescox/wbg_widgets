@@ -1,0 +1,345 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="100%" height="100%">
+  <defs>
+    <style>
+      /* Component Styles - Light Theme */
+      .vav-enclosure { fill: url(#enclosureGradient); stroke: #90a4ae; stroke-width: 2.5; }
+      .duct-supply { fill: url(#ductGradient); stroke: #90a4ae; stroke-width: 2; }
+      .duct-zone { fill: url(#ductGradient); stroke: #90a4ae; stroke-width: 2; }
+      .damper-blade { fill: #b0bec5; stroke: #78909c; stroke-width: 2; transition: all 0.3s; }
+      .damper-shaft { fill: #78909c; stroke: #546e7a; stroke-width: 1; }
+      .airflow-arrow { fill: none; stroke: #2196f3; stroke-width: 2.5; stroke-linecap: round; }
+      .airflow-particle { fill: #64b5f6; opacity: 0.7; }
+
+      /* Text Styles */
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 16px; fill: #2c3e50; font-weight: 700; text-anchor: middle; }
+      .label-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 10px; fill: #546e7a; font-weight: 600; }
+      .value-text { font-family: 'Consolas', 'Courier New', monospace; font-size: 13px; fill: #1976d2; font-weight: bold; }
+      .unit-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; fill: #78909c; }
+
+      /* Status Indicators */
+      .status-normal { fill: #27ae60; }
+      .status-warning { fill: #f39c12; }
+      .status-alarm { fill: #e74c3c; }
+      .status-inactive { fill: #546e7a; }
+
+      /* Data Panel */
+      .panel-bg { fill: #ffffff; stroke: #cfd8dc; stroke-width: 1.5; }
+      .panel-section { fill: #f5f7fa; stroke: #e0e0e0; stroke-width: 1; }
+
+      /* Animations */
+      .flow-animate { animation: flowPulse 2s ease-in-out infinite; }
+      .alarm-pulse { animation: alarmPulse 1s ease-in-out infinite; }
+
+      @keyframes flowPulse {
+        0%, 100% { opacity: 0.3; }
+        50% { opacity: 0.9; }
+      }
+      @keyframes alarmPulse {
+        0%, 100% { opacity: 1; fill-opacity: 1; }
+        50% { opacity: 0.4; fill-opacity: 0.4; }
+      }
+    </style>
+
+    <!-- Gradients - Light Theme -->
+    <linearGradient id="enclosureGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#eceff1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cfd8dc;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="ductGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eceff1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#cfd8dc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#b0bec5;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="3" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.12"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="450" height="350" fill="#f5f7fa" rx="10"/>
+
+  <!-- VAV Box Assembly -->
+  <g id="vavAssembly" transform="translate(0, 10)">
+
+    <!-- Supply Duct (Incoming) -->
+    <g id="supplyDuct">
+      <rect class="duct-supply" x="30" y="60" width="100" height="50" filter="url(#dropShadow)"/>
+      <rect x="30" y="60" width="100" height="8" fill="rgba(255,255,255,0.5)"/> <!-- highlight -->
+      <text class="label-text" x="80" y="53" text-anchor="middle">SUPPLY AIR</text>
+
+      <!-- Airflow indicators -->
+      <g id="supplyFlow">
+        <circle class="airflow-particle flow-animate" cx="50" cy="85" r="3"/>
+        <circle class="airflow-particle flow-animate" cx="80" cy="85" r="3" style="animation-delay: 0.5s"/>
+        <circle class="airflow-particle flow-animate" cx="110" cy="85" r="3" style="animation-delay: 1s"/>
+      </g>
+    </g>
+
+    <!-- VAV Enclosure -->
+    <g id="vavEnclosure" filter="url(#dropShadow)">
+      <rect class="vav-enclosure" x="130" y="45" width="160" height="80" rx="6"/>
+      <rect x="130" y="45" width="160" height="12" fill="rgba(255,255,255,0.6)" rx="6"/> <!-- top highlight -->
+
+      <!-- Damper mechanism -->
+      <g id="damperAssembly">
+        <circle class="damper-shaft" cx="210" cy="85" r="6"/>
+        <rect id="damperBlade" class="damper-blade" x="165" y="82" width="90" height="6" rx="2"
+              transform-origin="210 85"/>
+        <circle class="damper-shaft" cx="210" cy="85" r="3"/>
+      </g>
+
+      <!-- Actuator indicator -->
+      <circle id="actuatorIndicator" cx="275" cy="55" r="4" class="status-normal"/>
+    </g>
+
+    <!-- Zone Duct (Outgoing) -->
+    <g id="zoneDuct">
+      <rect class="duct-zone" x="290" y="60" width="130" height="50" filter="url(#dropShadow)"/>
+      <rect x="290" y="60" width="130" height="8" fill="rgba(255,255,255,0.5)"/> <!-- highlight -->
+      <text class="label-text" x="355" y="53" text-anchor="middle">ZONE DISCHARGE</text>
+
+      <!-- Zone flow indicators -->
+      <g id="zoneFlow">
+        <circle class="airflow-particle flow-animate" cx="310" cy="85" r="3"/>
+        <circle class="airflow-particle flow-animate" cx="345" cy="85" r="3" style="animation-delay: 0.5s"/>
+        <circle class="airflow-particle flow-animate" cx="380" cy="85" r="3" style="animation-delay: 1s"/>
+      </g>
+    </g>
+
+    <!-- Airflow Direction Arrows -->
+    <g class="airflow-arrow">
+      <path d="M 55 75 L 70 75 M 65 70 L 70 75 L 65 80"/>
+      <path d="M 315 75 L 330 75 M 325 70 L 330 75 L 325 80"/>
+    </g>
+  </g>
+
+  <!-- Data Display Panel -->
+  <g id="dataPanel">
+    <rect class="panel-bg" x="20" y="145" width="410" height="155" rx="8" filter="url(#dropShadow)"/>
+
+    <!-- Row 1: Damper & Airflow -->
+    <g id="row1">
+      <rect class="panel-section" x="30" y="160" width="125" height="60" rx="4"/>
+      <text class="label-text" x="92.5" y="175" text-anchor="middle">DAMPER POSITION</text>
+      <text id="damperPosValue" class="value-text" x="92.5" y="197" text-anchor="middle">65</text>
+      <text class="unit-text" x="92.5" y="210" text-anchor="middle">% OPEN</text>
+
+      <rect class="panel-section" x="165" y="160" width="125" height="60" rx="4"/>
+      <text class="label-text" x="227.5" y="175" text-anchor="middle">AIRFLOW</text>
+      <text id="airflowValue" class="value-text" x="227.5" y="197" text-anchor="middle">450</text>
+      <text class="unit-text" x="227.5" y="210" text-anchor="middle">CFM</text>
+
+      <rect class="panel-section" x="300" y="160" width="120" height="60" rx="4"/>
+      <text class="label-text" x="360" y="175" text-anchor="middle">AIRFLOW SP</text>
+      <text id="airflowSPValue" class="value-text" x="360" y="197" text-anchor="middle">500</text>
+      <text class="unit-text" x="360" y="210" text-anchor="middle">CFM</text>
+    </g>
+
+    <!-- Row 2: Zone Temperature & Status -->
+    <g id="row2">
+      <rect class="panel-section" x="30" y="230" width="125" height="60" rx="4"/>
+      <text class="label-text" x="92.5" y="245" text-anchor="middle">ZONE TEMP</text>
+      <text id="zoneTempValue" class="value-text" x="92.5" y="267" text-anchor="middle">72.5</text>
+      <text class="unit-text" x="92.5" y="280" text-anchor="middle">°F</text>
+
+      <rect class="panel-section" x="165" y="230" width="125" height="60" rx="4"/>
+      <text class="label-text" x="227.5" y="245" text-anchor="middle">SETPOINT (OCC)</text>
+      <text id="setpointOccValue" class="value-text" x="227.5" y="267" text-anchor="middle">72.0</text>
+      <text class="unit-text" x="227.5" y="280" text-anchor="middle">°F</text>
+
+      <rect class="panel-section" x="300" y="230" width="120" height="60" rx="4"/>
+      <text class="label-text" x="360" y="245" text-anchor="middle">STATUS</text>
+      <circle id="statusLight" cx="360" cy="260" r="7" class="status-normal"/>
+      <text id="statusText" class="value-text" x="360" y="282" text-anchor="middle" font-size="11">NORMAL</text>
+    </g>
+  </g>
+
+  <!-- Alarm Indicator (top right) -->
+  <g id="alarmIndicator">
+    <circle id="alarmLight" cx="420" cy="20" r="8" class="status-inactive"/>
+  </g>
+
+  <script><![CDATA[
+//!export-start
+// VAV Box datapoints mapped to BMS_Device_Datapoint_Catalog.csv
+let _pn_airflow = 450;                // Airflow (CFM/L/s) - From flow sensor
+let _pn_airflowSP = 500;              // Airflow SP (CFM/L/s) - Occupied/unoccupied
+let _pn_damperCommand = 65;           // Damper Command (0-100%)
+let _pn_damperPosition = 65;          // Damper Position (0-100%) - Feedback
+let _pn_zoneTemp = 72.5;              // Zone Temp (°F/°C)
+let _pn_zoneTempSPOcc = 72.0;         // Zone Temp SP Occ (°F/°C)
+let _pn_zoneTempSPUnocc = 76.0;       // Zone Temp SP Unocc (°F/°C)
+let _pn_reheatStatus = 0;             // Reheat Status (On/Off/%) - If reheat present
+let _pn_reheatValveCmd = 0;           // Reheat Valve Cmd (0-100%)
+let _pb_occupancy = true;             // Occupancy (Occ/Unocc) - From schedule or sensor
+let _pb_alarmActive = false;          // Alarms (Text/Code)
+//!export-end
+
+let flowAnimation = null;
+
+function init() {
+  update();
+  startFlowAnimation();
+}
+
+function update() {
+  updateDamper();
+  updateDataPanel();
+  updateStatus();
+  updateFlowRate();
+}
+
+function updateDamper() {
+  const damper = document.getElementById('damperBlade');
+  if (!damper) return;
+
+  // Rotate damper based on position (0° = closed, 90° = open)
+  const angle = (_pn_damperPosition / 100) * 90;
+  damper.setAttribute('transform', 'rotate(' + angle + ' 210 85)');
+
+  // Update actuator indicator
+  const actuator = document.getElementById('actuatorIndicator');
+  if (actuator) {
+    if (_pn_damperPosition > 95) {
+      actuator.setAttribute('class', 'status-normal');
+    } else if (_pn_damperPosition < 5) {
+      actuator.setAttribute('class', 'status-inactive');
+    } else {
+      actuator.setAttribute('class', 'status-warning');
+    }
+  }
+}
+
+function updateDataPanel() {
+  // Update damper position
+  const damperPosEl = document.getElementById('damperPosValue');
+  if (damperPosEl) damperPosEl.textContent = Math.round(_pn_damperPosition);
+
+  // Update airflow
+  const airflowEl = document.getElementById('airflowValue');
+  if (airflowEl) airflowEl.textContent = Math.round(_pn_airflow);
+
+  // Update airflow setpoint
+  const airflowSPEl = document.getElementById('airflowSPValue');
+  if (airflowSPEl) airflowSPEl.textContent = Math.round(_pn_airflowSP);
+
+  // Update zone temperature
+  const zoneTempEl = document.getElementById('zoneTempValue');
+  if (zoneTempEl) zoneTempEl.textContent = _pn_zoneTemp.toFixed(1);
+
+  // Update setpoint based on occupancy
+  const setpointEl = document.getElementById('setpointOccValue');
+  if (setpointEl) {
+    const sp = _pb_occupancy ? _pn_zoneTempSPOcc : _pn_zoneTempSPUnocc;
+    setpointEl.textContent = sp.toFixed(1);
+  }
+}
+
+function updateStatus() {
+  const statusLight = document.getElementById('statusLight');
+  const statusText = document.getElementById('statusText');
+  const alarmLight = document.getElementById('alarmLight');
+
+  if (!statusLight || !statusText || !alarmLight) return;
+
+  // Handle alarm state
+  if (_pb_alarmActive) {
+    statusLight.setAttribute('class', 'status-alarm alarm-pulse');
+    statusText.textContent = 'ALARM';
+    alarmLight.setAttribute('class', 'status-alarm alarm-pulse');
+    return;
+  }
+
+  alarmLight.setAttribute('class', 'status-inactive');
+
+  // Check if airflow is within tolerance of setpoint
+  const flowError = Math.abs(_pn_airflow - _pn_airflowSP);
+  const tolerance = _pn_airflowSP * 0.15; // 15% tolerance
+
+  if (flowError > tolerance) {
+    statusLight.setAttribute('class', 'status-warning');
+    statusText.textContent = 'FLOW ERROR';
+  } else if (!_pb_occupancy) {
+    statusLight.setAttribute('class', 'status-inactive');
+    statusText.textContent = 'UNOCCUPIED';
+  } else {
+    statusLight.setAttribute('class', 'status-normal');
+    statusText.textContent = 'NORMAL';
+  }
+}
+
+function updateFlowRate() {
+  // Adjust flow animation speed based on airflow
+  const supplyFlow = document.getElementById('supplyFlow');
+  const zoneFlow = document.getElementById('zoneFlow');
+
+  if (!supplyFlow || !zoneFlow) return;
+
+  if (_pn_airflow < 50 || _pn_damperPosition < 5) {
+    // Stop flow animation
+    supplyFlow.style.display = 'none';
+    zoneFlow.style.display = 'none';
+  } else {
+    supplyFlow.style.display = 'block';
+    zoneFlow.style.display = 'block';
+  }
+}
+
+function startFlowAnimation() {
+  // Flow animation is handled via CSS, no additional JS needed
+}
+
+function putValue(id, value) {
+  switch(id) {
+    case '_pn_airflow':
+      _pn_airflow = Number(value) || 0;
+      break;
+    case '_pn_airflowSP':
+      _pn_airflowSP = Number(value) || 0;
+      break;
+    case '_pn_damperCommand':
+      _pn_damperCommand = Number(value) || 0;
+      break;
+    case '_pn_damperPosition':
+      _pn_damperPosition = Number(value) || 0;
+      break;
+    case '_pn_zoneTemp':
+      _pn_zoneTemp = Number(value) || 0;
+      break;
+    case '_pn_zoneTempSPOcc':
+      _pn_zoneTempSPOcc = Number(value) || 72;
+      break;
+    case '_pn_zoneTempSPUnocc':
+      _pn_zoneTempSPUnocc = Number(value) || 76;
+      break;
+    case '_pn_reheatStatus':
+      _pn_reheatStatus = Number(value) || 0;
+      break;
+    case '_pn_reheatValveCmd':
+      _pn_reheatValveCmd = Number(value) || 0;
+      break;
+    case '_pb_occupancy':
+      _pb_occupancy = Boolean(value);
+      break;
+    case '_pb_alarmActive':
+      _pb_alarmActive = Boolean(value);
+      break;
+  }
+  update();
+}
+
+init();
+]]></script>
+</svg>

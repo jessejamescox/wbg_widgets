@@ -2,19 +2,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 450" width="100%" height="100%">
   <defs>
     <style>
-      .ahud-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .ahud-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .ahud-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .ahud-fan { fill: none; stroke: #3498db; stroke-width: 2; }
-      .ahud-fan-blade { fill: #3498db; }
+      .ahud-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .ahud-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .ahud-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .ahud-fan { fill: none; stroke: #1976d2; stroke-width: 2; }
+      .ahud-fan-blade { fill: #1976d2; }
       .ahud-fan-active { animation: spin 1s linear infinite; }
-      .ahud-coil-cooling { stroke: #3498db; fill: none; stroke-width: 2; }
+      .ahud-coil-cooling { stroke: #1976d2; fill: none; stroke-width: 2; }
       .ahud-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
       .ahud-coil-active { filter: drop-shadow(0 0 3px currentColor); }
-      .ahud-filter { fill: #bdc3c7; stroke: #7f8c8d; stroke-width: 1; }
-      .ahud-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 12px; }
-      .ahud-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 10px; }
-      .ahud-value { fill: #3498db; font-family: Arial, monospace; font-size: 11px; font-weight: bold; }
+      .ahud-filter { fill: #eceff1; stroke: #7f8c8d; stroke-width: 1; }
+      .ahud-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 12px; }
+      .ahud-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 10px; }
+      .ahud-value { fill: #1976d2; font-family: Arial, monospace; font-size: 11px; font-weight: bold; }
       .status-ok { fill: #27ae60; }
       .status-alarm { fill: #e74c3c; }
       @keyframes spin {
@@ -93,11 +93,11 @@
   <rect class="ahud-box" x="250" y="90" width="45" height="70" rx="3"/>
   <g id="filter">
     <rect class="ahud-filter" x="258" y="100" width="29" height="50"/>
-    <line x1="262" y1="100" x2="262" y2="150" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="267" y1="100" x2="267" y2="150" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="272" y1="100" x2="272" y2="150" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="277" y1="100" x2="277" y2="150" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="282" y1="100" x2="282" y2="150" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="262" y1="100" x2="262" y2="150" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="267" y1="100" x2="267" y2="150" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="272" y1="100" x2="272" y2="150" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="277" y1="100" x2="277" y2="150" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="282" y1="100" x2="282" y2="150" stroke="#cfd8dc" stroke-width="1"/>
   </g>
   <text class="ahud-label" x="272" y="170" text-anchor="middle" font-size="8">FILTER</text>
 
@@ -115,12 +115,12 @@
   <rect class="ahud-box" x="340" y="90" width="50" height="70" rx="3"/>
   <g id="coolingCoil">
     <path class="ahud-coil-cooling" d="M 350 105 L 380 105 M 350 115 L 380 115 M 350 125 L 380 125 M 350 135 L 380 135 M 350 145 L 380 145 M 350 155 L 380 155"/>
-    <circle cx="350" cy="105" r="2" fill="#3498db"/>
-    <circle cx="350" cy="115" r="2" fill="#3498db"/>
-    <circle cx="350" cy="125" r="2" fill="#3498db"/>
-    <circle cx="350" cy="135" r="2" fill="#3498db"/>
-    <circle cx="350" cy="145" r="2" fill="#3498db"/>
-    <circle cx="350" cy="155" r="2" fill="#3498db"/>
+    <circle cx="350" cy="105" r="2" fill="#1976d2"/>
+    <circle cx="350" cy="115" r="2" fill="#1976d2"/>
+    <circle cx="350" cy="125" r="2" fill="#1976d2"/>
+    <circle cx="350" cy="135" r="2" fill="#1976d2"/>
+    <circle cx="350" cy="145" r="2" fill="#1976d2"/>
+    <circle cx="350" cy="155" r="2" fill="#1976d2"/>
   </g>
   <text class="ahud-label" x="365" y="170" text-anchor="middle" font-size="8">CC</text>
 
@@ -153,7 +153,7 @@
   <text id="saTemp" class="ahud-value" x="587" y="128" text-anchor="middle">58°F</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="290" width="660" height="145" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="290" width="660" height="145" rx="5"/>
 
   <!-- Column 1 -->
   <text class="ahud-label" x="35" y="310">Dampers</text>

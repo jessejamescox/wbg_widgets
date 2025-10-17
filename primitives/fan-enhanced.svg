@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="100%" height="100%">
+  <defs>
+    <style>
+      .fan-housing { fill: url(#housingGradient); stroke: #90a4ae; stroke-width: 2.5; }
+      .fan-blade { fill: url(#bladeGradient); stroke: #546e7a; stroke-width: 0.8; }
+      .fan-blade-shadow { fill: rgba(0,0,0,0.08); }
+      .fan-hub { fill: url(#hubGradient); stroke: #546e7a; stroke-width: 1.5; }
+      .fan-hub-center { fill: #78909c; }
+      .status-ring { fill: none; stroke-width: 3; stroke-linecap: round; }
+      .status-off { stroke: #95a5a6; }
+      .status-on { stroke: #27ae60; }
+      .status-alarm { stroke: #e74c3c; }
+      .label-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 7px; fill: #546e7a; font-weight: 600; text-anchor: middle; }
+      .value-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 9px; fill: #1976d2; font-weight: bold; text-anchor: middle; }
+      .alarm-pulse { animation: alarmPulse 1s ease-in-out infinite; }
+      @keyframes alarmPulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.3; }
+      }
+    </style>
+
+    <!-- Gradients for depth - Light Theme -->
+    <linearGradient id="housingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#eceff1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cfd8dc;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="bladeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#64b5f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2196f3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1976d2;stop-opacity:1" />
+    </linearGradient>
+
+    <radialGradient id="hubGradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#b0bec5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#78909c;stop-opacity:1" />
+    </radialGradient>
+
+    <!-- Drop shadow filter -->
+    <filter id="dropShadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="2"/>
+      <feOffset dx="0" dy="2" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.15"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background card -->
+  <rect x="5" y="5" width="110" height="110" rx="8" fill="#2c3e50" stroke="#e0e0e0" stroke-width="1"/>
+
+  <!-- Fan Housing Circle with shadow -->
+  <circle cx="60" cy="55" r="38" class="fan-housing" filter="url(#dropShadow)"/>
+
+  <!-- Inner ring detail -->
+  <circle cx="60" cy="55" r="34" fill="none" stroke="#b0bec5" stroke-width="0.5" opacity="0.6"/>
+  <circle cx="60" cy="55" r="30" fill="none" stroke="#cfd8dc" stroke-width="0.3" opacity="0.4"/>
+
+  <!-- Fan Blades with shadows -->
+  <g id="fanBlades" transform-origin="60 55">
+    <!-- Blade 1 (Top) -->
+    <g>
+      <path class="fan-blade-shadow" d="M 60 55 L 60 20 A 35 35 0 0 1 77 27 Z" transform="translate(1, 1)"/>
+      <path class="fan-blade" d="M 60 55 L 60 20 A 35 35 0 0 1 77 27 Z"/>
+    </g>
+
+    <!-- Blade 2 (Right) -->
+    <g>
+      <path class="fan-blade-shadow" d="M 60 55 L 95 55 A 35 35 0 0 1 88 72 Z" transform="translate(1, 1)"/>
+      <path class="fan-blade" d="M 60 55 L 95 55 A 35 35 0 0 1 88 72 Z"/>
+    </g>
+
+    <!-- Blade 3 (Bottom) -->
+    <g>
+      <path class="fan-blade-shadow" d="M 60 55 L 60 90 A 35 35 0 0 1 43 83 Z" transform="translate(1, 1)"/>
+      <path class="fan-blade" d="M 60 55 L 60 90 A 35 35 0 0 1 43 83 Z"/>
+    </g>
+
+    <!-- Blade 4 (Left) -->
+    <g>
+      <path class="fan-blade-shadow" d="M 60 55 L 25 55 A 35 35 0 0 1 32 38 Z" transform="translate(1, 1)"/>
+      <path class="fan-blade" d="M 60 55 L 25 55 A 35 35 0 0 1 32 38 Z"/>
+    </g>
+  </g>
+
+  <!-- Center Hub with depth -->
+  <circle cx="60" cy="55" r="11" class="fan-hub" filter="url(#dropShadow)"/>
+  <circle cx="60" cy="55" r="8" class="fan-hub-center"/>
+  <circle cx="60" cy="55" r="4" fill="#90a4ae"/>
+  <circle cx="58" cy="53" r="1.5" fill="#2c3e50" opacity="0.6"/>
+
+  <!-- Status Ring (top right) -->
+  <circle id="statusRing" cx="95" cy="20" r="8" class="status-ring status-off"
+          stroke-dasharray="50.27" stroke-dashoffset="0"/>
+  <circle id="statusIndicator" cx="95" cy="20" r="5" fill="#95a5a6"/>
+
+  <!-- Info Panel -->
+  <g id="infoPanel">
+    <rect x="10" y="97" width="100" height="18" rx="4" fill="#f5f7fa" stroke="#e0e0e0" stroke-width="1"/>
+
+    <!-- Speed Label & Value -->
+    <text class="label-text" x="30" y="103">SPEED</text>
+    <text id="speedText" class="value-text" x="30" y="111">OFF</text>
+
+    <!-- Status Text -->
+    <text id="statusText" class="value-text" x="85" y="107">STOPPED</text>
+  </g>
+
+  <script><![CDATA[
+//!export-start
+let _pn_status = 0;      // Fan status: 0=off, 1=on
+let _pn_speed = 0;       // Fan speed percentage (0-100%)
+let _pn_alarm = 0;       // Alarm state: 0=normal, 1=alarm
+//!export-end
+
+let rotation = 0;
+let animationId = null;
+
+function init() {
+  update();
+}
+
+function update() {
+  const blades = document.getElementById('fanBlades');
+  const statusRing = document.getElementById('statusRing');
+  const statusInd = document.getElementById('statusIndicator');
+  const speedText = document.getElementById('speedText');
+  const statusText = document.getElementById('statusText');
+
+  if (!blades || !statusRing || !statusInd || !speedText || !statusText) return;
+
+  // Handle alarm state (highest priority)
+  if (_pn_alarm === 1) {
+    statusRing.setAttribute('class', 'status-ring status-alarm alarm-pulse');
+    statusInd.setAttribute('fill', '#e74c3c');
+    statusText.textContent = 'ALARM';
+    return;
+  }
+
+  // Handle running state
+  if (_pn_status === 1 && _pn_speed > 0) {
+    // Animate blades based on speed
+    if (!animationId) {
+      animationId = setInterval(function() {
+        rotation += _pn_speed / 8;
+        if (rotation >= 360) rotation = 0;
+        blades.setAttribute('transform', 'rotate(' + rotation + ' 60 55)');
+      }, 50);
+    }
+
+    // Update status ring with speed indication
+    const dashOffset = 50.27 * (1 - _pn_speed / 100);
+    statusRing.setAttribute('class', 'status-ring status-on');
+    statusRing.setAttribute('stroke-dashoffset', dashOffset);
+    statusInd.setAttribute('fill', '#27ae60');
+    speedText.textContent = Math.round(_pn_speed) + '%';
+
+    if (_pn_speed < 30) {
+      statusText.textContent = 'LOW';
+    } else if (_pn_speed < 70) {
+      statusText.textContent = 'MEDIUM';
+    } else {
+      statusText.textContent = 'HIGH';
+    }
+  } else {
+    // Stopped state
+    if (animationId) {
+      clearInterval(animationId);
+      animationId = null;
+    }
+    statusRing.setAttribute('class', 'status-ring status-off');
+    statusRing.setAttribute('stroke-dashoffset', '0');
+    statusInd.setAttribute('fill', '#95a5a6');
+    speedText.textContent = 'OFF';
+    statusText.textContent = 'STOPPED';
+  }
+}
+
+function putValue(id, value) {
+  if (id === '_pn_status') {
+    _pn_status = Number(value) || 0;
+    update();
+  } else if (id === '_pn_speed') {
+    _pn_speed = Number(value) || 0;
+    update();
+  } else if (id === '_pn_alarm') {
+    _pn_alarm = Number(value) || 0;
+    update();
+  }
+}
+
+init();
+]]></script>
+</svg>

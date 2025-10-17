@@ -4,18 +4,18 @@
     <style>
       .thermo-card-bg { fill: #2c3e50; stroke: #34495e; stroke-width: 2; }
       .thermo-display { fill: #1a252f; stroke: #34495e; stroke-width: 1; }
-      .thermo-text { fill: #ecf0f1; font-family: Arial, sans-serif; }
-      .thermo-label { fill: #95a5a6; font-family: Arial, sans-serif; font-size: 12px; }
+      .thermo-text { fill: #2c3e50; font-family: Arial, sans-serif; }
+      .thermo-label { fill: #546e7a; font-family: Arial, sans-serif; font-size: 12px; }
       .thermo-temp-large { font-size: 48px; font-weight: bold; }
       .thermo-temp-small { font-size: 24px; }
       .thermo-mode-btn { cursor: pointer; stroke-width: 2; }
       .thermo-mode-btn:hover { opacity: 0.8; }
-      .mode-off { fill: #7f8c8d; stroke: #95a5a6; }
+      .mode-off { fill: #546e7a; stroke: #95a5a6; }
       .mode-heat { fill: #e74c3c; stroke: #c0392b; }
       .mode-cool { fill: #3498db; stroke: #2980b9; }
       .mode-auto { fill: #f39c12; stroke: #d68910; }
       .mode-active { stroke-width: 3; filter: brightness(1.2); }
-      .fan-icon { fill: #ecf0f1; }
+      .fan-icon { fill: #2c3e50; }
       .fan-spinning { animation: spin 2s linear infinite; }
       @keyframes spin {
         from { transform: rotate(0deg); }

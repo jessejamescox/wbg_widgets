@@ -2,19 +2,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 350" width="100%" height="100%">
   <defs>
     <style>
-      .hum-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .hum-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .hum-water { fill: #3498db; opacity: 0.6; }
-      .hum-steam { fill: none; stroke: #ecf0f1; stroke-width: 1.5; opacity: 0.5; }
+      .hum-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .hum-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .hum-water { fill: #1976d2; opacity: 0.6; }
+      .hum-steam { fill: none; stroke: #2c3e50; stroke-width: 1.5; opacity: 0.5; }
       .hum-steam-active { animation: steam 2s ease-in-out infinite; }
-      .hum-spray { fill: #3498db; opacity: 0.4; }
+      .hum-spray { fill: #1976d2; opacity: 0.4; }
       .hum-spray-active { animation: spray 1.5s ease-in-out infinite; }
-      .hum-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .hum-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .hum-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
-      .hum-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .hum-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .hum-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .hum-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .hum-arrow { fill: none; stroke: #1976d2; stroke-width: 2; }
       .status-ok { fill: #27ae60; }
-      .status-active { fill: #3498db; }
+      .status-active { fill: #1976d2; }
       .status-alarm { fill: #e74c3c; }
       @keyframes steam {
         0% { transform: translateY(0); opacity: 0.5; }
@@ -84,7 +84,7 @@
   </g>
 
   <!-- Water/Steam Supply -->
-  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="110" y="45" width="180" height="25" rx="3"/>
+  <rect fill="#2c3e50" stroke="#e0e0e0" stroke-width="2" x="110" y="45" width="180" height="25" rx="3"/>
   <text class="hum-label" x="200" y="61" text-anchor="middle" font-size="9">STEAM/WATER SUPPLY</text>
 
   <!-- Drain Pan -->
@@ -99,15 +99,15 @@
   <path class="hum-arrow" d="M 310 125 L 330 125 M 325 120 L 330 125 L 325 130"/>
 
   <!-- Water Supply Pipe -->
-  <rect fill="#3498db" stroke="#2980b9" stroke-width="1" x="20" y="55" width="90" height="8" rx="2"/>
+  <rect fill="#1976d2" stroke="#2980b9" stroke-width="1" x="20" y="55" width="90" height="8" rx="2"/>
   <text class="hum-label" x="65" y="52" text-anchor="middle" font-size="9">WATER IN</text>
 
   <!-- Valve -->
-  <circle fill="#34495e" stroke="#2c3e50" stroke-width="2" cx="110" cy="59" r="8"/>
+  <circle fill="#f5f7fa" stroke="#ffffff" stroke-width="2" cx="110" cy="59" r="8"/>
   <text class="hum-label" x="110" y="62" text-anchor="middle" font-size="7">V</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="190" width="360" height="140" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="190" width="360" height="140" rx="5"/>
 
   <!-- Row 1 -->
   <text class="hum-label" x="40" y="215">Inlet RH:</text>

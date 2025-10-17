@@ -1,13 +1,13 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 40" width="100%" height="100%">
   <defs>
     <style>
-      .chip-body { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1.5; }
+      .chip-body { fill: #2c3e50; stroke: #95a5a6; stroke-width: 1.5; }
       .chip-alarm { fill: #e74c3c; stroke: #c0392b; stroke-width: 1.5; }
       .icon { fill: #e74c3c; }
-      .icon-normal { fill: #95a5a6; }
+      .icon-normal { fill: #546e7a; }
       .alarm-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; font-weight: bold; text-anchor: middle; }
       .normal-text { font-family: Arial, sans-serif; font-size: 11px; fill: #27ae60; font-weight: bold; text-anchor: middle; }
-      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #95a5a6; text-anchor: middle; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #546e7a; text-anchor: middle; }
     </style>
   </defs>
 

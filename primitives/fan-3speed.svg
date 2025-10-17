@@ -1,41 +1,44 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100" width="100%" height="100%">
   <defs>
     <style>
-      .speed-btn { fill: #ecf0f1; stroke: #34495e; stroke-width: 1.5; cursor: pointer; }
-      .speed-btn-active { fill: #3498db; }
-      .speed-label { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; text-anchor: middle; }
-      .fan-blade { fill: #4a90e2; }
+      .speed-btn { fill: #ffffff; stroke: #90a4ae; stroke-width: 1.5; cursor: pointer; transition: all 0.2s; }
+      .speed-btn-active { fill: #2196f3; stroke: #1976d2; }
+      .speed-label { font-family: Arial, sans-serif; font-size: 10px; fill: #2c3e50; text-anchor: middle; font-weight: 600; }
+      .speed-label-active { fill: #ffffff; }
+      .fan-blade { fill: #2196f3; }
+      .fan-housing { stroke: #90a4ae; fill: none; }
+      .fan-center { fill: #78909c; }
     </style>
   </defs>
 
   <!-- Fan Visual -->
-  <circle cx="30" cy="50" r="25" fill="none" stroke="#34495e" stroke-width="2"/>
+  <circle cx="30" cy="50" r="25" class="fan-housing" stroke-width="2"/>
   <g id="fanBlades" transform-origin="30 50">
     <path class="fan-blade" d="M 30 50 L 30 27 A 23 23 0 0 1 42 34 Z"/>
     <path class="fan-blade" d="M 30 50 L 53 50 A 23 23 0 0 1 46 62 Z"/>
     <path class="fan-blade" d="M 30 50 L 30 73 A 23 23 0 0 1 18 66 Z"/>
     <path class="fan-blade" d="M 30 50 L 7 50 A 23 23 0 0 1 14 38 Z"/>
   </g>
-  <circle cx="30" cy="50" r="6" fill="#2c3e50"/>
+  <circle cx="30" cy="50" r="6" class="fan-center"/>
 
   <!-- Speed Buttons -->
   <rect id="btn0" class="speed-btn speed-btn-active" x="65" y="10" width="20" height="20" rx="3"/>
-  <text x="75" y="23" class="speed-label">0</text>
+  <text id="lbl0" x="75" y="23" class="speed-label speed-label-active">0</text>
 
   <rect id="btn1" class="speed-btn" x="65" y="35" width="20" height="20" rx="3"/>
-  <text x="75" y="48" class="speed-label">1</text>
+  <text id="lbl1" x="75" y="48" class="speed-label">1</text>
 
   <rect id="btn2" class="speed-btn" x="65" y="60" width="20" height="20" rx="3"/>
-  <text x="75" y="73" class="speed-label">2</text>
+  <text id="lbl2" x="75" y="73" class="speed-label">2</text>
 
   <rect id="btn3" class="speed-btn" x="65" y="85" width="20" height="20" rx="3"/>
-  <text x="75" y="98" class="speed-label">3</text>
+  <text id="lbl3" x="75" y="98" class="speed-label">3</text>
 
   <!-- Labels -->
-  <text x="100" y="23" class="speed-label">OFF</text>
-  <text x="100" y="48" class="speed-label">LOW</text>
-  <text x="100" y="73" class="speed-label">MED</text>
-  <text x="100" y="98" class="speed-label">HIGH</text>
+  <text x="100" y="23" class="speed-label" font-size="9px">OFF</text>
+  <text x="100" y="48" class="speed-label" font-size="9px">LOW</text>
+  <text x="100" y="73" class="speed-label" font-size="9px">MED</text>
+  <text x="100" y="98" class="speed-label" font-size="9px">HIGH</text>
 
   <script><![CDATA[
 //!export-start
@@ -49,43 +52,45 @@ function init() {
 let rotation = 0;
 let animationId = null;
 
-    function update() {
-const blades = document.getElementById('fanBlades');
-
+function update() {
+  const blades = document.getElementById('fanBlades');
   if (!blades) return;
 
-      // Update button states
-      for (var i = 0; i <= 3; i++) {
-const btn = document.getElementById('btn' + i);
-        if (i === _pn_speed) {
-          btn.setAttribute('class', 'speed-btn speed-btn-active');
-        } else {
-          btn.setAttribute('class', 'speed-btn');
-        }
-      }
-
-      // Animate based on _pn_speed
-      if (animationId) clearInterval(animationId);
-
-      if (_pn_speed > 0) {
-let rotSpeed = _pn_speed * 3;
-        animationId = setInterval(function() {
-          rotation += rotSpeed;
-          blades.setAttribute('transform', 'rotate(' + rotation + ' 30 50)');
-        }, 50);
-      }
+  // Update button and label states
+  for (var i = 0; i <= 3; i++) {
+    const btn = document.getElementById('btn' + i);
+    const lbl = document.getElementById('lbl' + i);
+    if (i === _pn_speed) {
+      btn.setAttribute('class', 'speed-btn speed-btn-active');
+      lbl.setAttribute('class', 'speed-label speed-label-active');
+    } else {
+      btn.setAttribute('class', 'speed-btn');
+      lbl.setAttribute('class', 'speed-label');
     }
+  }
 
-    // Button click handlers
-    function setSpeed(s) {
-      _pn_speed = s;
-      update();
-    }
+  // Animate based on _pn_speed
+  if (animationId) clearInterval(animationId);
 
-    document.getElementById('btn0').onclick = function() { setSpeed(0); };
-    document.getElementById('btn1').onclick = function() { setSpeed(1); };
-    document.getElementById('btn2').onclick = function() { setSpeed(2); };
-    document.getElementById('btn3').onclick = function() { setSpeed(3); };
+  if (_pn_speed > 0) {
+    let rotSpeed = _pn_speed * 3;
+    animationId = setInterval(function() {
+      rotation += rotSpeed;
+      blades.setAttribute('transform', 'rotate(' + rotation + ' 30 50)');
+    }, 50);
+  }
+}
+
+// Button click handlers
+function setSpeed(s) {
+  _pn_speed = s;
+  update();
+}
+
+document.getElementById('btn0').onclick = function() { setSpeed(0); };
+document.getElementById('btn1').onclick = function() { setSpeed(1); };
+document.getElementById('btn2').onclick = function() { setSpeed(2); };
+document.getElementById('btn3').onclick = function() { setSpeed(3); };
 
 function putValue(id, value) {
   if (id === '_pn_speed') {

@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 400" width="100%" height="100%">
+  <defs>
+    <style>
+      /* BESS Enclosure */
+      .bess-container { fill: url(#containerGradient); stroke: #ffffff; stroke-width: 3; }
+      .battery-cell { fill: url(#cellGradient); stroke: #f5f7fa; stroke-width: 1.5; }
+      .terminal-positive { fill: #e74c3c; stroke: #c0392b; stroke-width: 2; }
+      .terminal-negative { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+
+      /* Energy Flow */
+      .energy-flow { fill: none; stroke-width: 4; stroke-linecap: round; }
+      .flow-charging { stroke: #27ae60; }
+      .flow-discharging { stroke: #1976d2; }
+      .flow-idle { stroke: #b0bec5; }
+      .flow-arrow { stroke-width: 2.5; }
+
+      /* SOC Battery Fill */
+      .soc-background { fill: #e0e0e0; stroke: #ffffff; stroke-width: 2; }
+      .soc-fill { transition: all 0.5s ease; }
+      .soc-low { fill: url(#socLowGradient); }
+      .soc-medium { fill: url(#socMediumGradient); }
+      .soc-high { fill: url(#socHighGradient); }
+
+      /* Text Styles */
+      .title-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 20px; fill: #2c3e50; font-weight: 700; text-anchor: middle; letter-spacing: 1px; }
+      .label-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 11px; fill: #546e7a; font-weight: 600; }
+      .value-text { font-family: 'Orbitron', 'Consolas', monospace; font-size: 18px; fill: #1976d2; font-weight: 700; }
+      .value-text-large { font-family: 'Orbitron', 'Consolas', monospace; font-size: 32px; fill: #1976d2; font-weight: 700; text-anchor: middle; }
+      .unit-text { font-family: 'Segoe UI', Arial, sans-serif; font-size: 12px; fill: #b0bec5; font-weight: 600; }
+
+      /* Status & Mode */
+      .mode-idle { fill: #b0bec5; }
+      .mode-charging { fill: #27ae60; }
+      .mode-discharging { fill: #1976d2; }
+      .mode-alarm { fill: #e74c3c; }
+
+      /* Data Panels */
+      .panel-bg { fill: #ffffff; stroke: #f5f7fa; stroke-width: 1.5; }
+      .panel-header { fill: #f5f7fa; }
+
+      /* Animations */
+      .charging-pulse { animation: chargingPulse 2s ease-in-out infinite; }
+      .discharging-pulse { animation: dischargingPulse 1.5s ease-in-out infinite; }
+      .flow-animate { animation: flowMove 2s linear infinite; }
+      .alarm-flash { animation: alarmFlash 0.7s ease-in-out infinite; }
+
+      @keyframes chargingPulse {
+        0%, 100% { opacity: 0.6; }
+        50% { opacity: 1; }
+      }
+      @keyframes dischargingPulse {
+        0%, 100% { opacity: 0.7; }
+        50% { opacity: 1; }
+      }
+      @keyframes flowMove {
+        0% { stroke-dashoffset: 20; }
+        100% { stroke-dashoffset: 0; }
+      }
+      @keyframes alarmFlash {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.2; }
+      }
+    </style>
+
+    <!-- Gradients -->
+    <linearGradient id="containerGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eceff1;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cfd8dc;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="cellGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#eceff1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#cfd8dc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cfd8dc;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="socLowGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#e74c3c;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c0392b;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="socMediumGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f39c12;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#d68910;stop-opacity:1" />
+    </linearGradient>
+
+    <linearGradient id="socHighGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#27ae60;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#229954;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Filters -->
+    <filter id="dropShadow">
+      <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+      <feOffset dx="0" dy="3" result="offsetblur"/>
+      <feComponentTransfer>
+        <feFuncA type="linear" slope="0.15"/>
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="480" height="400" fill="#f5f7fa" rx="12"/>
+
+  <!-- Main Battery Visualization -->
+  <g id="batterySystem" transform="translate(40, 20)">
+    <!-- BESS Container -->
+    <rect class="bess-container" x="0" y="0" width="180" height="120" rx="8" filter="url(#dropShadow)"/>
+
+    <!-- Battery Cells (4 visible cells) -->
+    <g id="batteryCells">
+      <rect class="battery-cell" x="15" y="15" width="35" height="90" rx="3"/>
+      <rect class="battery-cell" x="58" y="15" width="35" height="90" rx="3"/>
+      <rect class="battery-cell" x="101" y="15" width="35" height="90" rx="3"/>
+      <rect class="battery-cell" x="144" y="15" width="35" height="90" rx="3"/>
+
+      <!-- Cell terminals (positive) -->
+      <rect class="terminal-positive" x="25" y="8" width="15" height="7" rx="2"/>
+      <rect class="terminal-positive" x="68" y="8" width="15" height="7" rx="2"/>
+      <rect class="terminal-positive" x="111" y="8" width="15" height="7" rx="2"/>
+      <rect class="terminal-positive" x="154" y="8" width="15" height="7" rx="2"/>
+    </g>
+
+    <!-- SOC Indicator Overlay -->
+    <g id="socIndicator">
+      <rect class="soc-background" x="15" y="15" width="160" height="90" rx="3"/>
+      <rect id="socFill" class="soc-fill soc-high" x="15" y="15" width="160" height="90" rx="3"/>
+    </g>
+
+    <!-- SOC Percentage Text -->
+    <text id="socText" class="value-text-large" x="95" y="72">75%</text>
+  </g>
+
+  <!-- Power Flow Diagram -->
+  <g id="powerFlow" transform="translate(240, 20)">
+    <!-- Grid Connection -->
+    <g id="gridConnection">
+      <circle cx="100" cy="20" r="18" fill="#f5f7fa" stroke="#ffffff" stroke-width="2"/>
+      <text x="100" y="18" text-anchor="middle" font-size="10" fill="#2c3e50" font-weight="bold">GRID</text>
+      <text x="100" y="28" text-anchor="middle" font-size="8" fill="#546e7a">CONNECTION</text>
+    </g>
+
+    <!-- Energy Flow Lines -->
+    <g id="flowLines">
+      <!-- Vertical line -->
+      <path id="flowPath" class="energy-flow flow-idle" d="M 100 38 L 100 82"
+            stroke-dasharray="5,5"/>
+      <!-- Flow arrow -->
+      <g id="flowArrow">
+        <path class="energy-flow flow-arrow flow-idle" d="M 95 60 L 100 65 L 105 60"/>
+      </g>
+    </g>
+
+    <!-- BESS Icon Center -->
+    <g id="bessIcon">
+      <rect x="75" y="82" width="50" height="38" rx="4" fill="#2c3e50" stroke="#f5f7fa" stroke-width="2"/>
+      <text x="100" y="105" text-anchor="middle" font-size="11" fill="#1976d2" font-weight="bold">BESS</text>
+    </g>
+  </g>
+
+  <!-- Data Display Panel -->
+  <g id="dataPanel" transform="translate(20, 160)">
+    <rect class="panel-bg" x="0" y="0" width="440" height="180" rx="8" filter="url(#dropShadow)"/>
+
+    <!-- Row 1: Power & Mode -->
+    <g id="powerDisplay">
+      <rect class="panel-header" x="10" y="10" width="200" height="75" rx="5"/>
+      <text class="label-text" x="110" y="28" text-anchor="middle">CHARGE/DISCHARGE POWER</text>
+      <text id="powerValue" class="value-text-large" x="110" y="62" font-size="28">0.0</text>
+      <text class="unit-text" x="110" y="78" text-anchor="middle">kW</text>
+    </g>
+
+    <g id="modeDisplay">
+      <rect class="panel-header" x="230" y="10" width="200" height="75" rx="5"/>
+      <text class="label-text" x="330" y="28" text-anchor="middle">OPERATING MODE</text>
+      <circle id="modeIndicator" cx="330" cy="50" r="12" class="mode-idle"/>
+      <text id="modeText" class="value-text" x="330" y="75" text-anchor="middle" font-size="16">IDLE</text>
+    </g>
+
+    <!-- Row 2: SOC, SOH, Alarms -->
+    <g id="stateOfCharge">
+      <rect class="panel-header" x="10" y="95" width="135" height="75" rx="5"/>
+      <text class="label-text" x="77.5" y="113" text-anchor="middle">STATE OF CHARGE</text>
+      <text id="socValue" class="value-text" x="77.5" y="140" text-anchor="middle" font-size="24">75</text>
+      <text class="unit-text" x="77.5" y="158" text-anchor="middle">%</text>
+    </g>
+
+    <g id="stateOfHealth">
+      <rect class="panel-header" x="155" y="95" width="135" height="75" rx="5"/>
+      <text class="label-text" x="222.5" y="113" text-anchor="middle">STATE OF HEALTH</text>
+      <text id="sohValue" class="value-text" x="222.5" y="140" text-anchor="middle" font-size="24">98</text>
+      <text class="unit-text" x="222.5" y="158" text-anchor="middle">%</text>
+    </g>
+
+    <g id="alarmStatus">
+      <rect class="panel-header" x="300" y="95" width="130" height="75" rx="5"/>
+      <text class="label-text" x="365" y="113" text-anchor="middle">STATUS</text>
+      <circle id="alarmIndicator" cx="365" cy="135" r="10" class="mode-charging"/>
+      <text id="alarmText" class="label-text" x="365" y="160" text-anchor="middle" font-size="11" fill="#546e7a">NORMAL</text>
+    </g>
+  </g>
+
+  <script><![CDATA[
+//!export-start
+// BESS datapoints mapped to BMS_Device_Datapoint_Catalog.csv
+let _pn_chargeDischargePower = 0;  // Charge/Discharge Power (kW) - positive=discharge, negative=charge
+let _pn_soc = 75;                   // SOC (%) - State of Charge
+let _pn_soh = 98;                   // SOH (%) - State of Health
+let _pn_modeCmd = 0;                // Mode Cmd (0=Idle, 1=Charge, 2=Discharge)
+let _ps_alarms = "";                // Alarms (Text/Code)
+let _pb_alarmActive = false;        // Alarm active boolean
+//!export-end
+
+let flowAnimationId = null;
+
+function init() {
+  update();
+}
+
+function update() {
+  updateSOC();
+  updatePower();
+  updateMode();
+  updateHealth();
+  updateAlarm();
+  updateFlowAnimation();
+}
+
+function updateSOC() {
+  const socFill = document.getElementById('socFill');
+  const socText = document.getElementById('socText');
+  const socValue = document.getElementById('socValue');
+
+  if (socFill) {
+    // Calculate fill height (bottom-up fill)
+    const fillHeight = (_pn_soc / 100) * 90;
+    const yPos = 105 - fillHeight; // Start from bottom (105) and go up
+    socFill.setAttribute('y', yPos);
+    socFill.setAttribute('height', fillHeight);
+
+    // Change color based on SOC level
+    if (_pn_soc < 20) {
+      socFill.setAttribute('class', 'soc-fill soc-low');
+    } else if (_pn_soc < 50) {
+      socFill.setAttribute('class', 'soc-fill soc-medium');
+    } else {
+      socFill.setAttribute('class', 'soc-fill soc-high');
+    }
+  }
+
+  if (socText) socText.textContent = Math.round(_pn_soc) + '%';
+  if (socValue) socValue.textContent = Math.round(_pn_soc);
+}
+
+function updatePower() {
+  const powerValue = document.getElementById('powerValue');
+  if (!powerValue) return;
+
+  const absValue = Math.abs(_pn_chargeDischargePower);
+  powerValue.textContent = absValue.toFixed(1);
+
+  // Color based on charge/discharge
+  if (_pn_chargeDischargePower > 0) {
+    powerValue.setAttribute('fill', '#1976d2'); // Discharging = blue
+  } else if (_pn_chargeDischargePower < 0) {
+    powerValue.setAttribute('fill', '#27ae60'); // Charging = green
+  } else {
+    powerValue.setAttribute('fill', '#b0bec5'); // Idle = gray
+  }
+}
+
+function updateMode() {
+  const modeIndicator = document.getElementById('modeIndicator');
+  const modeText = document.getElementById('modeText');
+  const flowPath = document.getElementById('flowPath');
+  const flowArrow = document.getElementById('flowArrow');
+
+  if (!modeIndicator || !modeText || !flowPath || !flowArrow) return;
+
+  let modeClass = 'mode-idle';
+  let modeLabel = 'IDLE';
+  let flowClass = 'energy-flow flow-idle';
+  let arrowPath = 'M 95 60 L 100 65 L 105 60'; // Down arrow
+
+  if (_pn_modeCmd === 1 || _pn_chargeDischargePower < 0) {
+    // Charging mode
+    modeClass = 'mode-charging charging-pulse';
+    modeLabel = 'CHARGING';
+    flowClass = 'energy-flow flow-charging flow-animate';
+    arrowPath = 'M 95 60 L 100 65 L 105 60'; // Down arrow (grid to battery)
+  } else if (_pn_modeCmd === 2 || _pn_chargeDischargePower > 0) {
+    // Discharging mode
+    modeClass = 'mode-discharging discharging-pulse';
+    modeLabel = 'DISCHARGING';
+    flowClass = 'energy-flow flow-discharging flow-animate';
+    arrowPath = 'M 95 70 L 100 65 L 105 70'; // Up arrow (battery to grid)
+  }
+
+  modeIndicator.setAttribute('class', modeClass);
+  modeText.textContent = modeLabel;
+  flowPath.setAttribute('class', flowClass);
+
+  const arrowElement = flowArrow.querySelector('path');
+  if (arrowElement) {
+    arrowElement.setAttribute('class', flowClass.replace('energy-flow', 'energy-flow flow-arrow'));
+    arrowElement.setAttribute('d', arrowPath);
+  }
+}
+
+function updateHealth() {
+  const sohValue = document.getElementById('sohValue');
+  if (!sohValue) return;
+
+  sohValue.textContent = Math.round(_pn_soh);
+
+  // Color based on health
+  if (_pn_soh < 70) {
+    sohValue.setAttribute('fill', '#e74c3c');
+  } else if (_pn_soh < 85) {
+    sohValue.setAttribute('fill', '#f39c12');
+  } else {
+    sohValue.setAttribute('fill', '#1976d2');
+  }
+}
+
+function updateAlarm() {
+  const alarmIndicator = document.getElementById('alarmIndicator');
+  const alarmText = document.getElementById('alarmText');
+
+  if (!alarmIndicator || !alarmText) return;
+
+  if (_pb_alarmActive || _ps_alarms !== "") {
+    alarmIndicator.setAttribute('class', 'mode-alarm alarm-flash');
+    alarmText.textContent = _ps_alarms || 'ALARM';
+    alarmText.setAttribute('fill', '#e74c3c');
+  } else {
+    alarmIndicator.setAttribute('class', 'mode-charging');
+    alarmText.textContent = 'NORMAL';
+    alarmText.setAttribute('fill', '#546e7a');
+  }
+}
+
+function updateFlowAnimation() {
+  // Animation is handled via CSS
+}
+
+function putValue(id, value) {
+  switch(id) {
+    case '_pn_chargeDischargePower':
+      _pn_chargeDischargePower = Number(value) || 0;
+      break;
+    case '_pn_soc':
+      _pn_soc = Math.max(0, Math.min(100, Number(value) || 0));
+      break;
+    case '_pn_soh':
+      _pn_soh = Math.max(0, Math.min(100, Number(value) || 0));
+      break;
+    case '_pn_modeCmd':
+      _pn_modeCmd = Number(value) || 0;
+      break;
+    case '_ps_alarms':
+      _ps_alarms = String(value) || "";
+      _pb_alarmActive = (_ps_alarms !== "");
+      break;
+    case '_pb_alarmActive':
+      _pb_alarmActive = Boolean(value);
+      break;
+  }
+  update();
+}
+
+init();
+]]></script>
+</svg>

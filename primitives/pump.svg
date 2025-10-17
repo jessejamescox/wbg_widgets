@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
-      .pump-body { fill: #3498db; stroke: #2c3e50; stroke-width: 2; }
-      .pump-volute { fill: #5dade2; stroke: #2c3e50; stroke-width: 2; }
-      .motor { fill: #34495e; stroke: #2c3e50; stroke-width: 1.5; }
+      .pump-body { fill: #1976d2; stroke: #ffffff; stroke-width: 2; }
+      .pump-volute { fill: #64b5f6; stroke: #ffffff; stroke-width: 2; }
+      .motor { fill: #f5f7fa; stroke: #ffffff; stroke-width: 1.5; }
       .pipe { fill: none; stroke: #7f8c8d; stroke-width: 4; }
       .impeller { fill: #2980b9; transition: opacity 0.3s; }
       .status-on { fill: #27ae60; }
-      .status-off { fill: #95a5a6; }
+      .status-off { fill: #546e7a; }
       .status-alarm { fill: #e74c3c; }
-      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 10px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
     </style>
   </defs>
 
@@ -32,7 +32,7 @@
 
   <!-- Motor -->
   <rect x="45" y="55" width="10" height="15" class="motor" rx="1"/>
-  <line x1="50" y1="55" x2="50" y2="48" stroke="#2c3e50" stroke-width="2"/>
+  <line x1="50" y1="55" x2="50" y2="48" stroke="#ffffff" stroke-width="2"/>
 
   <!-- Status Indicator -->
   <circle id="statusIndicator" cx="50" cy="15" r="6" class="status-off"/>

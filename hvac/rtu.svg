@@ -2,22 +2,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 550 400" width="100%" height="100%">
   <defs>
     <style>
-      .rtu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .rtu-roof { fill: #2c3e50; stroke: #1a252f; stroke-width: 2; }
-      .rtu-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .rtu-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .rtu-fan { fill: none; stroke: #3498db; stroke-width: 2; }
-      .rtu-fan-blade { fill: #3498db; }
+      .rtu-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .rtu-roof { fill: #ffffff; stroke: #e0e0e0; stroke-width: 2; }
+      .rtu-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .rtu-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .rtu-fan { fill: none; stroke: #1976d2; stroke-width: 2; }
+      .rtu-fan-blade { fill: #1976d2; }
       .rtu-fan-active { animation: spin 1s linear infinite; }
-      .rtu-compressor { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .rtu-compressor-active { fill: #3498db; animation: pulse 1s ease-in-out infinite; }
+      .rtu-compressor { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .rtu-compressor-active { fill: #1976d2; animation: pulse 1s ease-in-out infinite; }
       .rtu-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
       .rtu-coil-active { filter: drop-shadow(0 0 3px currentColor); }
-      .rtu-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .rtu-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .rtu-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .rtu-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .rtu-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .rtu-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
       .status-ok { fill: #27ae60; }
-      .status-running { fill: #3498db; }
+      .status-running { fill: #1976d2; }
       .status-alarm { fill: #e74c3c; }
       @keyframes spin {
         from { transform: rotate(0deg); }
@@ -73,11 +73,11 @@
   <rect class="rtu-box" x="120" y="160" width="70" height="50" rx="3"/>
   <text class="rtu-label" x="155" y="175" text-anchor="middle" font-size="9">DX COIL</text>
   <g id="dxCoil">
-    <path stroke="#3498db" fill="none" stroke-width="2" d="M 130 183 L 180 183 M 130 190 L 180 190 M 130 197 L 180 197 M 130 204 L 180 204"/>
-    <circle cx="130" cy="183" r="2" fill="#3498db"/>
-    <circle cx="130" cy="190" r="2" fill="#3498db"/>
-    <circle cx="130" cy="197" r="2" fill="#3498db"/>
-    <circle cx="130" cy="204" r="2" fill="#3498db"/>
+    <path stroke="#1976d2" fill="none" stroke-width="2" d="M 130 183 L 180 183 M 130 190 L 180 190 M 130 197 L 180 197 M 130 204 L 180 204"/>
+    <circle cx="130" cy="183" r="2" fill="#1976d2"/>
+    <circle cx="130" cy="190" r="2" fill="#1976d2"/>
+    <circle cx="130" cy="197" r="2" fill="#1976d2"/>
+    <circle cx="130" cy="204" r="2" fill="#1976d2"/>
   </g>
 
   <!-- Heating Section -->
@@ -97,14 +97,14 @@
   <rect class="rtu-box" x="280" y="85" width="50" height="125" rx="3"/>
   <text class="rtu-label" x="305" y="100" text-anchor="middle" font-size="8">FILTER</text>
   <g id="filter">
-    <rect fill="#bdc3c7" stroke="#7f8c8d" stroke-width="1" x="290" y="108" width="30" height="95"/>
-    <line x1="293" y1="108" x2="293" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="297" y1="108" x2="297" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="301" y1="108" x2="301" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="305" y1="108" x2="305" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="309" y1="108" x2="309" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="313" y1="108" x2="313" y2="203" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="317" y1="108" x2="317" y2="203" stroke="#95a5a6" stroke-width="1"/>
+    <rect fill="#eceff1" stroke="#7f8c8d" stroke-width="1" x="290" y="108" width="30" height="95"/>
+    <line x1="293" y1="108" x2="293" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="297" y1="108" x2="297" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="301" y1="108" x2="301" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="305" y1="108" x2="305" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="309" y1="108" x2="309" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="313" y1="108" x2="313" y2="203" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="317" y1="108" x2="317" y2="203" stroke="#cfd8dc" stroke-width="1"/>
   </g>
 
   <!-- Supply Fan -->
@@ -126,7 +126,7 @@
   <text id="saTemp" class="rtu-value" x="502" y="143" text-anchor="middle" font-size="10">58°F</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="240" width="510" height="145" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="240" width="510" height="145" rx="5"/>
 
   <!-- Row 1 -->
   <text class="rtu-label" x="35" y="260">Supply Fan:</text>
@@ -242,7 +242,7 @@ const comp1Text = document.getElementById('comp1Text');
         comp1Circle.classList.add('rtu-compressor-active');
         comp1Light.setAttribute('class', 'status-running');
         comp1Text.textContent = 'Running';
-        comp1Text.style.fill = '#3498db';
+        comp1Text.style.fill = '#1976d2';
       } else {
         comp1Circle.classList.remove('rtu-compressor-active');
         comp1Light.setAttribute('class', 'status-ok');
@@ -256,7 +256,7 @@ const comp2Text = document.getElementById('comp2Text');
         comp2Circle.classList.add('rtu-compressor-active');
         comp2Light.setAttribute('class', 'status-running');
         comp2Text.textContent = 'Running';
-        comp2Text.style.fill = '#3498db';
+        comp2Text.style.fill = '#1976d2';
       } else {
         comp2Circle.classList.remove('rtu-compressor-active');
         comp2Light.setAttribute('class', 'status-ok');
@@ -267,7 +267,7 @@ const comp2Text = document.getElementById('comp2Text');
       // Update DX coil appearance
 const dxCoil = document.getElementById('dxCoil');
       if (_pb_compressor1 || _pb_compressor2) {
-        dxCoil.style.filter = 'drop-shadow(0 0 3px #3498db)';
+        dxCoil.style.filter = 'drop-shadow(0 0 3px #1976d2)';
       } else {
         dxCoil.style.filter = 'none';
       }

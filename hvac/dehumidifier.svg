@@ -2,19 +2,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 380" width="100%" height="100%">
   <defs>
     <style>
-      .dehum-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .dehum-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .dehum-coil { stroke: #3498db; fill: none; stroke-width: 2; }
-      .dehum-coil-active { filter: drop-shadow(0 0 3px #3498db); }
-      .dehum-water { fill: #3498db; opacity: 0.6; }
-      .dehum-drop { fill: #3498db; opacity: 0.7; }
+      .dehum-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .dehum-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .dehum-coil { stroke: #1976d2; fill: none; stroke-width: 2; }
+      .dehum-coil-active { filter: drop-shadow(0 0 3px #1976d2); }
+      .dehum-water { fill: #1976d2; opacity: 0.6; }
+      .dehum-drop { fill: #1976d2; opacity: 0.7; }
       .dehum-drop-active { animation: drip 2s ease-in infinite; }
-      .dehum-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .dehum-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .dehum-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
-      .dehum-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
+      .dehum-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .dehum-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .dehum-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .dehum-arrow { fill: none; stroke: #1976d2; stroke-width: 2; }
       .status-ok { fill: #27ae60; }
-      .status-active { fill: #3498db; }
+      .status-active { fill: #1976d2; }
       .status-alarm { fill: #e74c3c; }
       @keyframes drip {
         0% { transform: translateY(0); opacity: 0.7; }
@@ -42,13 +42,13 @@
   <!-- Cooling Coil -->
   <g id="coolingCoil" transform="translate(140, 90)">
     <path class="dehum-coil" d="M 0 0 L 120 0 M 0 10 L 120 10 M 0 20 L 120 20 M 0 30 L 120 30 M 0 40 L 120 40 M 0 50 L 120 50 M 0 60 L 120 60"/>
-    <circle cx="0" cy="0" r="2" fill="#3498db"/>
-    <circle cx="0" cy="10" r="2" fill="#3498db"/>
-    <circle cx="0" cy="20" r="2" fill="#3498db"/>
-    <circle cx="0" cy="30" r="2" fill="#3498db"/>
-    <circle cx="0" cy="40" r="2" fill="#3498db"/>
-    <circle cx="0" cy="50" r="2" fill="#3498db"/>
-    <circle cx="0" cy="60" r="2" fill="#3498db"/>
+    <circle cx="0" cy="0" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="10" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="20" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="30" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="40" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="50" r="2" fill="#1976d2"/>
+    <circle cx="0" cy="60" r="2" fill="#1976d2"/>
   </g>
   <text class="dehum-label" x="200" y="110" text-anchor="middle" font-size="9">COOLING COIL</text>
 
@@ -65,11 +65,11 @@
 
   <!-- Condensate Pan -->
   <rect class="dehum-water" x="110" y="170" width="180" height="15" rx="3"/>
-  <text class="dehum-label" x="200" y="182" text-anchor="middle" font-size="8" fill="#ecf0f1">CONDENSATE</text>
+  <text class="dehum-label" x="200" y="182" text-anchor="middle" font-size="8" fill="#546e7a">CONDENSATE</text>
 
   <!-- Drain -->
-  <rect fill="#3498db" stroke="#2980b9" stroke-width="1" x="197" y="185" width="6" height="25" rx="1"/>
-  <path fill="#3498db" stroke="#2980b9" stroke-width="1" d="M 197 210 L 200 215 L 203 210 Z"/>
+  <rect fill="#1976d2" stroke="#2980b9" stroke-width="1" x="197" y="185" width="6" height="25" rx="1"/>
+  <path fill="#1976d2" stroke="#2980b9" stroke-width="1" d="M 197 210 L 200 215 L 203 210 Z"/>
 
   <!-- Air Outlet Duct -->
   <rect class="dehum-duct" x="300" y="95" width="80" height="50"/>
@@ -80,15 +80,15 @@
   <path class="dehum-arrow" d="M 310 125 L 330 125 M 325 120 L 330 125 L 325 130"/>
 
   <!-- Refrigeration System Indicator -->
-  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="110" y="45" width="180" height="20" rx="3"/>
+  <rect fill="#2c3e50" stroke="#e0e0e0" stroke-width="2" x="110" y="45" width="180" height="20" rx="3"/>
   <text class="dehum-label" x="200" y="59" text-anchor="middle" font-size="9">REFRIGERATION SYSTEM</text>
 
   <!-- Compressor Icon -->
-  <circle fill="#34495e" stroke="#2c3e50" stroke-width="2" cx="130" cy="55" r="8"/>
+  <circle fill="#f5f7fa" stroke="#ffffff" stroke-width="2" cx="130" cy="55" r="8"/>
   <text class="dehum-label" x="130" y="58" text-anchor="middle" font-size="7">C</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="230" width="360" height="140" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="230" width="360" height="140" rx="5"/>
 
   <!-- Row 1 -->
   <text class="dehum-label" x="40" y="255">Inlet RH:</text>

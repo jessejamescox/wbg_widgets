@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
-      .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
-      .damper-blade { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; transition: transform 0.5s; }
-      .actuator { fill: #95a5a6; stroke: #2c3e50; stroke-width: 1.5; }
-      .position-text { font-family: Arial, sans-serif; font-size: 12px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
-      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #7f8c8d; text-anchor: middle; }
+      .duct { fill: #eceff1; stroke: #f5f7fa; stroke-width: 2; }
+      .damper-blade { fill: #546e7a; stroke: #ffffff; stroke-width: 2; transition: transform 0.5s; }
+      .actuator { fill: #546e7a; stroke: #ffffff; stroke-width: 1.5; }
+      .position-text { font-family: Arial, sans-serif; font-size: 12px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #546e7a; text-anchor: middle; }
     </style>
   </defs>
 
@@ -25,11 +25,11 @@
 
   <!-- Actuator -->
   <rect x="82" y="8" width="14" height="10" class="actuator" rx="2"/>
-  <line x1="89" y1="18" x2="89" y2="25" stroke="#2c3e50" stroke-width="1.5"/>
+  <line x1="89" y1="18" x2="89" y2="25" stroke="#ffffff" stroke-width="1.5"/>
   <circle cx="89" cy="25" r="2" fill="#2c3e50"/>
 
   <!-- Position Display -->
-  <rect x="30" y="65" width="40" height="14" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
+  <rect x="30" y="65" width="40" height="14" fill="#2c3e50" stroke="#95a5a6" stroke-width="1" rx="2"/>
   <text id="positionText" x="50" y="75" class="position-text">0%</text>
 
   <!-- Open/Close Labels -->
@@ -73,7 +73,7 @@ function update() {
   } else if (displayPos > 95) {
     posText.setAttribute('fill', '#27ae60');
   } else {
-    posText.setAttribute('fill', '#3498db');
+    posText.setAttribute('fill', '#1976d2');
   }
 }
 

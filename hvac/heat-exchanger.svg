@@ -2,22 +2,22 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="100%" height="100%">
   <defs>
     <style>
-      .hx-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .hx-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .hx-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .hx-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
       .hx-wheel { fill: none; stroke: #7f8c8d; stroke-width: 2; }
       .hx-wheel-active { animation: spin 4s linear infinite; }
-      .hx-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .hx-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .hx-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .hx-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .hx-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .hx-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
       .hx-value-warm { fill: #e74c3c; }
-      .hx-value-cold { fill: #3498db; }
+      .hx-value-cold { fill: #1976d2; }
       .hx-arrow { fill: none; stroke-width: 2; }
-      .hx-arrow-supply { stroke: #3498db; }
+      .hx-arrow-supply { stroke: #1976d2; }
       .hx-arrow-exhaust { stroke: #e74c3c; }
       .hx-flow { opacity: 0.3; }
       .hx-flow-active { animation: flow 2s linear infinite; }
       .status-ok { fill: #27ae60; }
-      .status-running { fill: #3498db; }
+      .status-running { fill: #1976d2; }
       .status-alarm { fill: #e74c3c; }
       @keyframes spin {
         from { transform: rotate(0deg); }
@@ -77,9 +77,9 @@
   <!-- Airflow Arrows -->
   <g id="supplyFlow">
     <path class="hx-arrow hx-arrow-supply" d="M 110 160 L 140 160 M 135 155 L 140 160 L 135 165"/>
-    <circle class="hx-flow hx-flow-active" fill="#3498db" cx="120" cy="160" r="3"/>
+    <circle class="hx-flow hx-flow-active" fill="#1976d2" cx="120" cy="160" r="3"/>
     <path class="hx-arrow hx-arrow-supply" d="M 310 160 L 340 160 M 335 155 L 340 160 L 335 165"/>
-    <circle class="hx-flow hx-flow-active" fill="#3498db" cx="320" cy="160" r="3" style="animation-delay: 1s"/>
+    <circle class="hx-flow hx-flow-active" fill="#1976d2" cx="320" cy="160" r="3" style="animation-delay: 1s"/>
   </g>
 
   <g id="exhaustFlow">
@@ -90,7 +90,7 @@
   </g>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
 
   <!-- Row 1 -->
   <text class="hx-label" x="35" y="235">Outside Air:</text>

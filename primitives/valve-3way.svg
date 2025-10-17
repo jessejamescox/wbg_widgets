@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
     <style>
-      .valve-body { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .valve-ball { fill: #95a5a6; stroke: #2c3e50; stroke-width: 2; }
-      .pipe { fill: none; stroke: #34495e; stroke-width: 4; }
-      .flow-indicator { fill: #3498db; opacity: 0.6; }
-      .port-label { font-family: Arial, sans-serif; font-size: 9px; fill: #2c3e50; text-anchor: middle; }
+      .valve-body { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .valve-ball { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .pipe { fill: none; stroke: #f5f7fa; stroke-width: 4; }
+      .flow-indicator { fill: #1976d2; opacity: 0.6; }
+      .port-label { font-family: Arial, sans-serif; font-size: 9px; fill: #ffffff; text-anchor: middle; }
       .position-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
     </style>
   </defs>

@@ -2,14 +2,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 350 300" width="100%" height="100%">
   <defs>
     <style>
-      .exh-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .exh-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .exh-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .exh-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .exh-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .exh-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
       .exh-fan { fill: none; stroke: #e74c3c; stroke-width: 2; }
       .exh-fan-blade { fill: #e74c3c; }
       .exh-fan-active { animation: spin 1s linear infinite; }
-      .exh-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .exh-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
+      .exh-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .exh-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
       .exh-value { fill: #e74c3c; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
       .exh-arrow { fill: none; stroke: #e74c3c; stroke-width: 2; }
       .exh-flow { fill: #e74c3c; opacity: 0.3; }
@@ -74,11 +74,11 @@
   <text class="exh-label" x="295" y="75" text-anchor="middle">OUTSIDE</text>
 
   <!-- Motor -->
-  <rect fill="#2c3e50" stroke="#1a252f" stroke-width="2" x="195" y="165" width="30" height="20" rx="2"/>
+  <rect fill="#2c3e50" stroke="#e0e0e0" stroke-width="2" x="195" y="165" width="30" height="20" rx="2"/>
   <text class="exh-label" x="210" y="178" text-anchor="middle" font-size="8">M</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="185" width="310" height="95" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="185" width="310" height="95" rx="5"/>
 
   <!-- Row 1 -->
   <text class="exh-label" x="40" y="210">Status:</text>

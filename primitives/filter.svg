@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 100" width="100%" height="100%">
   <defs>
     <style>
-      .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
-      .filter-frame { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .filter-media { fill: #ecf0f1; stroke: #95a5a6; stroke-width: 1; }
+      .duct { fill: #eceff1; stroke: #f5f7fa; stroke-width: 2; }
+      .filter-frame { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .filter-media { fill: #2c3e50; stroke: #95a5a6; stroke-width: 1; }
       .filter-dirty { fill: #8d6e63; }
       .status-good { fill: #27ae60; }
       .status-warning { fill: #f39c12; }
       .status-alarm { fill: #e74c3c; }
-      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
     </style>
   </defs>
 
@@ -43,7 +43,7 @@
 
   <!-- Pressure Drop Display -->
   <rect x="20" y="75" width="40" height="12" fill="#2c3e50" rx="2"/>
-  <text id="pressureText" x="40" y="84" class="label-text" fill="#ffffff">0.5 in</text>
+  <text id="pressureText" x="40" y="84" class="label-text" fill="#546e7a">0.5 in</text>
 
   <text x="40" y="96" class="label-text" font-size="7">PRESSURE DROP</text>
 
@@ -85,7 +85,7 @@ let paths = media.querySelectorAll('path');
         if (index / paths.length < dirtLevel) {
           path.style.fill = '#8d6e63';
         } else {
-          path.style.fill = '#ecf0f1';
+          path.style.fill = '#2c3e50';
         }
       });
     }

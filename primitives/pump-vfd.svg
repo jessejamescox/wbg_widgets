@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 90" width="100%" height="100%">
   <defs>
     <style>
-      .pump-body { fill: #3498db; stroke: #2c3e50; stroke-width: 2; }
-      .motor { fill: #34495e; stroke: #2c3e50; stroke-width: 1.5; }
+      .pump-body { fill: #1976d2; stroke: #ffffff; stroke-width: 2; }
+      .motor { fill: #f5f7fa; stroke: #ffffff; stroke-width: 1.5; }
       .pipe { fill: none; stroke: #7f8c8d; stroke-width: 4; }
       .impeller { fill: #2980b9; }
-      .vfd-box { fill: #2c3e50; stroke: #34495e; stroke-width: 1.5; }
-      .speed-bar-bg { fill: #ecf0f1; }
+      .vfd-box { fill: #ffffff; stroke: #f5f7fa; stroke-width: 1.5; }
+      .speed-bar-bg { fill: #2c3e50; }
       .speed-bar-fill { fill: #27ae60; }
       .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
-      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #7f8c8d; text-anchor: middle; }
+      .label-text { font-family: Arial, sans-serif; font-size: 8px; fill: #546e7a; text-anchor: middle; }
     </style>
   </defs>
 
@@ -32,7 +32,7 @@
 
   <!-- Motor -->
   <rect x="40" y="48" width="10" height="12" class="motor" rx="1"/>
-  <line x1="45" y1="48" x2="45" y2="43" stroke="#2c3e50" stroke-width="2"/>
+  <line x1="45" y1="48" x2="45" y2="43" stroke="#ffffff" stroke-width="2"/>
 
   <!-- VFD Control Panel -->
   <rect x="88" y="10" width="28" height="70" class="vfd-box" rx="2"/>

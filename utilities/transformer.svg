@@ -1,18 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" id="transformer">
   <defs>
     <style>
-      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .meter-bg { fill: #f5f7fa; stroke: #16213e; stroke-width: 2; }
       .title-text { fill: #ff9900; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
-      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
-      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
-      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .label-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #1976d2; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 14px; }
       .status-ok { fill: #00ff00; }
       .status-warning { fill: #ffaa00; }
       .status-alarm { fill: #ff0000; }
       .coil-primary { fill: none; stroke: #ff4444; stroke-width: 3; }
       .coil-secondary { fill: none; stroke: #4444ff; stroke-width: 3; }
       .core { fill: #606060; stroke: #404040; stroke-width: 2; }
-      .load-bar { fill: #00d4ff; }
+      .load-bar { fill: #1976d2; }
       .temp-bar { fill: #ff6600; }
     </style>
   </defs>
@@ -163,8 +163,8 @@ function update() {
     loadBar.setAttribute('fill', '#ffaa00');
     loadValue.setAttribute('fill', '#ffaa00');
   } else {
-    loadBar.setAttribute('fill', '#00d4ff');
-    loadValue.setAttribute('fill', '#ffffff');
+    loadBar.setAttribute('fill', '#1976d2');
+    loadValue.setAttribute('fill', '#1976d2');
   }
 
   // Control energy flow animation speed
@@ -186,7 +186,7 @@ function update() {
   } else if (_pn_temperature >= warningTemp) {
     temperatureValue.setAttribute('fill', '#ffaa00');
   } else {
-    temperatureValue.setAttribute('fill', '#ffffff');
+    temperatureValue.setAttribute('fill', '#1976d2');
   }
 
   // Update efficiency

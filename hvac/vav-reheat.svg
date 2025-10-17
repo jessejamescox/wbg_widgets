@@ -2,18 +2,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 450 350" width="100%" height="100%">
   <defs>
     <style>
-      .vavr-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .vavr-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .vavr-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
+      .vavr-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .vavr-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .vavr-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
       .vavr-coil { fill: none; stroke: #e74c3c; stroke-width: 2; }
       .vavr-coil-active { stroke: #e74c3c; filter: drop-shadow(0 0 3px #e74c3c); }
       .vavr-coil-inactive { stroke: #7f8c8d; }
-      .vavr-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .vavr-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .vavr-value { fill: #3498db; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
+      .vavr-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .vavr-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .vavr-value { fill: #1976d2; font-family: Arial, monospace; font-size: 13px; font-weight: bold; }
       .vavr-value-heat { fill: #e74c3c; }
-      .vavr-arrow { fill: none; stroke: #3498db; stroke-width: 2; }
-      .vavr-flow { fill: #3498db; opacity: 0.3; }
+      .vavr-arrow { fill: none; stroke: #1976d2; stroke-width: 2; }
+      .vavr-flow { fill: #1976d2; opacity: 0.3; }
       .vavr-flow-active { animation: flow 2s linear infinite; }
       .status-ok { fill: #27ae60; }
       .status-heating { fill: #e74c3c; }
@@ -70,7 +70,7 @@
   <text id="dischargeTemp" class="vavr-value" x="395" y="125" text-anchor="middle" font-size="11">68°F</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="210" width="410" height="120" rx="5"/>
 
   <!-- Row 1 -->
   <text class="vavr-label" x="40" y="235">Damper Position:</text>

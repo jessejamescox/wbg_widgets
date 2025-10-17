@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" id="generator">
   <defs>
     <style>
-      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
-      .title-text { fill: #00ff88; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
-      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
-      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
-      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .meter-bg { fill: #f5f7fa; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #1976d2; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #1976d2; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 14px; }
       .status-ok { fill: #00ff00; }
       .status-warning { fill: #ffaa00; }
       .status-alarm { fill: #ff0000; }
@@ -37,8 +37,8 @@
 
     <!-- Rotating Indicator (when running) -->
     <g id="rotatingIndicator">
-      <circle fill="#00ff88" cx="20" cy="0" r="15" opacity="0.3"/>
-      <line stroke="#00ff88" stroke-width="3" x1="20" y1="0" x2="20" y2="-12"/>
+      <circle fill="#1976d2" cx="20" cy="0" r="15" opacity="0.3"/>
+      <line stroke="#1976d2" stroke-width="3" x1="20" y1="0" x2="20" y2="-12"/>
     </g>
 
     <!-- Exhaust Animation (when running) -->
@@ -207,7 +207,7 @@ function update() {
   } else if (isRunning && voltageDeviation > 0.05) {
     voltageValue.setAttribute('fill', '#ffaa00');
   } else {
-    voltageValue.setAttribute('fill', '#ffffff');
+    voltageValue.setAttribute('fill', '#1976d2');
   }
 
   // Update frequency
@@ -218,7 +218,7 @@ function update() {
   } else if (isRunning && freqDeviation > 0.01) {
     frequencyValue.setAttribute('fill', '#ffaa00');
   } else {
-    frequencyValue.setAttribute('fill', '#ffffff');
+    frequencyValue.setAttribute('fill', '#1976d2');
   }
 
   // Update power
@@ -231,7 +231,7 @@ function update() {
   } else if (_pn_load > 90) {
     loadValue.setAttribute('fill', '#ffaa00');
   } else {
-    loadValue.setAttribute('fill', '#ffffff');
+    loadValue.setAttribute('fill', '#1976d2');
   }
 
   // Update fuel level
@@ -248,7 +248,7 @@ function update() {
     fuelValue.setAttribute('fill', '#ffaa00');
   } else {
     fuelBar.setAttribute('fill', '#00ff00');
-    fuelValue.setAttribute('fill', '#ffffff');
+    fuelValue.setAttribute('fill', '#1976d2');
   }
 
   // Update runtime

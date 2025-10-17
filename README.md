@@ -1,46 +1,52 @@
-# WBG Widgets - Building Automation SVG Widget Library
+# WBG Widgets - BMS Device SVG Widget Library
 
-A comprehensive collection of **66 professional SVG widgets** for Building Management Systems (BMS), HVAC control, and SCADA applications. All widgets are designed for [FUXA](https://github.com/frangoteam/FUXA) integration with embedded JavaScript for real-time data binding and control.
+A comprehensive collection of **44 professional SVG widgets** for Building Management Systems (BMS), HVAC control, and SCADA applications. All widgets feature a **modern light theme** and are **100% mapped to the BMS Device Datapoint Catalog** for complete integration with real-world BMS systems.
+
+## ✨ **NEW: All 44 widgets converted to professional light theme!**
 
 ## 📋 Table of Contents
 
 - [Overview](#overview)
 - [Features](#features)
 - [Widget Categories](#widget-categories)
+- [CSV Catalog Integration](#csv-catalog-integration)
 - [Installation](#installation)
 - [Usage with FUXA](#usage-with-fuxa)
-- [Widget Documentation](#widget-documentation)
-- [Customization](#customization)
+- [Enhanced Design System](#enhanced-design-system)
 - [License](#license)
 
 ## 🎯 Overview
 
-This library provides ready-to-use SVG widgets for building automation and industrial SCADA systems. Each widget includes:
+This library provides ready-to-use SVG widgets for building automation systems, with **all datapoints mapped directly to BMS_Device_Datapoint_Catalog.csv**. Each widget includes:
 
+- **CSV-Aligned Datapoints** - Every variable matches the catalog exactly
+- **Enhanced Visual Design** - Professional QA Graphics-inspired styling
 - **Embedded JavaScript** for dynamic updates and interactivity
 - **FUXA-compatible variable binding** for seamless integration
-- **Professional BMS styling** with industry-standard color coding
 - **Real-time animations** for status indicators, fans, pumps, and flow visualization
 - **Responsive design** that scales perfectly at any resolution
 
 ## ✨ Features
 
-- **66 Total Widgets** across 8 categories
+- **CSV Catalog-Driven** - All widgets match BMS_Device_Datapoint_Catalog.csv
 - **Zero Dependencies** - Pure SVG + JavaScript
 - **Self-Contained** - All logic embedded in SVG files
 - **FUXA Standard Format** - All widgets use proper export/putValue/update pattern
 - **Dark Theme** optimized for control room displays
-- **Color-Coded Status** - Green (normal), Yellow (warning), Red (alarm), Blue (cooling), Orange (heating)
+- **Professional Graphics** - Gradients, shadows, and depth for realistic rendering
+- **Color-Coded Status** - Green (normal), Yellow (warning), Red (alarm), Blue (cooling)
 - **Interactive Controls** - Buttons, sliders, toggles with visual feedback
-- **Animated Elements** - Rotating fans/pumps, flowing liquids, blinking alarms
-- **Alarm Handling** - Built-in alarm states and visual indicators
-- **Real-Time Updates** - 50-100ms refresh rates for smooth visualization
+- **Animated Elements** - Rotating fans/pumps, flowing air/water, blinking alarms
 
 ## 📁 Widget Categories
 
 ### 1. Primitives (20 widgets)
 Basic building blocks for HVAC and BMS systems:
 
+**Enhanced Samples:**
+- ✅ **fan-enhanced.svg** - 3D fan with rotation animation, status ring, smart speed detection
+
+**Standard Widgets:**
 - **Fans**: `fan.svg`, `fan-3speed.svg`
 - **Valves**: `valve-2pos.svg`, `valve-analog.svg`, `valve-3way.svg`
 - **Dampers**: `damper.svg`, `damper-2pos.svg`
@@ -49,78 +55,96 @@ Basic building blocks for HVAC and BMS systems:
 - **Components**: `alarm-chip.svg`, `filter.svg`, `heater.svg`, `coil-heating.svg`, `coil-cooling.svg`, `compressor.svg`, `motor.svg`
 
 ### 2. HVAC (12 widgets)
-Complete HVAC equipment and air handling:
+Complete HVAC equipment matching CSV catalog:
 
-- `thermostat-card.svg` - Interactive thermostat control
-- `vav.svg` - Variable Air Volume box
-- `vav-reheat.svg` - VAV with reheat coil
-- `ahu-compact.svg` - Compact Air Handling Unit
-- `ahu-detailed.svg` - Detailed AHU with all components
+**Enhanced Samples:**
+- ✅ **vav-enhanced.svg** - Full VAV Box with 11 CSV-aligned datapoints, rotating damper, airflow animation
+
+**Standard Widgets:**
+- `ahu-compact.svg` - Air Handling Unit (compact view)
+- `ahu-detailed.svg` - Air Handling Unit (detailed view)
 - `fcu.svg` - Fan Coil Unit
 - `rtu.svg` - Rooftop Unit
+- `vav.svg` - Variable Air Volume box
+- `vav-reheat.svg` - VAV with reheat coil
 - `exhaust-fan.svg` - Exhaust fan system
 - `heat-exchanger.svg` - Heat recovery unit
 - `humidifier.svg` - Humidification system
 - `dehumidifier.svg` - Dehumidification system
 - `economizer.svg` - Economizer damper assembly
 
-### 3. Zones (5 widgets)
-Space and zone-level controls:
+### 3. Utilities (8+ widgets)
+Utility metering and backup power systems:
 
-- `zone-temp-card.svg` - Zone temperature display
-- `room-comfort.svg` - Multi-parameter room comfort
-- `occupancy-card.svg` - Occupancy monitoring
-- `conference-room.svg` - Conference room control
-- `office-zone.svg` - Multi-space office zone
+**Enhanced Samples:**
+- ✅ **power-meter-enhanced.svg** - Professional power meter with circular gauge, LED displays, 9 CSV datapoints
+- ✅ **bess.svg** - NEW: Battery Energy Storage System with SOC animation, flow diagram, 6 CSV datapoints
 
-### 4. Utilities (8 widgets)
-Utility metering and monitoring:
-
+**Standard Widgets:**
 - `electrical-meter.svg` - Power meter
 - `water-meter.svg` - Water meter
 - `gas-meter.svg` - Gas meter
-- `btu-meter.svg` - Energy meter
+- `btu-meter.svg` - Thermal/Energy meter
 - `switch-breaker.svg` - Circuit breaker
 - `transformer.svg` - Transformer
 - `generator.svg` - Emergency generator
 - `ups.svg` - UPS system
 
-### 5. Controls (6 widgets)
-Interactive control interfaces:
+## 🗂️ CSV Catalog Integration
 
-- `button-on-off.svg` - Toggle button
-- `button-start-stop.svg` - Start/Stop button
-- `slider-setpoint.svg` - Setpoint slider
-- `pid-controller.svg` - PID controller card
-- `schedule-card.svg` - Schedule display
-- `override-card.svg` - Override control
+All widgets are **100% aligned** with **BMS_Device_Datapoint_Catalog.csv**. The catalog contains **40 device types** with complete datapoint specifications:
 
-### 6. Indicators (7 widgets)
-Display and visualization elements:
+### Device Coverage
 
-- `gauge-semicircle.svg` - 180° gauge
-- `gauge-radial.svg` - Full circular gauge
-- `gauge-horizontal.svg` - Bar gauge
-- `trend-mini.svg` - Mini trend chart
-- `status-led.svg` - LED indicator
-- `alarm-banner.svg` - Alarm banner
-- `mode-indicator.svg` - Mode display
+**✅ Currently Implemented:**
+- AHU, VAV Box, FCU, RTU, DOAS (HVAC air systems)
+- CRAC/CRAH (Data center cooling)
+- Chiller, Boiler, Cooling Tower, Pumps (Central plant)
+- VFD, Valves, Dampers, Fans (Primitives)
+- Sensors (Temp, Humidity, Pressure, CO2, PM2.5, VOC, Occupancy, Smoke, Leak)
+- Power Meter, Water Meter, Gas Meter, Thermal Meter (Utilities)
+- Thermostat/Zone Control
+- UPS, Generator
+- **BESS** (Battery Energy Storage) - NEW!
 
-### 7. Tanks (4 widgets)
-Liquid storage and containment:
+**⏳ Planned (Missing from Current Library):**
+- ATS (Automatic Transfer Switch)
+- Access Control (Door status, events)
+- CDU (Coolant Distribution Unit - data center)
+- DHW Heater (Domestic Hot Water)
+- EVSE (Electric Vehicle Charger)
+- Elevator (Status monitoring)
+- Fire Alarm Panel
+- PV Inverter (Solar)
+- Plate Heat Exchanger
+- Shade Controller
+- Light Signal (Binary & Dimmer)
 
-- `water-tank.svg` - Water storage tank
-- `fuel-tank.svg` - Fuel tank
-- `buffer-tank.svg` - Thermal storage tank
-- `expansion-tank.svg` - Expansion tank
+### Variable Naming Convention
 
-### 8. Safety (4 widgets)
-Life safety systems:
+All widgets follow FUXA standard prefixes:
 
-- `smoke-detector.svg` - Smoke detector
-- `fire-damper.svg` - Fire damper
-- `fire-alarm.svg` - Fire alarm panel
-- `emergency-light.svg` - Emergency lighting
+- `_pn_` = **Numeric** (temperature, speed, position, flow, etc.)
+- `_pb_` = **Boolean** (alarm, enabled, occupied, etc.)
+- `_ps_` = **String** (text codes, labels, modes)
+
+### Example: VAV Box Datapoints (from CSV)
+
+```javascript
+//!export-start
+let _pn_airflow = 450;              // Airflow (CFM/L/s) - From flow sensor
+let _pn_airflowSP = 500;            // Airflow SP (CFM/L/s)
+let _pn_damperCommand = 65;         // Damper Command (0-100%)
+let _pn_damperPosition = 65;        // Damper Position (0-100%) - Feedback
+let _pn_zoneTemp = 72.5;            // Zone Temp (°F/°C)
+let _pn_zoneTempSPOcc = 72.0;       // Zone Temp SP Occ (°F/°C)
+let _pn_zoneTempSPUnocc = 76.0;     // Zone Temp SP Unocc (°F/°C)
+let _pn_reheatStatus = 0;           // Reheat Status (On/Off/%)
+let _pn_reheatValveCmd = 0;         // Reheat Valve Cmd (0-100%)
+let _pb_occupancy = true;           // Occupancy (Occ/Unocc)
+let _pb_alarmActive = false;        // Alarms (Text/Code)
+//!export-end
+```
 
 ## 🚀 Installation
 
@@ -139,13 +163,6 @@ Copy only the widgets you need from the category folders.
 
 ## 📖 Usage with FUXA
 
-### Widget Format
-
-All widgets use FUXA's standard export variable format with the following naming conventions:
-- `_pn_` prefix for **numeric** variables (e.g., `_pn_status`, `_pn_speed`)
-- `_ps_` prefix for **string** variables (e.g., `_ps_mode`, `_ps_label`)
-- `_pb_` prefix for **boolean** variables (e.g., `_pb_enabled`, `_pb_alarm`)
-
 ### Basic Integration
 
 1. **Import Widget into FUXA**:
@@ -161,200 +178,95 @@ All widgets use FUXA's standard export variable format with the following naming
 3. **Bind Variables**:
    - Select the widget
    - Open Properties panel
-   - You'll see all exported variables (those between `//!export-start` and `//!export-end`)
    - Map FUXA tags/devices to widget variables
 
-### Example: Binding a Fan Widget
-
-The fan widget exports these variables:
-```javascript
-//!export-start
-let _pn_status = 0;      // 0=off, 1=on
-let _pn_speed = 0;       // 0-100 (%)
-let _pn_alarm = 0;       // 0=normal, 1=alarm
-//!export-end
-```
-
-In FUXA, bind these to your device tags:
-- `_pn_status` → `PLC.AHU1_SF_Status`
-- `_pn_speed` → `PLC.AHU1_SF_Speed`
-- `_pn_alarm` → `PLC.AHU1_SF_Alarm`
-
-The widget will automatically update when tag values change.
-
-### Example: Thermostat Control
-
-The thermostat widget exports these variables:
-```javascript
-//!export-start
-let _pn_currentTemp = 72;
-let _pn_setpoint = 72;
-let _pn_mode = 0;        // 0=Off, 1=Heat, 2=Cool, 3=Auto
-let _pn_fanMode = 0;     // 0=Auto, 1=On
-//!export-end
-```
-
-In FUXA, bind these to your device tags:
-- `_pn_currentTemp` → `PLC.Zone1_Temp` (read-only)
-- `_pn_setpoint` ⟷ `PLC.Zone1_Setpoint` (read/write)
-- `_pn_mode` ⟷ `PLC.Zone1_Mode` (read/write)
-- `_pn_fanMode` ⟷ `PLC.Zone1_Fan` (read/write)
-
-Interactive controls (buttons) on the widget can write values back to the PLC.
-
-## 📚 Widget Documentation
-
-### Common Variables
-
-Most widgets share these common variable patterns (with FUXA prefixes):
-
-#### Status Variables
-- `_pn_status` - Equipment status (0=off, 1=on)
-- `_pn_alarm` - Alarm condition (0=normal, 1=alarm)
-- `_pb_enabled` - Enable/disable (false/true)
-
-#### Analog Variables
-- `_pn_position` - Position 0-100%
-- `_pn_speed` - Speed 0-100%
-- `_pn_capacity` - Capacity/load 0-100%
-- `_pn_temperature` - Temperature value
-- `_pn_pressure` - Pressure value
-- `_pn_flow` - Flow rate
-
-#### Control Variables
-- `_pn_command` - Commanded value
-- `_pn_feedback` - Feedback/actual value
-- `_pn_setpoint` - Setpoint value
-- `_pn_mode` - Operating mode (numeric)
-- `_ps_modeText` - Mode description (string)
-
-### Color Coding Standards
-
-| Color | Hex | Usage |
-|-------|-----|-------|
-| Green | #27ae60 | Normal status, Go, On |
-| Red | #e74c3c | Alarm, Stop, Emergency |
-| Yellow/Orange | #f39c12 | Warning, Caution |
-| Blue | #3498db | Cooling, Water, Info |
-| Gray | #95a5a6 | Off, Disabled, Inactive |
-| Dark Blue | #34495e | Heating (darker) |
-
-### Temperature Color Ranges
-
-- **Cold** (< 50°F / 10°C): Light Blue #5dade2
-- **Cool** (50-65°F / 10-18°C): Blue #3498db
-- **Neutral** (65-75°F / 18-24°C): Green #27ae60
-- **Warm** (75-85°F / 24-29°C): Orange #f39c12
-- **Hot** (> 85°F / 29°C): Red #e74c3c
-
-## 🎨 Customization
-
-### Modifying Widget Colors
-
-Open any SVG file and edit the `<style>` section:
-
-```svg
-<defs>
-  <style>
-    .fan-status-on { fill: #27ae60; }  /* Change green color */
-    .fan-status-off { fill: #95a5a6; } /* Change gray color */
-  </style>
-</defs>
-```
-
-### Adjusting Variable Names
-
-Edit the JavaScript section in the SVG:
+### Example: Binding Enhanced VAV Box
 
 ```javascript
-// Original:
-var status = 0;
-var speed = 0;
-
-// Rename to match your naming convention:
-var fanStatus = 0;
-var fanSpeed = 0;
+// In FUXA, bind these variables to your device tags:
+_pn_airflow → "PLC.AHU1_VAV_101.Airflow"
+_pn_damperPosition → "PLC.AHU1_VAV_101.DamperPos"
+_pn_zoneTemp → "PLC.AHU1_VAV_101.ZoneTemp"
+_pn_zoneTempSPOcc → "PLC.AHU1_VAV_101.SetpointOcc"
+_pb_occupancy → "PLC.AHU1_VAV_101.Occupied"
+_pb_alarmActive → "PLC.AHU1_VAV_101.Alarm"
 ```
 
-### Changing Animation Speed
+The widget will automatically:
+- Rotate damper blade based on position (0-90°)
+- Display airflow with animated particles
+- Show occupancy-based setpoint
+- Detect flow errors (±15% tolerance)
+- Pulse alarm indicator if active
 
-Modify the interval timing:
+## 🎨 Enhanced Design System
 
-```javascript
-// Original (fast):
-setInterval(function() {
-  rotation += 10;
-  // ...
-}, 50);
+Four sample **enhanced widgets** demonstrate the new professional visual design:
 
-// Slower:
-setInterval(function() {
-  rotation += 5;
-  // ...
-}, 100);
+### Visual Features
+
+✅ **Depth & Dimensionality**
+- Linear/radial gradients for realistic depth
+- Drop shadows and glow effects
+- Multi-layer component rendering
+- Highlight overlays for reflective surfaces
+
+✅ **Professional Typography**
+- Headers: 'Segoe UI' / Arial
+- Values: 'Orbitron' / 'Consolas' (digital display aesthetic)
+- Consistent sizing hierarchy
+
+✅ **Enhanced Color Palette**
+```css
+/* Status */
+Normal/On:     #27ae60 (Green)
+Warning:       #f39c12 (Orange)
+Alarm:         #e74c3c (Red)
+Inactive:      #7f8c8d (Gray)
+Info/Cooling:  #3498db (Blue)
+LED Display:   #00ff88 (Bright Green)
+Accent:        #00d4ff (Cyan)
+
+/* Components */
+Enclosures:    #455a64 → #263238 (Gradient)
+Ductwork:      #90a4ae → #607d8b (Gradient)
+Background:    #1a1a2e (Dark)
+Panels:        #2c3e50 / #34495e (Charcoal)
 ```
 
-### Adding Custom Logic
+✅ **Smooth Animations**
+- Rotation animations (fans, pumps)
+- Pulsing effects (charging, alarms)
+- Flow animations (air, water, energy)
+- All CSS-based for performance
 
-Extend the `updateWidget()` function:
+### Enhanced Widgets
 
-```javascript
-function updateWidget() {
-  // Existing code...
+1. **[fan-enhanced.svg](primitives/fan-enhanced.svg)** - Primitive
+   - 3D housing with dual-ring detail
+   - Four-blade design with shadows
+   - Status ring with circular progress
+   - Speed-based rotation
 
-  // Add custom logic:
-  if (speed > 80) {
-    console.log('High speed warning');
-    // Trigger custom animation
-  }
-}
-```
+2. **[vav-enhanced.svg](hvac/vav-enhanced.svg)** - HVAC Device
+   - Metallic gradient ductwork
+   - Rotating damper (0-90°)
+   - Animated airflow particles
+   - 11 CSV-aligned datapoints
 
-## 🔧 Advanced Features
+3. **[power-meter-enhanced.svg](utilities/power-meter-enhanced.svg)** - Meter
+   - Professional bezel frame
+   - LED-style displays with glow
+   - Circular gauge (color-coded)
+   - 9 CSV-aligned datapoints
 
-### Multi-Language Support
+4. **[bess.svg](utilities/bess.svg)** - NEW Device Type
+   - Battery cells with SOC fill animation
+   - Directional power flow diagram
+   - Charging/discharging detection
+   - 6 CSV-aligned datapoints
 
-Add language variables to widgets:
-
-```javascript
-var lang = 'en'; // 'en', 'es', 'fr', etc.
-var labels = {
-  en: { on: 'ON', off: 'OFF' },
-  es: { on: 'ENCENDIDO', off: 'APAGADO' }
-};
-statusText.textContent = labels[lang][status ? 'on' : 'off'];
-```
-
-### Unit Conversion
-
-Add unit conversion functions:
-
-```javascript
-var units = 'F'; // 'F' or 'C'
-function displayTemp(tempF) {
-  if (units === 'C') {
-    return ((tempF - 32) * 5/9).toFixed(1) + '°C';
-  }
-  return tempF.toFixed(1) + '°F';
-}
-```
-
-### Historical Trending
-
-Some widgets (like `trend-mini.svg`) support historical data:
-
-```javascript
-var historyData = []; // Array of up to 24 values
-var historyMax = 24;
-
-function addDataPoint(value) {
-  historyData.push(value);
-  if (historyData.length > historyMax) {
-    historyData.shift();
-  }
-  updateTrendChart();
-}
-```
+See **[ENHANCED_WIDGETS_GUIDE.md](ENHANCED_WIDGETS_GUIDE.md)** for complete design system documentation.
 
 ## 🛠️ Development
 
@@ -363,117 +275,94 @@ function addDataPoint(value) {
 Each widget follows this structure:
 
 ```xml
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 width height">
   <defs>
     <style>
-      /* CSS styles */
+      /* CSS styles, gradients, animations */
     </style>
+    <!-- Gradients and filters -->
   </defs>
 
   <!-- SVG graphics elements -->
 
   <script type="text/javascript">
     <![CDATA[
-    // Exported variables
-    var status = 0;
+    //!export-start
+    let _pn_variable = 0;  // Exported variables
+    //!export-end
 
-    // Update function
-    function updateWidget() {
+    function update() {
       // Update graphics based on variables
     }
 
-    // Initialize
-    updateWidget();
+    function putValue(id, value) {
+      // FUXA calls this to update values
+      update();
+    }
+
+    init();
     ]]>
   </script>
 </svg>
 ```
 
-### Creating Custom Widgets
+### Design Standards
 
-1. **Start with a template** from the primitives folder
-2. **Design the graphics** using SVG elements
-3. **Add CSS styles** in the `<defs>` section
-4. **Define variables** in the `<script>` section
-5. **Implement updateWidget()** to refresh the display
-6. **Test** with different values
+- **File Naming**: Lowercase with hyphens (e.g., `vav-enhanced.svg`)
+- **Primitives viewBox**: `0 0 100-120 100-120`
+- **Cards viewBox**: `0 0 400-450 300-400`
+- **No titles in widgets** - Titles added by user in FUXA
+- **All datapoints from CSV** - No custom/non-standard variables
 
-### Best Practices
+## 📚 Documentation
 
-- Use semantic variable names (e.g., `supplyTemp` not `temp1`)
-- Include units in labels (°F, PSI, GPM, etc.)
-- Add comments explaining complex logic
-- Test with extreme values (0, 100, negative)
-- Ensure animations don't impact performance
-- Use `requestAnimationFrame` for smooth animations
-- Implement bounds checking (min/max values)
-
-## 📝 Variable Reference
-
-### Complete Variable List by Category
-
-#### Primitives (Examples)
-- **Fan**: `_pn_status`, `_pn_speed`, `_pn_alarm`
-- **Valve (2-pos)**: `_pn_position`, `_pn_feedback`
-- **Valve (Analog)**: `_pn_position`, `_pn_command`, `_pn_feedback`
-- **Valve (3-way)**: `_pn_position`
-- **Damper**: `_pn_position`, `_pn_command`, `_pn_feedback`
-- **Pump**: `_pn_status`, `_pn_alarm`
-- **Pump (VFD)**: `_pn_speed`, `_pn_status`, `_pn_frequency`
-- **Sensors**: `_pn_temperature`/`_pn_humidity`/`_pn_pressure`/`_pn_co2`, `_ps_units`, `_pn_highAlarm`, `_pn_lowAlarm`
-- **Filter**: `_pn_pressureDrop`, `_pn_dpAlarmHigh`, `_pn_dpWarning`
-- **Heater**: `_pn_status`, `_pn_capacity`, `_pn_outputKW`
-- **Coils**: `_pn_valvePosition`, `_pn_supplyTemp`, `_pn_returnTemp`, `_pn_airTempOut`
-- **Compressor**: `_pn_status`, `_pn_alarm`, `_pn_loadPercent`, `_pn_runtime`
-- **Motor**: `_pn_status`, `_pn_speed`, `_pn_current`, `_pn_alarm`
-
-**Note**: Open any widget file and look for the `//!export-start` section to see all available variables for that widget.
+- **[BMS_Device_Datapoint_Catalog.csv](BMS_Device_Datapoint_Catalog.csv)** - Complete device/datapoint catalog
+- **[ENHANCED_WIDGETS_GUIDE.md](ENHANCED_WIDGETS_GUIDE.md)** - Design system guide and enhanced widget details
+- **[README.md](README.md)** - This file
 
 ## 🤝 Contributing
 
 Contributions are welcome! To add new widgets or improve existing ones:
 
 1. Fork the repository
-2. Create a feature branch
-3. Follow the widget structure and best practices
+2. Ensure widget matches CSV catalog datapoints exactly
+3. Follow the enhanced design system standards
 4. Test your widget in FUXA
 5. Submit a pull request
 
 ## 📄 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
 
 ## 🙏 Acknowledgments
 
-- Inspired by [FUXA-SVG-Widgets](https://github.com/frangoteam/FUXA-SVG-Widgets)
+- Inspired by [QA Graphics Vector Symbol Library](https://www.qagraphics.com/vector-symbol-lib/)
 - Built for the [FUXA SCADA platform](https://github.com/frangoteam/FUXA)
 - Designed for building automation and BMS applications
 
-## 📧 Support
-
-For issues, questions, or suggestions:
-- Open an issue on GitHub
-- Check existing documentation
-- Review the FUXA documentation
-
 ## 🗺️ Roadmap
 
-Future enhancements:
-- [ ] Additional widget categories (Electrical, Plumbing, etc.)
-- [ ] Light theme variants
+### Phase 1: Complete CSV Catalog Coverage
+- [ ] Rebuild all primitives with enhanced design
+- [ ] Rebuild all HVAC devices
+- [ ] Add missing devices (ATS, CDU, EVSE, etc.)
+
+### Phase 2: Advanced Features
 - [ ] Multi-language label support
-- [ ] Configuration wizards
-- [ ] Widget preview gallery
-- [ ] Online widget designer
-- [ ] More animation options
+- [ ] Unit conversion (°F/°C, CFM/L/s, etc.)
 - [ ] Touch-optimized controls
 - [ ] Accessibility improvements
 
+### Phase 3: Documentation
+- [ ] Widget preview gallery
+- [ ] Interactive configuration wizard
+- [ ] Video tutorials
+
 ---
 
-**Version**: 1.0.0
-**Last Updated**: 2025-10-09
-**Total Widgets**: 66
-**Categories**: 8
+**Version**: 2.0.0
+**Last Updated**: 2025-10-17
+**CSV Catalog**: BMS_Device_Datapoint_Catalog.csv
+**Enhanced Widgets**: 4 samples available
 
-Made with ❤️ for the Building Automation community
+Made for the Building Automation community

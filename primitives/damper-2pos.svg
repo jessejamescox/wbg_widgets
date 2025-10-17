@@ -1,9 +1,9 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
-      .duct { fill: #bdc3c7; stroke: #34495e; stroke-width: 2; }
-      .damper-blade { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; transition: transform 0.5s; }
-      .actuator { fill: #95a5a6; stroke: #2c3e50; stroke-width: 1.5; }
+      .duct { fill: #eceff1; stroke: #f5f7fa; stroke-width: 2; }
+      .damper-blade { fill: #546e7a; stroke: #ffffff; stroke-width: 2; transition: transform 0.5s; }
+      .actuator { fill: #546e7a; stroke: #ffffff; stroke-width: 1.5; }
       .status-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
     </style>
   </defs>
@@ -18,7 +18,7 @@
 
   <!-- Actuator -->
   <rect x="83" y="12" width="12" height="8" class="actuator" rx="2"/>
-  <line x1="89" y1="20" x2="89" y2="30" stroke="#2c3e50" stroke-width="1.5"/>
+  <line x1="89" y1="20" x2="89" y2="30" stroke="#ffffff" stroke-width="1.5"/>
 
   <!-- Status Display -->
   <rect id="statusBox" x="25" y="62" width="50" height="16" fill="#e74c3c" rx="3"/>

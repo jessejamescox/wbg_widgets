@@ -2,18 +2,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" width="100%" height="100%">
   <defs>
     <style>
-      .ahu-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .ahu-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
-      .ahu-fan { fill: none; stroke: #3498db; stroke-width: 2; }
-      .ahu-fan-blade { fill: #3498db; }
+      .ahu-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .ahu-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
+      .ahu-fan { fill: none; stroke: #1976d2; stroke-width: 2; }
+      .ahu-fan-blade { fill: #1976d2; }
       .ahu-fan-active { animation: spin 1s linear infinite; }
-      .ahu-coil-cooling { stroke: #3498db; fill: none; stroke-width: 2; }
+      .ahu-coil-cooling { stroke: #1976d2; fill: none; stroke-width: 2; }
       .ahu-coil-heating { stroke: #e74c3c; fill: none; stroke-width: 2; }
       .ahu-coil-active { filter: drop-shadow(0 0 3px currentColor); }
-      .ahu-filter { fill: #bdc3c7; stroke: #7f8c8d; stroke-width: 1; }
-      .ahu-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .ahu-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .ahu-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .ahu-filter { fill: #eceff1; stroke: #7f8c8d; stroke-width: 1; }
+      .ahu-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .ahu-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .ahu-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
       .status-ok { fill: #27ae60; }
       .status-alarm { fill: #e74c3c; }
       @keyframes spin {
@@ -50,11 +50,11 @@
   <rect class="ahu-box" x="140" y="130" width="50" height="70" rx="3"/>
   <g id="filter">
     <rect class="ahu-filter" x="150" y="140" width="30" height="50"/>
-    <line x1="155" y1="140" x2="155" y2="190" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="160" y1="140" x2="160" y2="190" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="165" y1="140" x2="165" y2="190" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="170" y1="140" x2="170" y2="190" stroke="#95a5a6" stroke-width="1"/>
-    <line x1="175" y1="140" x2="175" y2="190" stroke="#95a5a6" stroke-width="1"/>
+    <line x1="155" y1="140" x2="155" y2="190" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="160" y1="140" x2="160" y2="190" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="165" y1="140" x2="165" y2="190" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="170" y1="140" x2="170" y2="190" stroke="#cfd8dc" stroke-width="1"/>
+    <line x1="175" y1="140" x2="175" y2="190" stroke="#cfd8dc" stroke-width="1"/>
   </g>
   <text class="ahu-label" x="165" y="210" text-anchor="middle" font-size="9">FILTER</text>
 
@@ -62,11 +62,11 @@
   <rect class="ahu-box" x="190" y="130" width="50" height="70" rx="3"/>
   <g id="coolingCoil">
     <path class="ahu-coil-cooling" d="M 200 145 L 230 145 M 200 155 L 230 155 M 200 165 L 230 165 M 200 175 L 230 175 M 200 185 L 230 185"/>
-    <circle cx="200" cy="145" r="2" fill="#3498db"/>
-    <circle cx="200" cy="155" r="2" fill="#3498db"/>
-    <circle cx="200" cy="165" r="2" fill="#3498db"/>
-    <circle cx="200" cy="175" r="2" fill="#3498db"/>
-    <circle cx="200" cy="185" r="2" fill="#3498db"/>
+    <circle cx="200" cy="145" r="2" fill="#1976d2"/>
+    <circle cx="200" cy="155" r="2" fill="#1976d2"/>
+    <circle cx="200" cy="165" r="2" fill="#1976d2"/>
+    <circle cx="200" cy="175" r="2" fill="#1976d2"/>
+    <circle cx="200" cy="185" r="2" fill="#1976d2"/>
   </g>
   <text class="ahu-label" x="215" y="210" text-anchor="middle" font-size="9">CC</text>
 
@@ -98,7 +98,7 @@
   <text id="supplyTemp" class="ahu-value" x="420" y="168" text-anchor="middle" font-size="10">58°F</text>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="230" width="460" height="100" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="230" width="460" height="100" rx="5"/>
 
   <!-- Row 1 -->
   <text class="ahu-label" x="40" y="255">Supply Fan:</text>

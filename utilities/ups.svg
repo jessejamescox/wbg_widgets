@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 550" id="ups">
   <defs>
     <style>
-      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
-      .title-text { fill: #00d4ff; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
-      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
-      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
-      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .meter-bg { fill: #f5f7fa; stroke: #16213e; stroke-width: 2; }
+      .title-text { fill: #1976d2; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
+      .label-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #1976d2; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 14px; }
       .status-ok { fill: #00ff00; }
       .status-warning { fill: #ffaa00; }
       .status-alarm { fill: #ff0000; }
@@ -165,7 +165,7 @@ function update() {
     batteryValue.setAttribute('fill', '#ffaa00');
   } else {
     batteryFill.setAttribute('fill', '#00ff00');
-    batteryValue.setAttribute('fill', '#ffffff');
+    batteryValue.setAttribute('fill', '#1976d2');
   }
 
   // Update runtime
@@ -189,7 +189,7 @@ function update() {
     } else if (_pn_runtimeRemaining < 15) {
       runtimeValue.setAttribute('fill', '#ffaa00');
     } else {
-      runtimeValue.setAttribute('fill', '#ffffff');
+      runtimeValue.setAttribute('fill', '#1976d2');
     }
   } else {
     runtimeValue.textContent = '--:--';
@@ -204,7 +204,7 @@ function update() {
   } else if (inputDeviation > 0.1) {
     inputVoltage.setAttribute('fill', '#ffaa00');
   } else {
-    inputVoltage.setAttribute('fill', '#ffffff');
+    inputVoltage.setAttribute('fill', '#1976d2');
   }
 
   // Update output voltage
@@ -213,7 +213,7 @@ function update() {
   if (outputDeviation > 0.05) {
     outputVoltage.setAttribute('fill', '#ffaa00');
   } else {
-    outputVoltage.setAttribute('fill', '#ffffff');
+    outputVoltage.setAttribute('fill', '#1976d2');
   }
 
   // Update load
@@ -253,7 +253,7 @@ function update() {
       break;
     case 'charging':
       modeText.textContent = 'CHARGING';
-      modeText.setAttribute('fill', '#00d4ff');
+      modeText.setAttribute('fill', '#1976d2');
       break;
     case 'fault':
       modeText.textContent = 'FAULT';

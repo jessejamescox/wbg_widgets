@@ -1,11 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" id="gas-meter">
   <defs>
     <style>
-      .meter-bg { fill: #1a1a2e; stroke: #16213e; stroke-width: 2; }
+      .meter-bg { fill: #f5f7fa; stroke: #16213e; stroke-width: 2; }
       .title-text { fill: #ffa500; font-family: Arial, sans-serif; font-size: 18px; font-weight: bold; }
-      .label-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 12px; }
-      .value-text { fill: #ffffff; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
-      .unit-text { fill: #a0a0a0; font-family: Arial, sans-serif; font-size: 14px; }
+      .label-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 12px; }
+      .value-text { fill: #1976d2; font-family: 'Courier New', monospace; font-size: 20px; font-weight: bold; }
+      .unit-text { fill: #546e7a; font-family: Arial, sans-serif; font-size: 14px; }
       .status-ok { fill: #00ff00; }
       .status-warning { fill: #ffaa00; }
       .status-alarm { fill: #ff0000; }
@@ -163,7 +163,7 @@ function update() {
   } else if (_pn_pressure > maxPressure) {
     pressureValue.setAttribute('fill', '#ff0000');
   } else {
-    pressureValue.setAttribute('fill', '#ffffff');
+    pressureValue.setAttribute('fill', '#1976d2');
   }
 
   // Update BTU content display

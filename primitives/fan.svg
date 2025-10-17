@@ -1,16 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
   <defs>
     <style>
-      .fan-blade { fill: #4a90e2; transition: fill 0.3s; }
-      .fan-center { fill: #2c3e50; }
-      .fan-status-off { fill: #95a5a6; }
+      .fan-blade { fill: #2196f3; transition: fill 0.3s; }
+      .fan-center { fill: #78909c; }
+      .fan-housing { stroke: #90a4ae; fill: none; }
+      .fan-status-off { fill: #546e7a; }
       .fan-status-on { fill: #27ae60; }
-      .fan-speed-text { font-family: Arial, sans-serif; font-size: 10px; fill: #2c3e50; text-anchor: middle; }
+      .fan-speed-text { font-family: Arial, sans-serif; font-size: 8px; fill: #2c3e50; text-anchor: middle; font-weight: 600; }
     </style>
   </defs>
 
   <!-- Fan Housing Circle -->
-  <circle cx="50" cy="50" r="40" fill="none" stroke="#34495e" stroke-width="2"/>
+  <circle cx="50" cy="50" r="40" class="fan-housing" stroke-width="2"/>
 
   <!-- Fan Blades -->
   <g id="fanBlades" transform-origin="50 50">

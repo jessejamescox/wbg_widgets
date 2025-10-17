@@ -1,0 +1,219 @@
+Device Type,Datapoint,Units / Range,R/W,Notes
+AHU,Alarms,Text/Code,R,Any fault summary
+AHU,Cooling Call,Bool,R,From zone/loop logic
+AHU,Cooling Valve Command,0–100%,W,Analog 0–10V or BACnet
+AHU,Filter ΔP,inWC/Pa,R,Maintenance indicator
+AHU,Heating Call,Bool,R,
+AHU,Heating Valve Command,0–100%,W,
+AHU,Min OA Position,0–100%,W,Ventilation minimum
+AHU,Mixed Air Temp,°F/°C,R,
+AHU,Outdoor Air Damper,0–100%,W,Economizer/ventilation control
+AHU,Return Air Temp,°F/°C,R,
+AHU,Return Fan Command,On/Off,W,
+AHU,Return Fan Status,On/Off,R,
+AHU,Static Pressure,inWC/Pa,R,Duct static sensor
+AHU,Static Pressure SP,inWC/Pa,W,VAV tracking control
+AHU,Supply Air SP,°F/°C,W,Cooling/heating discharge setpoint
+AHU,Supply Air Temp,°F/°C,R,
+AHU,Supply Fan Command,On/Off,W,Start/stop
+AHU,Supply Fan Speed,%,R,From VFD speed feedback
+AHU,Supply Fan Speed Cmd,%,W,VFD speed command
+AHU,Supply Fan Status,On/Off,R,From fan HOA or VFD run feedback
+ATS,Alarms,Text/Code,R,
+ATS,Position,A/B,R,
+ATS,Source,Normal/Emergency,R,
+ATS,Transfer Command,Normal/EMER,W,Rare; follow safety policy
+Access Control,Access Events,Count/List,R,
+Access Control,Door Held/Open Alarm,Bool,R,
+Access Control,Door Status,Open/Closed,R,
+BESS,Alarms,Text/Code,R,
+BESS,Charge/Discharge Power,kW,R,
+BESS,Mode Cmd,Idle/Charge/Discharge,W,If integrated via EMS
+BESS,SOC,%,R,
+BESS,SOH,%,R,
+Boiler,Alarm/Fault,Text/Code,R,
+Boiler,Enable Command,On/Off,W,
+Boiler,Firing Rate,%,R,
+Boiler,HW Return Temp,°F/°C,R,
+Boiler,HW Supply SP,°F/°C,W,
+Boiler,HW Supply Temp,°F/°C,R,
+Boiler,Run Status,On/Off,R,
+CDU,Alarms,Text/Code,R,
+CDU,Pump Speed,%,R,
+CDU,Pump Speed Cmd,%,W,
+CDU,Return Coolant Temp,°F/°C,R,
+CDU,Supply Coolant Temp,°F/°C,R,
+CDU,ΔP,psi/kPa,R,
+CRAC/CRAH,Alarm Summary,Text/Code,R,
+CRAC/CRAH,Fan Speed,%,R,
+CRAC/CRAH,Fan Speed Cmd,%,W,
+CRAC/CRAH,Humidify/Dehumidify,On/Off/%,W,If equipped
+CRAC/CRAH,Return Air Temp,°F/°C,R,
+CRAC/CRAH,Supply Air Temp,°F/°C,R,
+CRAC/CRAH,Supply Temp SP,°F/°C,W,
+Chiller,Alarm/Fault Code,Text/Code,R,
+Chiller,CHWS SP,°F/°C,W,
+Chiller,Chilled Water Return Temp,°F/°C,R,CHWR
+Chiller,Chilled Water Supply Temp,°F/°C,R,CHWS
+Chiller,Compressor Speed/Stage,%/Stage,R,
+Chiller,Cooling Capacity,tons/kW,R,If available
+Chiller,Enable Command,On/Off,W,Plant enable
+Chiller,Evaporator ΔT,°F/°C,R,
+Chiller,Run Status,On/Off,R,
+Chiller,kW,kW,R,Power draw
+Cooling Tower,Alarm/Fault,Text/Code,R,
+Cooling Tower,Approach SP,°F/°C,W,Optional strategy
+Cooling Tower,Basin Temp,°F/°C,R,
+Cooling Tower,Condenser Return Temp,°F/°C,R,LCWR
+Cooling Tower,Condenser Supply Temp,°F/°C,R,LCWS
+Cooling Tower,Fan Command,On/Off/%,W,Stage or VFD
+Cooling Tower,Fan Status,On/Off,R,
+DHW Heater,Alarm,Text/Code,R,
+DHW Heater,Enable Cmd,On/Off,W,
+DHW Heater,Tank/Outlet Temp,°F/°C,R,
+DHW Heater,Temp SP,°F/°C,W,
+DOAS,Alarms,Text/Code,R,
+DOAS,Dewpoint SP,°F/°C,W,
+DOAS,Heat Recovery Cmd,On/Off/%,W,
+DOAS,Heat Recovery Wheel,On/Off/%,R,Status or speed
+DOAS,OA Damper,0–100%,W,
+DOAS,SAT,°F/°C,R,
+DOAS,SAT SP,°F/°C,W,
+DOAS,Supply Air Dewpoint,°F/°C,R,
+Damper Actuator,Position Cmd,0–100%,W,
+Damper Actuator,Position Feedback,0–100%,R,
+Damper Actuator,Spring Return Status,Bool,R,If applicable
+Dehumidifier,Enable Cmd,On/Off,W,
+Dehumidifier,Humidity SP,%RH,W,
+Dehumidifier,Run Status,On/Off,R,
+EVSE,Alarms,Text/Code,R,
+EVSE,Connector Status,Avail/Charging/Fault,R,
+EVSE,Max Current Cmd,A,W,OCPP load management
+EVSE,Session Energy,kWh,R,
+Elevator,Alarms,Text/Code,R,
+Elevator,Car Position,Floor,R,
+Elevator,Mode,Normal/Fire/Service,R,
+FCU,Alarms,Text/Code,R,
+FCU,Condensate Overflow,Bool,R,Safety interlock
+FCU,Cooling Valve Cmd,0–100%,W,
+FCU,Fan Command,Off/Low/Med/High or %,W,3‑speed or VFD
+FCU,Fan Status,On/Off,R,
+FCU,Heating Valve Cmd,0–100%,W,
+FCU,Room Temp,°F/°C,R,
+FCU,Setback (Unocc),°F/°C,W,
+FCU,Setpoint (Occ),°F/°C,W,
+Fire Alarm Panel,Active Alarms,Count/List,R,
+Fire Alarm Panel,Points,Text,R,Zone/point details
+Fire Alarm Panel,Supervisory,Count/List,R,
+Fire Alarm Panel,System Status,Normal/Alarm/Trouble,R,Read-only integration
+Gas Meter,Flow,scfh/m³h,R,
+Gas Meter,Totalized,scf/m³,R,
+Generator,Alarms,Text/Code,R,
+Generator,Ready/Available,Bool,R,
+Generator,Run Status,On/Off,R,
+Generator,Start Cmd (Test),On/Off,W,Test only per SOP
+Generator,kW Output,kW,R,
+Humidifier,Enable Cmd,On/Off,W,
+Humidifier,Humidity SP,%RH,W,
+Humidifier,Output,%,R,
+Humidifier,Run Status,On/Off,R,
+Light Signal (Binary),Fault Alarm,Bool,R,Light fault or malfunction alarm
+Light Signal (Binary),Light State,On/Off,RW,On/Off state control
+Light Signal (Binary),Runtime Hours,hours,R,Total accumulated runtime in hours
+Light Signal (Binary),Status Feedback,On/Off,R,Actual status feedback from the light
+Light Signal (Dimmer),Fault Alarm,Bool,R,Light fault or malfunction alarm
+Light Signal (Dimmer),Intensity,0-100%,RW,Dimming level control
+Light Signal (Dimmer),Intensity Feedback,0-100%,R,Actual intensity feedback from the light
+Light Signal (Dimmer),Light State,On/Off,RW,On/Off state control
+Light Signal (Dimmer),Power Consumption,W,R,Current power consumption in watts
+Light Signal (Dimmer),Runtime Hours,hours,R,Total accumulated runtime in hours
+Light Signal (Dimmer),Status Feedback,On/Off,R,Actual on/off status feedback from the light
+Lighting Controller,Fault,Text/Code,R,
+Lighting Controller,Group Command,On/Off,W,Area/group control
+Lighting Controller,Level,0–100%,W,Dimming
+Lighting Controller,Occupancy,Occ/Unocc,R,Sensor feedback
+Lighting Controller,Status,On/Off/%,R,
+PV Inverter,AC Voltage,V,R,
+PV Inverter,Active Power,kW,R,
+PV Inverter,Alarm,Text/Code,R,
+PV Inverter,DC Voltage,V,R,
+PV Inverter,Limit Cmd,%,W,Power curtailment if supported
+PV Inverter,Reactive Power,kVAR,R,
+Plate HX,Control Valve Cmd,0–100%,W,
+Plate HX,Primary Supply Temp,°F/°C,R,
+Plate HX,Secondary SP,°F/°C,W,
+Plate HX,Secondary Supply Temp,°F/°C,R,
+Plate HX,ΔP,psi/kPa,R,Fouling indicator
+Power Meter,Current (per phase),A,R,
+Power Meter,Demand,kW,R,
+Power Meter,Energy,kWh,R,
+Power Meter,Frequency,Hz,R,
+Power Meter,Power Factor,PF,R,
+Power Meter,Real Power,kW,R,
+Power Meter,Voltage (Ph-Ph),V,R,
+Pump,Alarm/Fault,Text/Code,R,
+Pump,Discharge Pressure,psi/kPa,R,
+Pump,Run Status,On/Off,R,
+Pump,Speed Cmd,%,W,If VFD
+Pump,Speed Feedback,%,R,
+Pump,Start/Stop Cmd,On/Off,W,
+Pump,Suction Pressure,psi/kPa,R,
+RTU,Alarms,Text/Code,R,
+RTU,Compressor Command,On/Off,W,If controlled
+RTU,Compressor Status,On/Off,R,Stage 1..N
+RTU,Economizer Command,0–100%,W,
+RTU,Economizer Position,0–100%,R,
+RTU,SAT,°F/°C,R,Supply air temperature
+RTU,SAT SP,°F/°C,W,
+RTU,Space Temp,°F/°C,R,
+RTU,Supply Fan Command,On/Off,W,
+RTU,Supply Fan Status,On/Off,R,
+Sensor - CO2,Value,ppm,R,
+Sensor - Differential Pressure,Value,inWC/Pa,R,
+Sensor - Humidity,Value,%RH,R,
+Sensor - Leak Detection,State,Wet/Dry,R,
+Sensor - Occupancy,State,Occ/Unocc,R,
+Sensor - PM2.5,Value,µg/m³,R,
+Sensor - Smoke,State,Normal/Alarm,R,Read-only via FACP
+Sensor - Temperature,Value,°F/°C,R,
+Sensor - VOC/TVOC,Value,ppb,R,
+Shade Controller,Position Cmd,0–100%,W,
+Shade Controller,Position Feedback,0–100%,R,
+Thermal Meter (BTU),Energy,MBTU/kWhth,R,
+Thermal Meter (BTU),Flow,gpm/LPM,R,
+Thermal Meter (BTU),Return Temp,°F/°C,R,
+Thermal Meter (BTU),Supply Temp,°F/°C,R,
+Thermostat/Zone Ctrl,Alarm,Text/Code,R,
+Thermostat/Zone Ctrl,Cooling SP,°F/°C,W,
+Thermostat/Zone Ctrl,Fan Cmd,Auto/On/%,W,
+Thermostat/Zone Ctrl,Heating SP,°F/°C,W,
+Thermostat/Zone Ctrl,Mode,Off/Heat/Cool/Auto,W,
+Thermostat/Zone Ctrl,Occupied,Occ/Unocc,W,Schedule/override
+Thermostat/Zone Ctrl,Space Temp,°F/°C,R,
+UPS,Alarm,Text/Code,R,
+UPS,Battery %,%,R,
+UPS,Load %,%,R,
+UPS,On Battery,Bool,R,
+UPS,Runtime Remaining,min,R,
+VAV Box,Airflow,CFM/L/s,R,From flow sensor
+VAV Box,Airflow SP,CFM/L/s,W,Occupied/unoccupied
+VAV Box,Alarms,Text/Code,R,
+VAV Box,Damper Command,0–100%,W,
+VAV Box,Damper Position,0–100%,R,Feedback
+VAV Box,Occupancy,Occ/Unocc,R,From schedule or sensor
+VAV Box,Reheat Status,On/Off/%,R,
+VAV Box,Reheat Valve Cmd,0–100%,W,If reheat present
+VAV Box,Zone Temp,°F/°C,R,
+VAV Box,Zone Temp SP (Occ),°F/°C,W,
+VAV Box,Zone Temp SP (Unocc),°F/°C,W,
+VFD,Current,A,R,
+VFD,Enable/Start Cmd,On/Off,W,
+VFD,Fault Code,Text/Code,R,
+VFD,Run Status,On/Off,R,
+VFD,Speed Cmd,%,W,
+VFD,Speed Feedback,%,R,
+Valve Actuator,Override,Bool,W,Manual override if available
+Valve Actuator,Position Cmd,0–100%,W,
+Valve Actuator,Position Feedback,0–100%,R,
+Water Meter,Flow,gpm/LPM,R,
+Water Meter,Totalized,gal/m³,R,

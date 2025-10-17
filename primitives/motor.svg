@@ -1,15 +1,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 80" width="100%" height="100%">
   <defs>
     <style>
-      .motor-body { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .motor-endbell { fill: #2c3e50; stroke: #1a1a1a; stroke-width: 1.5; }
-      .motor-shaft { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 1.5; }
-      .motor-fan { fill: #95a5a6; }
+      .motor-body { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .motor-endbell { fill: #ffffff; stroke: #1a1a1a; stroke-width: 1.5; }
+      .motor-shaft { fill: #546e7a; stroke: #ffffff; stroke-width: 1.5; }
+      .motor-fan { fill: #546e7a; }
       .status-on { fill: #27ae60; }
-      .status-off { fill: #95a5a6; }
+      .status-off { fill: #546e7a; }
       .status-alarm { fill: #e74c3c; }
-      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
-      .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #2c3e50; text-anchor: middle; font-weight: bold; }
+      .label-text { font-family: Arial, sans-serif; font-size: 9px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
+      .value-text { font-family: Arial, sans-serif; font-size: 11px; fill: #ffffff; text-anchor: middle; font-weight: bold; }
     </style>
   </defs>
 
@@ -36,7 +36,7 @@
   <text id="statusText" x="50" y="10" class="label-text">OFF</text>
 
   <!-- Info Display -->
-  <rect x="20" y="63" width="60" height="12" fill="#ecf0f1" stroke="#95a5a6" stroke-width="1" rx="2"/>
+  <rect x="20" y="63" width="60" height="12" fill="#2c3e50" stroke="#95a5a6" stroke-width="1" rx="2"/>
   <text id="infoText" x="50" y="72" class="value-text">0 RPM</text>
 
   <script><![CDATA[

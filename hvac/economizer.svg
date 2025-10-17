@@ -2,15 +2,15 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 400" width="100%" height="100%">
   <defs>
     <style>
-      .econ-box { fill: #34495e; stroke: #2c3e50; stroke-width: 2; }
-      .econ-duct { fill: #95a5a6; stroke: #7f8c8d; stroke-width: 2; }
+      .econ-box { fill: #f5f7fa; stroke: #ffffff; stroke-width: 2; }
+      .econ-duct { fill: #cfd8dc; stroke: #7f8c8d; stroke-width: 2; }
       .econ-duct-oa { fill: #7fb3d5; stroke: #5499c7; stroke-width: 2; }
       .econ-duct-ra { fill: #ec7063; stroke: #cb4335; stroke-width: 2; }
       .econ-duct-ea { fill: #bb8fce; stroke: #8e44ad; stroke-width: 2; }
-      .econ-damper { fill: #7f8c8d; stroke: #2c3e50; stroke-width: 2; }
-      .econ-text { fill: #ecf0f1; font-family: Arial, sans-serif; font-size: 14px; }
-      .econ-label { fill: #bdc3c7; font-family: Arial, sans-serif; font-size: 11px; }
-      .econ-value { fill: #3498db; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
+      .econ-damper { fill: #546e7a; stroke: #ffffff; stroke-width: 2; }
+      .econ-text { fill: #2c3e50; font-family: Arial, sans-serif; font-size: 14px; }
+      .econ-label { fill: #eceff1; font-family: Arial, sans-serif; font-size: 11px; }
+      .econ-value { fill: #1976d2; font-family: Arial, monospace; font-size: 12px; font-weight: bold; }
       .econ-arrow { fill: none; stroke-width: 2; }
       .econ-arrow-oa { stroke: #5499c7; }
       .econ-arrow-ra { stroke: #cb4335; }
@@ -18,7 +18,7 @@
       .econ-flow { opacity: 0.4; }
       .econ-flow-active { animation: flow 2s linear infinite; }
       .status-ok { fill: #27ae60; }
-      .status-active { fill: #3498db; }
+      .status-active { fill: #1976d2; }
       .status-alarm { fill: #e74c3c; }
       @keyframes flow {
         0% { opacity: 0.1; }
@@ -105,14 +105,14 @@
 
   <!-- Supply Flow Arrow -->
   <g id="supplyFlow">
-    <path class="econ-arrow" stroke="#3498db" d="M 270 155 L 290 155 M 285 150 L 290 155 L 285 160"/>
-    <path class="econ-arrow" stroke="#3498db" d="M 310 175 L 330 175 M 325 170 L 330 175 L 325 180"/>
-    <circle class="econ-flow econ-flow-active" fill="#3498db" cx="280" cy="155" r="3"/>
-    <circle class="econ-flow econ-flow-active" fill="#3498db" cx="320" cy="175" r="3" style="animation-delay: 0.7s"/>
+    <path class="econ-arrow" stroke="#1976d2" d="M 270 155 L 290 155 M 285 150 L 290 155 L 285 160"/>
+    <path class="econ-arrow" stroke="#1976d2" d="M 310 175 L 330 175 M 325 170 L 330 175 L 325 180"/>
+    <circle class="econ-flow econ-flow-active" fill="#1976d2" cx="280" cy="155" r="3"/>
+    <circle class="econ-flow econ-flow-active" fill="#1976d2" cx="320" cy="175" r="3" style="animation-delay: 0.7s"/>
   </g>
 
   <!-- Data Panel -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="300" y="215" width="180" height="165" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="300" y="215" width="180" height="165" rx="5"/>
 
   <text class="econ-label" x="390" y="235" text-anchor="middle" font-weight="bold">DAMPER POSITIONS</text>
 
@@ -133,7 +133,7 @@
   <text id="modeText" class="econ-value" x="390" y="370" text-anchor="middle">Economizer</text>
 
   <!-- Data Panel 2 -->
-  <rect fill="#2c3e50" stroke="#34495e" stroke-width="1" x="20" y="215" width="270" height="165" rx="5"/>
+  <rect fill="#2c3e50" stroke="#f5f7fa" stroke-width="1" x="20" y="215" width="270" height="165" rx="5"/>
 
   <!-- Temperatures -->
   <text class="econ-label" x="35" y="235">Outside Air:</text>
